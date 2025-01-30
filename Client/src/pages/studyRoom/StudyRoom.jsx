@@ -1,20 +1,17 @@
 import { useState, useEffect } from "react";
-import { User, Headphones } from "lucide-react";
+import { User, Headphones, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
-import Ai from "./AiChatbot.jsx";
 
+import Ai from "./AiChatbot.jsx";
 import Calender from "./CalendarComponent.jsx";
 import TimerComponent from "./TimerComponent.jsx";
 import NotesComponent from "./NotesComponent.jsx";
 import TodoComponent from "./TodoComponent.jsx";
-
-
-
-// import axios from "axios";
+import StudyStats from "./StudyStats.jsx";
 
 function StudyRoom() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [selectedId, setSelectedId] = useState(""); // for AI
+  const [selectedId, setSelectedId] = useState(""); // for AI. donot remove
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -25,29 +22,32 @@ function StudyRoom() {
     <div className="space-y-8">
       {/* nav-bar  */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Study Room</h1>
-        <div className="flex items-center">
-         
-          <span className="text-gray-400">Total uptime today: 4 hours</span>
+        <button className="flex gap-3 font-bold text-lg items-center">
+          <ExternalLink />
+          Links
+        </button>
+        <h1 className="text-2xl font-bold">Stay hungry; stay foolish.</h1>
+        <div className="flex items-center gap-6">
           {/* ai */}
-          <div>
-            <Ai onShowId={setSelectedId} />
-          </div>
+          <Ai onShowId={setSelectedId} />
+          {!isLoggedIn && (
+            <Link
+              className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg flex items-center gap-2"
+              to="/authenticate"
+            >
+              <User className="w-5 h-5" />
+              Login
+            </Link>
+          )}
         </div>
-        {!isLoggedIn && (
-          <Link
-            className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg flex items-center gap-2"
-            to="/authenticate"
-          >
-            <User className="w-5 h-5" />
-            Login
-          </Link>
-        )}
       </div>
 
       <div className="flex gap-8 w-full h-auto">
         <div className="flex-1 h-100 flex flex-col gap-8">
-          <TimerComponent />
+          <div className="flex">
+            <TimerComponent />
+            <StudyStats />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 flex-1">
             <NotesComponent />
             <TodoComponent />

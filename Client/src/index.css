@@ -91,3 +91,24 @@ body {
   @apply bg-purple-900;
 }
 /* ------------------------------------------------------------------------------------------------------------------ */
+/* scrollbar styling */
+
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(148, 148, 148, 0.4);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(155, 154, 154, 0.6);
+  }
+}

@@ -17,9 +17,12 @@ const Ai = () => {
     }
 
     setLoading(true);
-    const currentTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const currentTime = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     const userMessage = { type: "user", text: question, time: currentTime };
-    setMessages((prev) => [...prev, userMessage]);     
+    setMessages((prev) => [...prev, userMessage]);
 
     try {
       const response = await fetch(
@@ -44,7 +47,11 @@ const Ai = () => {
       if (data && data.candidates && data.candidates.length > 0) {
         const generatedResponse =
           data.candidates[0]?.content?.parts[0]?.text || "No response found";
-        const aiMessage = { type: "ai", text: generatedResponse, time: currentTime };
+        const aiMessage = {
+          type: "ai",
+          text: generatedResponse,
+          time: currentTime,
+        };
         setMessages((prev) => [...prev, aiMessage]);
         toast.success("Response generated successfully!");
       } else {
@@ -73,7 +80,7 @@ const Ai = () => {
   return (
     <div id="manishai" className="cursor-pointer">
       <button
-        className="flex gap-3 bg-purple-800 shadow-[0_4px_100px_rgba(176,71,255,0.7)] hover:bg-purple-900 px-5 py-2.5 rounded-xl text-white font-semibold transition duration-200 transform hover:scale-105 ml-9 hover:shadow-[0_4px_100px_rgba(176,71,255,1)]"
+        className="flex gap-3 bg-purple-800 shadow-[0_4px_100px_rgba(176,71,255,0.7)] hover:bg-purple-700 px-5 py-2.5 rounded-xl text-white font-semibold transition duration-200 transform hover:scale-105 ml-9 hover:shadow-[0_4px_100px_rgba(176,71,255,1)]"
         onClick={() => document.getElementById("my_modal_1").showModal()}
       >
         <BotMessageSquare />
@@ -88,32 +95,28 @@ const Ai = () => {
           {/* Nav-bar */}
           <div className="flex justify-between items-center">
             <h3 className="text-xl font-semibold px-4 py-2">Ask AI</h3>
-            <button
-              onClick={closeModal}
-              className="hover:bg-red-600 py-2 px-4"
-            >
+            <button onClick={closeModal} className="hover:bg-red-600 py-2 px-4">
               <X className="h-6 w-6" />
             </button>
           </div>
 
-{/* {gif part pls change the gif  if needed } */}
+          {/* {gif part pls change the gif  if needed } */}
           {messages.length === 0 && (
-  <div className="m-6 flex flex-col items-center space-y-15">
-  <p className="text-lg font-semibold text-center">
-      Hey! Welcome to <span className="text-purple-400">EduHaven Bot</span> 🎉<br />
-      How can I help you today?
-    </p>
+            <div className="m-6 flex flex-col items-center space-y-15">
+              <p className="text-lg font-semibold text-center">
+                Hey! Welcome to{" "}
+                <span className="text-purple-400">EduHaven Bot</span> 🎉
+                <br />
+                How can I help you today?
+              </p>
 
-    <img
-      src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExam9nM2hrdW9rMzF0cXJzYWZ2b2ZrdTkyaG9nbnEyZndjYmYyOWh0ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/NeQoAaKp2hhLt6Ayq1/giphy.gif"
-      alt="Welcome"
-      className="mt-20 w-40 h-40 rounded-full"
-
-    />
-    
-  </div>
-)}
-
+              <img
+                src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExam9nM2hrdW9rMzF0cXJzYWZ2b2ZrdTkyaG9nbnEyZndjYmYyOWh0ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/NeQoAaKp2hhLt6Ayq1/giphy.gif"
+                alt="Welcome"
+                className="mt-20 w-40 h-40 rounded-full"
+              />
+            </div>
+          )}
 
           {/* Chat area */}
           <div className="m-6 flex-1 overflow-y-auto space-y-4">
@@ -133,9 +136,7 @@ const Ai = () => {
                 >
                   {msg.text}
                 </p>
-                <span className="text-sm text-gray-400 mt-1">
-                  {msg.time}
-                </span>
+                <span className="text-sm text-gray-400 mt-1">{msg.time}</span>
               </div>
             ))}
           </div>
