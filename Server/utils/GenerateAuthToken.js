@@ -1,16 +1,7 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
-// export default function generateAuthToken(user) {
-//   return jwt.sign({ user }, process.env.JWT_SECRET, {
-//     expiresIn: "1d",
-//   });
-// }
-
-const generateAuthToken = (userId, fullName) => {
-  const token = jwt.sign({ userId, fullName }, process.env.JWT_SECRET, {
-    expiresIn: "1d",
-  });
-  return token;
+const generateAuthToken = (user) => {
+  return jwt.sign({ id: user._id, fullName: user.FullName }, process.env.JWT_SECRET, { expiresIn: '1d' });
 };
 
 export default generateAuthToken;
