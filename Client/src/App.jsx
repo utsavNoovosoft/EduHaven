@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import StudyRoom from './pages/studyRoom/StudyRoom.jsx';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Anaylitics/Anaylitics';
 import GameRoom from './pages/gameRoom/GameRoutes.jsx';
 import MusicRoom from './pages/MusicRoom';
 import Signout from './Auth/Signout';

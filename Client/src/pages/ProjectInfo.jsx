@@ -64,16 +64,36 @@ export default function Info() {
 
       <div className="flex justify-center gap-10 mt-8">
         {/* left section */}
-        <div className="max-w-5xl p-4 sm:p-6 ">
-          <p className="text-lg text-gray-300 mb-6 m-4 pb-5">
-            EduHaven is a productivity platform designed to enhance student
-            learning with real-time collaboration, task management, note-making,
-            and social connectivity. Built to optimize study efficiency, it
-            offers seamless interactions through WebRTC-powered study rooms,
-            analytics-driven insights, and gamification.
-          </p>
-        {/* key-features */}
-          <div className="grid md:grid-cols-2 gap-6 m-4 pb-5">
+        <div className="max-w-5xl p-4 sm:p-6 flex flex-col gap-10">
+          {/* Overview */}
+          <div>
+            <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center">
+              <FileText className="mr-2" /> OVERVIEW
+            </h2>
+            <p className="text-lg text-gray-300">
+              EduHaven is a productivity platform designed to enhance student
+              learning with real-time collaboration, task management,
+              note-making, and social connectivity. Built to optimize study
+              efficiency, it offers seamless interactions through WebRTC-powered
+              study rooms, analytics-driven insights, and gamification.
+            </p>
+            <p className=" text-sm sm:text-base text-gray-300 mt-5">
+              Explore the full details of this project in the{" "}
+              <a
+                href={`${repoData.html_url}/blob/main/README.md`}
+                className="text-blue-400 hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                README file
+              </a>
+            </p>
+          </div>
+
+          <hr className="opacity-40" />
+
+          {/* key-features | why it stands-out*/}
+          <div className="grid lg:grid-cols-2 gap-6">
             <div>
               <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center">
                 Key Features
@@ -88,7 +108,6 @@ export default function Info() {
                 <li>🎮 Gamification Badges & streaks to boost motivation.</li>
               </ul>
             </div>
-
             <div>
               <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center">
                 Real-Time Collaboration
@@ -101,43 +120,26 @@ export default function Info() {
             </div>
           </div>
 
-          <div className="mt-6 m-4 pb-5">
+          <div className="mt-6 ">
             <h3 className="text-lg sm:text-2xl font-semibold mb-4 gap-2 flex items-center">
               <SmilePlus /> Why It Stands Out?
             </h3>
             <p className="text-gray-300">
-              EduHaven is more than just a study app—it’s a
-              community-driven, data-backed platform that fosters
-              productivity, teamwork, and personalized learning. By leveraging
-              real-time features and gamification, it ensures students stay
-              engaged and on track.
-            </p>
-          </div>
-          {/* README*/}
-          <div className="border-b-2 border-gray-600 m-4 pb-5">
-            <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center">
-              <FileText className="mr-2" /> README
-            </h2>
-            <p className=" text-sm sm:text-base">
-              Explore the full details of this project in the{" "}
-              <a
-                href={`${repoData.html_url}/blob/main/README.md`}
-                className="text-blue-600 hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                README file
-              </a>
-              .
+              EduHaven is more than just a study app—it’s a community-driven,
+              data-backed platform that fosters productivity, teamwork, and
+              personalized learning. By leveraging real-time features and
+              gamification, it ensures students stay engaged and on track.
             </p>
           </div>
 
-          {/* Contributors */}
-          <div className="border-b-2 border-gray-600 m-4 pb-5">
-            <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center">
+          <hr className="opacity-40" />
+
+          {/* team-members */}
+          <div className=" border-gray-600 ">
+            <h2 className="text-lg lg:text-2xl font-semibold mb-4 flex items-center">
               <Users className="mr-2" /> Team members
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4">
               {contributors.map((contributor) => (
                 <a
                   key={contributor.id}
@@ -159,9 +161,11 @@ export default function Info() {
               ))}
             </div>
           </div>
+        <hr className="opacity-40" />
         </div>
+
         {/* right-section */}
-        <div className="  p-4 rounded-lg">
+        <div className="flex-shrink-0">
           {/* about */}
           <div>
             <h2 className="semi-bold text-xl">About</h2>
@@ -203,6 +207,8 @@ export default function Info() {
           </div>
         </div>
       </div>
+
+      <div className="h-8"></div>
     </div>
   );
 }

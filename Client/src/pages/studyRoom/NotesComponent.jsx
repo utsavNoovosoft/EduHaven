@@ -1,37 +1,69 @@
 import { useState, useRef, useEffect } from "react";
+import axios from "axios";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Trash,
+  Plus,
+  RefreshCcwDot,
+} from "lucide-react";
 
 function NotesComponent() {
-  const [notes, setNotes] = useState([
-    { text: "", heading: "", date: new Date() },
-  ]);
+  const [notes, setNotes] = useState([]);
+  const [error, setError] = useState("");
+
+  const titleTimeoutRef = useRef(null);
+  const contentTimeoutRef = useRef(null);
+  const [isSynced, setIsSynced] = useState(true);
+  const [rotate, setRotate] = useState(false); // used to rotate sync icon
   const [currentPage, setCurrentPage] = useState(0);
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [scrollHeight, setScrollHeight] = useState(0);
-
-  const historyRef = useRef(null);
   const textAreaRef = useRef(null);
 
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  useEffect(() => {
+    fetchNotes();
 
-  const addNewNote = () => {
-    const newNote = { text: "", heading: "", date: new Date() };
-    setNotes((prevNotes) => [...prevNotes, newNote]);
-    setCurrentPage(notes.length);
+    if (textAreaRef.current) {
+      setScrollHeight(textAreaRef.current.scrollHeight);
+    }
+    return () => {
+      clearTimeout(titleTimeoutRef.current);
+      clearTimeout(contentTimeoutRef.current);
+    };
+  }, []);
+
+  const fetchNotes = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/note");
+      if (response.data.success) {
+        if (!response.data.data || response.data.data.length === 0) {
+          addNewPage(); // adding new is necessary cause we get err in posting data to db.
+        } else {
+          setNotes(response.data.data);
+        }
+      } else {
+        setError("Something wrong at our end");
+      }
+    } catch (err) {
+      setError(err?.response?.data?.error || "Failed to fetch notes.");
+    }
   };
 
-  const deleteNote = () => {
-    if (notes.length > 1) {
-      setNotes((prevNotes) =>
-        prevNotes.filter((_, index) => index !== currentPage),
-      );
-      setCurrentPage((prev) => Math.max(prev - 1, 0));
-    } else {
-      setNotes([{ text: "", heading: "", date: new Date() }]);
-      setCurrentPage(0);
+  // this fn manages wether to update note or create new. keeps track of notes
+  const handleSync = () => {
+    setRotate(true);
+    setTimeout(() => setIsSynced(true), 700);
+    if (notes[currentPage]._id === undefined) {
+      handleAddNote();
+      return;
     }
+  };
+
+  const addNewPage = () => {
+    const newNote = { content: "", title: "", date: new Date() };
+    setNotes((prevNotes) => [...prevNotes, newNote]);
+    setCurrentPage(notes.length);
   };
 
   const goToNextPage = () => {
@@ -46,61 +78,94 @@ function NotesComponent() {
     }
   };
 
-  const handleNoteChange = (event) => {
-    const updatedText = event.target.value;
-    setNotes((prevNotes) =>
-      prevNotes.map((note, index) =>
-        index === currentPage ? { ...note, text: updatedText } : note,
-      ),
-    );
-  };
-
-  const handleHeadingChange = (event) => {
-    const updatedHeading = event.target.value.toUpperCase();
-    setNotes((prevNotes) =>
-      prevNotes.map((note, index) =>
-        index === currentPage ? { ...note, heading: updatedHeading } : note,
-      ),
-    );
-  };
-
-  const toggleHistory = () => {
-    setIsHistoryOpen((prev) => !prev);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (historyRef.current && !historyRef.current.contains(event.target)) {
-        setIsHistoryOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const selectDate = (date) => {
-    const updatedNotes = [...notes];
-    const existingNote = updatedNotes.find(
-      (note) => note.date.toDateString() === new Date(date).toDateString(),
-    );
-
-    if (existingNote) {
-      const index = updatedNotes.indexOf(existingNote);
-      setCurrentPage(index);
+  const handleAddNote = async () => {
+    if (
+      notes[currentPage]?.title.trim() === "" ||
+      notes[currentPage]?.content.trim() === ""
+    ) {
+      setError("Title and content are required.");
+      return;
     }
-    //else {
-    //  const newNote = { text: "", heading: "", date: new Date(date) };
-    //  updatedNotes.push(newNote);
-    //  setCurrentPage(updatedNotes.length - 1);
-    //}
 
-    updatedNotes[currentPage].date = new Date(date);
-    setNotes(updatedNotes);
-    setSelectedDate(new Date(date));
-    setIsHistoryOpen(false);
+    try {
+      const response = await axios.post("http://localhost:3000/note", {
+        title: notes[currentPage].title,
+        content: notes[currentPage].content,
+      });
+
+      if (response.data.success) {
+        fetchNotes();
+        setError(""); // Clear errors
+      }
+    } catch (err) {
+      setError(
+        err.response?.data?.error || "Failed to add note try refreshing page"
+      );
+      console.log(err);
+    }
+  };
+
+  const handleDeleteNote = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/note/${id}`);
+      if (response.data.success) {
+        fetchNotes();
+      }
+    } catch (err) {
+      setError(
+        err.response?.data?.error ||
+          "Failed to delete note try refreshinng page"
+      );
+    }
+  };
+
+  const handleNoteContentChange = async (event) => {
+    const updatedText = event.target.value;
+    isSynced === true ? (setIsSynced(false), setRotate(false)) : "";
+    setNotes((prevNotes) =>
+      prevNotes.map((note, index) =>
+        index === currentPage ? { ...note, content: updatedText } : note
+      )
+    );
+
+    clearTimeout(titleTimeoutRef.current);
+    titleTimeoutRef.current = setTimeout(async () => {
+      try {
+        handleSync();
+        const noteId = notes[currentPage]._id;
+        await axios.put(`http://localhost:3000/note/${noteId}`, {
+          content: updatedText,
+        });
+      } catch (err) {
+        console.error("Error updating note content:", err);
+        setIsSynced(true); // hide sync if error occurs
+      }
+    }, 3000);
+  };
+  currentPage;
+
+  const handleTitleChange = async (event) => {
+    const updatedTitle = event.target.value;
+    isSynced === true ? (setIsSynced(false), setRotate(false)) : "";
+    setNotes((prevNotes) =>
+      prevNotes.map((note, index) =>
+        index === currentPage ? { ...note, title: updatedTitle } : note
+      )
+    );
+
+    clearTimeout(contentTimeoutRef.current);
+    contentTimeoutRef.current = setTimeout(async () => {
+      try {
+        handleSync();
+        const noteId = notes[currentPage]._id;
+        await axios.put(`http://localhost:3000/note/${noteId}`, {
+          title: updatedTitle,
+        });
+      } catch (err) {
+        console.error("Error updating note title:", err);
+        setIsSynced(true);
+      }
+    }, 3000);
   };
 
   const handleScroll = () => {
@@ -110,169 +175,118 @@ function NotesComponent() {
     }
   };
 
-  useEffect(() => {
-    if (textAreaRef.current) {
-      setScrollHeight(textAreaRef.current.scrollHeight);
-    }
-  }, []);
-
-  // Function to update month
-  const updateMonth = (increment) => {
-    const newMonth = currentMonth + increment;
-    if (newMonth >= 0 && newMonth <= 11) {
-      setCurrentMonth(newMonth);
-    } else {
-      const newYear = increment > 0 ? currentYear + 1 : currentYear - 1;
-      setCurrentYear(newYear);
-      setCurrentMonth(increment > 0 ? 0 : 11);
-    }
-  };
-
-  // Calculate the number of days in the month
-  const firstDayOfMonth = new Date(currentYear, currentMonth).getDay();
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
   return (
     <>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Handlee&family=Roboto:wght@700&display=swap"
-      />
       <div className="bg-gray-800 text-white rounded-lg p-6 w-full mx-auto relative">
-        <div className="flex justify-between items-center mb-4">
-          <div className="text-2xl font-semibold">
-            Notes{" "}
-            <span className="text-lg">
+        {error && <p className="text-red-500">{error}</p>}
+
+        {/* nav */}
+        <div className="flex justify-between">
+          <div className=" flex gap-4 items-center">
+            <h3 className="text-2xl font-semibold">Notes</h3>
+            <button
+              className="p-1.5 rounded-full hover:bg-slate-700"
+              onClick={addNewPage}
+            >
+              <Plus />
+            </button>
+          </div>
+          <div className="flex space-x-2 items-center">
+            <span className="text-yellow-300 opacity-90 text-lg">
               {notes.length > 0 ? `${currentPage + 1}/${notes.length}` : "1/1"}
             </span>
-          </div>
-          <div className="flex space-x-4">
-            <span className="cursor-pointer" onClick={toggleHistory}>
-              <i className="icon-calendar-heart">📅</i>
-            </span>
-            <span
-              className={`cursor-pointer ${currentPage === 0 ? "text-gray-600" : ""}`}
+            <button
               onClick={goToPreviousPage}
+              className={`p-1.5 rounded-full hover:bg-slate-700 ${
+                currentPage === 0 ? "text-gray-500" : ""
+              }`}
             >
-              &lt;
-            </span>
-            <span
-              className={`cursor-pointer ${currentPage === notes.length - 1 ? "text-gray-500" : ""}`}
+              <ChevronLeft />
+            </button>
+            <button
               onClick={goToNextPage}
+              className={`p-1.5 rounded-full hover:bg-slate-700 ${
+                currentPage === notes.length - 1 ? "text-gray-500" : ""
+              }`}
             >
-              &gt;
-            </span>
+              <ChevronRight />
+            </button>
           </div>
         </div>
 
-        {isHistoryOpen && (
-          <div
-            ref={historyRef}
-            className="absolute top-16 right-0 bg-gray-700 text-white rounded-lg p-4 shadow-lg w-64 z-10"
-          >
-            <div className="flex justify-between items-center mb-2">
-              <button onClick={() => updateMonth(-1)}>{"<"}</button>
-              <span className="font-semibold">
-                {new Date(currentYear, currentMonth).toLocaleString("default", {
-                  month: "long",
-                })}{" "}
-                {currentYear}
-              </span>
-              <button onClick={() => updateMonth(1)}>{">"}</button>
-            </div>
-            <div className="grid grid-cols-7 gap-1 text-sm">
-              {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
-                <div key={day} className="text-center font-bold">
-                  {day}
-                </div>
-              ))}
-              {[...Array(firstDayOfMonth)].map((_, index) => (
-                <div key={`empty-${index}`} className="text-center"></div>
-              ))}
-              {[...Array(daysInMonth)].map((_, index) => {
-                const date = new Date(currentYear, currentMonth, index + 1);
-                return (
-                  <div
-                    key={index}
-                    className={`p-2 text-center cursor-pointer rounded transition-colors duration-200 ${selectedDate?.toDateString() === date.toDateString()
-                        ? "bg-blue-500 text-white"
-                        : "hover:bg-sky-400 hover:text-black"
-                      }`}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      selectDate(date);
-                    }}
-                  >
-                    {index + 1}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        <div className="flex justify-between space-x-4 text-blue-500 mb-4">
+        {/* Topic , delete and sync btn*/}
+        <div className="flex justify-between mt-5 items-center w-full">
           <input
             type="text"
-            value={notes[currentPage]?.heading}
-            onChange={handleHeadingChange}
-            placeholder="Heading"
-            className="bg-transparent border-b border-[rgba(176,71,255,0.7)] outline-none font-bold"
-            style={{
-              fontFamily: "Roboto, sans-serif",
-              color: "rgba(255, 223, 186, 1)",
-            }}
+            value={notes[currentPage]?.title || ""}
+            onChange={handleTitleChange}
+            placeholder="Title"
+            className="bg-transparent outline-none p-0.5 text-lg flex-1 w-28 font-semibold text-yellow-400 opacity-85"
           />
-          <div className="space-x-4">
-            <span className="cursor-pointer" onClick={addNewNote}>
-              <i className="icon-add-page outline-none">➕</i>
-            </span>
-            <span className="cursor-pointer" onClick={deleteNote}>
-              <i className="icon-trash">🗑️</i>
-            </span>
-          </div>
+          {!isSynced && (
+            <button
+              // onClick={handleSync}
+              // onclick feature will may added in future. when clicked, the notes quickly saves to db without delay of 3seconds.
+              className="text-black text-lg hover:bg-yellow-300 rounded-full mx-3 py-0.5 px-4 bg-yellow-400 flex items-center gap-2 transition-transform transform opacity-100"
+            >
+              sync
+              <div
+                className="h-4"
+                style={{
+                  transform: rotate ? "rotate(-360deg)" : "rotate(0deg)",
+                  transition: "transform 0.7s ease-in-out",
+                }}
+              >
+                <RefreshCcwDot className="h-4" />
+              </div>
+            </button>
+          )}
+          <button onClick={() => handleDeleteNote(notes[currentPage]?._id)}>
+            <Trash className="h-5 text-gray-300  hover:text-red-500 " />
+          </button>
         </div>
 
-        <div
-          className="relative w-full h-64 overflow-hidden"
-          style={{ lineHeight: "39px" }}
-        >
-          <div className="absolute top-0 right-0 text-sm text-cyan-400 p-2">
-            {notes[currentPage]?.date.toLocaleDateString()}
-          </div>
-
+        {/* content */}
+        <div className="relative w-full h-64 overflow-hidden">
           <div
             className="absolute w-full pointer-events-none"
             style={{
-              backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent 38px, rgba(176,71,255,0.7) 39px )`,
-              backgroundSize: "100% 40px",
+              backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent 30px, white 39px )`,
+              backgroundSize: "100% 32px",
               transform: `translateY(-${scrollPosition}px)`,
               height: `${scrollHeight}px`,
+              marginTop: "2px",
             }}
           ></div>
           <textarea
             ref={textAreaRef}
             id="area"
-            className="relative w-full h-full bg-transparent text-[rgb(243,240,240)] p-2 outline-none resize-none font-mono "
+            className="relative w-full h-full bg-transparent text-gray-300 p-2 outline-none resize-none font-kalam font-light"
             style={{
-              lineHeight: "39px",
-              paddingTop: "10px",
-              paddingBottom: "10px",
-              overflowWrap: "break-word",
-              wordWrap: "break-word",
-              whiteSpace: "pre-wrap",
+              lineHeight: "32px",
+              paddingTop: "8px",
             }}
-            placeholder="Write your notes here..."
+            placeholder="Take a note..."
             onScroll={handleScroll}
-            value={notes[currentPage]?.text}
-            onChange={handleNoteChange}
+            value={notes[currentPage]?.content}
+            onChange={handleNoteContentChange}
           ></textarea>
+        </div>
+
+        {/* date and time */}
+        <div className="absolute bottom-3 right-12 text-slate-400 bg-gray-800">
+          {notes[currentPage]?.createdAt
+            ? new Date(notes[currentPage].createdAt).toLocaleDateString() +
+              "\u00A0\u00A0\u00A0" +
+              new Date(notes[currentPage].createdAt).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "No date available"}
         </div>
       </div>
     </>
   );
 }
-
 
 export default NotesComponent;
