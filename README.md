@@ -45,11 +45,11 @@
 2. Install dependencies:
    ```bash
    # Install backend dependencies
-   cd backend
+   cd Server
    npm install
 
    # Install frontend dependencies
-   cd ../frontend
+   cd ../Client
    npm install
    ```
 

@@ -1,12 +1,13 @@
-import express from "express";
-import { getAllTodos,getTodoById,createTodo ,updateTodo,deleteTodo} from "../Controller/TodoController.js";
-
+import express from 'express';
+import { getAllTodos, getTodoById, createTodo, updateTodo, deleteTodo } from '../Controller/TodoController.js';
+import authMiddleware from '../Middlewares/authMiddleware.js';
 
 const router = express.Router();
-router.post("/todo",createTodo);
-router.get("/todo",getAllTodos);
-router.get("/todo/:id",getTodoById);
-router.put("/todo/:id",updateTodo);
-router.delete("/todo/:id",deleteTodo);
+
+router.post('/todo', authMiddleware, createTodo);
+router.get('/todo', authMiddleware, getAllTodos);
+router.get('/todo/:id', authMiddleware, getTodoById);
+router.put('/todo/:id', authMiddleware, updateTodo);
+router.delete('/todo/:id', authMiddleware, deleteTodo);
 
 export default router;
