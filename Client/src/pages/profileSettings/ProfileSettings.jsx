@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { User, Settings, Users, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import jwtDecode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 const ProfileSettings = () => {
   const [user, setUser] = useState(null);
