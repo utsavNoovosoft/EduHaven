@@ -41,7 +41,9 @@ function NotesComponent() {
 
   const fetchNotes = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/note");
+      const response = await axios.get("http://localhost:3000/note",
+        getAuthHeader()
+      );
       if (response.data.success) {
         if (!response.data.data || response.data.data.length === 0) {
           addNewPage(); // adding new is necessary cause we get err in posting data to db.
@@ -97,7 +99,8 @@ function NotesComponent() {
       const response = await axios.post("http://localhost:3000/note", {
         title: notes[currentPage].title,
         content: notes[currentPage].content,
-      });
+      },
+      getAuthHeader());
 
       if (response.data.success) {
         fetchNotes();
@@ -113,7 +116,9 @@ function NotesComponent() {
 
   const handleDeleteNote = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:3000/note/${id}`);
+      const response = await axios.delete(`http://localhost:3000/note/${id}`,
+        getAuthHeader()
+      );
       if (response.data.success) {
         fetchNotes();
       }
@@ -141,7 +146,8 @@ function NotesComponent() {
         const noteId = notes[currentPage]._id;
         await axios.put(`http://localhost:3000/note/${noteId}`, {
           content: updatedText,
-        });
+        },
+        getAuthHeader());
       } catch (err) {
         console.error("Error updating note content:", err);
         setIsSynced(true); // hide sync if error occurs
@@ -166,7 +172,8 @@ function NotesComponent() {
         const noteId = notes[currentPage]._id;
         await axios.put(`http://localhost:3000/note/${noteId}`, {
           title: updatedTitle,
-        });
+        },
+        getAuthHeader());
       } catch (err) {
         console.error("Error updating note title:", err);
         setIsSynced(true);

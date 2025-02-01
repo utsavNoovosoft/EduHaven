@@ -7,21 +7,24 @@ import {
     deleteNote 
 } from "../Controller/NotesController.js";
 
+import authMiddleware from '../Middlewares/authMiddleware.js';
+
+
 const router = express.Router();
 
 // Route to create a new note
-router.post("/note", createNote);
+router.post("/note",authMiddleware, createNote);
 
 // Route to get all notes
-router.get("/note", getAllNotes);
+router.get("/note",authMiddleware, getAllNotes);
 
 // Route to get a specific note by its ID
-router.get("/note/:id", getNoteById);
+router.get("/note/:id", authMiddleware,getNoteById);
 
 // Route to update a specific note by its ID
-router.put("/note/:id", updateNote);
+router.put("/note/:id",authMiddleware, updateNote);
 
 // Route to delete a specific note by its ID
-router.delete("/note/:id", deleteNote);
+router.delete("/note/:id",authMiddleware, deleteNote);
 
 export default router;
