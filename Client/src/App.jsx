@@ -6,7 +6,7 @@ import GameRoom from './pages/gameRoom/GameRoutes.jsx';
 import MusicRoom from './pages/MusicRoom';
 import Signout from './Auth/Signout';
 import SignUp from './Auth/Authenticate.jsx';
-import ProfilePage from './pages/ProfilePage.jsx';
+import ProfileRoutes from './pages/profileSettings/ProfileRoutes.jsx';
 import PageNotFound from '../src/pages/PageNotFound';
 import ProjectInfo from '../src/pages/ProjectInfo';
 
@@ -28,7 +28,7 @@ function App() {
             <Route path='games/*' element={<GameRoom />} />
             <Route path='music' element={<MusicRoom />} />
             <Route path='project-details' element={<ProjectInfo />} />
-            <Route path='profile' element={<ProfilePage />} />
+            <Route path='profile/*' element={<ProfileRoutes />} />
             <Route path='signout' element={<Signout />} />
             <Route path='*' element={<PageNotFound />} />
           </Route>

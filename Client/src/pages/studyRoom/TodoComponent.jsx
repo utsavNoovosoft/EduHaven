@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Plus } from "lucide-react";
 
 const TodoComponent = () => {
   const [todos, setTodos] = useState([]);
@@ -159,7 +160,7 @@ const TodoComponent = () => {
           className="w-full bg-transparent border-b border-gray-600 text-gray-400 py-1 px-2 focus:outline-none"
         />
         <button onClick={handleCreate} className="text-white ml-2">
-          ➕
+          <Plus/>
         </button>
       </div>
 
