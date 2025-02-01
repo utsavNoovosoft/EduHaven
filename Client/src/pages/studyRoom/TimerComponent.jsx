@@ -35,7 +35,7 @@ function TimerComponent() {
   };
 
   return (
-    <div className="bg-gray-800 p-10 rounded-xl flex flex-col items-center justify-center">
+    <div className="bg-gray-800 p-10 rounded-xl flex flex-col items-center justify-center flex-1">
       <h1 className="text-lg flex items-center gap-2">
         <Timer />
         Timer

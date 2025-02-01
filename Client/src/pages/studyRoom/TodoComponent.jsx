@@ -7,29 +7,27 @@ const TodoComponent = () => {
   const [editingId, setEditingId] = useState(null);
   const [editedTitle, setEditedTitle] = useState("");
 
-  // --- Added sorting function ---
   const sortTodos = (todosArray) => {
     return [...todosArray].sort((a, b) => {
-      // Show incomplete tasks first
       if (a.completed !== b.completed) return a.completed ? 1 : -1;
       // Newest tasks first for incomplete, oldest first for completed
-      return a.completed 
+      return a.completed
         ? new Date(a.dueDate) - new Date(b.dueDate)
         : new Date(b.dueDate) - new Date(a.dueDate);
     });
   };
 
-  // Get authentication headers
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
-  // Fetch all to-dos
   const fetchTodos = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3000/todo", getAuthHeader());
-      // Added sorting here
+      const { data } = await axios.get(
+        "http://localhost:3000/todo",
+        getAuthHeader()
+      );
       setTodos(sortTodos(data.data));
     } catch (error) {
       console.error("Error fetching todos:", error.message);
@@ -39,10 +37,11 @@ const TodoComponent = () => {
     }
   };
 
-  // Create a new to-do
   const handleCreate = async () => {
     if (!title.trim()) {
       alert("Title is required!");
+      //     if (!title || !dueDate) {
+      //       alert('Title and Due Date both are required!');
       return;
     }
 
@@ -64,18 +63,15 @@ const TodoComponent = () => {
     }
   };
 
-  // Delete a to-do
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:3000/todo/${id}`, getAuthHeader());
-      // Added sorting here
       setTodos(sortTodos(todos.filter((todo) => todo._id !== id)));
     } catch (error) {
       console.error("Error deleting todo:", error.message);
     }
   };
 
-  // Toggle completion status
   const handleToggle = async (id) => {
     try {
       const todo = todos.find((t) => t._id === id);
@@ -86,13 +82,14 @@ const TodoComponent = () => {
         getAuthHeader()
       );
       // Added sorting here
-      setTodos(sortTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo))));
+      setTodos(
+        sortTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)))
+      );
     } catch (error) {
       console.error("Error toggling todo:", error.message);
     }
   };
 
-  // Save edited todo
   const handleSave = async () => {
     if (!editedTitle.trim()) {
       alert("Title cannot be empty!");
@@ -106,8 +103,11 @@ const TodoComponent = () => {
         updatedTodo,
         getAuthHeader()
       );
-      // Added sorting here
-      setTodos(sortTodos(todos.map((todo) => (todo._id === editingId ? updatedTodo : todo))));
+      setTodos(
+        sortTodos(
+          todos.map((todo) => (todo._id === editingId ? updatedTodo : todo))
+        )
+      );
       setEditingId(null);
       setEditedTitle("");
     } catch (error) {
@@ -115,16 +115,11 @@ const TodoComponent = () => {
     }
   };
 
-  // Rest of the code remains exactly the same...
-  // [No changes made to any existing lines below this point]
-
-  // Cancel editing
   const handleCancel = () => {
     setEditingId(null);
     setEditedTitle("");
   };
 
-  // Handle Enter key press
   const handleKeyPress = (e) => {
     if (e.key === "Enter") handleCreate();
   };
@@ -184,7 +179,7 @@ const TodoComponent = () => {
                 onChange={() => handleToggle(todo._id)}
                 className="cursor-pointer w-5 h-5"
               />
-              
+
               {editingId === todo._id ? (
                 <input
                   type="text"
@@ -300,7 +295,6 @@ const TodoComponent = () => {
       </div>
     </div>
   );
-  
 };
 
 export default TodoComponent;
