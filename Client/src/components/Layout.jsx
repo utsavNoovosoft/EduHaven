@@ -1,8 +1,6 @@
-import React from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import {
   BarChart2,
-  BookOpen,
   GamepadIcon,
   LogIn,
   User,
@@ -14,94 +12,83 @@ function Layout() {
   const location = useLocation();
   const token = localStorage.getItem("token");
 
+  const SidebarLink = ({ to, IconComponent, label }) => {
+    const isActive = location.pathname === to;
+    return (
+      <Link
+        to={to}
+        className="relative flex flex-col items-center justify-center p-2 group hover:bg-gray-700 rounded-lg transition-colors"
+      >
+        {/* Active Indicator */}
+        <span
+          className={`absolute left-0 top-1/2 transform -translate-y-1/2 h-8 w-1 rounded transition-all duration-300 ${
+            isActive
+              ? "bg-purple-500 opacity-100"
+              : "bg-transparent opacity-0 group-hover:opacity-50"
+          }`}
+        />
+        <IconComponent
+          className={`w-6 h-6 transition-colors duration-300 ${
+            isActive ? "text-white" : "text-gray-400 group-hover:text-white"
+          }`}
+        />
+        <span className="mt-1 text-xs text-gray-400">{label}</span>
+      </Link>
+    );
+  };
+
+  const isHome = location.pathname === "/";
+
   return (
-    <div className="flex min-h-screen bg-gray-900 text-white">
+    <div className="flex min-h-screen bg-gray-900 text-gray-300">
       {/* Sidebar */}
-      <nav className="w-20 bg-gray-800 p-4 flex flex-col items-center justify-between fixed top-0 left-0 h-screen">
-        <div className="space-y-6">
-          <Link to={"/"}>
+      <nav className="w-[4.5rem] border border-transparent border-r-gray-800 p-1 flex flex-col items-center justify-between fixed top-0 left-0 h-screen shadow-lg">
+        <div>
+          <Link to="/">
             <img
               src="../public/Logo2.svg"
               alt="Logo"
-              className="w-full p-2.5 hover:bg-gray-700 rounded-lg "
+              className={`w-full m-auto object-contain p-4 hover:bg-gray-700 rounded-xl transition-opacity duration-300 ${
+                isHome ? "opacity-100" : "opacity-80"
+              }`}
             />
           </Link>
-          <Link
-            to="/dashboard"
-            className={`block p-3 rounded-lg transition-colors ${
-              location.pathname === "/dashboard"
-                ? "bg-purple-600"
-                : "hover:bg-gray-700"
-            }`}
-          >
-            <BarChart2 className="w-6 h-6" />
-          </Link>
-
-          <Link
-            to="/games"
-            className={`block p-3 rounded-lg transition-colors ${
-              location.pathname === "/games"
-                ? "bg-purple-600"
-                : "hover:bg-gray-700"
-            }`}
-          >
-            <GamepadIcon className="w-6 h-6" />
-          </Link>
-
-          <Link
-            to="/music"
-            className={`block p-3 rounded-lg transition-colors ${
-              location.pathname === "/music"
-                ? "bg-purple-600"
-                : "hover:bg-gray-700"
-            }`}
-          >
-            <Headphones className="w-6 h-6" />
-          </Link>
-          <hr />
-          <Link
+          <div className="space-y-5 my-4">
+            <SidebarLink
+              to="/dashboard"
+              IconComponent={BarChart2}
+              label="Stats"
+            />
+            <SidebarLink
+              to="/games"
+              IconComponent={GamepadIcon}
+              label="Games"
+            />
+            <SidebarLink to="/music" IconComponent={Headphones} label="Music" />
+          </div>
+          <hr className="border-gray-700 my-5 mx-4" />
+          <SidebarLink
             to="/project-details"
-            className={`block p-3 rounded-lg transition-colors ${
-              location.pathname === "/project-details"
-                ? "bg-purple-600"
-                : "hover:bg-gray-700"
-            }`}
-          >
-            <BadgeInfo className="w-6 h-6" />
-          </Link>
+            IconComponent={BadgeInfo}
+            label="About"
+          />
         </div>
 
         <div className="space-y-8">
           {!token && (
-            <Link
+            <SidebarLink
               to="/authenticate"
-              className={`block p-3 rounded-lg transition-colors ${
-                location.pathname === "/authenticate"
-                  ? "bg-purple-600"
-                  : "hover:bg-gray-700"
-              }`}
-            >
-              <LogIn className="w-6 h-6" />
-            </Link>
+              IconComponent={LogIn}
+              label="Login"
+            />
           )}
-
           {token && (
-            <Link
-              to="/profile"
-              className={`block p-3 rounded-lg transition-colors ${
-                location.pathname === "/profile"
-                  ? "bg-purple-600"
-                  : "hover:bg-gray-700"
-              }`}
-            >
-              <User className="w-6 h-6" />
-            </Link>
+            <SidebarLink to="/profile" IconComponent={User} label="Profile" />
           )}
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="flex-1 p-8 ml-20">
+      <main className="flex-1 p-8 ml-[4.5rem]">
         <Outlet />
       </main>
     </div>

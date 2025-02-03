@@ -82,50 +82,50 @@ function Calendar() {
 
   return (
     <>
-      <div className="bg-gray-800 p-8 rounded-xl shadow-lg">
+      <div className="bg-gray-800 py-8 rounded-xl shadow-lg">
         {/* Header: Time and Day */}
-        <h1 className="text-5xl font-thin text-white mb-4">
-          {time.toLocaleTimeString("en-US", {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: true,
-          })}
-        </h1>
-        <h2 className="text-l font-semibold text-gray-300">
-          Today's{" "}
-          {
-            "Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(
-              " "
-            )[currentDate.getDay()]
-          }
-        </h2>
-
-        <br />
-
+        <div className="px-8">
+          <h1 className="text-5xl font-thin text-white mb-2">
+            {time.toLocaleTimeString("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              hour12: true,
+            })}
+          </h1>
+          <h2 className="text-l text-gray-300">
+            Today's{" "}
+            {
+              "Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(
+                " "
+              )[currentDate.getDay()]
+            }
+          </h2>
+        </div>
+        <hr className="my-4 opacity-10" />
         {/* Calendar View */}
-        <div className="p-4">
+        <div className="px-8">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold">
+            <h2 className="text-lg font-semibold pl-2.5">
               {currentDate.toLocaleString("default", { month: "long" })}{" "}
               {currentDate.getFullYear()}
             </h2>
             <div className="flex gap-5">
               <button
                 onClick={handlePrevMonth}
-                className="p-1.5 bg-gray-700 rounded-full hover:bg-slate-600"
+                className="p-1.5 rounded-full hover:bg-slate-700"
               >
                 <ChevronLeft />
               </button>
               <button
                 onClick={handleNextMonth}
-                className="p-1.5 bg-gray-700 rounded-full hover:bg-slate-600"
+                className="p-1.5 rounded-full hover:bg-slate-700"
               >
                 <ChevronRight />
               </button>
             </div>
           </div>
-          <div className="grid grid-cols-7 gap-2">
+          <div className="grid grid-cols-7 gap-[0.4rem]">
             {"Sun Mon Tue Wed Thu Fri Sat".split(" ").map((day) => (
               <div
                 key={day}
@@ -154,7 +154,7 @@ function Calendar() {
                 <div
                   key={day}
                   onClick={() => handleDayClick(day)}
-                  className={`flex items-center justify-center p-3 rounded-lg text-white cursor-pointer transition-all duration-200 ease-in-out 
+                  className={`flex items-center justify-center p-3 rounded-lg text-white cursor-pointer transition-all duration-200 ease-in-out h-11 mb-1
                   ${isToday ? "bg-purple-600 hover:bg-purple-700" : ""}
                   ${
                     hasEvent && !isToday
@@ -169,28 +169,40 @@ function Calendar() {
             })}
           </div>
         </div>
-
+        <hr className="my-4 opacity-10" />
         {/* Upcoming Events Section */}
-        <div className="mt-6">
-          <h3 className="text-xl font-bold text-gray-300 mb-2">
-            Upcoming Events
+        <div className="px-8">
+          <h3 className="text-lg font-semibold text-gray-300 mb-4">
+            Upcoming Events:
           </h3>
           {upcomingEvents.length > 0 ? (
-            <ul className="text-gray-200 space-y-2">
-              {upcomingEvents.map((event) => (
-                <li
-                  key={event.id}
-                  className="p-3 bg-gray-700 rounded-md shadow-md"
-                >
-                  <strong className="block text-purple-400">
-                    {new Date(event.date).toLocaleDateString()}
-                  </strong>
-                  <span className="block">{event.title}</span>
-                </li>
-              ))}
+            <ul className="text-gray-200 space-y-4 pl-2">
+              {upcomingEvents.map((event) => {
+                const eventDate = new Date(event.date);
+                return (
+                  <li
+                    key={event.id}
+                    className="pl-3 border-l-4 border-purple-500 flex gap-4 items-center"
+                  >
+                    <div className="">
+                      <div className="font-semibold text-gray-300">
+                        {eventDate.toLocaleDateString()}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {eventDate.toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
+                      </div>
+                    </div>
+                    <span className="block mt-1">{event.title}</span>
+                  </li>
+                );
+              })}
             </ul>
           ) : (
-            <p className="text-gray-400">No upcoming events.</p>
+            <p className="text-gray-400 text-sm">No events.</p>
           )}
         </div>
       </div>
