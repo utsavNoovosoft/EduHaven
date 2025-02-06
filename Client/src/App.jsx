@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
-import StudyRoom from './pages/studyRoom/StudyRoom.jsx';
-import Dashboard from './pages/Anaylitics/Anaylitics';
+import Home from './pages/homeDashboard/Home.jsx';
+import Dashboard from './pages/stats/Stats';
 import GameRoom from './pages/gameRoom/GameRoutes.jsx';
 import MusicRoom from './pages/MusicRoom';
 import Signout from './Auth/Signout';
@@ -9,6 +9,7 @@ import SignUp from './Auth/Authenticate.jsx';
 import ProfileRoutes from './pages/profileSettings/ProfileRoutes.jsx';
 import PageNotFound from '../src/pages/PageNotFound';
 import ProjectInfo from '../src/pages/ProjectInfo';
+import StudyRoom from './pages/Sessions/Sessions.jsx';
 
 function App() {
   const token = localStorage.getItem('token');
@@ -23,8 +24,9 @@ function App() {
           </>
         ) : (
           <Route path='/' element={<Layout />}>
-            <Route index element={<StudyRoom />} />
-            <Route path='dashboard' element={<Dashboard />} />
+            <Route index element={<Home />} />
+            <Route path='study-room' element={<StudyRoom />} />
+            <Route path='stats' element={<Dashboard />} />
             <Route path='games/*' element={<GameRoom />} />
             <Route path='music' element={<MusicRoom />} />
             <Route path='project-details' element={<ProjectInfo />} />
