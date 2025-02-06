@@ -42,7 +42,7 @@ router.post("/login", login);
 router.post("/logout", logout);
 router.get("/user/details", getUserDetails);
 router.put("/user/profile", authMiddleware, updateProfile);
-router.post('/upload-profile-picture', 
+router.post('/user/upload-profile-picture', 
   authMiddleware, 
   upload.single('profilePicture'), 
   uploadProfilePicture
