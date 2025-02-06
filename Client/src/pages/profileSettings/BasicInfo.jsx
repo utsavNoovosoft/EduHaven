@@ -99,7 +99,7 @@ export default function BasicInfo() {
 
     try {
       const response = await axios.post(
-        'http://localhost:3000/upload-profile-picture', 
+        'http://localhost:3000/user/upload-profile-picture', 
         formData,
         {
           headers: {
