@@ -75,6 +75,24 @@ export const updateProfile = async (req, res) => {
       return res.status(400).json({ error: 'Bio cannot exceed 500 characters' });
     }
 
+    // Handle OtherDetails
+    if (updateData.OtherDetails) {
+      // Validate OtherDetails
+      if (typeof updateData.OtherDetails !== 'object') {
+        return res.status(400).json({ error: 'OtherDetails must be an object' });
+      }
+
+      // Optional: Add specific validations for OtherDetails
+      const MAX_DETAILS_LENGTH = 1000;
+      Object.entries(updateData.OtherDetails).forEach(([key, value]) => {
+        if (typeof value === 'string' && value.length > MAX_DETAILS_LENGTH) {
+          return res.status(400).json({ 
+            error: `${key} in OtherDetails cannot exceed ${MAX_DETAILS_LENGTH} characters` 
+          });
+        }
+      });
+    }
+
     // Perform the update
     const updatedUser = await User.findByIdAndUpdate(
       userId, 

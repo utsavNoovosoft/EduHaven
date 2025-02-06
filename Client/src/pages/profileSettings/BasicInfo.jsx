@@ -16,6 +16,7 @@ export default function BasicInfo() {
     FieldOfStudy: '',
     GraduationYear: '',
     Gender: '',
+    OtherDetails: {}
   });
   const [profilePic, setProfilePic] = useState(null);
   const [userId, setUserId] = useState(null);
@@ -44,6 +45,7 @@ export default function BasicInfo() {
             FieldOfStudy: user.FieldOfStudy || '',
             GraduationYear: user.GraduationYear || '',
             Gender: user.Gender || '',
+            OtherDetails: user.OtherDetails || {}
           });
         }
       } catch (error) {
@@ -57,6 +59,16 @@ export default function BasicInfo() {
     setProfileData(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handleOtherDetailsChange = (key, value) => {
+    setProfileData(prev => ({
+      ...prev,
+      OtherDetails: {
+        ...prev.OtherDetails,
+        [key]: value
+      }
     }));
   };
 
@@ -315,6 +327,46 @@ export default function BasicInfo() {
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
+        </div>
+
+        {/* OtherDetails Section */}
+        <div>
+          <h3 className="text-xl font-semibold mb-4">Additional Details</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block mb-1">Interests</label>
+              <input
+                type="text"
+                value={profileData.OtherDetails.interests || ''}
+                onChange={(e) => handleOtherDetailsChange('interests', e.target.value)}
+                placeholder="Enter your interests"
+                className="w-full border rounded px-3 py-2 !text-[var(--primary)]"
+                disabled={isProfileUpdateLoading}
+              />
+            </div>
+            <div>
+              <label className="block mb-1">Skills</label>
+              <input
+                type="text"
+                value={profileData.OtherDetails.skills || ''}
+                onChange={(e) => handleOtherDetailsChange('skills', e.target.value)}
+                placeholder="Enter your skills"
+                className="w-full border rounded px-3 py-2 !text-[var(--primary)]"
+                disabled={isProfileUpdateLoading}
+              />
+            </div>
+            <div>
+              <label className="block mb-1">Additional Notes</label>
+              <textarea
+                value={profileData.OtherDetails.additionalNotes || ''}
+                onChange={(e) => handleOtherDetailsChange('additionalNotes', e.target.value)}
+                placeholder="Any additional information you'd like to share"
+                className="w-full bg-gray-700 text-white rounded px-3 py-2 border-0"
+                rows="4"
+                disabled={isProfileUpdateLoading}
+              ></textarea>
+            </div>
+          </div>
         </div>
 
         {/* Submit Button */}
