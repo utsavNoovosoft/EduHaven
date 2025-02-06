@@ -3,6 +3,7 @@ import {
   BarChart2,
   GamepadIcon,
   LogIn,
+  Radio,
   User,
   Headphones,
   BadgeInfo,
@@ -55,7 +56,12 @@ function Layout() {
           </Link>
           <div className="space-y-5 my-4">
             <SidebarLink
-              to="/dashboard"
+              to="/study-room"
+              IconComponent={Radio}
+              label="Session"
+            />
+            <SidebarLink
+              to="/stats"
               IconComponent={BarChart2}
               label="Stats"
             />
