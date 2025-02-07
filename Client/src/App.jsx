@@ -13,7 +13,6 @@ import StudyRoom from './pages/Sessions/Sessions.jsx';
 
 function App() {
   const token = localStorage.getItem('token');
-  console.log('app.js TOKEN~~~' + token);
   return (
     <BrowserRouter>
       <Routes>

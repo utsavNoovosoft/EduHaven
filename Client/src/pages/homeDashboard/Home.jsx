@@ -7,7 +7,7 @@ import Calender from "./CalendarComponent.jsx";
 import TimerComponent from "./TimerComponent.jsx";
 import NotesComponent from "./NotesComponent.jsx";
 import TodoComponent from "./TodoComponent.jsx";
-import StudyStats from "./StudyStats.jsx";
+import StudyStats from "./TimerStats.jsx";
 
 function StudyRoom() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

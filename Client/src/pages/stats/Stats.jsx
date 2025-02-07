@@ -5,6 +5,7 @@ import Badges from "./Badges";
 import StudyStats from "./StudyStats";
 import Goals from "./Goals";
 import Leaderboard from "./Leaderboard";
+import Test from "./Test.jsx"
 
 const Stats = () => {
   return (
@@ -37,6 +38,7 @@ const Stats = () => {
           <Leaderboard />
         </div>
       </div>
+      <Test/>
     </>
   );
 };
