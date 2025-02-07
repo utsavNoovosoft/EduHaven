@@ -2,7 +2,7 @@ import {useState} from "react";
 import { ChevronDown } from "lucide-react";
 
 function StudyStats() {
-  const [selectedTime, setSelectedTime] = useState("All time");
+  const [selectedTime, setSelectedTime] = useState("Today");
   const [isOpen, setIsOpen] = useState(false);
   const studyData = {
     Today: "0.5 h",

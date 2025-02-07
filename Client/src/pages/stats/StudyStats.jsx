@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import {
   ComposedChart,
@@ -17,77 +17,265 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 
-// Sample time-series data for study stats (with study room hours included)
-const studyStatsData = {
-  daily: [
-    { name: "Mon", totalHours: 2, studyRoomHours: 1 },
-    { name: "Tue", totalHours: 3, studyRoomHours: 1.5 },
-    { name: "Wed", totalHours: 1.5, studyRoomHours: 0.5 },
-    { name: "Thu", totalHours: 2.5, studyRoomHours: 1.5 },
-    { name: "Fri", totalHours: 3, studyRoomHours: 2 },
-    { name: "Sat", totalHours: 4, studyRoomHours: 2.5 },
-    { name: "Sun", totalHours: 0, studyRoomHours: 0 },
-  ],
-  weekly: [
-    { name: "Week 1", totalHours: 15, studyRoomHours: 7 },
-    { name: "Week 2", totalHours: 20, studyRoomHours: 10 },
-    { name: "Week 3", totalHours: 18, studyRoomHours: 8 },
-    { name: "Week 4", totalHours: 22, studyRoomHours: 11 },
-  ],
-  monthly: [
-    { name: "Jan", totalHours: 70, studyRoomHours: 35 },
-    { name: "Feb", totalHours: 65, studyRoomHours: 32 },
-    { name: "Mar", totalHours: 80, studyRoomHours: 40 },
-    { name: "Apr", totalHours: 90, studyRoomHours: 45 },
-  ],
+// ──────────────────────────────────────────────────────────────
+// Helper functions for date formatting
+// ──────────────────────────────────────────────────────────────
+
+const formatLocalHour = (date) => {
+  // Format as "YYYY-MM-DD-HH" using local date values.
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const hour = date.getHours().toString().padStart(2, "0");
+  return `${year}-${month}-${day}-${hour}`;
 };
 
-// Summary statistics for each view
-const summaryStats = {
-  daily: {
-    rank: "Null",
-    currentStreak: 3,
-    maxStreak: 5,
-    totalStudyHours: 16,
-    avgDaily: 2.29,
-  },
-  weekly: {
-    rank: "Null",
-    currentStreak: 2,
-    maxStreak: 4,
-    totalStudyHours: 75,
-    avgDaily: 2.68,
-  },
-  monthly: {
-    rank: "Null",
-    currentStreak: 6,
-    maxStreak: 10,
-    totalStudyHours: 325,
-    avgDaily: 2.78,
-  },
+const formatLocalDate = (date) => {
+  // Format as "YYYY-MM-DD"
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  return `${year}-${month}-${day}`;
 };
+
+// Compute ISO week string ("YYYY-WW") for a given date.
+const getISOYearWeek = (date) => {
+  const tempDate = new Date(date.getTime());
+  tempDate.setHours(0, 0, 0, 0);
+  // Shift date to Thursday in current week: ISO weeks start on Monday.
+  tempDate.setDate(tempDate.getDate() + 3 - ((tempDate.getDay() + 6) % 7));
+  const year = tempDate.getFullYear();
+  const week1 = new Date(year, 0, 4);
+  const diff = tempDate - week1;
+  const weekNumber =
+    1 + Math.round((diff / 86400000 - 3 + ((week1.getDay() + 6) % 7)) / 7);
+  return `${year}-${weekNumber.toString().padStart(2, "0")}`;
+};
+
+// ──────────────────────────────────────────────────────────────
+// Timeline Generators
+// ──────────────────────────────────────────────────────────────
+
+const generateHourlyTimeline = () => {
+  const timeline = [];
+  const now = new Date();
+  for (let i = 23; i >= 0; i--) {
+    const hourDate = new Date(now.getTime() - i * 60 * 60 * 1000);
+    const label = hourDate.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+    timeline.push({
+      value: formatLocalHour(hourDate), // key: "YYYY-MM-DD-HH"
+      label,
+      totalHours: 0,
+      studyRoomHours: 0,
+    });
+  }
+  return timeline;
+};
+
+const generateDailyTimeline = () => {
+  const timeline = [];
+  const now = new Date();
+  for (let i = 6; i >= 0; i--) {
+    const dayDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - i
+    );
+    const label = dayDate.toLocaleDateString([], {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    });
+    const value = formatLocalDate(dayDate); // key: "YYYY-MM-DD"
+    timeline.push({
+      value,
+      label,
+      totalHours: 0,
+      studyRoomHours: 0,
+    });
+  }
+  return timeline;
+};
+
+const generateWeeklyTimeline = () => {
+  const timeline = [];
+  const now = new Date();
+  // Generate last 5 weeks (including the current week).
+  for (let i = 4; i >= 0; i--) {
+    const weekDate = new Date(now.getTime() - i * 7 * 24 * 60 * 60 * 1000);
+    const isoYearWeek = getISOYearWeek(weekDate); // e.g. "2025-06"
+    // Label can show the week number.
+    const label = `Week ${isoYearWeek.split("-")[1]}`;
+    timeline.push({
+      value: isoYearWeek,
+      label,
+      totalHours: 0,
+      studyRoomHours: 0,
+    });
+  }
+  return timeline;
+};
+
+const generateMonthlyTimeline = () => {
+  const timeline = [];
+  const now = new Date();
+  for (let i = 4; i >= 0; i--) {
+    const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const label = monthDate.toLocaleDateString([], {
+      month: "short",
+      year: "numeric",
+    });
+    const value = `${monthDate.getFullYear()}-${(monthDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}`; // key: "YYYY-MM"
+    timeline.push({
+      value,
+      label,
+      totalHours: 0,
+      studyRoomHours: 0,
+    });
+  }
+  return timeline;
+};
+
+// ──────────────────────────────────────────────────────────────
+// Compute summary
+// ──────────────────────────────────────────────────────────────
+
+const computeSummary = (data) => {
+  if (!data || data.length === 0) {
+    return { totalStudyHours: 0, avgDaily: 0, maxStudyHours: 0};
+  }
+  const totalStudyHours = data.reduce(
+    (acc, item) => acc + (item.totalHours || 0),
+    0
+  );
+  const avgDaily = totalStudyHours / data.length;
+  const maxStudyHours = Math.max(...data.map((item) => item.totalHours || 0));
+  return { totalStudyHours, avgDaily, maxStudyHours};
+};
+
+// ──────────────────────────────────────────────────────────────
+// Main Component
+// ──────────────────────────────────────────────────────────────
 
 const StudyStats = () => {
-  const [view, setView] = useState("weekly");
+  const [view, setView] = useState("daily");
   const [isOpen, setIsOpen] = useState(false);
+  const [stats, setStats] = useState([]);
+
+  useEffect(() => {
+    const handleGetStats = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `http://localhost:3000/timerstats?period=${view}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const result = await response.json();
+        let timeline = [];
+
+        if (view === "hourly") {
+          timeline = generateHourlyTimeline();
+          result.periodData.forEach((item) => {
+            const found = timeline.find((entry) => entry.value === item._id);
+            if (found) {
+              found.totalHours = item.totalHours || 0;
+              found.studyRoomHours = item.studyRoomHours || 0;
+            }
+          });
+          setStats(
+            timeline.map((entry) => ({
+              name: entry.label,
+              totalHours: entry.totalHours,
+              studyRoomHours: entry.studyRoomHours,
+            }))
+          );
+        } else if (view === "daily") {
+          timeline = generateDailyTimeline();
+          result.periodData.forEach((item) => {
+            const found = timeline.find((entry) => entry.value === item._id);
+            if (found) {
+              found.totalHours = item.totalHours || 0;
+              found.studyRoomHours = item.studyRoomHours || 0;
+            }
+          });
+          setStats(
+            timeline.map((entry) => ({
+              name: entry.label,
+              totalHours: entry.totalHours,
+              studyRoomHours: entry.studyRoomHours,
+            }))
+          );
+        } else if (view === "weekly") {
+          timeline = generateWeeklyTimeline();
+          result.periodData.forEach((item) => {
+            const found = timeline.find((entry) => entry.value === item._id);
+            if (found) {
+              found.totalHours = item.totalHours || 0;
+              found.studyRoomHours = item.studyRoomHours || 0;
+            }
+          });
+          setStats(
+            timeline.map((entry) => ({
+              name: entry.label,
+              totalHours: entry.totalHours,
+              studyRoomHours: entry.studyRoomHours,
+            }))
+          );
+        } else if (view === "monthly") {
+          timeline = generateMonthlyTimeline();
+          result.periodData.forEach((item) => {
+            const found = timeline.find((entry) => entry.value === item._id);
+            if (found) {
+              found.totalHours = item.totalHours || 0;
+              found.studyRoomHours = item.studyRoomHours || 0;
+            }
+          });
+          setStats(
+            timeline.map((entry) => ({
+              name: entry.label,
+              totalHours: entry.totalHours,
+              studyRoomHours: entry.studyRoomHours,
+            }))
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
+    };
+
+    handleGetStats();
+  }, [view]);
+
+  const summary = computeSummary(stats);
 
   const handleDropdownClick = (viewType) => {
     setView(viewType);
     setIsOpen(false);
   };
 
-  const currentStats = summaryStats[view];
-
   return (
     <div className="bg-gray-800 rounded-xl text-center w-full">
-      {/* Header with summary study stats */}
+      {/* Header with computed summary study stats */}
       <div className="flex flex-col md:flex-row justify-between items-center p-6">
         <div className="font-semibold">
-          Total Study Hours: <strong>{currentStats.totalStudyHours}</strong>
-          <span>&nbsp; &nbsp;&nbsp;&nbsp;</span>
-          Average: <strong>{currentStats.totalStudyHours % 7}</strong>
-          <span>&nbsp; &nbsp;&nbsp;&nbsp;</span>
-          Maximum: <strong>{currentStats.totalStudyHours / 2}</strong>
+          Total Study Hours:{" "}
+          <strong>{summary.totalStudyHours.toFixed(2)}</strong>
+          <span className="mx-4"></span>
+          Average: <strong>{Number(summary.avgDaily).toFixed(2)}</strong>
+          <span className="mx-4"></span>
+          Maximum: <strong>{summary.maxStudyHours.toFixed(2)}</strong>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -101,6 +289,9 @@ const StudyStats = () => {
           </DropdownMenuTrigger>
           {isOpen && (
             <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleDropdownClick("hourly")}>
+                Hourly
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleDropdownClick("daily")}>
                 Daily
               </DropdownMenuItem>
@@ -115,15 +306,14 @@ const StudyStats = () => {
         </DropdownMenu>
       </div>
 
-      {/* Chart showing Total Study Hours and Study-Room Hours with gradients */}
+      {/* Chart showing Total Study Hours and Study-Room Hours */}
       <div className="flex">
         <div className="w-full" style={{ background: "#1e293b" }}>
           <ResponsiveContainer width="100%" height={300}>
             <ComposedChart
-              data={studyStatsData[view]}
+              data={stats}
               margin={{ top: 20, right: 30, left: 0, bottom: 10 }}
             >
-              {/* Define gradients for both series */}
               <defs>
                 <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#a855f7" stopOpacity={0.5} />
@@ -136,36 +326,28 @@ const StudyStats = () => {
               <Tooltip
                 contentStyle={{
                   backgroundColor: "#1e293b",
-                  border:"0",
-                  borderRadius:"0.8rem"
+                  border: "0",
+                  borderRadius: "0.8rem",
                 }}
                 itemStyle={{ color: "#fff" }}
                 labelStyle={{ color: "#d09eff" }}
               />
-
-              {/* Gradient Area for Total Study Hours */}
               <Area
                 type="monotone"
                 dataKey="totalHours"
                 stroke="#a855f7"
                 strokeWidth={2}
                 fill="url(#colorHours)"
-                dot={{
-                  r: 2,
-                  fill: "#a855f7",
-                }}
+                dot={{ r: 2, fill: "#a855f7" }}
                 activeDot={{ r: 6 }}
               />
-
               <Area
                 type="monotone"
                 dataKey="studyRoomHours"
                 stroke="#7b3eb5"
                 strokeWidth={2}
                 fill="url(#colorHours)"
-                dot={{
-                  r: 0,
-                }}
+                dot={{ r: 0 }}
                 activeDot={{ r: 6 }}
               />
             </ComposedChart>
@@ -174,17 +356,15 @@ const StudyStats = () => {
         <div className="text-sm text-gray-300 pr-6 my-auto text-left w-32">
           Rank:
           <div className="text-4xl mb-8 font-bold text-blue-500">
-            {currentStats.rank}
+            Null
           </div>
           Current Streak:
           <div className="text-4xl mb-8 font-bold text-yellow-500">
-            {currentStats.currentStreak}{" "}
-            <span className="text-lg font-normal"> days</span>
+            32 <span className="text-lg font-normal">days</span>
           </div>
           Max Streak:
           <div className="text-4xl mb-8 font-bold text-green-500">
-            {currentStats.maxStreak}{" "}
-            <span className="text-lg font-normal"> days</span>
+            50 <span className="text-lg font-normal">days</span>
           </div>
         </div>
       </div>
