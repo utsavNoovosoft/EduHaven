@@ -7,6 +7,7 @@ import {
   User,
   Headphones,
   BadgeInfo,
+  FileVideo2
 } from "lucide-react";
 
 function Layout() {
@@ -70,7 +71,7 @@ function Layout() {
               IconComponent={GamepadIcon}
               label="Games"
             />
-            <SidebarLink to="/music" IconComponent={Headphones} label="Music" />
+            <SidebarLink to="/course" IconComponent={FileVideo2} label="course" />
           </div>
           <hr className="border-gray-700 my-5 mx-4" />
           <SidebarLink

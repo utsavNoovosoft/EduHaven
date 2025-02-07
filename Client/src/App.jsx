@@ -3,7 +3,7 @@ import Layout from './components/Layout';
 import Home from './pages/homeDashboard/Home.jsx';
 import Dashboard from './pages/stats/Stats';
 import GameRoom from './pages/gameRoom/GameRoutes.jsx';
-import MusicRoom from './pages/MusicRoom';
+import CourseRoom from './pages/CourseRoom';
 import Signout from './Auth/Signout';
 import SignUp from './Auth/Authenticate.jsx';
 import ProfileRoutes from './pages/profileSettings/ProfileRoutes.jsx';
@@ -28,7 +28,7 @@ function App() {
             <Route path='study-room' element={<StudyRoom />} />
             <Route path='stats' element={<Dashboard />} />
             <Route path='games/*' element={<GameRoom />} />
-            <Route path='music' element={<MusicRoom />} />
+            <Route path='course' element={<CourseRoom />} />
             <Route path='project-details' element={<ProjectInfo />} />
             <Route path='profile/*' element={<ProfileRoutes />} />
             <Route path='signout' element={<Signout />} />
