@@ -1,5 +1,5 @@
-import {useState} from "react";
-import { ChevronDown } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, Clock4, Flame, BarChart2 } from "lucide-react";
 
 function StudyStats() {
   const [selectedTime, setSelectedTime] = useState("Today");
@@ -11,63 +11,61 @@ function StudyStats() {
     "All time": "45.8 h",
   };
   return (
-    <div className="bg-gray-900 text-white pl-6 rounded-2xl w-80 min-w-64 space-y-4 h-auto">
-      {/* Study Time */}
-      <div className="bg-gray-800 p-3 rounded-lg relative">
-      <div className="flex justify-between items-center">
-        <span className="font-semibold text-gray-300">Study time</span>
+    <div className=" text-white m-4 mt-2 w-[25%] h-full">
+      {/* Dropdown */}
+      <div className=" relative">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center space-x-1 text-gray-300 hover:text-white ml-auto"
+        >
+          <span>{selectedTime}</span>
+          <ChevronDown className="w-4 h-4" />
+        </button>
 
-        {/* Dropdown */}
-        <div className="relative">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center space-x-1 text-gray-300 hover:text-white"
-          >
-            <span>{selectedTime}</span>
-            <ChevronDown className="w-4 h-4" />
-          </button>
-
-          {isOpen && (
-            <div className="absolute right-0 mt-2 w-32 bg-gray-900 text-white rounded-lg shadow-lg overflow-hidden z-10">
-              {Object.keys(studyData).map((time) => (
-                <button
-                  key={time}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-700"
-                  onClick={() => {
-                    setSelectedTime(time);
-                    setIsOpen(false);
-                  }}
-                >
-                  {time}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        {isOpen && (
+          <div className="absolute right-0 top-5 mt-2 w-32 bg-gray-900 text-white rounded-lg shadow-lg overflow-hidden z-10">
+            {Object.keys(studyData).map((time) => (
+              <button
+                key={time}
+                className="block w-full text-left px-4 py-2 hover:bg-gray-700"
+                onClick={() => {
+                  setSelectedTime(time);
+                  setIsOpen(false);
+                }}
+              >
+                {time}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
-      <p className="text-2xl font-bold mt-1">{studyData[selectedTime]}</p>
-    </div>
-
-      {/* Monthly Level */}
-      <div className="bg-gray-800 p-3 rounded-lg">
-        <p className="ont-semibold text-gray-300">Beginner (1-3h)</p>
-        <div className="w-full bg-gray-700 h-2 rounded-full mt-2">
-          <div
-            className="bg-purple-500 h-2 rounded-full"
-            style={{ width: "40%" }}
-          ></div>
-        </div>
-        <p className="text-sm text-gray-300 mt-1">
-          1.8 hours left until:{" "}
-          <span className="text-purple-400">Intermediate (3-6h)</span>
+      <div className="flex items-center gap-4 mb-3">
+        <Clock4 className="h-12 w-12 p-2.5 bg-green-400/70 rounded-full text-gray-100" />
+        <p className="text-2xl text-gray-300 font-bold ">
+          {studyData[selectedTime]}
         </p>
       </div>
 
-      {/* Leaderboard Rank */}
-      <div className="bg-gray-800 p-3 rounded-lg">
-        <p className="font-semibold text-gray-300">Leaderboard rank</p>
-        <p className="text-2xl font-bold text-yellow-400">#36385</p>
+      <div className="flex items-center gap-4 mb-3">
+        <BarChart2 className="h-12 w-12 p-2.5 bg-blue-400/70 rounded-full text-gray-100" />
+        <p className="text-2xl font-bold text-blue-400">#36385</p>
+      </div>
+
+      <div className="flex items-center gap-4 mb-3">
+        <Flame className="h-12 w-12 p-2.5 bg-yellow-400/70 rounded-full text-gray-100" />
+        <p className="text-2xl font-bold text-yellow-400">20 days</p>
+      </div>
+
+      <p className="text-md text-gray-200 pl-2">Beginner (1-2h)</p>
+      <div className="relative w-full bg-gray-700 h-5 rounded-2xl mt-2">
+        <p className="absolute h-full w-full pr-5 text-gray-300 text-sm text-right">
+          1.8h left
+        </p>
+        <div
+          className="bg-purple-500 h-5 rounded-2xl"
+          style={{ width: "40%" }}
+        ></div>
       </div>
     </div>
   );

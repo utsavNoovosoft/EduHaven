@@ -79,21 +79,22 @@ function Calendar() {
   };
 
   const blankDays = Array(firstDayOfMonth).fill(null);
-
+  const formattedTime = time.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+  const [timePart, period] = formattedTime.split(" ");
   return (
     <>
-      <div className="bg-gray-800 py-8 rounded-xl shadow-lg">
+      <div className="bg-gray-800 pt-6 rounded-3xl shadow-lg flex flex-col">
         {/* Header: Time and Day */}
-        <div className="px-8">
+        <div className="px-6">
           <h1 className="text-5xl font-thin text-white mb-2">
-            {time.toLocaleTimeString("en-US", {
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-              hour12: true,
-            })}
+            {timePart} <span className="text-xl">{period}</span>
           </h1>
-          <h2 className="text-l text-gray-300">
+          <h2 className="text-md text-gray-300">
             Today's{" "}
             {
               "Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(
@@ -104,13 +105,13 @@ function Calendar() {
         </div>
         <hr className="my-4 opacity-10" />
         {/* Calendar View */}
-        <div className="px-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold pl-2.5">
+        <div className="px-4">
+          <div className="flex justify-between items-center mb-6 px-2">
+            <h2 className="text-lg font-semibold ">
               {currentDate.toLocaleString("default", { month: "long" })}{" "}
               {currentDate.getFullYear()}
             </h2>
-            <div className="flex gap-5">
+            <div className="flex gap-3">
               <button
                 onClick={handlePrevMonth}
                 className="p-1.5 rounded-full hover:bg-slate-700"
@@ -126,10 +127,10 @@ function Calendar() {
             </div>
           </div>
           <div className="grid grid-cols-7 gap-[0.4rem]">
-            {"Sun Mon Tue Wed Thu Fri Sat".split(" ").map((day) => (
+            {"Su Mo Tu We Th Fr Sa".split(" ").map((day) => (
               <div
                 key={day}
-                className="text-center text-sm font-bold text-gray-500"
+                className="text-center text-xs font-md text-gray-400"
               >
                 {day}
               </div>
@@ -154,11 +155,11 @@ function Calendar() {
                 <div
                   key={day}
                   onClick={() => handleDayClick(day)}
-                  className={`flex items-center justify-center p-3 rounded-lg text-white cursor-pointer transition-all duration-200 ease-in-out h-11 mb-1
+                  className={`flex items-center justify-center p-2.5 text-sm rounded-full  text-gray-200 cursor-pointer transition-all duration-200 ease-in-out h-9 
                   ${isToday ? "bg-purple-600 hover:bg-purple-700" : ""}
                   ${
                     hasEvent && !isToday
-                      ? "bg-purple-900 hover:bg-purple-700"
+                      ? "bg-gray-700 hover:bg-gray-600"
                       : ""
                   }
                   ${!isToday && !hasEvent ? " hover:bg-gray-700" : ""}`}
@@ -169,23 +170,23 @@ function Calendar() {
             })}
           </div>
         </div>
-        <hr className="my-4 opacity-10" />
+
         {/* Upcoming Events Section */}
-        <div className="px-8">
-          <h3 className="text-lg font-semibold text-gray-300 mb-4">
+        <div className="p-6 rounded-3xl bg-[#2d364a] flex-1 mt-6">
+          <h3 className="text-lg font-semibold text-gray-200 mb-4">
             Upcoming Events:
           </h3>
           {upcomingEvents.length > 0 ? (
-            <ul className="text-gray-200 space-y-4 pl-2">
+            <ul className="text-gray-200 space-y-6 pl-2">
               {upcomingEvents.map((event) => {
                 const eventDate = new Date(event.date);
                 return (
                   <li
                     key={event.id}
-                    className="pl-3 border-l-4 border-purple-500 flex gap-4 items-center"
+                    className="pl-3 border-l-4 border-purple-500"
                   >
-                    <div className="">
-                      <div className="font-semibold text-gray-300">
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm text-gray-400">
                         {eventDate.toLocaleDateString()}
                       </div>
                       <div className="text-xs text-gray-400">

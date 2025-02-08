@@ -262,7 +262,7 @@ function TimerComponent() {
 
   return (
     <div
-      className={`p-6 rounded-xl flex-1 text-white min-w-72 transition-all duration-500 ${
+      className={`p-6 rounded-3xl flex-1 text-white min-w-72 transition-all duration-500 ${
         isBreakMode
           ? "bg-gradient-to-br from-emerald-800 to-sky-800"
           : "bg-gradient-to-br from-purple-900 to-indigo-800"

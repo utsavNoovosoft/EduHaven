@@ -5,7 +5,6 @@ import {
   LogIn,
   Radio,
   User,
-  Headphones,
   BadgeInfo,
   FileVideo2
 } from "lucide-react";
@@ -95,7 +94,7 @@ function Layout() {
         </div>
       </nav>
 
-      <main className="flex-1 p-8 ml-[4.5rem]">
+      <main className="flex-1 p-6 ml-[4.5rem]">
         <Outlet />
       </main>
     </div>
