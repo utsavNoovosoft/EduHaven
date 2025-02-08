@@ -131,7 +131,7 @@ const TodoComponent = () => {
   const openCount = todos.length - completedCount;
 
   return (
-    <div className="bg-gray-800 text-white rounded-lg p-6 w-full mx-auto relative">
+    <div className="bg-gray-800 text-white rounded-3xl p-6 w-full mx-auto relative">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Goals</h1>
