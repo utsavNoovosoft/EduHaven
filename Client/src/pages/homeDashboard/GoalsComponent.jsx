@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Plus, Pencil, Trash, Check, X } from "lucide-react";
+import { Pencil, Trash, Check, X } from "lucide-react";
+import Setgoals from "./Setgoals.jsx";
 
-const TodoComponent = () => {
+const GoalsComponent = () => {
   const [todos, setTodos] = useState([]);
-  const [title, setTitle] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editedTitle, setEditedTitle] = useState("");
 
   const sortTodos = (todosArray) => {
     return [...todosArray].sort((a, b) => {
       if (a.completed !== b.completed) return a.completed ? 1 : -1;
-      // Newest tasks first for incomplete, oldest first for completed
+      // For incomplete tasks, show newest first; for completed, oldest first.
       return a.completed
         ? new Date(a.dueDate) - new Date(b.dueDate)
         : new Date(b.dueDate) - new Date(a.dueDate);
@@ -38,28 +38,13 @@ const TodoComponent = () => {
     }
   };
 
-  const handleCreate = async () => {
-    if (!title.trim()) {
-      alert("Title is required!");
-      return;
-    }
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
-    try {
-      const { data } = await axios.post(
-        "http://localhost:3000/todo",
-        {
-          title,
-          completed: false,
-          dueDate: new Date().toISOString(),
-        },
-        getAuthHeader()
-      );
-      // Added sorting here
-      setTodos(sortTodos([data.data, ...todos]));
-      setTitle("");
-    } catch (error) {
-      console.error("Error creating todo:", error.message);
-    }
+  // Callback to handle a newly created goal from Setgoals.
+  const handleNewGoalCreated = (newGoal) => {
+    setTodos(sortTodos([newGoal, ...todos]));
   };
 
   const handleDelete = async (id) => {
@@ -80,7 +65,6 @@ const TodoComponent = () => {
         updatedTodo,
         getAuthHeader()
       );
-      // Added sorting here
       setTodos(
         sortTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)))
       );
@@ -119,21 +103,13 @@ const TodoComponent = () => {
     setEditedTitle("");
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") handleCreate();
-  };
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
   const completedCount = todos.filter((todo) => todo.completed).length;
   const openCount = todos.length - completedCount;
 
   return (
-    <div className="bg-gray-800 text-white rounded-3xl p-6 w-full mx-auto relative">
+    <div className="bg-gray-800 text-white rounded-3xl py-6 pb-2 w-full mx-auto relative">
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4 px-6">
         <h1 className="text-2xl font-bold">Goals</h1>
         <div className="flex space-x-4">
           <div className="flex items-center space-x-1">
@@ -147,31 +123,21 @@ const TodoComponent = () => {
         </div>
       </div>
 
-      {/* Input Section */}
-      <div className="relative w-full flex">
-        <input
-          type="text"
-          placeholder="Type a goal..."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          onKeyDown={handleKeyPress}
-          className="w-full bg-transparent border-b border-gray-600 text-gray-400 py-1 px-2 focus:outline-none"
-        />
-        <button onClick={handleCreate} className="text-white ml-2">
-          <Plus />
-        </button>
+      {/* New Goal Input Section (Extracted to Setgoals.jsx) */}
+      <div className="h-11"></div>
+      <div className="absolute left-0 right-0 z-10 top-16">
+        <Setgoals onGoalCreated={handleNewGoalCreated} />
       </div>
 
       {/* Tasks List Section */}
-      <div className="w-full space-y-2 mt-4 max-h-64 overflow-y-auto">
+      <div className="w-full max-h-[17.5rem] overflow-y-auto pt-2 px-2">
         {todos.length === 0 ? (
           <div className="text-gray-400">No tasks available</div>
         ) : (
           todos.map((todo) => (
-            // Added the "group" class to enable hover effects
             <div
               key={todo._id}
-              className="group flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700 cursor-pointer"
+              className="group flex items-center space-x-2 p-2 px-4 rounded-lg hover:bg-gray-700 cursor-pointer"
             >
               <label className="relative flex items-center">
                 <input
@@ -184,7 +150,6 @@ const TodoComponent = () => {
                   <Check className="absolute w-full text-white pointer-events-none" />
                 )}
               </label>
-
               {editingId === todo._id ? (
                 <input
                   type="text"
@@ -205,7 +170,6 @@ const TodoComponent = () => {
                   {todo.title}
                 </span>
               )}
-
               {editingId === todo._id ? (
                 <div className="flex gap-4">
                   <button
@@ -253,4 +217,4 @@ const TodoComponent = () => {
   );
 };
 
-export default TodoComponent;
+export default GoalsComponent;

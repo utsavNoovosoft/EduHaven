@@ -5,7 +5,7 @@ import Badges from "./Badges";
 import StudyStats from "./StudyStats";
 import Goals from "./Goals";
 import Leaderboard from "./Leaderboard";
-import Test from "./Test.jsx"
+import Test from "./Test.jsx";
 
 const Stats = () => {
   return (
@@ -18,27 +18,29 @@ const Stats = () => {
       </div>
       {/* content */}
       <div className="flex flex-col lg:flex-row gap-6 w-full content-center">
-        <div>
-          <ProfileCard />
-        </div>
-        <div className="flex-1 ">
+        <ProfileCard />
+        <div className="flex-1">
           <div className="mb-6">
             <StudyStats />
           </div>
-          <div className="flex gap-6 mb-6">
-            <MonthlyLevel />
-            <Badges />
+          <div className="flex flex-col xl:flex-col 2xl:flex-row">
+            <div className="flex-1 mr-6">
+              <div className="flex gap-6 mb-6">
+                <MonthlyLevel />
+                <Badges />
+              </div>
+              <div className=" gap-6 mb-6 ">
+                <Goals />
+              </div>
+            </div>
+            <div>
+              <Achievements />
+              <Leaderboard />
+            </div>
           </div>
-          <div className="flex gap-6 mb-6 flex-col xl:flex-col 2xl:flex-row">
-            <Goals />
-          </div>
-        </div>
-        <div>
-          <Achievements />
-          <Leaderboard />
         </div>
       </div>
-      <Test/>
+      <Test />
     </>
   );
 };

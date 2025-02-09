@@ -69,7 +69,11 @@ const Leaderboard = () => {
   };
 
   // Example: Current user's data (you can get this dynamically)
-  const currentUser = { name: "You", rank: 2, score: leaderboardData[view][1]?.score };
+  const currentUser = {
+    name: "You",
+    rank: 2,
+    score: leaderboardData[view][1]?.score,
+  };
 
   // Filter the leaderboard based on "Friends Only" toggle
   const filteredLeaderboard = leaderboardData[view].filter(
@@ -77,7 +81,7 @@ const Leaderboard = () => {
   );
 
   return (
-    <div className="bg-gray-800 p-6 pl-0 rounded-lg shadow-md text-center w-full">
+    <div className="bg-gray-800 p-6 pl-0 rounded-3xl shadow-md text-center w-full">
       <nav className="flex justify-between items-center pl-6">
         <h3 className="text-lg font-semibold flex items-center gap-2">
           <strong>Leaderboard</strong>
@@ -94,9 +98,15 @@ const Leaderboard = () => {
           </DropdownMenuTrigger>
           {isOpen && (
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleDropdownClick("daily")}>Daily</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDropdownClick("weekly")}>Weekly</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDropdownClick("monthly")}>Monthly</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDropdownClick("daily")}>
+                Daily
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDropdownClick("weekly")}>
+                Weekly
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDropdownClick("monthly")}>
+                Monthly
+              </DropdownMenuItem>
             </DropdownMenuContent>
           )}
         </DropdownMenu>
@@ -120,9 +130,13 @@ const Leaderboard = () => {
           {filteredLeaderboard.slice(0, 10).map((entry) => (
             <li
               key={entry.rank}
-              className={`flex justify-between py-2 px-4 ${entry.name === currentUser.name ? "bg-gray-600" : ""}`}
+              className={`flex justify-between py-2 px-4 ${
+                entry.name === currentUser.name ? "bg-gray-600" : ""
+              }`}
             >
-              <span>{entry.rank}. {entry.name}</span>
+              <span>
+                {entry.rank}. {entry.name}
+              </span>
               <span>{entry.score} points</span>
             </li>
           ))}
@@ -131,7 +145,8 @@ const Leaderboard = () => {
 
       {/* Show current user's position at the end */}
       <div className="mt-4 text-lg font-semibold">
-        Your Position: {currentUser.rank} - {currentUser.name} ({currentUser.score} points)
+        Your Position: {currentUser.rank} - {currentUser.name} (
+        {currentUser.score} points)
       </div>
     </div>
   );

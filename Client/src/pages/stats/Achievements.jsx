@@ -2,7 +2,7 @@ import { Trophy, Medal } from "lucide-react";
 
 const Achievements = () => {
   return (
-    <div className="bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
+    <div className="bg-gray-800 rounded-3xl shadow-lg p-6 mb-6">
       <div className="flex items-center gap-2 mb-4">
         <Trophy className="w-6 h-6 text-yellow-500" />
         <h3 className="text-xl font-bold">Achievements</h3>
