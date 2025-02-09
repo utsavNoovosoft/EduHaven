@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { parseISO } from "date-fns";
 import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -88,7 +88,7 @@ function Calendar() {
   const [timePart, period] = formattedTime.split(" ");
   return (
     <>
-      <div className="bg-gray-800 pt-6 rounded-3xl shadow-lg flex flex-col">
+      <div className="bg-gray-800 pt-6 w-[25%] min-w-fit rounded-3xl shadow-lg flex flex-col max-h-[750px]">
         {/* Header: Time and Day */}
         <div className="px-6">
           <h1 className="text-5xl font-thin text-white mb-2">
@@ -157,11 +157,7 @@ function Calendar() {
                   onClick={() => handleDayClick(day)}
                   className={`flex items-center justify-center p-2.5 text-sm rounded-full  text-gray-200 cursor-pointer transition-all duration-200 ease-in-out h-9 
                   ${isToday ? "bg-purple-600 hover:bg-purple-700" : ""}
-                  ${
-                    hasEvent && !isToday
-                      ? "bg-gray-700 hover:bg-gray-600"
-                      : ""
-                  }
+                  ${hasEvent && !isToday ? "bg-gray-700 hover:bg-gray-600" : ""}
                   ${!isToday && !hasEvent ? " hover:bg-gray-700" : ""}`}
                 >
                   {day}

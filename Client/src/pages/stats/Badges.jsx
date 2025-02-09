@@ -5,7 +5,7 @@ const Badges = () => {
   const badges = Array.from({ length: 10 }, (_, i) => i + 1);
 
   return (
-    <div className="bg-gray-800 rounded-xl shadow-lg p-6 w-full">
+    <div className="bg-gray-800 rounded-3xl shadow-lg p-6 w-full">
       <h3 className="text-xl font-bold mb-4 text-center">Badges Earned</h3>
       <div className="grid grid-cols-5 gap-4">
         {badges.map((badge) => (

@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { User, MessageCircle, ThumbsUp, Edit, UserPlus } from "lucide-react";
+import {
+  User,
+  MessageCircle,
+  ThumbsUp,
+  Edit3,
+  Share2,
+  UserPlus,
+  Landmark,
+  Earth,
+  DraftingCompass,
+  Puzzle,
+} from "lucide-react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { Link } from "react-router-dom";
 
 const ProfileCard = () => {
   const [user, setUser] = useState(null);
@@ -29,7 +41,6 @@ const ProfileCard = () => {
         setIsLoading(false);
       }
     };
-
     fetchUserProfile();
   }, []);
 
@@ -46,10 +57,18 @@ const ProfileCard = () => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-indigo-900 to-purple-900 rounded-3xl shadow-2xl pt-6 w-full relative overflow-hidden">
-      {/* Profile  */}
+    <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 lg:w-[20%] min-w-72 h-fit relative overflow-hidden">
+      {/* nav */}
+      <div className=" flex justify-end gap-6 px-4">
+        <Link to={"/profile/"}>
+          <Edit3 className="h-6 w-6 text-gray-400 hover:text-white" />
+        </Link>
+        <Share2 className=" h-6 w-6 text-gray-400 hover:text-white" />
+      </div>
+
       <div className="mx-4">
-        <div className="relative flex justify-center mb-4 gap-4">
+        {/* Profile  */}
+        <div className="relative flex items-center mb-4 gap-4">
           <div className="w-28 h-28 rounded-full shadow-lg overflow-hidden">
             {user.ProfilePicture ? (
               <img
@@ -63,64 +82,90 @@ const ProfileCard = () => {
               </div>
             )}
           </div>
-
-          <div className=" flex items-center gap-2 space-x-4 ">
-            <div className="">
-              <span className="block text-xl font-bold">342</span>
-              <span className="text-sm text-white/70">Kudos</span>
-            </div>
-            <div className="">
-              <span className="block text-xl font-bold">56</span>
-              <span className="text-sm text-white/70">Friends</span>
-            </div>
+          <div className=" text-center flex-1">
+            <span className="block text-2xl font-bold">342</span>
+            <span className="text-sm text-white/70">Kudos</span>
+          </div>
+          <div className=" text-center flex-1">
+            <span className="block text-2xl font-bold">56</span>
+            <span className="text-sm text-white/70">Friends</span>
           </div>
         </div>
 
         {/* User Info */}
-        <div className=" text-white">
+        <div className="text-white">
           <h2 className="text-xl font-bold">
             {user.FirstName} {user.LastName}
           </h2>
-          <p className="text-white/80 mb-4 max-w-xs">
-            {user?.Bio || "No bio available"}
-          </p>
+          {user?.Bio && (
+            <p className="text-white/80 mb-4 max-w-xs">{user.Bio}</p>
+          )}
+        </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-center space-x-4 my-4">
-            <button className="bg-white/20 hover:bg-white/30 transition-colors text-white px-6 py-2 rounded-full flex items-center space-x-2">
-              <ThumbsUp className="w-5 h-5" />
-              <span>Kudos</span>
-            </button>
-            <button className="bg-white/20 hover:bg-white/30 transition-colors text-white px-6 py-2 rounded-full flex items-center space-x-2">
-              <MessageCircle className="w-5 h-5" />
-              <span>chat</span>
-            </button>
-          </div>
-          <button className="bg-white/20 w-full text-center hover:bg-white/30 transition-colors text-white px-6 py-2 rounded-full flex items-center space-x-2 mb-4">
-            <UserPlus  className="w-5 h-5" />
+        {/* Action Buttons */}
+        <div className="flex flex-wrap justify-center gap-4 my-4">
+          <button className="bg-white/20 hover:bg-white/30 transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
+            <ThumbsUp className="w-5 h-5" />
+            <span>Kudos</span>
+          </button>
+          <button className="bg-white/20 hover:bg-white/30 transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
+            <MessageCircle className="w-5 h-5" />
+            <span>Chat</span>
+          </button>
+          <button className="bg-purple-600 hover:bg-purple-700 transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
+            <UserPlus className="w-5 h-5" />
             <span>Add friend</span>
           </button>
         </div>
       </div>
 
       {/* Additional Details */}
-      <div className="bg-white/10 rounded-2xl p-4 space-y-2">
-        <div className="flex justify-between text-white/80">
-          <span>University</span>
-          <span>{user.University || "Not specified"}</span>
-        </div>
-        <div className="flex justify-between text-white/80">
-          <span>Country</span>
-          <span>{user.Country || "Not specified"}</span>
-        </div>
-        <div className="flex justify-between text-white/80">
-          <span>Field of Study</span>
-          <span>{user.FieldOfStudy || "Not specified"}</span>
-        </div>
-        <div className="flex justify-between text-white/80">
-          <span>Member Since</span>
-          <span>{new Date(user.createdAt).getFullYear()}</span>
-        </div>
+      <div className="bg-gray-500/20 rounded-3xl p-4 space-y-4">
+        {user.FieldOfStudy && (
+          <div className="flex items-center gap-4 text-white/80">
+            <Landmark className="h-7 w-7" />
+            <div>
+              <p className="text-xs">{user.University || "Field of Study"}</p>
+              <p className="text-lg">
+                {user.FieldOfStudy}
+                {", " + user.GraduationYear || ""}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {user.OtherDetails?.skills && (
+          <div className="flex items-center gap-4 text-white/80">
+            <Puzzle className="h-7 w-7" />
+            <div>
+              <p className="text-xs">Skills</p>
+              <p className="text-lg">{user.OtherDetails.skills}</p>
+            </div>
+          </div>
+        )}
+        {user.OtherDetails?.interests && (
+          <div className="flex items-center gap-4 text-white/80">
+            <DraftingCompass className="h-7 w-7" />
+            <div>
+              <p className="text-xs">Interests</p>
+              <p className="text-lg">{user.OtherDetails.interests}</p>
+            </div>
+          </div>
+        )}
+        {user.Country && (
+          <div className="flex items-center gap-4 text-white/80">
+            <Earth className="h-7 w-7" />
+            <div>
+              <p className="text-xs">Country</p>
+              <p className="text-lg">{user.Country}</p>
+            </div>
+          </div>
+        )}
+        {user.OtherDetails?.additionalNotes && (
+          <div className="flex gap-3 text-white/80">
+            <span>{user.OtherDetails.additionalNotes}</span>
+          </div>
+        )}
       </div>
     </div>
   );
