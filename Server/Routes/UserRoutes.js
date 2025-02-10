@@ -4,6 +4,7 @@ import authMiddleware from '../Middlewares/authMiddleware.js';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { cloudinaryUpload, uploadmanish } from "../utils/Cloudnary.js";
 
 const router = express.Router();
 
@@ -36,6 +37,8 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024 // 5MB file size limit
   }
 });
+
+// uploadmanish.single("image"),cloudinaryUpload
 
 router.post("/signup", signup);
 router.post("/verify", verifyUser);
