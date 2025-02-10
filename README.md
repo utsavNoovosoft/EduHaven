@@ -65,7 +65,7 @@
 4. Start the development servers:
    ```bash
    # Start backend server
-   cd backend
+   cd Server
    npm start
 
    # Start frontend server
