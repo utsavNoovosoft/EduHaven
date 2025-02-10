@@ -33,7 +33,7 @@ const GoalsComponent = () => {
     } catch (error) {
       console.error("Error fetching todos:", error.message);
       if (error.response?.status === 401) {
-        window.location.href = "/login";
+        // window.location.href = "/login";
       }
     }
   };

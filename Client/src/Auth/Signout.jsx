@@ -12,6 +12,7 @@ const Signout = () => {
 
       // Clear the auth token after successful logout
       localStorage.removeItem("token");
+      localStorage.removeItem("activationToken");
 
       // Redirect to the login page
       navigate("/");
