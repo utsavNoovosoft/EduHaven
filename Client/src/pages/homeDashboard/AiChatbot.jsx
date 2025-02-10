@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { BotMessageSquare, X, ArrowUp, Loader } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
 
-const apikey = "AIzaSyC-zMJyRt8UuSutFmBLGW5Ou4hROtLxLrk";
+const apikey = "AIzaSyBPuUC9dW_uIqC8q9wsSE1zKjgUJR62XxE";
 
 const Ai = () => {
   const [question, setQuestion] = useState("");
