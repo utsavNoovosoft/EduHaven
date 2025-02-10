@@ -1,5 +1,5 @@
 import express from "express";
-import { login, logout, signup, getUserDetails, updateProfile, uploadProfilePicture } from "../Controller/UserController.js";
+import { login, logout, signup, getUserDetails, updateProfile, uploadProfilePicture, verifyUser } from "../Controller/UserController.js";
 import authMiddleware from '../Middlewares/authMiddleware.js';
 import multer from 'multer';
 import path from 'path';
@@ -38,8 +38,9 @@ const upload = multer({
 });
 
 router.post("/signup", signup);
+router.post("/verify", verifyUser);
 router.post("/login", login);
-router.post("/logout", logout);
+router.post("/logout",  logout);
 router.get("/user/details", getUserDetails);
 router.put("/user/profile", authMiddleware, updateProfile);
 router.post('/user/upload-profile-picture', 

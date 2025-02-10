@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 export const isAuth = (req, res, next) => {
-    const token = req.headers.authorization;
+    const token = req.headers.activationToken;
     if (!token) {
         return res.status(401).json({ error: "You must be logged in" });
     }
