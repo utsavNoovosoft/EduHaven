@@ -148,7 +148,7 @@ const generateMonthlyTimeline = () => {
 
 const computeSummary = (data) => {
   if (!data || data.length === 0) {
-    return { totalStudyHours: 0, avgDaily: 0, maxStudyHours: 0};
+    return { totalStudyHours: 0, avgDaily: 0, maxStudyHours: 0 };
   }
   const totalStudyHours = data.reduce(
     (acc, item) => acc + (item.totalHours || 0),
@@ -156,7 +156,7 @@ const computeSummary = (data) => {
   );
   const avgDaily = totalStudyHours / data.length;
   const maxStudyHours = Math.max(...data.map((item) => item.totalHours || 0));
-  return { totalStudyHours, avgDaily, maxStudyHours};
+  return { totalStudyHours, avgDaily, maxStudyHours };
 };
 
 // ──────────────────────────────────────────────────────────────
@@ -266,106 +266,106 @@ const StudyStats = () => {
   };
 
   return (
-    <div className="bg-gray-800 rounded-xl text-center w-full">
-      {/* Header with computed summary study stats */}
-      <div className="flex flex-col md:flex-row justify-between items-center p-6">
-        <div className="font-semibold">
-          Total Study Hours:{" "}
-          <strong>{summary.totalStudyHours.toFixed(2)}</strong>
-          <span className="mx-4"></span>
-          Average: <strong>{Number(summary.avgDaily).toFixed(2)}</strong>
-          <span className="mx-4"></span>
-          Maximum: <strong>{summary.maxStudyHours.toFixed(2)}</strong>
-        </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              className="flex items-center gap-1 hover:bg-gray-700 mt-4 md:mt-0"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {view.charAt(0).toUpperCase() + view.slice(1)}{" "}
-              <ChevronDown className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          {isOpen && (
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleDropdownClick("hourly")}>
-                Hourly
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDropdownClick("daily")}>
-                Daily
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDropdownClick("weekly")}>
-                Weekly
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDropdownClick("monthly")}>
-                Monthly
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          )}
-        </DropdownMenu>
-      </div>
-
+    <div className="flex bg-[#2D364A] rounded-3xl text-center w-full overflow-hidden">
       {/* Chart showing Total Study Hours and Study-Room Hours */}
-      <div className="flex">
-        <div className="w-full" style={{ background: "#1e293b" }}>
-          <ResponsiveContainer width="100%" height={300}>
-            <ComposedChart
-              data={stats}
-              margin={{ top: 20, right: 30, left: 0, bottom: 10 }}
-            >
-              <defs>
-                <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#a855f7" stopOpacity={0.5} />
-                  <stop offset="100%" stopColor="#a855f7" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
-              <XAxis dataKey="name" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#1e293b",
-                  border: "0",
-                  borderRadius: "0.8rem",
-                }}
-                itemStyle={{ color: "#fff" }}
-                labelStyle={{ color: "#d09eff" }}
-              />
-              <Area
-                type="monotone"
-                dataKey="totalHours"
-                stroke="#a855f7"
-                strokeWidth={2}
-                fill="url(#colorHours)"
-                dot={{ r: 2, fill: "#a855f7" }}
-                activeDot={{ r: 6 }}
-              />
-              <Area
-                type="monotone"
-                dataKey="studyRoomHours"
-                stroke="#7b3eb5"
-                strokeWidth={2}
-                fill="url(#colorHours)"
-                dot={{ r: 0 }}
-                activeDot={{ r: 6 }}
-              />
-            </ComposedChart>
-          </ResponsiveContainer>
+      <div
+        className="flex-1 bg-gray-800 pr-4 rounded-3xl"
+        style={{ background: "#1e293b" }}
+      >
+        {/* Header with computed summary study stats */}
+        <div className="flex flex-col md:flex-row justify-between items-center m-6">
+          <div className="font-semibold">
+            Total Study Hours:{" "}
+            <strong>{summary.totalStudyHours.toFixed(2)}</strong>
+            <span className="mx-4"></span>
+            Average: <strong>{Number(summary.avgDaily).toFixed(2)}</strong>
+            <span className="mx-4"></span>
+            Maximum: <strong>{summary.maxStudyHours.toFixed(2)}</strong>
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                className="flex items-center gap-1 hover:bg-gray-700 mt-4 md:mt-0"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                {view.charAt(0).toUpperCase() + view.slice(1)}{" "}
+                <ChevronDown className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            {isOpen && (
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleDropdownClick("hourly")}>
+                  Hourly
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleDropdownClick("daily")}>
+                  Daily
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleDropdownClick("weekly")}>
+                  Weekly
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleDropdownClick("monthly")}
+                >
+                  Monthly
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            )}
+          </DropdownMenu>
         </div>
-        <div className="text-sm text-gray-300 pr-6 my-auto text-left w-32">
-          Rank:
-          <div className="text-4xl mb-8 font-bold text-blue-500">
-            Null
-          </div>
-          Current Streak:
-          <div className="text-4xl mb-8 font-bold text-yellow-500">
-            32 <span className="text-lg font-normal">days</span>
-          </div>
-          Max Streak:
-          <div className="text-4xl mb-8 font-bold text-green-500">
-            50 <span className="text-lg font-normal">days</span>
-          </div>
+        <ResponsiveContainer width="100%" height={300}>
+          <ComposedChart
+            data={stats}
+            margin={{ top: 20, right: 30, left: 0, bottom: 10 }}
+          >
+            <defs>
+              <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#a855f7" stopOpacity={0.5} />
+                <stop offset="100%" stopColor="#a855f7" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
+            <XAxis dataKey="name" stroke="#94a3b8" />
+            <YAxis stroke="#94a3b8" />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#1e293b",
+                border: "0",
+                borderRadius: "0.8rem",
+              }}
+              itemStyle={{ color: "#fff" }}
+              labelStyle={{ color: "#d09eff" }}
+            />
+            <Area
+              type="monotone"
+              dataKey="totalHours"
+              stroke="#a855f7"
+              strokeWidth={2}
+              fill="url(#colorHours)"
+              dot={{ r: 2, fill: "#a855f7" }}
+              activeDot={{ r: 6 }}
+            />
+            <Area
+              type="monotone"
+              dataKey="studyRoomHours"
+              stroke="#7b3eb5"
+              strokeWidth={2}
+              fill="url(#colorHours)"
+              dot={{ r: 0 }}
+              activeDot={{ r: 6 }}
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="text-sm text-gray-300 p-6 mt-auto text-left w-fit">
+        Rank:
+        <div className="text-4xl mb-8 font-bold text-blue-500">Null</div>
+        Current Streak:
+        <div className="text-4xl mb-8 font-bold text-yellow-500">
+          32 <span className="text-lg font-normal">days</span>
+        </div>
+        Max Streak:
+        <div className="text-4xl mb-8 font-bold text-green-500">
+          50 <span className="text-lg font-normal">days</span>
         </div>
       </div>
     </div>

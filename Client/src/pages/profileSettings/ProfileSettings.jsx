@@ -76,7 +76,7 @@ const ProfileSettings = () => {
   return (
     <>
       {/* Profile Info */}
-      <div className="flex gap-5 items-center pl-[10vw] h-72 bg-gradient-to-r from-purple-700 to-indigo-800 rounded-xl">
+      <div className="flex gap-5 items-center pl-[10vw] h-72 bg-gradient-to-r from-purple-700 to-indigo-800 rounded-3xl">
         <div className="w-32 h-32 rounded-full border-2 border-gray-700 overflow-hidden shadow-lg">
           {user.ProfilePicture ? (
             <img
@@ -97,9 +97,9 @@ const ProfileSettings = () => {
         </div>
       </div>
 
-      <div className="flex h-1/2">
+      <div className="flex  max-w-[1080px] m-auto mt-4">
         {/* Sidebar */}
-        <aside className="w-64 bg-gray-800 shadow-md relative">
+        <aside className="w-64 h-[600px] bg-gray-800 shadow-md relative">
           <nav className="p-4 space-y-2">
             <NavLink to="" end className={sidebarLinkClasses}>
               <User className="inline-block mr-2" size={16} />
@@ -131,7 +131,7 @@ const ProfileSettings = () => {
         </aside>
 
         {/* Content Area */}
-        <main className="flex-1 p-8 bg-gray-900">
+        <main className=" p-8 bg-gray-900">
           <Outlet />
         </main>
       </div>

@@ -50,7 +50,7 @@ const Goals = () => {
   };
 
   return (
-    <div className="bg-gray-800 p-6 pl-0 rounded-lg shadow-md text-center w-full">
+    <div className="bg-gray-800 p-6 pl-0 rounded-3xl shadow-md text-center w-full">
       <nav className="flex justify-between items-center pl-6">
         <h3 className="text-lg font-semibold flex items-center gap-2">
           <CheckCircle className="w-5 h-5 text-green-500" /> <strong>13</strong>
@@ -69,15 +69,21 @@ const Goals = () => {
           </DropdownMenuTrigger>
           {isOpen && (
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleDropdownClick("daily")}>Daily</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDropdownClick("weekly")}>Weekly</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDropdownClick("monthly")}>Monthly</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDropdownClick("daily")}>
+                Daily
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDropdownClick("weekly")}>
+                Weekly
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDropdownClick("monthly")}>
+                Monthly
+              </DropdownMenuItem>
             </DropdownMenuContent>
           )}
         </DropdownMenu>
       </nav>
 
-      <div className="mt-4 w-full" style={{height: 300 }}>
+      <div className="mt-4 w-full" style={{ height: 300 }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data[view]}>
             <XAxis dataKey="name" stroke="#ddd" />
