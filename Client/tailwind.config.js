@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        kalam: ["Kalam", "cursive"], // Kalam font used in notes (study-room page)
+        kalam: ["Kalam", "cursive"], // Kalam font used in notes (home- page)
       },
       borderRadius: {
         lg: "var(--radius)",

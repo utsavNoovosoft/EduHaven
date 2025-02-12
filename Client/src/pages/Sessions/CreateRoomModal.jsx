@@ -25,7 +25,7 @@ function CreateRoomModal({ isOpen, onClose, onCreate }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-      <div className="bg-gray-800 p-6 rounded-lg w-full max-w-md relative">
+      <div className="bg-gray-800 p-6 rounded-3xl w-full max-w-md relative">
         {/* Close Button */}
         <button
           onClick={onClose}

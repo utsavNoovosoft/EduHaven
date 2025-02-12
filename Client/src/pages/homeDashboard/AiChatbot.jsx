@@ -1,14 +1,49 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
-import { BotMessageSquare, X, ArrowUp, Loader } from "lucide-react";
+import { BotMessageSquare, X, ArrowUp, Loader,  Spline } from "lucide-react";
+import { motion } from "framer-motion";
 import "react-toastify/dist/ReactToastify.css";
 
 const apikey = "AIzaSyBPuUC9dW_uIqC8q9wsSE1zKjgUJR62XxE";
+
+// Variants for the chat panel
+const panelVariants = {
+  hidden: { opacity: 0, scale: 0.95, y: 20 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 30 } },
+};
+
+// Variants for each chat message
+const messageVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1 },
+  }),
+};
 
 const Ai = () => {
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState([]); // Chat messages
   const [loading, setLoading] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  // Set a default size for the chat panel
+  const [dimensions, setDimensions] = useState({ width: 350, height: 500 });
+  const resizing = useRef(false);
+  const startPos = useRef({ x: 0, y: 0 });
+  const startDimensions = useRef({ width: 350, height: 500 });
+
+  // Attach custom showModal/close methods so the Ask AI button works as before
+  useEffect(() => {
+    const modalEl = document.getElementById("my_modal_1");
+    if (modalEl) {
+      modalEl.showModal = () => setIsChatOpen(true);
+      modalEl.close = () => {
+        setIsChatOpen(false);
+        setMessages([]); // Clear messages on close
+      };
+    }
+  }, []);
 
   const generateQuestion = async () => {
     if (!question.trim()) {
@@ -74,83 +109,128 @@ const Ai = () => {
 
   const closeModal = () => {
     setMessages([]); // Clear messages when modal is closed
-    document.getElementById("my_modal_1").close();
+    setIsChatOpen(false);
   };
 
+  // --- Resizable functionality from the top-left corner ---
+  const handleMouseDown = (e) => {
+    resizing.current = true;
+    startPos.current = { x: e.clientX, y: e.clientY };
+    startDimensions.current = { ...dimensions };
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!resizing.current) return;
+    const deltaX = e.clientX - startPos.current.x;
+    const deltaY = e.clientY - startPos.current.y;
+    // Since the resizer is at the top-left, subtract the delta from the starting width/height
+    const newWidth = Math.max(startDimensions.current.width - deltaX, 300);
+    const newHeight = Math.max(startDimensions.current.height - deltaY, 400);
+    setDimensions({ width: newWidth, height: newHeight });
+  };
+
+  const handleMouseUp = () => {
+    resizing.current = false;
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+  };
+  // --- End resizable functionality ---
+
   return (
-    <div id="manishai" className="cursor-pointer">
+    <div id="manishai">
+      {/* Ask AI Button (unchanged) */}
       <button
         className="flex gap-3 bg-purple-800 shadow-[0_4px_100px_rgba(176,71,255,0.7)] hover:bg-purple-700 px-5 py-2.5 rounded-xl text-white font-semibold transition duration-200 transform hover:scale-105 ml-9 hover:shadow-[0_4px_100px_rgba(176,71,255,1)]"
-        onClick={() => document.getElementById("my_modal_1").showModal()}
+        onClick={() => {
+          const modalEl = document.getElementById("my_modal_1");
+          modalEl && modalEl.showModal();
+        }}
       >
         <BotMessageSquare />
         Ask AI
       </button>
 
-      <dialog
+      {/* Chat Panel */}
+      <motion.div
         id="my_modal_1"
-        className="modal backdrop:bg-black/50 bg-transparent shadow-sm min-w-[380px] w-1/3 h-5/6"
+        variants={panelVariants}
+        initial="hidden"
+        animate={isChatOpen ? "visible" : "hidden"}
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          zIndex: 50,
+          pointerEvents: isChatOpen ? "auto" : "none",
+          width: dimensions.width,
+          height: dimensions.height,
+        }}
+        className="shadow-lg"
       >
-        <div className="modal-box bg-gray-800 rounded-2xl w-full h-full text-white flex flex-col overflow-hidden">
+        <div className="bg-gray-900 rounded-3xl w-full h-full text-white flex flex-col overflow-hidden relative">
+          {/* Resizer handle using the Maximize2 icon */}
+          <div
+            onMouseDown={handleMouseDown}
+            className="absolute top-0 left-0 p-2 cursor-nw-resize z-50"
+          >
+            <Spline className="w-5 h-5 text-gray-400" />
+          </div>
+
           {/* Nav-bar */}
-          <div className="flex justify-between items-center">
-            <h3 className="text-xl font-semibold px-4 py-2">Ask AI</h3>
-            <button onClick={closeModal} className="hover:bg-red-600 py-2 px-4">
+          <div className="flex justify-between items-center px-2 py-0.5 border-b border-gray-800">
+            <h3 className="text-lg text-gray-300 font-semibold pl-8">Ask AI</h3>
+            <button onClick={closeModal} className="hover:text-gray-100 text-gray-400 p-2 ">
               <X className="h-6 w-6" />
             </button>
           </div>
 
-          {/* {gif part pls change the gif  if needed } */}
-          {messages.length === 0 && (
-            <div className="m-6 flex flex-col items-center space-y-15">
-              <p className="text-lg font-semibold text-center">
-                Hey! Welcome to{" "}
-                <span className="text-purple-400">EduHaven Bot</span> 🎉
-                <br />
-                How can I help you today?
-              </p>
-
-              <img
-                src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExam9nM2hrdW9rMzF0cXJzYWZ2b2ZrdTkyaG9nbnEyZndjYmYyOWh0ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/NeQoAaKp2hhLt6Ayq1/giphy.gif"
-                alt="Welcome"
-                className="mt-20 w-40 h-40 rounded-full"
-              />
-            </div>
-          )}
-
           {/* Chat area */}
-          <div className="m-6 flex-1 overflow-y-auto space-y-4">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`flex flex-col ${
-                  msg.type === "user" ? "items-end" : "items-start"
-                }`}
-              >
-                <p
-                  className={`py-2 px-4 rounded-lg ${
-                    msg.type === "user"
-                      ? "bg-blue-100 text-blue-700"
-                      : " bg-green-100 text-green-700"
-                  }`}
-                >
-                  {msg.text}
+          <div className="flex-1 p-4 overflow-y-auto space-y-3">
+            {messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full">
+                <p className="text-lg font-medium text-center">
+                  Hey! Welcome to <span className="text-purple-400">EduHaven AI</span> 
+                  <br />
+                  How can I help you today?
                 </p>
-                <span className="text-sm text-gray-400 mt-1">{msg.time}</span>
               </div>
-            ))}
+            ) : (
+              messages.map((msg, index) => (
+                <motion.div
+                  key={index}
+                  custom={index}
+                  variants={messageVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className={`flex flex-col ${msg.type === "user" ? "items-end" : "items-start"}`}
+                >
+                  <p
+                    className={`py-2 px-4 rounded-lg ${
+                      msg.type === "user"
+                        ? "bg-gray-700 text-white"
+                        : "bg-transparent text-white"
+                    }`}
+                  >
+                    {msg.text}
+                  </p>
+                  <span className="text-sm text-gray-400 mt-1">{msg.time}</span>
+                </motion.div>
+              ))
+            )}
           </div>
 
           {/* Input area */}
-          <div className="modal-action text-center flex mb-4 px-4 gap-2">
+          <div className="p-1 border border-gray-700 rounded-full  flex ">
             <div className="flex-1">
               <input
                 type="text"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Type your question here..."
-                className="w-full p-3 rounded-full outline-none bg-gray-900 focus:ring-2 focus:ring-blue-900"
+                placeholder="Ask Eduhaven AI..."
+                className="w-full p-3 rounded-full outline-none bg-transparent focus:ring-2 focus:ring-gray-900"
               />
             </div>
             <button
@@ -166,7 +246,7 @@ const Ai = () => {
             </button>
           </div>
         </div>
-      </dialog>
+      </motion.div>
     </div>
   );
 };

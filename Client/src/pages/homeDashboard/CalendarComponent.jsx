@@ -3,6 +3,7 @@ import { parseISO } from "date-fns";
 import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import EventPopup from "./eventPopup";
+import { motion } from "framer-motion";
 
 function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -20,7 +21,9 @@ function Calendar() {
   ).getDay();
   const daysArray = [...Array(daysInMonth).keys()].map((day) => day + 1);
   const [selectedDay, setSelectedDay] = useState(null);
+  // (Assuming selectedEvent is handled in EventPopup or elsewhere)
   const [time, setTime] = useState(new Date());
+  const [, setSelectedEvent] = useState(null);
 
   const handlePrevMonth = () =>
     setCurrentDate(
@@ -70,6 +73,7 @@ function Calendar() {
     ).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
     const event = events.find((e) => e.date === date);
     setSelectedDay(date);
+    // Assuming selectedEvent is defined elsewhere or in the EventPopup component
     setSelectedEvent(event || { date });
   };
 
@@ -86,6 +90,7 @@ function Calendar() {
     hour12: true,
   });
   const [timePart, period] = formattedTime.split(" ");
+
   return (
     <>
       <div className="bg-gray-800 pt-6 w-[25%] min-w-fit rounded-3xl shadow-lg flex flex-col max-h-[750px]">
@@ -155,10 +160,10 @@ function Calendar() {
                 <div
                   key={day}
                   onClick={() => handleDayClick(day)}
-                  className={`flex items-center justify-center p-2.5 text-sm rounded-full  text-gray-200 cursor-pointer transition-all duration-200 ease-in-out h-9 
+                  className={`flex items-center justify-center p-2.5 text-sm rounded-full text-gray-200 cursor-pointer transition-all duration-200 ease-in-out h-9 
                   ${isToday ? "bg-purple-600 hover:bg-purple-700" : ""}
                   ${hasEvent && !isToday ? "bg-gray-700 hover:bg-gray-600" : ""}
-                  ${!isToday && !hasEvent ? " hover:bg-gray-700" : ""}`}
+                  ${!isToday && !hasEvent ? "hover:bg-gray-700" : ""}`}
                 >
                   {day}
                 </div>
@@ -167,19 +172,34 @@ function Calendar() {
           </div>
         </div>
 
-        {/* Upcoming Events Section */}
+        {/* Upcoming Events Section with subtle animations */}
         <div className="p-6 rounded-3xl bg-[#2d364a] flex-1 mt-6">
           <h3 className="text-lg font-semibold text-gray-200 mb-4">
             Upcoming Events:
           </h3>
           {upcomingEvents.length > 0 ? (
-            <ul className="text-gray-200 space-y-6 pl-2">
+            <motion.ul
+              className="text-gray-200 space-y-6 pl-2"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                visible: {
+                  transition: {
+                    staggerChildren: 0.1,
+                  },
+                },
+              }}
+            >
               {upcomingEvents.map((event) => {
                 const eventDate = new Date(event.date);
                 return (
-                  <li
+                  <motion.li
                     key={event.id}
                     className="pl-3 border-l-4 border-purple-500"
+                    variants={{
+                      hidden: { opacity: 0, y: 10 },
+                      visible: { opacity: 1, y: 0 },
+                    }}
                   >
                     <div className="flex items-center justify-between">
                       <div className="text-sm text-gray-400">
@@ -194,12 +214,19 @@ function Calendar() {
                       </div>
                     </div>
                     <span className="block mt-1">{event.title}</span>
-                  </li>
+                  </motion.li>
                 );
               })}
-            </ul>
+            </motion.ul>
           ) : (
-            <p className="text-gray-400 text-sm">No events.</p>
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="text-gray-400 text-sm"
+            >
+              No events.
+            </motion.p>
           )}
         </div>
       </div>

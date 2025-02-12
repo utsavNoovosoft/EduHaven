@@ -1,33 +1,32 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
 
 const EventPopup = ({ date, onClose, refreshEvents }) => {
   const [event, setEvent] = useState(null);
   const [title, setTitle] = useState("");
-  const [time, setTime] = useState("");
+  // Set default time to "08:00"
+  const [time, setTime] = useState("08:00");
   const [id, setId] = useState("");
 
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        console.log(date);
         const response = await axios.get(
           `http://localhost:3000/events-by-date?date=${date}`
         );
         const eventData = response.data.data[0]; // Assuming one event per date
-        setId(eventData._id);
-        console.log(response);
         if (eventData) {
+          setId(eventData._id);
           setEvent(eventData);
           setTitle(eventData.title || "");
-          setTime(eventData.time || "");
-
-          console.log("event exists", eventData);
+          // Use event time or default to "08:00"
+          setTime(eventData.time || "08:00");
         } else {
           setEvent(null);
           setTitle("");
-          setTime("");
-          console.log("No set event", date);
+          setTime("08:00");
         }
       } catch (error) {
         console.error("Error fetching event:", error);
@@ -39,23 +38,13 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
 
   const handleCreateOrUpdate = async () => {
     try {
-      const eventData = {
-        title,
-        time,
-        date,
-      };
-
+      const eventData = { title, time, date };
       if (id) {
-        // Update event if `id` exists
         await axios.put(`http://localhost:3000/events/${id}`, eventData);
-        console.log("Event updated successfully");
       } else {
-        // Create a new event if `id` is not provided
         await axios.post("http://localhost:3000/events", eventData);
-        console.log("Event created successfully");
       }
-
-      refreshEvents(); // Refresh calendar events
+      refreshEvents();
       onClose();
     } catch (error) {
       console.error("Error saving event:", error);
@@ -66,7 +55,6 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
     try {
       if (id) {
         await axios.delete(`http://localhost:3000/events/${id}`);
-        console.log("deleted");
         refreshEvents();
         onClose();
       }
@@ -76,54 +64,74 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-70 flex items-center justify-center z-50">
-      <div className="bg-gray-800 text-gray-100 p-6 rounded-lg shadow-lg w-80">
-        <h2 className="text-lg font-bold mb-4">
-          {event ? `Edit Event on ${date}` : `Create Event on ${date}`}
-        </h2>
-        <div className="mb-4">
-          <label className="block text-gray-300 mb-2">Event Title:</label>
-          <input
-            type="text"
-            placeholder="Enter event title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded p-2 focus:outline-none focus:ring focus:ring-purple-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-300 mb-2">Event Time:</label>
-          <input
-            type="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            className="w-full bg-gray-700 text-gray-100 border border-gray-600 rounded p-2 focus:outline-none focus:ring focus:ring-purple-500"
-          />
-        </div>
-        <div className="flex justify-between">
-          <button
-            onClick={handleCreateOrUpdate}
-            className="bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 transition duration-200"
-          >
-            {event ? "Update" : "Create"}
-          </button>
-          {event && (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div
+          className="relative w-96 bg-gray-800 rounded-3xl p-8 shadow-2xl shadow-gray-900 border border-gray-700"
+          initial={{ scale: 0.95, opacity: 0, y: 20 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.95, opacity: 0, y: 20 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          {/* Header with title, date and close icon */}
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-xl font-bold text-white">
+                {event ? "Edit Event" : "New Event"}
+              </h2>
+              <p className="text-sm text-gray-500">{date}</p>
+            </div>
             <button
-              onClick={handleDelete}
-              className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition duration-200"
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-300 transition mb-auto"
             >
-              Delete
+              <X size={24} />
             </button>
-          )}
-          <button
-            onClick={onClose}
-            className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-500 transition duration-200"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
+          </div>
+          {/* Input for event title */}
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Event title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full rounded-xl bg-transparent border border-gray-700 px-4 py-2 text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            />
+          </div>
+          {/* Input for event time */}
+          <div className="mb-6">
+            <input
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              className="w-full rounded-xl bg-transparent border border-gray-700 px-4 py-2 text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition "
+            />
+          </div>
+          {/* Action buttons */}
+          <div className="flex space-x-3">
+            {event && (
+              <button
+                onClick={handleDelete}
+                className="flex-1 rounded-lg bg-gray-600 py-2 text-center text-white font-semibold shadow hover:bg-red-700 transition"
+              >
+                Delete
+              </button>
+            )}
+            <button
+              onClick={handleCreateOrUpdate}
+              className="flex-1 m-auto w-min rounded-lg bg-purple-600 py-2 text-center text-white font-semibold shadow hover:bg-purple-700 transition"
+            >
+              {event ? "Update" : "Create"}
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
