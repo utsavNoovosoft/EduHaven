@@ -62,26 +62,24 @@ function Session() {
   };
 
   return (
-    <>
-      {/* Navbar */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Study Room</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 px-6 py-2.5 rounded-xl flex items-center gap-2 transition-colors"
-        >
-          <PlusCircle className="w-6 h-6" />
-          Create Your Own Room
-        </button>
-      </div>
-
-      {/* Study Rooms Section */}
-      <section>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="h-[calc(100vh_-_3rem)] flex gap-6">
+      <div className=" gap-6 flex-1 ">
+        {/* Navbar */}
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Study Room</h1>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 px-6 py-2.5 rounded-xl flex items-center gap-2 transition-colors"
+          >
+            <PlusCircle className="w-6 h-6" />
+            Create Your Own Room
+          </button>
+        </div>
+        <div className="flex gap-6 justify-center mt-8 flex-1 flex-wrap">
           {Sessions.map((room) => (
             <div
               key={room.id}
-              className="bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow"
+              className="bg-gray-800 p-6 rounded-3xl shadow-lg hover:shadow-2xl transition-shadow w-96"
             >
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold">{room.name}</h3>
@@ -98,18 +96,14 @@ function Session() {
             </div>
           ))}
         </div>
-      </section>
+      </div>
 
-      <br />
-      <br />
-      <hr />
-      <br />
-
-      {/* Friends Section */}
-      <Friends
-        friendRequests={friendRequests}
-        suggestedFriends={suggestedFriends}
-      />
+      <div className="w-[20%] overflow-scroll">
+        <Friends
+          friendRequests={friendRequests}
+          suggestedFriends={suggestedFriends}
+        />
+      </div>
 
       {/* Create Room Modal */}
       <CreateRoomModal
@@ -117,7 +111,7 @@ function Session() {
         onClose={() => setIsModalOpen(false)}
         onCreate={handleCreateRoom}
       />
-    </>
+    </div>
   );
 }
 
