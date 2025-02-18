@@ -26,7 +26,7 @@ export default async function calculateStats(userId, period) {
     default:
       startDate = new Date(0);
   }
-
+2
   try {
     const stats = await StudySession.aggregate([
       {

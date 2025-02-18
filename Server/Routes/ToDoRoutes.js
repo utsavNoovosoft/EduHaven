@@ -4,10 +4,10 @@ import authMiddleware from '../Middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-router.post('/todo', authMiddleware, createTodo);
-router.get('/todo', authMiddleware, getAllTodos);
-router.get('/todo/:id', authMiddleware, getTodoById);
-router.put('/todo/:id', authMiddleware, updateTodo);
-router.delete('/todo/:id', authMiddleware, deleteTodo);
+router.post('/', authMiddleware, createTodo);
+router.get('/', authMiddleware, getAllTodos);
+router.get('/:id', authMiddleware, getTodoById);
+router.put('/:id', authMiddleware, updateTodo);
+router.delete('/:id', authMiddleware, deleteTodo);
 
 export default router;

@@ -11,43 +11,6 @@ function Session() {
     { id: 3, name: "Room 3", students: 4 },
   ]);
 
-  // Dummy data for friend requests and suggested friends.
-  const friendRequests = [
-    {
-      id: 1,
-      name: "Alice Johnson",
-      mutual: 2,
-      bio: "Loves design and art. Available for a study session!",
-    },
-    {
-      id: 2,
-      name: "Bob Smith",
-      mutual: 1,
-      bio: "Computer science major and coding enthusiast.",
-    },
-  ];
-
-  const suggestedFriends = [
-    {
-      id: 1,
-      name: "Charlie Brown",
-      mutual: 3,
-      bio: "History buff and passionate about ancient civilizations.",
-    },
-    {
-      id: 2,
-      name: "David Lee",
-      mutual: 2,
-      bio: "Math lover who enjoys solving puzzles and brainteasers.",
-    },
-    {
-      id: 3,
-      name: "Eva Green",
-      mutual: 4,
-      bio: "Aspiring writer and literature geek.",
-    },
-  ];
-
   // State to manage modal visibility.
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -63,7 +26,7 @@ function Session() {
 
   return (
     <div className="h-[calc(100vh_-_3rem)] flex gap-6">
-      <div className=" gap-6 flex-1 ">
+      <div className=" gap-6 flex-1">
         {/* Navbar */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Study Room</h1>
@@ -98,11 +61,8 @@ function Session() {
         </div>
       </div>
 
-      <div className="w-[20%] overflow-scroll">
-        <Friends
-          friendRequests={friendRequests}
-          suggestedFriends={suggestedFriends}
-        />
+      <div className="w-[20%] overflow-scroll min-w-72">
+        <Friends/>
       </div>
 
       {/* Create Room Modal */}

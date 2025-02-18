@@ -13,18 +13,18 @@ import authMiddleware from '../Middlewares/authMiddleware.js';
 const router = express.Router();
 
 // Route to create a new note
-router.post("/note",authMiddleware, createNote);
+router.post("/",authMiddleware, createNote);
 
 // Route to get all notes
-router.get("/note",authMiddleware, getAllNotes);
+router.get("/",authMiddleware, getAllNotes);
 
 // Route to get a specific note by its ID
-router.get("/note/:id", authMiddleware,getNoteById);
+router.get("/:id", authMiddleware,getNoteById);
 
 // Route to update a specific note by its ID
-router.put("/note/:id",authMiddleware, updateNote);
+router.put("/:id",authMiddleware, updateNote);
 
 // Route to delete a specific note by its ID
-router.delete("/note/:id",authMiddleware, deleteNote);
+router.delete("/:id",authMiddleware, deleteNote);
 
 export default router;

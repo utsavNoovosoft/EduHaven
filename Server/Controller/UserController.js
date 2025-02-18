@@ -27,7 +27,7 @@ export const signup = async (req, res) => {
     if (user) {
       return res.status(409).json({ error: "User already exists" });
     }
-    // const imageurl = req.body.imageUrl; 
+    // const imageurl = req.body.imageUrl;
     // console.log(imageurl)
     // Hash the password
     const haspass = await bcrypt.hash(Password, 12);
