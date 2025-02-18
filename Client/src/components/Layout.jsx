@@ -67,7 +67,7 @@ function Layout() {
       {/* Sidebar */}
       <nav
         ref={sidebarRef}
-        className="relative w-[4.5rem] border border-transparent border-r-gray-800 p-1 flex flex-col items-center justify-between fixed top-0 left-0 h-screen shadow-lg"
+        className=" w-[4.5rem] border border-transparent border-r-gray-800 p-1 flex flex-col items-center justify-between fixed top-0 left-0 h-screen shadow-lg"
       >
         <div>
           <Link to="/">
@@ -151,7 +151,7 @@ function Layout() {
       </nav>
 
       {/* Main content area with a fast, minimal slide-in-from-bottom animation */}
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-6 ml-[4.5vw]">
         <motion.div
           key={location.pathname}
           initial={{ opacity: 0, y: 10 }}

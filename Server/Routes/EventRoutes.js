@@ -10,11 +10,11 @@ import {
 
 const router = express.Router();
 
-router.get("/events", getAllEvents);
-router.get("/events/:id", getEventById);
-router.get("/events-by-date", getEventByDate);
-router.post("/events", createEvent);
-router.put("/events/:id", updateEvent);
-router.delete("/events/:id", deleteEvent);
+router.get("/", getAllEvents);
+router.get("/:id", getEventById);
+router.get("/-by-date", getEventByDate);
+router.post("/", createEvent);
+router.put("/:id", updateEvent);
+router.delete("/:id", deleteEvent);
 
 export default router;
