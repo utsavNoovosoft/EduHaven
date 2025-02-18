@@ -1,6 +1,7 @@
 [![join our group on (2)](https://github.com/user-attachments/assets/b40b3895-897b-421c-8b0d-531bf5e71adf)
 ](https://chat.whatsapp.com/D2YldBvUAigD2FOzFQ8U5X)
 # EduHaven
+![image](https://github.com/user-attachments/assets/970c84bf-ac78-4583-af73-d2b8b4b393b0)
 
 ## Overview
 **EduHaven** is a platform designed to assist students in their academic journey by providing a productivity-focused environment. With features like task management, note-making, real-time study rooms, and a social touch, it aims to simplify and enhance the learning process. The project is built with the **MERN stack** and incorporates real-time collaboration, analytics, and optional AI-powered tools.
