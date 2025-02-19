@@ -18,7 +18,8 @@ const UserSchema = new mongoose.Schema(
     GraduationYear: { type: Number, min: 1900, max: 2100 },
     OtherDetails: { type: mongoose.Schema.Types.Mixed },
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], 
+    friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    sentRequests:[{type:mongoose.Schema.Types.ObjectId, ref: 'User'}],
     notes: [
       {
         type: mongoose.Schema.Types.ObjectId,
