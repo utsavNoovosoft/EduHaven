@@ -31,7 +31,7 @@ function GameRoom() {
     },
   ];
   return (
-    <>
+    <div className="m-6 ">
       {/* nav-bar */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Game Room</h1>
@@ -102,7 +102,7 @@ function GameRoom() {
 
       {/* breathing-space */}
       <div className="h-[200px]"></div>
-    </>
+    </div>
   );
 }
 

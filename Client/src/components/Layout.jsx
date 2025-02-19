@@ -7,6 +7,7 @@ import {
   Radio,
   User,
   BadgeInfo,
+  MessageSquareText,
   FileVideo2,
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -88,6 +89,13 @@ function Layout() {
               ref={(el) => (linkRefs.current["/study-room"] = el)}
             />
             <SidebarLink
+              to="/chat-room"
+              IconComponent={MessageSquareText}
+              label="chat"
+              isActive={location.pathname === "/chat-room"}
+              ref={(el) => (linkRefs.current["/chat-room"] = el)}
+            />
+            <SidebarLink
               to="/stats"
               IconComponent={BarChart2}
               label="Stats"
@@ -151,7 +159,7 @@ function Layout() {
       </nav>
 
       {/* Main content area with a fast, minimal slide-in-from-bottom animation */}
-      <main className="flex-1 p-6 ml-[4.5vw]">
+      <main className="flex-1 ml-[70px]">
         <motion.div
           key={location.pathname}
           initial={{ opacity: 0, y: 10 }}

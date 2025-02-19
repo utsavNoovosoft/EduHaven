@@ -25,7 +25,7 @@ function Session() {
   };
 
   return (
-    <div className="h-[calc(100vh_-_3rem)] flex gap-6">
+    <div className="h-[100vh] p-6 pb-0 flex gap-6">
       <div className=" gap-6 flex-1">
         {/* Navbar */}
         <div className="flex justify-between items-center mb-6">

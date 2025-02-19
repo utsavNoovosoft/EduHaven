@@ -76,7 +76,7 @@ const ProfileSettings = () => {
   return (
     <>
       {/* Profile Info */}
-      <div className="flex gap-5 items-center pl-[10vw] h-72 bg-gradient-to-r from-purple-700 to-indigo-800 rounded-3xl">
+      <div className="m-6 flex gap-5 items-center pl-[10vw] h-72 bg-gradient-to-r from-purple-700 to-indigo-800 rounded-3xl">
         <div className="w-32 h-32 rounded-full border-2 border-gray-700 overflow-hidden shadow-lg">
           {user.ProfilePicture ? (
             <img

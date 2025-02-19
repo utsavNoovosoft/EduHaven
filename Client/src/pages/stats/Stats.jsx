@@ -9,7 +9,7 @@ import Test from "./Test.jsx";
 
 const Stats = () => {
   return (
-    <>
+    <div className="m-6 ">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Anaylitics</h1>
         <div className="flex items-center gap-4">
@@ -41,7 +41,7 @@ const Stats = () => {
         </div>
       </div>
       <Test />
-    </>
+    </div>
   );
 };
 
