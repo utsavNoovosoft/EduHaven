@@ -107,7 +107,7 @@ const GoalsComponent = () => {
   const openCount = todos.length - completedCount;
 
   return (
-    <div className="bg-gray-800 text-white rounded-3xl py-6 pb-2 w-full mx-auto relative">
+    <div className="bg-sec txt rounded-3xl py-6 pb-2 w-full mx-auto relative">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-4 px-6">
         <h1 className="text-2xl font-bold">Goals</h1>
@@ -117,7 +117,7 @@ const GoalsComponent = () => {
             <span>{openCount} Open</span>
           </div>
           <div className="flex items-center space-x-1">
-            <span className="text-gray-400">●</span>
+            <span className="txt-dim">●</span>
             <span>{completedCount} Closed</span>
           </div>
         </div>
@@ -132,22 +132,22 @@ const GoalsComponent = () => {
       {/* Tasks List Section */}
       <div className="w-full max-h-[17.5rem] overflow-y-auto pt-2 px-2">
         {todos.length === 0 ? (
-          <div className="text-gray-400">No tasks available</div>
+          <div className="txt-dim">No tasks available</div>
         ) : (
           todos.map((todo) => (
             <div
               key={todo._id}
-              className="group flex items-center space-x-2 p-2 px-4 rounded-lg hover:bg-gray-700 cursor-pointer"
+              className="group flex items-center space-x-2 p-2 px-4 rounded-lg hover:bg-ter cursor-pointer"
             >
               <label className="relative flex items-center">
                 <input
                   type="checkbox"
                   checked={todo.completed}
                   onChange={() => handleToggle(todo._id)}
-                  className="w-5 h-5 rounded-full border border-gray-500 appearance-none checked:bg-purple-500 checked:border-purple-500 focus:outline-none"
+                  className="w-5 h-5 rounded-full border border-txt-dim appearance-none checked:bg-purple-500 checked:border-purple-500 focus:outline-none"
                 />
                 {todo.completed && (
-                  <Check className="absolute w-full text-white pointer-events-none" />
+                  <Check className="absolute w-full txt pointer-events-none" />
                 )}
               </label>
               {editingId === todo._id ? (
@@ -156,15 +156,13 @@ const GoalsComponent = () => {
                   value={editedTitle}
                   onChange={(e) => setEditedTitle(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSave()}
-                  className="flex-grow bg-transparent border-b border-gray-600 text-gray-400 py-1 px-2 focus:outline-none"
+                  className="flex-grow bg-transparent border-b border-txt-dim txt-dim py-1 px-2 focus:outline-none"
                   autoFocus
                 />
               ) : (
                 <span
                   className={`flex-grow text-lg ${
-                    todo.completed
-                      ? "line-through text-gray-500"
-                      : "text-gray-300"
+                    todo.completed ? "line-through txt-dim" : "txt-dim"
                   }`}
                 >
                   {todo.title}
@@ -180,14 +178,14 @@ const GoalsComponent = () => {
                   </button>
                   <button
                     onClick={handleCancel}
-                    className="text-gray-400 hover:text-gray-300 transition-colors"
+                    className="txt-dim hover:txt transition-colors"
                   >
                     <X />
                   </button>
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
-                  <span className="text-gray-400 group-hover:hidden">
+                  <span className="txt-dim group-hover:hidden">
                     {new Date(todo.dueDate).toLocaleDateString()}
                   </span>
                   <div className="hidden group-hover:flex gap-4">
@@ -196,13 +194,13 @@ const GoalsComponent = () => {
                         setEditingId(todo._id);
                         setEditedTitle(todo.title);
                       }}
-                      className="text-gray-400 hover:text-blue-500 transition-colors"
+                      className="txt-dim hover:text-blue-500 transition-colors"
                     >
                       <Pencil className="h-5" />
                     </button>
                     <button
                       onClick={() => handleDelete(todo._id)}
-                      className="text-gray-400 hover:text-red-500 transition-colors"
+                      className="txt-dim hover:text-red-500 transition-colors"
                     >
                       <Trash className="h-5" />
                     </button>

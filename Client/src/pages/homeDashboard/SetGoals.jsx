@@ -63,8 +63,8 @@ const Setgoals = ({ onGoalCreated }) => {
 
   return (
     <div
-      className={` px-4 pt-2 rounded-xl ${
-        title.trim() !== "" ? "bg-[#2d364a]" : ""
+      className={`px-4 pt-2 rounded-xl ${
+        title.trim() !== "" ? "bg-ter" : ""
       }`}
       style={{ containerType: "inline-size" }}
     >
@@ -76,23 +76,25 @@ const Setgoals = ({ onGoalCreated }) => {
           onChange={(e) => setTitle(e.target.value)}
           onKeyDown={handleKeyPress}
           autoFocus
-          className="w-full bg-transparent border-b border-gray-600 text-gray-400 py-2 px-2 focus:outline-none"
+          className="w-full bg-transparent border-b border-txt-dim txt-dim py-2 px-2 focus:outline-none"
         />
-        <button onClick={handleCreate} className="text-white ml-2">
+        <button onClick={handleCreate} className="txt ml-2">
           <Plus />
         </button>
       </div>
       {/* Render the calendar and dropdowns only if there's some text in the input */}
       {title.trim() !== "" && (
         <>
-          <p className="text-red-400">Currenty only calender is functional. </p>
+          <p className="text-red-400">
+            Currenty only calender is functional.
+          </p>
           <div className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col">
-            <div className="flex-1 ">
+            <div className="flex-1">
               {/* Repeat Dropdown */}
               <div className="mb-4 [@container(max-width:420px)]:flex gap-12 items-center">
                 <label className="block font-semibold mb-1">Repeat:</label>
                 <select
-                  className="bg-slate-700 rounded-lg p-2 w-full text-white border border-gray-600"
+                  className="bg-ter rounded-lg p-2 w-full txt border border-txt-dim"
                   value={repeat}
                   onChange={(e) => setRepeat(e.target.value)}
                 >
@@ -101,7 +103,7 @@ const Setgoals = ({ onGoalCreated }) => {
                       <option
                         key={r}
                         value={r}
-                        className="text-white bg-slate-800"
+                        className="txt bg-sec"
                       >
                         {r}
                       </option>
@@ -113,7 +115,7 @@ const Setgoals = ({ onGoalCreated }) => {
               <div className="mb-4 [@container(max-width:420px)]:flex gap-16 items-center">
                 <label className="block font-semibold mb-1">Time:</label>
                 <select
-                  className="bg-slate-700 rounded-lg p-2 w-full text-white border border-gray-600"
+                  className="bg-ter rounded-lg p-2 w-full txt border border-txt-dim"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
                 >
@@ -129,7 +131,7 @@ const Setgoals = ({ onGoalCreated }) => {
                     <option
                       key={t}
                       value={t}
-                      className="text-white bg-slate-800"
+                      className="txt bg-sec"
                     >
                       {t}
                     </option>
@@ -137,10 +139,10 @@ const Setgoals = ({ onGoalCreated }) => {
                 </select>
               </div>
               {/* Reminder Dropdown */}
-              <div className=" [@container(max-width:420px)]:flex gap-7 items-center">
+              <div className="[@container(max-width:420px)]:flex gap-7 items-center">
                 <label className="block font-semibold mb-1">Reminder:</label>
                 <select
-                  className="bg-slate-700 rounded-lg p-2 w-full text-white border border-gray-600"
+                  className="bg-ter rounded-lg p-2 w-full txt border border-txt-dim"
                   value={reminder}
                   onChange={(e) => setReminder(e.target.value)}
                 >
@@ -155,7 +157,7 @@ const Setgoals = ({ onGoalCreated }) => {
                     <option
                       key={r}
                       value={r}
-                      className="text-white bg-slate-800"
+                      className="txt bg-sec"
                     >
                       {r}
                     </option>

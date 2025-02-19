@@ -58,7 +58,7 @@ function NotesComponent() {
     }
   };
 
-  // this fn manages wether to update note or create new. keeps track of notes
+  // This function manages whether to update note or create new.
   const handleSync = () => {
     setRotate(true);
     setTimeout(() => setIsSynced(true), 700);
@@ -161,7 +161,6 @@ function NotesComponent() {
       }
     }, 3000);
   };
-  currentPage;
 
   const handleTitleChange = async (event) => {
     const updatedTitle = event.target.value;
@@ -199,15 +198,15 @@ function NotesComponent() {
   };
 
   return (
-    <div className="bg-gray-800 text-white rounded-3xl py-6 px-3 w-full mx-auto relative">
+    <div className="bg-sec txt rounded-3xl py-6 px-3 w-full mx-auto relative">
       {error && <p className="text-red-500">{error}</p>}
 
-      {/* nav */}
+      {/* Navigation */}
       <div className="flex justify-between px-3">
-        <div className=" flex gap-4 items-center">
+        <div className="flex gap-4 items-center">
           <h3 className="text-2xl font-semibold">Notes</h3>
           <button
-            className="p-1.5 rounded-full hover:bg-slate-700"
+            className="p-1.5 rounded-full hover:bg-ter"
             onClick={addNewPage}
           >
             <Plus />
@@ -219,16 +218,16 @@ function NotesComponent() {
           </span>
           <button
             onClick={goToPreviousPage}
-            className={`p-1.5 rounded-full hover:bg-slate-700 ${
-              currentPage === 0 ? "text-gray-500" : ""
+            className={`p-1.5 rounded-full hover:bg-ter ${
+              currentPage === 0 ? "txt-dim" : ""
             }`}
           >
             <ChevronLeft />
           </button>
           <button
             onClick={goToNextPage}
-            className={`p-1.5 rounded-full hover:bg-slate-700 ${
-              currentPage === notes.length - 1 ? "text-gray-500" : ""
+            className={`p-1.5 rounded-full hover:bg-ter ${
+              currentPage === notes.length - 1 ? "txt-dim" : ""
             }`}
           >
             <ChevronRight />
@@ -236,7 +235,7 @@ function NotesComponent() {
         </div>
       </div>
 
-      {/* Topic , delete and sync btn*/}
+      {/* Title, Delete and Sync Button */}
       <div className="flex justify-between mt-5 items-center w-full px-3">
         <input
           type="text"
@@ -247,8 +246,6 @@ function NotesComponent() {
         />
         {!isSynced && (
           <button
-            // onClick={handleSync}
-            // onclick feature will may added in future. when clicked, the notes quickly saves to db without delay of 3seconds.
             className="text-black text-lg hover:bg-yellow-300 rounded-full mx-3 py-0.5 px-4 bg-yellow-400 flex items-center gap-2 transition-transform transform opacity-100"
           >
             sync
@@ -264,16 +261,16 @@ function NotesComponent() {
           </button>
         )}
         <button onClick={() => handleDeleteNote(notes[currentPage]?._id)}>
-          <Trash className="h-5 text-gray-300  hover:text-red-500 " />
+          <Trash className="h-5 txt-dim hover:text-red-500" />
         </button>
       </div>
 
-      {/* content */}
+      {/* Content */}
       <div className="relative w-full h-64 overflow-hidden">
         <div
           className="absolute w-full pointer-events-none"
           style={{
-            backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent 30px, white 39px )`,
+            backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent 30px, #6E6E6E 39px )`,
             backgroundSize: "100% 32px",
             transform: `translateY(-${scrollPosition}px)`,
             height: `${scrollHeight}px`,
@@ -283,7 +280,7 @@ function NotesComponent() {
         <textarea
           ref={textAreaRef}
           id="area"
-          className="relative w-full h-full bg-transparent text-gray-300 p-2 px-3 outline-none resize-none font-kalam font-light"
+          className="relative w-full h-full bg-transparent txt-dim p-2 px-3 outline-none resize-none font-kalam font-light"
           style={{
             lineHeight: "32px",
             paddingTop: "8px",
@@ -295,8 +292,8 @@ function NotesComponent() {
         ></textarea>
       </div>
 
-      {/* date and time */}
-      <div className="absolute bottom-3 right-12 text-slate-400 bg-gray-800">
+      {/* Date and Time */}
+      <div className="absolute bottom-3 right-12 txt-dim bg-sec">
         {notes[currentPage]?.createdAt
           ? new Date(notes[currentPage].createdAt).toLocaleDateString() +
             "\u00A0\u00A0\u00A0" +

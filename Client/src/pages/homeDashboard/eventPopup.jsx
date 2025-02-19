@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
@@ -66,13 +66,13 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
         <motion.div
-          className="relative w-96 bg-gray-800 rounded-3xl p-8 shadow-2xl shadow-gray-900 border border-gray-700"
+          className="relative w-96 bg-sec rounded-3xl p-8 shadow-2xl shadow-gray-900 border border-[var(--bg-ter)]"
           initial={{ scale: 0.95, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.95, opacity: 0, y: 20 }}
@@ -81,14 +81,14 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
           {/* Header with title, date and close icon */}
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold txt">
                 {event ? "Edit Event" : "New Event"}
               </h2>
-              <p className="text-sm text-gray-500">{date}</p>
+              <p className="text-sm txt-dim">{date}</p>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-300 transition mb-auto"
+              className="txt-dim hover:txt transition mb-auto"
             >
               <X size={24} />
             </button>
@@ -100,7 +100,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
               placeholder="Event title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-xl bg-transparent border border-gray-700 px-4 py-2 text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+              className="w-full rounded-xl bg-transparent border border-[var(--bg-ter)] px-4 py-2 txt placeholder:txt-dim focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
             />
           </div>
           {/* Input for event time */}
@@ -109,7 +109,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="w-full rounded-xl bg-transparent border border-gray-700 px-4 py-2 text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition "
+              className="w-full rounded-xl bg-transparent border border-[var(--bg-ter)] px-4 py-2 txt placeholder:txt-dim focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
             />
           </div>
           {/* Action buttons */}
@@ -117,7 +117,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
             {event && (
               <button
                 onClick={handleDelete}
-                className="flex-1 rounded-lg bg-gray-600 py-2 text-center text-white font-semibold shadow hover:bg-red-700 transition"
+                className="flex-1 rounded-lg bg-ter py-2 text-center txt font-semibold shadow hover:bg-red-700 transition"
               >
                 Delete
               </button>

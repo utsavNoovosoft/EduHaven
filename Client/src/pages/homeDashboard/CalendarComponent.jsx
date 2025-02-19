@@ -93,14 +93,14 @@ function Calendar() {
 
   return (
     <>
-      <div className="bg-gray-800 pt-6 w-[25%] min-w-fit rounded-3xl shadow-lg flex flex-col max-h-[750px]">
+      <div className="bg-sec pt-6 w-[25%] min-w-fit rounded-3xl shadow-lg flex flex-col max-h-[750px]">
         {/* Header: Time and Day */}
         <div className="px-6">
-          <h1 className="text-5xl font-thin text-white mb-2">
+          <h1 className="text-5xl font-thin txt mb-2">
             {timePart} <span className="text-xl">{period}</span>
           </h1>
-          <h2 className="text-md text-gray-300">
-            Today's{" "}
+          <h2 className="text-md txt-dim">
+            Today&apos;s{" "}
             {
               "Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(
                 " "
@@ -112,20 +112,20 @@ function Calendar() {
         {/* Calendar View */}
         <div className="px-4">
           <div className="flex justify-between items-center mb-6 px-2">
-            <h2 className="text-lg font-semibold ">
+            <h2 className="text-lg font-semibold">
               {currentDate.toLocaleString("default", { month: "long" })}{" "}
               {currentDate.getFullYear()}
             </h2>
             <div className="flex gap-3">
               <button
                 onClick={handlePrevMonth}
-                className="p-1.5 rounded-full hover:bg-slate-700"
+                className="p-1.5 rounded-full hover:bg-ter"
               >
                 <ChevronLeft />
               </button>
               <button
                 onClick={handleNextMonth}
-                className="p-1.5 rounded-full hover:bg-slate-700"
+                className="p-1.5 rounded-full hover:bg-ter"
               >
                 <ChevronRight />
               </button>
@@ -135,7 +135,7 @@ function Calendar() {
             {"Su Mo Tu We Th Fr Sa".split(" ").map((day) => (
               <div
                 key={day}
-                className="text-center text-xs font-md text-gray-400"
+                className="text-center text-xs font-md txt-dim"
               >
                 {day}
               </div>
@@ -160,10 +160,10 @@ function Calendar() {
                 <div
                   key={day}
                   onClick={() => handleDayClick(day)}
-                  className={`flex items-center justify-center p-2.5 text-sm rounded-full text-gray-200 cursor-pointer transition-all duration-200 ease-in-out h-9 
+                  className={`flex items-center justify-center p-2.5 text-sm rounded-full txt cursor-pointer transition-all duration-200 ease-in-out h-9 
                   ${isToday ? "bg-purple-600 hover:bg-purple-700" : ""}
-                  ${hasEvent && !isToday ? "bg-gray-700 hover:bg-gray-600" : ""}
-                  ${!isToday && !hasEvent ? "hover:bg-gray-700" : ""}`}
+                  ${hasEvent && !isToday ? "bg-ter hover:bg-ter" : ""}
+                  ${!isToday && !hasEvent ? "hover:bg-ter" : ""}`}
                 >
                   {day}
                 </div>
@@ -173,13 +173,13 @@ function Calendar() {
         </div>
 
         {/* Upcoming Events Section with subtle animations */}
-        <div className="p-6 rounded-3xl bg-[#2d364a] flex-1 mt-6">
-          <h3 className="text-lg font-semibold text-gray-200 mb-4">
+        <div className="p-6 rounded-3xl bg-ter flex-1 mt-6">
+          <h3 className="text-lg font-semibold txt mb-4">
             Upcoming Events:
           </h3>
           {upcomingEvents.length > 0 ? (
             <motion.ul
-              className="text-gray-200 space-y-6 pl-2"
+              className="txt space-y-6 pl-2"
               initial="hidden"
               animate="visible"
               variants={{
@@ -202,10 +202,10 @@ function Calendar() {
                     }}
                   >
                     <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-400">
+                      <div className="text-sm txt-dim">
                         {eventDate.toLocaleDateString()}
                       </div>
-                      <div className="text-xs text-gray-400">
+                      <div className="text-xs txt-dim">
                         {eventDate.toLocaleTimeString("en-US", {
                           hour: "2-digit",
                           minute: "2-digit",
@@ -223,7 +223,7 @@ function Calendar() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="text-gray-400 text-sm"
+              className="txt-dim text-sm"
             >
               No events.
             </motion.p>

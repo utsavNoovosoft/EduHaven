@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
 import {
   BarChart2,
   GamepadIcon,
@@ -19,14 +20,14 @@ const SidebarLink = React.forwardRef(
       <Link
         to={to}
         ref={ref}
-        className="relative flex flex-col items-center justify-center p-2 group hover:bg-gray-700 rounded-lg transition-colors"
+        className="relative flex flex-col items-center justify-center p-2 group hover:bg-ter rounded-lg transition-colors"
       >
         <IconComponent
           className={`w-6 h-6 transition-colors duration-300 ${
-            isActive ? "text-white" : "text-gray-400 group-hover:text-white"
+            isActive ? "txt" : "txt-dim group-hover:txt"
           }`}
         />
-        <span className="mt-1 text-xs text-gray-400">{label}</span>
+        <span className="mt-1 text-xs txt-dim">{label}</span>
       </Link>
     );
   }
@@ -64,18 +65,18 @@ function Layout() {
   const isHome = location.pathname === "/";
 
   return (
-    <div className="flex min-h-screen bg-gray-900 text-gray-300">
+    <div className="flex min-h-screen bg-primary txt transition-colors duration-500">
       {/* Sidebar */}
       <nav
         ref={sidebarRef}
-        className=" w-[4.5rem] border border-transparent border-r-gray-800 p-1 flex flex-col items-center justify-between fixed top-0 left-0 h-screen shadow-lg"
+        className="w-[4.5rem] border border-transparent border-r border-sec p-1 flex flex-col items-center justify-between fixed top-0 left-0 h-screen shadow-lg"
       >
         <div>
           <Link to="/">
             <img
               src="../public/Logo2.svg"
               alt="Logo"
-              className={`w-full m-auto object-contain p-4 hover:bg-gray-700 rounded-xl transition-opacity duration-300 ${
+              className={`w-full m-auto object-contain p-4 hover:bg-ter rounded-lg transition-opacity duration-300 ${
                 isHome ? "opacity-100" : "opacity-80"
               }`}
             />
@@ -117,7 +118,7 @@ function Layout() {
               ref={(el) => (linkRefs.current["/course"] = el)}
             />
           </div>
-          <hr className="border-gray-700 my-5 mx-4" />
+          <hr className="border-sec my-5 mx-4" />
           <SidebarLink
             to="/project-details"
             IconComponent={BadgeInfo}
@@ -127,7 +128,9 @@ function Layout() {
           />
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-2 w-full">
+          {/* Theme toggle button now uses the rounded-lg variable */}
+          <ThemeToggle />
           {!token && (
             <SidebarLink
               to="/authenticate"
@@ -151,14 +154,14 @@ function Layout() {
         {/* Render the animated active indicator only if not on the home page */}
         {!isHome && (
           <motion.span
-            className="absolute left-1 h-8 w-1  rounded bg-purple-500"
+            className="absolute left-1 h-8 w-1 rounded-lg bg-purple-500"
             animate={{ top: indicatorPos.top }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           />
         )}
       </nav>
 
-      {/* Main content area with a fast, minimal slide-in-from-bottom animation */}
+      {/* Main content area with a slide-in-from-bottom animation */}
       <main className="flex-1 ml-[70px]">
         <motion.div
           key={location.pathname}
