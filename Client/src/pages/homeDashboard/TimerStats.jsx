@@ -2,10 +2,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Clock4, Flame, BarChart2 } from "lucide-react";
 
-// Variants for dropdown buttons
+// Variants for dropdown buttons (using custom variable for hover bg)
 const dropdownButtonVariants = {
   initial: { backgroundColor: "transparent" },
-  hover: { backgroundColor: "#374151" }, // same as Tailwind's bg-gray-700 (rgb(55,65,81))
+  hover: { backgroundColor: "var(--bg-ter)" },
 };
 
 function StudyStats() {
@@ -20,7 +20,7 @@ function StudyStats() {
 
   return (
     <motion.div
-      className="text-white m-4 mt-2 w-[25%] h-full"
+      className="txt m-4 mt-2 w-[25%] h-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -29,7 +29,7 @@ function StudyStats() {
       <div className="relative">
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center space-x-1 text-gray-300 hover:text-white ml-auto"
+          className="flex items-center space-x-1 txt-dim hover:txt ml-auto"
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
@@ -45,7 +45,7 @@ function StudyStats() {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              className="absolute right-0 top-5 mt-2 w-32 bg-gray-900 text-white rounded-lg shadow-lg overflow-hidden z-10"
+              className="absolute right-0 top-5 mt-2 w-32 bg-primary txt rounded-lg shadow-lg overflow-hidden z-10"
               initial={{ opacity: 0, scale: 0.95, y: -10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -10 }}
@@ -54,7 +54,7 @@ function StudyStats() {
               {Object.keys(studyData).map((time) => (
                 <motion.button
                   key={time}
-                  className="block w-full text-left px-4 py-2"
+                  className="block w-full text-left px-4 py-2 btn-rad"
                   variants={dropdownButtonVariants}
                   initial="initial"
                   whileHover="hover"
@@ -79,7 +79,7 @@ function StudyStats() {
         transition={{ duration: 0.3, delay: 0.1 }}
       >
         <Clock4 className="h-12 w-12 p-2.5 bg-green-400/70 rounded-full text-gray-100" />
-        <p className="text-2xl text-gray-300 font-bold ">
+        <p className="text-2xl txt-dim font-bold">
           {studyData[selectedTime]}
         </p>
       </motion.div>
@@ -105,16 +105,16 @@ function StudyStats() {
       </motion.div>
 
       <motion.p
-        className="text-md text-gray-200 pl-2"
+        className="text-md txt-dim pl-2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.4 }}
       >
         Beginner (1-2h)
       </motion.p>
-      <div className="relative w-full bg-gray-700 h-5 rounded-2xl mt-2">
+      <div className="relative w-full bg-ter h-5 rounded-2xl mt-2">
         <motion.p
-          className="absolute h-full w-full pr-5 text-gray-300 text-sm text-right"
+          className="absolute h-full w-full pr-5 txt-dim text-sm text-right"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 0.5 }}

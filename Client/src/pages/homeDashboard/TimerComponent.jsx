@@ -312,13 +312,13 @@ function TimerComponent() {
     <div className="relative p-6 rounded-3xl flex-1 text-white min-w-72 overflow-hidden">
       {/* Background Layers Crossfading */}
       <motion.div
-        className="absolute inset-0 rounded-3xl bg-gradient-to-br from-purple-900 to-indigo-800"
+        className="absolute inset-0 rounded-3xl bg-gradient-to-br from-purple-700/60 to-indigo-800"
         initial={{ opacity: isBreakMode ? 0 : 1 }}
         animate={{ opacity: isBreakMode ? 0 : 1 }}
         transition={{ duration: 0.5 }}
       />
       <motion.div
-        className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-800 to-sky-800"
+        className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-700/60 to-sky-800"
         initial={{ opacity: isBreakMode ? 1 : 0 }}
         animate={{ opacity: isBreakMode ? 1 : 0 }}
         transition={{ duration: 0.5 }}

@@ -29,8 +29,8 @@ function StudyRoom() {
           }
         `}
       </style>
-      <div className="m-6 space-y-4 ">
-        {/* nav-bar  */}
+      <div className="m-6 space-y-4">
+        {/* nav-bar */}
         <div className="flex justify-between items-center">
           <button className="flex gap-3 font-bold text-lg items-center">
             <ExternalLink />
@@ -54,7 +54,8 @@ function StudyRoom() {
 
         <div className="flex gap-6 w-full h-auto flex-col [min-width:700px]:flex-col lg:flex-row">
           <div className="flex-1 h-100 flex flex-col gap-6">
-            <div className="flex bg-gray-800 rounded-3xl ">
+            {/* Updated color: bg-gray-800 => bg-sec */}
+            <div className="flex bg-sec rounded-3xl">
               <TimerComponent />
               <StudyStats />
             </div>
@@ -70,10 +71,13 @@ function StudyRoom() {
         <h1 className="text-2xl font-bold">Connect with friends</h1>
         <div className="grid grid-cols-3 gap-6">
           {["Room 1", "Room 2", "Room 3"].map((room) => (
-            <div key={room} className="bg-gray-800 p-6 rounded-3xl">
+            // Updated color: bg-gray-800 => bg-sec
+            <div key={room} className="bg-sec p-6 rounded-3xl">
               <h3 className="font-semibold mb-2">{room}</h3>
-              <p className="text-gray-400 text-sm mb-4">4 students studying</p>
-              <button className="bg-gray-700 hover:bg-purple-700 px-4 py-2 rounded-lg w-full flex gap-3 transition-all duration-200 ease-in-out">
+              {/* Updated text color: text-gray-400 => txt-dim */}
+              <p className="txt-dim text-sm mb-4">4 students studying</p>
+              {/* Updated color: bg-gray-700 => bg-ter; hover remains unchanged */}
+              <button className="bg-ter hover:bg-purple-700 px-4 py-2 rounded-lg w-full flex gap-3 transition-all duration-200 ease-in-out">
                 <Headphones />
                 Join Room
               </button>
