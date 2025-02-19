@@ -29,7 +29,7 @@ function StudyRoom() {
           }
         `}
       </style>
-      <div className="space-y-4 ">
+      <div className="m-6 space-y-4 ">
         {/* nav-bar  */}
         <div className="flex justify-between items-center">
           <button className="flex gap-3 font-bold text-lg items-center">
