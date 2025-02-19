@@ -44,7 +44,7 @@ export default function Info() {
     );
   }
   return (
-    <div className="min-h-screen text-white px-4 sm:px-6 lg:px-8">
+    <div className="m-6 min-h-screen text-white px-4 sm:px-6 lg:px-8">
       {/* Navbar */}
       <nav className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Our Open-Source Work</h1>

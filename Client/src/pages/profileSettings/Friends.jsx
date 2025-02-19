@@ -39,7 +39,6 @@ const Friends = () => {
         `http://localhost:3000/friends/${friendId}`,
         getAuthHeader()
       );
-      // Instead of removing the friend from the list, mark it as removed
       setFriends(
         friends.map((friend) =>
           friend._id === friendId ? { ...friend, isRemoved: true } : friend
