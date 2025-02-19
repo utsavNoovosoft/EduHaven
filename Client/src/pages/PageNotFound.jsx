@@ -11,7 +11,7 @@ const PageNotFound = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-screen pt-20 bg-gray-900 text-white">
+    <div className="m-6 flex items-center justify-center min-screen pt-20 bg-gray-900 text-white">
       <div className="text-center p-8 bg-gray-800 rounded-lg shadow-lg transform transition-all duration-500 hover:scale-105">
         <img
           src="error.png" // Example 404 illustration, can be replaced with any custom image

@@ -3,43 +3,73 @@ import { User, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function Friends() {
-  const [suggestedFriends, setUsers] = useState([]);
   const onlineFriends = [];
-  const friendRequests = [
-    {
-      id: 1,
-      name: "Alice Johnson",
-      mutual: 2,
-      bio: "Loves design and art. Available for a study session!",
-    },
-    {
-      id: 2,
-      name: "Bob Smith",
-      mutual: 1,
-      bio: "Computer science major and coding enthusiast.",
-    },
-  ];
+  const [friendRequests, setRequests] = useState([]);
+  const [suggestedFriends, setUsers] = useState([]);
+
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
-  const addFriend = async (friendId) => {
+  const sendRequest = async (friendId) => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/friends/${friendId}`,
+        `http://localhost:3000/friends/request/${friendId}`,
         null,
         getAuthHeader()
       );
-      console.log('response:', response.data.message);
+      console.log("response:", response.data.message);
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === friendId ? { ...user, requestSent: true } : user
+        )
+      );
     } catch (error) {
-      console.error("Error adding friend:", error);
+      console.error("Error adding friend:", error.response.data);
     }
   };
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/friends/add-new", getAuthHeader())
+      .get("http://localhost:3000/friends/requests", getAuthHeader())
+      .then((res) => {
+        setRequests(res.data);
+      })
+      .catch((err) => console.error(err.response.data));
+  }, []);
+
+  const handleAccept = (friendId) => {
+    axios
+      .post(
+        `http://localhost:3000/friends/accept/${friendId}`,
+        null,
+        getAuthHeader()
+      )
+      .then((res) => {
+        console.log(res.data);
+        setRequests((prev) => prev.filter((user) => user._id !== friendId));
+      })
+      .catch((err) => console.error(err.response.data));
+  };
+
+  const handleReject = (friendId) => {
+    axios
+      .post(
+        `http://localhost:3000/friends/reject/${friendId}`,
+        null,
+        getAuthHeader()
+      )
+      .then((res) => {
+        console.log(res.data);
+        setRequests((prev) => prev.filter((user) => user._id !== friendId));
+      })
+      .catch((err) => console.error(err.response.data));
+  };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/friends/friend-suggestions", getAuthHeader())
       .then((response) => {
         setUsers((prevUsers) => {
           return JSON.stringify(prevUsers) !== JSON.stringify(response.data)
@@ -74,57 +104,24 @@ function Friends() {
             ))}
           </div>
         ) : (
-          <p className="text-gray-400">No online friends.</p>
+          <p className="text-gray-400">
+            online friends is not currently functional
+          </p>
         )}
       </section>
 
       {/* Friend Requests */}
-      <section className="bg-gray-800 rounded-3xl p-4">
-        {friendRequests.length > 0 ? (
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold ">Friend Requests</h3>
-            {friendRequests.map((request) => (
-              <div key={request.id} className="">
-                <div className="flex items-center mt-4">
-                  <div className="p-2 bg-gray-700 rounded-full">
-                    <User className="w-8 h-8" />
-                  </div>
-                  <div className="ml-4">
-                    <h4 className="text-lg font-medium">{request.name}</h4>
-                    <p className=" text-sm text-gray-400 line-clamp-1">
-                      {request.bio}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="m-4 flex space-x-3">
-                  <button className="flex-1 border border-gray-700 hover:bg-red-500 text-red-400 hover:text-white text-sm px-3 py-1 rounded-lg flex items-center justify-center gap-1 transition">
-                    Decline
-                  </button>
-                  <button className="flex-1 border border-gray-600 hover:bg-purple-600 text-white text-sm px-3 py-1 rounded-lg flex items-center justify-center gap-1 transition">
-                    Accept
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-400 text-center">No friend requests.</p>
-        )}
-      </section>
-
-      {/* Suggested Friends */}
-      {suggestedFriends.length > 0 && (
+      {friendRequests.length > 0 && (
         <section className="bg-gray-800 rounded-3xl p-4">
-          <h3 className="text-xl font-semibold ">Suggested Friends</h3>
+          <h3 className="text-xl font-semibold ">Friend Requests</h3>
           <div className="space-y-4">
-            {suggestedFriends.map((user) => (
+            {friendRequests.map((user) => (
               <div key={user.id} className="!mt-7">
                 <div className="flex items-center">
                   {user.ProfilePicture ? (
                     <img
                       src={user.ProfilePicture}
-                      className="w-9 h-9 rounded-full"
+                      className="w-12 h-12 rounded-full"
                     />
                   ) : (
                     <div className="p-2 bg-gray-700 rounded-full">
@@ -142,17 +139,78 @@ function Friends() {
                     </p>
                   </div>
                 </div>
-                <div className="m-4 ">
+                <div className="m-4 flex space-x-3">
                   <button
-                    onClick={() => addFriend(user._id)}
-                    className="w-full border border-gray-700 hover:bg-gray-600 text-white text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition"
+                    onClick={() => handleReject(user._id)}
+                    className="flex-1 border border-gray-700 hover:bg-red-500 text-red-400 hover:text-white text-sm px-3 py-1 rounded-lg flex items-center justify-center gap-1 transition"
                   >
-                    <UserPlus className="w-5 h-5" />
-                    Add friend
+                    Decline
+                  </button>
+                  <button
+                    onClick={() => handleAccept(user._id)}
+                    className="flex-1 border border-gray-600 hover:bg-purple-600 text-white text-sm px-3 py-1 rounded-lg flex items-center justify-center gap-1 transition"
+                  >
+                    Accept
                   </button>
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+      )}
+
+      {/* Suggested Friends */}
+      {suggestedFriends.length > 0 && (
+        <section className="bg-gray-800 rounded-3xl p-4">
+          <h3 className="text-xl font-semibold ">Suggested Friends</h3>
+          <div className="space-y-4">
+            {suggestedFriends
+              .slice()
+              .reverse()
+              .map((user) => (
+                <div key={user.id} className="!mt-7">
+                  <div className="flex items-center">
+                    {user.ProfilePicture ? (
+                      <img
+                        src={user.ProfilePicture}
+                        className="w-9 h-9 rounded-full"
+                      />
+                    ) : (
+                      <div className="p-2 bg-gray-700 rounded-full">
+                        <User className="w-7 h-7" />
+                      </div>
+                    )}
+                    <div className="ml-4">
+                      <h4 className="text-lg font-medium line-clamp-1">
+                        {user.FirstName
+                          ? `${user.FirstName} ${user.LastName || ""}`
+                          : "old-user"}
+                      </h4>
+                      <p className="text-sm text-gray-400 line-clamp-1">
+                        {user.Bio}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="m-4 ">
+                    {user.requestSent ? (
+                      <button
+                        disabled
+                        className="w-full border border-gray-700 bg-gray-600 text-white text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition"
+                      >
+                        Request Sent
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => sendRequest(user._id)}
+                        className="w-full border border-gray-700 hover:bg-gray-600 text-white text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition"
+                      >
+                        <UserPlus className="w-5 h-5" />
+                        Add friend
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
           </div>
         </section>
       )}

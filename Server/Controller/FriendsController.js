@@ -1,5 +1,17 @@
 import User from "../Model/UserModel.js";
 
+export const friendList = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate(
+      "friends",
+      "FirstName LastName ProfilePicture"
+    );
+    res.json(user.friends);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 export const userList = async (req, res) => {
   try {
     const currentUser = await User.findById(req.user._id);
@@ -18,10 +30,12 @@ export const userList = async (req, res) => {
   }
 };
 
-export const addFriend = async (req, res) => {
+export const sendRequest = async (req, res) => {
   try {
     const userId = req.user._id;
     const { friendId } = req.params;
+    const currentUser = await User.findById(userId);
+    const friendUser = await User.findById(friendId);
 
     if (userId.toString() === friendId) {
       return res
@@ -29,17 +43,80 @@ export const addFriend = async (req, res) => {
         .json({ message: "You cannot add yourself as a friend." });
     }
 
-    const currentUser = await User.findById(userId);
+    if (!currentUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    if (!friendUser) {
+      return res.status(404).json({ message: "Friend not found." });
+    }
+
     if (currentUser.friends.includes(friendId)) {
       return res.status(400).json({ message: "Already friends." });
     }
 
-    await User.findByIdAndUpdate(userId, { $push: { friends: friendId } });
-    await User.findByIdAndUpdate(friendId, { $push: { friends: userId } });
+    if (friendUser.friendRequests.includes(userId)) {
+      return res.status(400).json({ message: "Request already sent." });
+    }
 
-    res.json({ message: "Friend added successfully." });
+    await User.findByIdAndUpdate(friendId, {
+      $push: { friendRequests: userId },
+    });
+
+    res.json({ message: "Friend request sent." });
   } catch (err) {
     console.error("Error in backend:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const incomingRequests = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate(
+      "friendRequests",
+      "FirstName LastName Bio ProfilePicture"
+    );
+    res.json(user.friendRequests);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const acceptRequest = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { friendId } = req.params;
+
+    const user = await User.findById(userId);
+    if (!user.friendRequests.includes(friendId)) {
+      return res
+        .status(400)
+        .json({ message: "No pending request from this user." });
+    }
+    await User.findByIdAndUpdate(userId, {
+      $pull: { friendRequests: friendId },
+      $push: { friends: friendId },
+    });
+
+    await User.findByIdAndUpdate(friendId, { $push: { friends: userId } });
+
+    res.json({ message: "Friend request accepted." });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const rejectRequest = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { friendId } = req.params;
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: { friendRequests: friendId },
+    });
+
+    res.json({ message: "Friend request rejected." });
+  } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
@@ -54,18 +131,6 @@ export const removeFriend = async (req, res) => {
     await User.findByIdAndUpdate(friendId, { $pull: { friends: userId } });
 
     res.json({ message: "Friend removed successfully." });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-export const friendList = async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id).populate(
-      "friends",
-      "FirstName LastName ProfilePicture"
-    );
-    res.json(user.friends);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

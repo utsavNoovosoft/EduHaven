@@ -7,7 +7,7 @@ import ChatListItem from "./ChatListItem";
 const personalChats = [
   {
     id: 1,
-    name: "Topperworld",
+    name: "ABC user",
     lastMessage: "People Have Already...",
     date: "Jan 30",
   },
@@ -31,7 +31,7 @@ const personalChats = [
   },
   {
     id: 5,
-    name: "BCA KE BANDE",
+    name: "Manish",
     lastMessage: "A Happy New Year to you all...",
     date: "Dec 29",
   },
