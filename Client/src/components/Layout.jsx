@@ -20,14 +20,14 @@ const SidebarLink = React.forwardRef(
       <Link
         to={to}
         ref={ref}
-        className="relative flex flex-col items-center justify-center p-2 group hover:bg-ter rounded-lg transition-colors"
+        className="relative flex flex-col items-center justify-center pt-2.5 pb-1.5 group hover:bg-ter rounded-lg transition-colors"
       >
         <IconComponent
           className={`w-6 h-6 transition-colors duration-300 ${
-            isActive ? "txt" : "txt-dim group-hover:txt"
+            isActive ? "txt" : "!txt-disabled group-hover:txt"
           }`}
         />
-        <span className="mt-1 text-xs txt-dim">{label}</span>
+        <span className="text-xs txt-dim">{label}</span>
       </Link>
     );
   }
@@ -65,23 +65,25 @@ function Layout() {
   const isHome = location.pathname === "/";
 
   return (
-    <div className="flex min-h-screen bg-primary txt transition-colors duration-500">
+    <div className="flex min-h-screen bg-primary txt !transition-colors !duration-500">
       {/* Sidebar */}
       <nav
         ref={sidebarRef}
-        className="w-[4.5rem] border border-transparent border-r border-sec p-1 flex flex-col items-center justify-between fixed top-0 left-0 h-screen shadow-lg"
+        className="w-[70px] border-r border-gray-500/20 p-1 flex flex-col items-center justify-between fixed top-0 left-0 h-screen "
       >
         <div>
           <Link to="/">
-            <img
-              src="../public/Logo2.svg"
-              alt="Logo"
-              className={`w-full m-auto object-contain p-4 hover:bg-ter rounded-lg transition-opacity duration-300 ${
-                isHome ? "opacity-100" : "opacity-80"
-              }`}
-            />
+            <div className="hover:bg-ter rounded-lg transition-opacity duration-300 ">
+              <img
+                src="../public/Logo.svg"
+                alt="Logo"
+                className={`w-full m-auto object-contain p-4 dark:invert ${
+                  isHome ? "opacity-100" : "opacity-80"
+                }`}
+              />
+            </div>
           </Link>
-          <div className="space-y-5 my-4">
+          <div className="space-y-5 mt-2">
             <SidebarLink
               to="/study-room"
               IconComponent={Radio}
@@ -154,7 +156,7 @@ function Layout() {
         {/* Render the animated active indicator only if not on the home page */}
         {!isHome && (
           <motion.span
-            className="absolute left-1 h-8 w-1 rounded-lg bg-purple-500"
+            className="absolute left-1 h-8 w-1 rounded-full bg-[var(--btn)]"
             animate={{ top: indicatorPos.top }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           />

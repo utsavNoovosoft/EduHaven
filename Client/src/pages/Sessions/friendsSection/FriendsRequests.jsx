@@ -50,8 +50,8 @@ function FriendRequests() {
   if (friendRequests.length === 0) return null;
 
   return (
-    <section className="bg-gray-800 rounded-3xl p-4">
-      <h3 className="text-xl font-semibold">Friend Requests</h3>
+    <section className="bg-sec rounded-3xl p-4">
+      <h3 className="text-xl font-semibold txt">Friend Requests</h3>
       <div className="space-y-4">
         {friendRequests.map((user) => (
           <div key={user.id} className="!mt-7">
@@ -63,29 +63,29 @@ function FriendRequests() {
                   alt="Profile"
                 />
               ) : (
-                <div className="p-2 bg-gray-700 rounded-full">
+                <div className="p-2.5 bg-ter rounded-full">
                   <User className="w-7 h-7" />
                 </div>
               )}
               <div className="ml-4">
-                <h4 className="text-lg font-medium line-clamp-1">
+                <h4 className="text-lg font-medium line-clamp-1 txt">
                   {user.FirstName
                     ? `${user.FirstName} ${user.LastName || ""}`
                     : "old-user"}
                 </h4>
-                <p className="text-sm text-gray-400 line-clamp-1">{user.Bio}</p>
+                <p className="text-sm txt-dim line-clamp-1">{user.Bio}</p>
               </div>
             </div>
             <div className="m-4 flex space-x-3">
               <button
                 onClick={() => handleReject(user._id)}
-                className="flex-1 border border-gray-700 hover:bg-red-500 text-red-400 hover:text-white text-sm px-3 py-1 rounded-lg flex items-center justify-center gap-1 transition"
+                className="flex-1 border border-gray-500/50 hover:bg-red-500 text-red-400 hover:text-white text-sm px-3 py-1 rounded-lg flex items-center justify-center gap-1 transition"
               >
                 Decline
               </button>
               <button
                 onClick={() => handleAccept(user._id)}
-                className="flex-1 border border-gray-600 hover:bg-purple-600 text-white text-sm px-3 py-1 rounded-lg flex items-center justify-center gap-1 transition"
+                className="flex-1 border border-gray-500/50 hover:bg-purple-600 hover:text-white text-sm px-3 py-1 rounded-lg flex items-center justify-center gap-1 transition"
               >
                 Accept
               </button>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
@@ -178,10 +178,8 @@ export default function BasicInfo() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-gray-900 shadow-lg">
-      <h1 className="text-3xl font-bold text-purple-400 mb-6">
-        Basic Information
-      </h1>
+    <div className="max-w-4xl mx-auto ">
+      <h1 className="text-3xl font-bold txt mb-6">Basic Information</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Profile Picture */}
         <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -190,23 +188,23 @@ export default function BasicInfo() {
               <img
                 src={profileData.ProfilePicture}
                 alt="Profile"
-                className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border border-gray-600"
+                className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border border-txt-dim"
               />
             ) : (
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full flex items-center justify-center bg-gray-800 border border-gray-600">
-                <UploadCloud className="w-8 h-8 text-gray-400" />
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full flex items-center justify-center bg-sec border border-txt-dim">
+                <UploadCloud className="w-8 h-8 txt-dim" />
               </div>
             )}
             {isProfilePicLoading && (
-              <div className="absolute inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center rounded-full">
-                <span className="text-purple-400 text-xs">Uploading...</span>
+              <div className="absolute inset-0 bg-sec bg-opacity-75 flex items-center justify-center rounded-full">
+                <span className="txt text-xs">Uploading...</span>
               </div>
             )}
           </div>
           <div className="flex-1">
             <label
               htmlFor="profile-pic"
-              className="cursor-pointer text-purple-400 px-4 py-2 rounded-md hover:bg-gray-800 transition-colors duration-200 text-sm"
+              className="cursor-pointer txt px-4 py-2 rounded-md hover:bg-ter transition-colors duration-200 text-sm"
             >
               Change Profile Picture
             </label>
@@ -224,7 +222,7 @@ export default function BasicInfo() {
         {/* Name Fields */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="flex items-center gap-3">
-            <label className="w-28 text-base font-medium text-gray-400">
+            <label className="w-28 text-base font-medium txt-dim">
               First Name:
             </label>
             <input
@@ -233,13 +231,13 @@ export default function BasicInfo() {
               value={profileData.FirstName}
               onChange={handleInputChange}
               placeholder="First name"
-              className="flex-1 bg-transparent border-b border-gray-600 mx-2 px-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-colors duration-200"
+              className="flex-1 bg-transparent border-b border-txt-dim mx-2 px-2 txt focus:outline-none focus:ring-2 focus:ring-[var(--btn)] transition-colors duration-200"
               required
               disabled={isProfileUpdateLoading}
             />
           </div>
           <div className="flex items-center gap-3">
-            <label className="w-28 text-base font-medium text-gray-400">
+            <label className="w-28 text-base font-medium txt-dim">
               Last Name:
             </label>
             <input
@@ -248,7 +246,7 @@ export default function BasicInfo() {
               value={profileData.LastName}
               onChange={handleInputChange}
               placeholder="Last name"
-              className="flex-1 bg-transparent border-b border-gray-600 mx-2 px-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-colors duration-200"
+              className="flex-1 bg-transparent border-b border-txt-dim mx-2 px-2 txt focus:outline-none focus:ring-2 focus:ring-[var(--btn)] transition-colors duration-200"
               required
               disabled={isProfileUpdateLoading}
             />
@@ -256,16 +254,14 @@ export default function BasicInfo() {
         </div>
 
         {/* Bio */}
-        <div className="flex items-center gap-3 border-b border-gray-700 pb-4">
-          <label className="w-28 text-base font-medium text-gray-400">
-            Bio:
-          </label>
+        <div className="flex items-center gap-3 border-b border-txt-dim pb-4">
+          <label className="w-28 text-base font-medium txt-dim">Bio:</label>
           <textarea
             name="Bio"
             value={profileData.Bio}
             onChange={handleInputChange}
             placeholder="Tell us about yourself (max 500 characters)"
-            className="flex-1 bg-transparent border border-gray-600 rounded-md py-2 px-3 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-colors duration-200 resize-none"
+            className="flex-1 bg-transparent border border-txt-dim rounded-md py-2 px-3 txt-dim focus:outline-none focus:ring-2 focus:ring-[var(--btn)] transition-colors duration-200 resize-none"
             rows="2"
             maxLength="500"
             disabled={isProfileUpdateLoading}
@@ -273,9 +269,9 @@ export default function BasicInfo() {
         </div>
 
         {/* University, Country, Field of Study, Graduation Year */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 border-b border-gray-700 pb-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 border-b border-txt-dim pb-4">
           <div className="flex items-center gap-3">
-            <label className="w-32 text-base font-medium text-gray-400">
+            <label className="w-32 text-base font-medium txt-dim">
               University:
             </label>
             <input
@@ -284,12 +280,12 @@ export default function BasicInfo() {
               value={profileData.University}
               onChange={handleInputChange}
               placeholder="Your university"
-              className="flex-1 bg-transparent border-b border-gray-600 mx-2 px-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-colors duration-200"
+              className="flex-1 bg-transparent border-b border-txt-dim mx-2 px-2 txt focus:outline-none focus:ring-2 focus:ring-[var(--btn)] transition-colors duration-200"
               disabled={isProfileUpdateLoading}
             />
           </div>
           <div className="flex items-center gap-3">
-            <label className="w-32 text-base font-medium text-gray-400">
+            <label className="w-32 text-base font-medium txt-dim">
               Country:
             </label>
             <input
@@ -298,12 +294,12 @@ export default function BasicInfo() {
               value={profileData.Country}
               onChange={handleInputChange}
               placeholder="Your country"
-              className="flex-1 bg-transparent border-b border-gray-600 mx-2 px-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-colors duration-200"
+              className="flex-1 bg-transparent border-b border-txt-dim mx-2 px-2 txt focus:outline-none focus:ring-2 focus:ring-[var(--btn)] transition-colors duration-200"
               disabled={isProfileUpdateLoading}
             />
           </div>
           <div className="flex items-center gap-3">
-            <label className="w-32 text-base font-medium text-gray-400">
+            <label className="w-32 text-base font-medium txt-dim">
               Field of Study:
             </label>
             <input
@@ -312,12 +308,12 @@ export default function BasicInfo() {
               value={profileData.FieldOfStudy}
               onChange={handleInputChange}
               placeholder="Your field of study"
-              className="flex-1 bg-transparent border-b border-gray-600 mx-2 px-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-colors duration-200"
+              className="flex-1 bg-transparent border-b border-txt-dim mx-2 px-2 txt focus:outline-none focus:ring-2 focus:ring-[var(--btn)] transition-colors duration-200"
               disabled={isProfileUpdateLoading}
             />
           </div>
           <div className="flex items-center gap-3">
-            <label className="w-32 text-base font-medium text-gray-400">
+            <label className="w-32 text-base font-medium txt-dim">
               Grad. Year:
             </label>
             <input
@@ -328,31 +324,29 @@ export default function BasicInfo() {
               placeholder="e.g. 2026"
               min="1900"
               max="2100"
-              className="flex-1 bg-transparent border-b border-gray-600 mx-2 px-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-colors duration-200"
+              className="flex-1 bg-transparent border-b border-txt-dim mx-2 px-2 txt focus:outline-none focus:ring-2 focus:ring-[var(--btn)] transition-colors duration-200"
               disabled={isProfileUpdateLoading}
             />
           </div>
         </div>
 
         {/* Gender */}
-        <div className="flex items-center gap-3 border-b border-gray-700 pb-4">
-          <label className="w-28 text-base font-medium text-gray-400">
-            Gender:
-          </label>
+        <div className="flex items-center gap-3 border-b border-txt-dim pb-4">
+          <label className="w-28 text-base font-medium txt-dim">Gender:</label>
           <select
             name="Gender"
             value={profileData.Gender}
             onChange={handleInputChange}
-            className="flex-1 bg-transparent border-b border-gray-600 mx-2 px-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-colors duration-200"
+            className="flex-1 bg-transparent border-b border-txt-dim mx-2 px-2 txt focus:outline-none focus:ring-2 focus:ring-[var(--btn)] transition-colors duration-200"
             disabled={isProfileUpdateLoading}
           >
-            <option value="" className="bg-gray-800 text-gray-200">
+            <option value="" className="bg-sec txt">
               Select Gender
             </option>
-            <option value="Male" className="bg-gray-800 text-gray-200">
+            <option value="Male" className="bg-sec txt">
               Male
             </option>
-            <option value="Female" className="bg-gray-800 text-gray-200">
+            <option value="Female" className="bg-sec txt">
               Female
             </option>
           </select>
@@ -362,7 +356,7 @@ export default function BasicInfo() {
         <div className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
-              <label className="w-28 text-base font-medium text-gray-400">
+              <label className="w-28 text-base font-medium txt-dim">
                 Interests:
               </label>
               <input
@@ -372,12 +366,12 @@ export default function BasicInfo() {
                   handleOtherDetailsChange("interests", e.target.value)
                 }
                 placeholder="Interests"
-                className="flex-1 bg-transparent border-b border-gray-600 mx-2 px-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-colors duration-200"
+                className="flex-1 bg-transparent border-b border-txt-dim mx-2 px-2 txt focus:outline-none focus:ring-2 focus:ring-[var(--btn)] transition-colors duration-200"
                 disabled={isProfileUpdateLoading}
               />
             </div>
             <div className="flex items-center gap-3">
-              <label className="w-28 text-base font-medium text-gray-400">
+              <label className="w-28 text-base font-medium txt-dim">
                 Skills:
               </label>
               <input
@@ -387,22 +381,20 @@ export default function BasicInfo() {
                   handleOtherDetailsChange("skills", e.target.value)
                 }
                 placeholder="Skills"
-                className="flex-1 bg-transparent border-b border-gray-600 mx-2 px-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-colors duration-200"
+                className="flex-1 bg-transparent border-b border-txt-dim mx-2 px-2 txt focus:outline-none focus:ring-2 focus:ring-[var(--btn)] transition-colors duration-200"
                 disabled={isProfileUpdateLoading}
               />
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <label className="w-28 text-base font-medium text-gray-400">
-              Notes:
-            </label>
+            <label className="w-28 text-base font-medium txt-dim">Notes:</label>
             <textarea
               value={profileData.OtherDetails.additionalNotes || ""}
               onChange={(e) =>
                 handleOtherDetailsChange("additionalNotes", e.target.value)
               }
               placeholder="Additional info"
-              className="flex-1 bg-transparent border border-gray-600 rounded-md py-2 px-3 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-600 transition-colors duration-200 resize-none"
+              className="flex-1 bg-transparent border border-txt-dim rounded-md py-2 px-3 txt focus:outline-none focus:ring-2 focus:ring-[var(--btn)] transition-colors duration-200 resize-none"
               rows="2"
               disabled={isProfileUpdateLoading}
             ></textarea>
@@ -415,8 +407,8 @@ export default function BasicInfo() {
             type="submit"
             className={`w-full py-2 rounded-md text-white font-semibold transition-colors duration-200 ${
               isProfileUpdateLoading
-                ? "bg-purple-500 cursor-not-allowed"
-                : "bg-purple-600 hover:bg-purple-700"
+                ? "bg-[var(--btn-hover)] cursor-not-allowed"
+                : "bg-[var(--btn)] hover:bg-[var(--btn-hover)]"
             }`}
             disabled={isProfileUpdateLoading}
           >

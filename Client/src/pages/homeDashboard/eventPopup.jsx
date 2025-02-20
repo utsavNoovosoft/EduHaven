@@ -78,7 +78,6 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
           exit={{ scale: 0.95, opacity: 0, y: 20 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
         >
-          {/* Header with title, date and close icon */}
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-xl font-bold txt">
@@ -93,7 +92,6 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
               <X size={24} />
             </button>
           </div>
-          {/* Input for event title */}
           <div className="mb-4">
             <input
               type="text"
@@ -103,7 +101,6 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
               className="w-full rounded-xl bg-transparent border border-[var(--bg-ter)] px-4 py-2 txt placeholder:txt-dim focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
             />
           </div>
-          {/* Input for event time */}
           <div className="mb-6">
             <input
               type="time"
@@ -112,7 +109,6 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
               className="w-full rounded-xl bg-transparent border border-[var(--bg-ter)] px-4 py-2 txt placeholder:txt-dim focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
             />
           </div>
-          {/* Action buttons */}
           <div className="flex space-x-3">
             {event && (
               <button

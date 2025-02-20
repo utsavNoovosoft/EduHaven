@@ -43,21 +43,22 @@ function SuggestedFriends({ onViewSentRequests }) {
   if (suggestedFriends.length === 0) return null;
 
   return (
-    <section className="bg-gray-800 rounded-3xl p-4 relative">
+    <section className="bg-sec rounded-3xl p-4 relative">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold">Suggested Friends</h3>
+        <h3 className="text-xl font-semibold txt">Suggested Friends</h3>
         <div className="relative">
           <button onClick={() => setShowDropdown(!showDropdown)}>
-            <MoreVertical className="w-5 h-5 text-white" />
+            <MoreVertical className="w-5 h-5 txt" />
           </button>
           {showDropdown && (
-            <div className="absolute right-0 mt-2 w-40 bg-gray-700 rounded-md shadow-lg z-10">
+            <div className="absolute right-0 mt-2 w-40 bg-ter rounded-md shadow-lg z-10">
               <button
                 onClick={() => {
                   setShowDropdown(false);
                   onViewSentRequests();
                 }}
-                className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-600"
+                className="block w-full text-left px-4 py-2 text-sm txt hover:bg-sec"
+                style={{ borderColor: "var(--txt-dim)" }}
               >
                 Show Sent Requests
               </button>
@@ -75,37 +76,35 @@ function SuggestedFriends({ onViewSentRequests }) {
                 {user.ProfilePicture ? (
                   <img
                     src={user.ProfilePicture}
-                    className="w-9 h-9 rounded-full"
+                    className="w-11 h-11 rounded-full"
                     alt="Profile"
                   />
                 ) : (
-                  <div className="p-2 bg-gray-700 rounded-full">
+                  <div className="p-2 bg-ter rounded-full">
                     <User className="w-7 h-7" />
                   </div>
                 )}
-                <div className="ml-4">
-                  <h4 className="text-lg font-medium line-clamp-1">
+                <div className="ml-4 flex-1 overflow-hidden">
+                  <h4 className="text-lg font-medium line-clamp-1 txt">
                     {user.FirstName
                       ? `${user.FirstName} ${user.LastName || ""}`
                       : "old-user"}
                   </h4>
-                  <p className="text-sm text-gray-400 line-clamp-1">
-                    {user.Bio}
-                  </p>
+                  <p className="text-sm txt-dim line-clamp-1">{user.Bio}</p>
                 </div>
               </div>
               <div className="m-4">
                 {user.requestSent ? (
                   <button
                     disabled
-                    className="w-full border border-gray-700 bg-gray-600 text-white text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition"
+                    className="w-full border border-gray-500/50 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition bg-sec txt"
                   >
                     Request Sent
                   </button>
                 ) : (
                   <button
                     onClick={() => sendRequest(user._id)}
-                    className="w-full border border-gray-700 hover:bg-gray-600 text-white text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition"
+                    className="w-full border border-gray-500/50 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-sec txt"
                   >
                     <UserPlus className="w-5 h-5" />
                     Add Friend

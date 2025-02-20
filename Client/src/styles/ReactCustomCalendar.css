@@ -8,7 +8,7 @@
 
 /* Month & Year Navigation Buttons */
 .react-calendar__navigation button {
-  color: #ffffff !important;
+  color: var(--cal-nav-text) !important;
   font-size: 14px;
   font-weight: bold;
   background: transparent;
@@ -20,10 +20,11 @@
 
 /* Disabled Buttons */
 .react-calendar__navigation button:disabled {
-  color: #a0aec0 !important; /* Muted color */
+  color: var(--cal-disabled-text) !important;
   cursor: not-allowed;
   background: none;
 }
+
 /* ------------------------------------------------------------------------------ */
 
 /* Individual Day Tiles */
@@ -35,23 +36,33 @@
   transition: background 0.2s ease-in-out;
   color: #cbd5e0;
   border-radius: 4px;
+  color: var(--cal-tile-text);
 }
 
-.react-calendar__tile:enabled{
+.react-calendar__tile:enabled {
   border-radius: 0.8rem;
 }
+
 /* Hover Effect on Days */
 .react-calendar__tile:enabled:hover {
-  background: #4a5568 !important;
-  color: #ffffff !important;
+  background: var(--bg-primary) !important;
+  color: var(--txt) !important;
 }
 
 /* Selected Date */
 .react-calendar__tile--active {
-  background: #6b46c1 !important; 
+  background: var(--btn) !important;
   color: #ffffff !important;
   font-weight: bold;
 }
+
+.react-calendar__tile--active {
+  /* background: var(--cal-tile-active-bg) !important; */
+  /* color: var(--cal-tile-active-text) !important; */
+  font-weight: bold;
+}
+
+
 /* ------------------------------------------------------------------------- */
 
 /* Change hover color of month names */
@@ -59,12 +70,14 @@
   background-color: #2d3748 !important;
   color: #ffffff !important;
 }
+
 /* Change hover color of navigation buttons */
 .react-calendar__navigation button:hover {
   background-color: #2d3748 !important;
-  color: #ffffff !important;
+  background-color: var(--bg-sec) !important;
   border-radius: 10px;
 }
+
 /* Ensure active month in year view is styled */
 .react-calendar__year-view__months__month.react-calendar__tile--active {
   background-color: #4a5568 !important;

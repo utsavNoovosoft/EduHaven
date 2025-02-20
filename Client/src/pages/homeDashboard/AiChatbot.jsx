@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
-import { BotMessageSquare, X, ArrowUp, Loader,  Spline } from "lucide-react";
+import { BotMessageSquare, X, ArrowUp, Loader, Spline } from "lucide-react";
 import { motion } from "framer-motion";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -9,7 +9,12 @@ const apikey = "AIzaSyBPuUC9dW_uIqC8q9wsSE1zKjgUJR62XxE";
 // Variants for the chat panel
 const panelVariants = {
   hidden: { opacity: 0, scale: 0.95, y: 20 },
-  visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 30 } },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 300, damping: 30 },
+  },
 };
 
 // Variants for each chat message
@@ -24,16 +29,14 @@ const messageVariants = {
 
 const Ai = () => {
   const [question, setQuestion] = useState("");
-  const [messages, setMessages] = useState([]); // Chat messages
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  // Set a default size for the chat panel
   const [dimensions, setDimensions] = useState({ width: 350, height: 500 });
   const resizing = useRef(false);
   const startPos = useRef({ x: 0, y: 0 });
   const startDimensions = useRef({ width: 350, height: 500 });
 
-  // Attach custom showModal/close methods so the Ask AI button works as before
   useEffect(() => {
     const modalEl = document.getElementById("my_modal_1");
     if (modalEl) {
@@ -125,9 +128,14 @@ const Ai = () => {
     if (!resizing.current) return;
     const deltaX = e.clientX - startPos.current.x;
     const deltaY = e.clientY - startPos.current.y;
-    // Since the resizer is at the top-left, subtract the delta from the starting width/height
-    const newWidth = Math.max(startDimensions.current.width - deltaX, 300);
-    const newHeight = Math.max(startDimensions.current.height - deltaY, 400);
+    const newWidth = Math.min(
+      Math.max(startDimensions.current.width - deltaX, 300),
+      window.innerWidth * 0.96
+    );
+    const newHeight = Math.min(
+      Math.max(startDimensions.current.height - deltaY, 400),
+      window.innerHeight * 0.94
+    );
     setDimensions({ width: newWidth, height: newHeight });
   };
 
@@ -140,9 +148,9 @@ const Ai = () => {
 
   return (
     <div id="manishai">
-      {/* Ask AI Button (unchanged) */}
+      {/* Ask AI Button */}
       <button
-        className="flex gap-3 bg-purple-800 shadow-[0_4px_100px_rgba(176,71,255,0.7)] hover:bg-purple-700 px-5 py-2.5 rounded-xl text-white font-semibold transition duration-200 transform hover:scale-105 ml-9 hover:shadow-[0_4px_100px_rgba(176,71,255,1)]"
+        className="flex gap-3 btn shadow-[0_4px_100px_rgba(176,71,255,0.7)] px-5 py-2.5 font-semibold transition duration-200 transform hover:scale-105 ml-9 hover:shadow-[0_4px_100px_rgba(176,71,255,1)]"
         onClick={() => {
           const modalEl = document.getElementById("my_modal_1");
           modalEl && modalEl.showModal();
@@ -167,21 +175,26 @@ const Ai = () => {
           width: dimensions.width,
           height: dimensions.height,
         }}
-        className="shadow-lg"
       >
-        <div className="bg-gray-900 rounded-3xl w-full h-full text-white flex flex-col overflow-hidden relative">
-          {/* Resizer handle using the Maximize2 icon */}
+        <div className="bg-primary rounded-3xl w-full h-full txt flex flex-col overflow-hidden relative shadow-2xl shadow-purple-800/50">
+          {/* Resizer handle using the Spline icon */}
           <div
             onMouseDown={handleMouseDown}
             className="absolute top-0 left-0 p-2 cursor-nw-resize z-50"
           >
-            <Spline className="w-5 h-5 text-gray-400" />
+            <Spline className="w-5 h-5 txt-dim" />
           </div>
 
           {/* Nav-bar */}
-          <div className="flex justify-between items-center px-2 py-0.5 border-b border-gray-800">
-            <h3 className="text-lg text-gray-300 font-semibold pl-8">Ask AI</h3>
-            <button onClick={closeModal} className="hover:text-gray-100 text-gray-400 p-2 ">
+          <div
+            className="flex justify-between items-center px-2 py-0.5 border-b"
+            style={{ borderColor: "var(--bg-sec)" }}
+          >
+            <h3 className="text-lg txt-dim font-semibold pl-8">Ask AI</h3>
+            <button
+              onClick={closeModal}
+              className="hover:txt transition p-2 txt-dim"
+            >
               <X className="h-6 w-6" />
             </button>
           </div>
@@ -191,7 +204,8 @@ const Ai = () => {
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full">
                 <p className="text-lg font-medium text-center">
-                  Hey! Welcome to <span className="text-purple-400">EduHaven AI</span> 
+                  Hey! Welcome to{" "}
+                  <span style={{ color: "var(--btn)" }}>EduHaven AI</span>
                   <br />
                   How can I help you today?
                 </p>
@@ -204,25 +218,28 @@ const Ai = () => {
                   variants={messageVariants}
                   initial="hidden"
                   animate="visible"
-                  className={`flex flex-col ${msg.type === "user" ? "items-end" : "items-start"}`}
+                  className={`flex flex-col ${
+                    msg.type === "user" ? "items-end" : "items-start"
+                  }`}
                 >
                   <p
                     className={`py-2 px-4 rounded-lg ${
-                      msg.type === "user"
-                        ? "bg-gray-700 text-white"
-                        : "bg-transparent text-white"
+                      msg.type === "user" ? "bg-sec txt" : "bg-transparent txt"
                     }`}
                   >
                     {msg.text}
                   </p>
-                  <span className="text-sm text-gray-400 mt-1">{msg.time}</span>
+                  <span className="text-sm txt-dim mt-1">{msg.time}</span>
                 </motion.div>
               ))
             )}
           </div>
 
           {/* Input area */}
-          <div className="p-1 border border-gray-700 rounded-full  flex ">
+          <div
+            className="p-1 border rounded-full flex"
+            style={{ borderColor: "var(--bg-sec)" }}
+          >
             <div className="flex-1">
               <input
                 type="text"
@@ -230,15 +247,15 @@ const Ai = () => {
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Ask Eduhaven AI..."
-                className="w-full p-3 rounded-full outline-none bg-transparent focus:ring-2 focus:ring-gray-900"
+                className="w-full p-3 rounded-full outline-none bg-transparent focus:ring-2 focus:ring-transparent"
               />
             </div>
             <button
               onClick={generateQuestion}
-              className={`text-white font-bold p-3 rounded-full transition-all shadow-[0_4px_20px_rgba(176,71,255,0.3)] hover:shadow-[0_4px_70px_rgba(176,71,255,0.4)] ${
+              className={`txt font-bold p-3 rounded-full transition-all shadow-[0_4px_20px_rgba(176,71,255,0.3)] hover:shadow-[0_4px_70px_rgba(176,71,255,0.4)] ${
                 loading
-                  ? "bg-gray-900 cursor-not-allowed"
-                  : "bg-purple-800 hover:bg-purple-700"
+                  ? "bg-sec cursor-not-allowed"
+                  : "btn hover:bg-[var(--btn-hover)]"
               }`}
               disabled={loading}
             >

@@ -21,9 +21,9 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="p-4 hover:bg-ter rounded-lg transition-colors m-auto w-full flex items-center justify-center "
+      className="p-4 hover:bg-ter rounded-lg m-auto w-full flex items-center justify-center "
     >
-      {theme === "light" ? <Sun /> : <Moon />}
+      {theme === "light" ? <Moon /> : <Sun />}
     </button>
   );
 };
