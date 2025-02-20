@@ -64,7 +64,7 @@ const Setgoals = ({ onGoalCreated }) => {
   return (
     <div
       className={`px-4 pt-2 rounded-xl ${
-        title.trim() !== "" ? "bg-ter" : ""
+        title.trim() !== "" ? "bg-ter shadow" : ""
       }`}
       style={{ containerType: "inline-size" }}
     >
@@ -82,7 +82,7 @@ const Setgoals = ({ onGoalCreated }) => {
           <Plus />
         </button>
       </div>
-      {/* Render the calendar and dropdowns only if there's some text in the input */}
+      {/* Render when there's some text in the input */}
       {title.trim() !== "" && (
         <>
           <p className="text-red-400">

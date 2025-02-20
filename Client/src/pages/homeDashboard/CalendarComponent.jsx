@@ -93,7 +93,7 @@ function Calendar() {
 
   return (
     <>
-      <div className="bg-sec pt-6 w-[25%] min-w-fit rounded-3xl shadow-lg flex flex-col max-h-[750px]">
+      <div className="bg-sec pt-6 w-[25%] min-w-fit rounded-3xl shadow flex flex-col max-h-[750px]">
         {/* Header: Time and Day */}
         <div className="px-6">
           <h1 className="text-5xl font-thin txt mb-2">

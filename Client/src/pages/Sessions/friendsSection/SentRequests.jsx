@@ -22,15 +22,15 @@ function SentRequests({ onBack }) {
   }, []);
 
   return (
-    <section className="bg-gray-800 rounded-3xl p-4">
+    <section className="bg-sec rounded-3xl p-4">
       <div className="flex items-center mb-4">
         <button onClick={onBack} className="mr-2">
-          <ArrowLeft className="w-5 h-5 text-white" />
+          <ArrowLeft className="w-5 h-5 txt" />
         </button>
-        <h3 className="text-xl font-semibold">Sent Requests</h3>
+        <h3 className="text-xl font-semibold txt">Sent Requests</h3>
       </div>
       {sentRequests.length === 0 ? (
-        <p className="text-gray-400">No sent requests.</p>
+        <p className="txt-dim">No sent requests.</p>
       ) : (
         <div className="space-y-4">
           {sentRequests.map((user) => (
@@ -42,17 +42,17 @@ function SentRequests({ onBack }) {
                   alt="Profile"
                 />
               ) : (
-                <div className="p-2 bg-gray-700 rounded-full">
+                <div className="p-2 bg-ter rounded-full">
                   <User className="w-7 h-7" />
                 </div>
               )}
               <div className="ml-4">
-                <h4 className="text-lg font-medium line-clamp-1">
+                <h4 className="text-lg font-medium line-clamp-1 txt">
                   {user.FirstName
                     ? `${user.FirstName} ${user.LastName || ""}`
                     : "old-user"}
                 </h4>
-                <p className="text-sm text-gray-400 line-clamp-1">{user.Bio}</p>
+                <p className="text-sm txt-dim line-clamp-1">{user.Bio}</p>
               </div>
             </div>
           ))}

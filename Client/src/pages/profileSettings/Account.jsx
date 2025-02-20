@@ -19,12 +19,12 @@ const Account = () => {
             className="w-full border rounded px-3 py-2"
           />
         </div>
-        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
+        <button type="submit" className="px-4 py-2 btn ">
           Update Account
         </button>
       </form>
       <div className="mt-6">
-        <button className="px-4 py-2 bg-red-600 text-white rounded">
+        <button className="px-4 py-2 bg-red-600 btn hover:bg-red-700">
           Delete Account
         </button>
       </div>

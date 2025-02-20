@@ -107,7 +107,7 @@ const GoalsComponent = () => {
   const openCount = todos.length - completedCount;
 
   return (
-    <div className="bg-sec txt rounded-3xl py-6 pb-2 w-full mx-auto relative">
+    <div className="bg-sec txt rounded-3xl py-6 pb-2 w-full mx-auto relative shadow">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-4 px-6">
         <h1 className="text-2xl font-bold">Goals</h1>
@@ -123,7 +123,7 @@ const GoalsComponent = () => {
         </div>
       </div>
 
-      {/* New Goal Input Section (Extracted to Setgoals.jsx) */}
+      {/* Set goals */}
       <div className="h-11"></div>
       <div className="absolute left-0 right-0 z-10 top-16">
         <Setgoals onGoalCreated={handleNewGoalCreated} />

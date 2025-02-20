@@ -2,7 +2,7 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { User, Settings, Users, LogOut } from "lucide-react";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 // Create a context for user profile
 const UserProfileContext = createContext({
@@ -69,14 +69,14 @@ const ProfileSettings = () => {
   };
 
   const sidebarLinkClasses = ({ isActive }) =>
-    `block px-4 py-2 rounded-md hover:bg-gray-700 ${
-      isActive ? "bg-purple-800 font-bold" : ""
+    `block px-4 py-2 rounded-md hover:bg-ter ${
+      isActive ? "bg-[var(--btn)] font-bold" : ""
     }`;
 
   return (
     <>
       {/* Profile Info */}
-      <div className="m-6 flex gap-5 items-center pl-[10vw] h-72 bg-gradient-to-r from-purple-700 to-indigo-800 rounded-3xl">
+      <div className="text-white m-6 flex gap-5 items-center pl-[10vw] h-72 bg-gradient-to-r from-purple-700 to-indigo-800 rounded-3xl">
         <div className="w-32 h-32 rounded-full border-2 border-gray-700 overflow-hidden shadow-lg">
           {user.ProfilePicture ? (
             <img
@@ -97,9 +97,9 @@ const ProfileSettings = () => {
         </div>
       </div>
 
-      <div className="flex  max-w-[1080px] m-auto mt-4">
+      <div className="flex max-w-[1080px] m-auto mt-4">
         {/* Sidebar */}
-        <aside className="w-64 h-[600px] bg-gray-800 shadow-md relative">
+        <aside className="w-64 h-[600px] bg-sec shadow-md relative">
           <nav className="p-4 space-y-2">
             <NavLink to="" end className={sidebarLinkClasses}>
               <User className="inline-block mr-2" size={16} />
@@ -131,7 +131,7 @@ const ProfileSettings = () => {
         </aside>
 
         {/* Content Area */}
-        <main className=" p-8 bg-gray-900">
+        <main className="p-8 bg-primary">
           <Outlet />
         </main>
       </div>

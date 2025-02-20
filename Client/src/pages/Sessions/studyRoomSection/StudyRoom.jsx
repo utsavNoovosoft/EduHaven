@@ -75,10 +75,10 @@ function StudyRoom() {
   }
 
   return (
-    <div className=" flex-1">
+    <div className="flex-1">
       {/* Navbar */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-200 mb-4 sm:mb-0">
+        <h1 className="text-2xl font-bold txt mb-4 sm:mb-0">
           Study Room
         </h1>
         <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -88,12 +88,12 @@ function StudyRoom() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search rooms..."
-              className="px-4 py-2 rounded-lg bg-gray-800 text-white placeholder-gray-500 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="px-4 py-2 rounded-lg bg-sec txt placeholder:txt-dim  focus:outline-none focus:ring-2 focus:ring-purple-600"
             />
             <select
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
-              className="px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="px-4 py-2 rounded-lg bg-sec txt  focus:outline-none focus:ring-2 focus:ring-purple-600"
             >
               <option value="default">Sort by</option>
               <option value="name">Name (A-Z)</option>
@@ -103,7 +103,7 @@ function StudyRoom() {
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 px-6 py-2.5 rounded-xl transition-colors"
+            className="flex items-center gap-2 btn px-6 py-2.5 rounded-xl transition-colors"
           >
             <PlusCircle className="w-6 h-6" />
             <span>Create Room</span>
@@ -116,15 +116,15 @@ function StudyRoom() {
         {sortedSessions.map((room) => (
           <div
             key={room.id}
-            className="relative bg-white/10 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-white/10 transition-shadow hover:shadow-2xl"
+            className="relative bg-sec backdrop-blur-md p-6 rounded-3xl shadow "
           >
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-2">
-                <h3 className="text-xl font-semibold text-white">
+                <h3 className="text-xl font-semibold txt">
                   {room.name}
                 </h3>
                 {room.pinned && (
-                  <span className="text-xs text-yellow-400 bg-yellow-900 px-2 py-0.5 rounded-full">
+                  <span className="text-xs txt-dim bg-sec px-2 py-0.5 rounded-full">
                     Pinned
                   </span>
                 )}
@@ -136,35 +136,39 @@ function StudyRoom() {
                     prev === room.id ? null : room.id
                   )
                 }
-                className="text-white hover:text-gray-300"
+                className="txt hover:txt-dim"
               >
                 <MoreHorizontal className="w-6 h-6" />
               </button>
               {/* Dropdown Menu */}
               {activeRoomMenu === room.id && (
-                <div className="absolute right-4 top-12 bg-gray-800 border border-gray-700 rounded-md shadow-md z-10">
+                <div
+                  className="absolute right-4 top-12 bg-sec rounded-lg shadow-md z-10"
+                >
                   <button
                     onClick={() => handlePinRoom(room.id)}
-                    className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-700"
+                    className="block w-full text-left px-4 py-3 text-sm txt hover:bg-ter"
                   >
-                    {room.pinned ? "Unpin from homepage" : "Pin to homepage"}
+                    {room.pinned
+                      ? "Unpin from homepage"
+                      : "Pin to homepage"}
                   </button>
                   <button
                     onClick={() => handleDeleteRoom(room.id)}
-                    className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-700"
+                    className="block w-full text-left px-4 py-2 text-sm txt-dim hover:bg-ter"
                   >
                     Delete
                   </button>
                 </div>
               )}
             </div>
-            <p className="text-gray-300 mb-4">
+            <p className="txt-dim mb-4">
               <span className="font-medium">{room.students}</span> student
               {room.students !== 1 ? "s" : ""} studying
             </p>
             {room.hasJoined ? (
               <button
-                className="w-full bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-default"
+                className="w-full bg-sec txt-disabled px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-default"
                 disabled
               >
                 <CheckCircle className="w-5 h-5" />
@@ -173,7 +177,7 @@ function StudyRoom() {
             ) : (
               <button
                 onClick={() => handleJoinRoom(room.id)}
-                className="w-full bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                className="w-full btn px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
               >
                 <Activity className="w-5 h-5" />
                 Join

@@ -52,8 +52,8 @@ const Friends = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">Friends List</h1>
-        <Link to={"/study-room"} className="hover:underline">
+        <h1 className="text-2xl font-semibold txt">Friends List</h1>
+        <Link to={"/study-room"} className="hover:underline txt">
           Find friends
         </Link>
       </div>
@@ -64,7 +64,7 @@ const Friends = () => {
           {friends.map((friend) => (
             <li
               key={friend._id}
-              className="p-4 rounded-md flex justify-between bg-gray-800"
+              className="p-4 rounded-md flex justify-between bg-sec"
             >
               <div className="flex items-center gap-4">
                 {friend.ProfilePicture ? (
@@ -74,11 +74,11 @@ const Friends = () => {
                     alt="profile"
                   />
                 ) : (
-                  <div className="p-2 bg-gray-700 rounded-full">
+                  <div className="p-2 bg-ter rounded-full">
                     <User className="w-7 h-7" />
                   </div>
                 )}
-                <h4 className="text-lg font-medium line-clamp-1">
+                <h4 className="text-lg font-medium line-clamp-1 txt">
                   {friend.FirstName
                     ? `${friend.FirstName} ${friend.LastName || ""}`
                     : "old-user"}
@@ -87,10 +87,8 @@ const Friends = () => {
               <button
                 onClick={() => removeFriend(friend._id)}
                 disabled={friend.isRemoved}
-                className={`transition-colors duration-300 text-white px-3 py-1 rounded ${
-                  friend.isRemoved
-                    ? "bg-gray-700"
-                    : "bg-gray-700 hover:bg-red-500"
+                className={`transition-colors duration-300 txt px-3 py-1 rounded ${
+                  friend.isRemoved ? "bg-ter" : "bg-ter hover:bg-red-500"
                 }`}
               >
                 {friend.isRemoved ? "Friend Removed" : "Remove"}
