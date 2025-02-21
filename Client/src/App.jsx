@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-import Home from "./pages/homeDashboard/Home.jsx";
+import Home from "./pages/home/Home.jsx";
 import Stats from "./pages/stats/Stats";
 import GameRoom from "./pages/gameRoom/GameRoutes.jsx";
 import CourseRoom from "./pages/CourseRoom";
