@@ -54,7 +54,7 @@ function NotesComponent() {
         setError("Something wrong at our end");
       }
     } catch (err) {
-      setError(err?.response?.data?.error || "Failed to fetch notes.");
+      setError(err?.response?.data?.error);
     }
   };
 
