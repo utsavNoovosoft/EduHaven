@@ -10,6 +10,7 @@ import FriendsRoutes from "./Routes/FriendsRoutes.js";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import { Server } from "socket.io";
 
 dotenv.config();
 const app = express();
@@ -25,7 +26,6 @@ app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(bodyParser.json());
-
 app.use(express.urlencoded({ extended: true }));
 
 // Example route
@@ -39,8 +39,33 @@ app.use("/note", NotesRoutes);
 app.use("/events", EventRoutes);
 app.use("/", TimerSessionRoutes);
 app.use("/friends", FriendsRoutes);
-// Start the server
-app.listen(port, () => {
+
+// Start Express server and integrate Socket.io
+const server = app.listen(port, () => {
   ConnectDB();
   console.log(`Server running at http://localhost:${port}`);
 });
+
+// Attach Socket.io to the existing Express server
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"]
+  }
+});
+
+// Socket.io logic
+io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.id}`);
+
+  socket.on("message", (data) => {
+    console.log("Received:", data);
+    io.emit("message", data); 
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.id}`);
+  });
+});
+
+
