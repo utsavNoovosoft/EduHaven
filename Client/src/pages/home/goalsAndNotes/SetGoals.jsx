@@ -3,7 +3,7 @@ import axios from "axios";
 import Calendar from "react-calendar";
 import { Plus } from "lucide-react";
 import "react-calendar/dist/Calendar.css";
-import "../../styles/ReactCustomCalendar.css";
+import "./ReactCustomCalendar.css";
 
 const Setgoals = ({ onGoalCreated }) => {
   const [title, setTitle] = useState("");

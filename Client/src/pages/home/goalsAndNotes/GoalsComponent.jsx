@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Pencil, Trash, Check, X } from "lucide-react";
-import Setgoals from "./Setgoals.jsx";
+import Setgoals from "./SetGoals.jsx";
 
 const GoalsComponent = () => {
   const [todos, setTodos] = useState([]);

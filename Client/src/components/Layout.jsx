@@ -75,7 +75,7 @@ function Layout() {
           <Link to="/">
             <div className="hover:bg-ter rounded-lg transition-opacity duration-300 ">
               <img
-                src="../public/Logo.svg"
+                src="./Logo.svg"
                 alt="Logo"
                 className={`w-full m-auto object-contain p-4 dark:invert ${
                   isHome ? "opacity-100" : "opacity-80"
