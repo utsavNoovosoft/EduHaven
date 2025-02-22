@@ -29,7 +29,6 @@ const ChatRooms = () => {
     if (input.trim()) {
       const newMessage = { text: input, sender: "me" };
       socket.emit("message", newMessage);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
       setInput("");
     }
   };
