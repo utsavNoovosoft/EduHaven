@@ -4,6 +4,7 @@ import cors from "cors";
 import UserRoutes from "./Routes/UserRoutes.js";
 import TodoRoutes from "./Routes/ToDoRoutes.js";
 import EventRoutes from "./Routes/EventRoutes.js";
+import authRoutes from "./Routes/OAuthRoute.js";
 import NotesRoutes from "./Routes/NotesRoutes.js";
 import { TimerSessionRoutes } from "./Routes/TimerSessionsRoutes.js";
 import FriendsRoutes from "./Routes/FriendsRoutes.js";
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/", UserRoutes);
+app.use("/auth", authRoutes);
 app.use("/todo", TodoRoutes);
 app.use("/note", NotesRoutes);
 app.use("/events", EventRoutes);
@@ -50,8 +52,8 @@ const server = app.listen(port, () => {
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
-    methods: ["GET", "POST"]
-  }
+    methods: ["GET", "POST"],
+  },
 });
 
 // Socket.io logic
@@ -60,12 +62,10 @@ io.on("connection", (socket) => {
 
   socket.on("message", (data) => {
     console.log("Received:", data);
-    io.emit("message", data); 
+    io.emit("message", data);
   });
 
   socket.on("disconnect", () => {
     console.log(`User disconnected: ${socket.id}`);
   });
 });
-
-

@@ -1,39 +1,41 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
-import Home from "./pages/home/Home.jsx";
-import Stats from "./pages/stats/Stats";
-import GameRoom from "./pages/gameRoom/GameRoutes.jsx";
-import CourseRoom from "./pages/CourseRoom";
+import Home from "./pages/Home.jsx";
+import Stats from "./pages/Stats";
+import GameRoom from "./routes/GameRoutes.jsx";
 import Signout from "./Auth/Signout";
-import SignUp from "./Auth/Authenticate.jsx";
-import ProfileRoutes from "./pages/profileSettings/ProfileRoutes.jsx";
+// import SignUp from "./Auth/Authenticate.jsx";
 import PageNotFound from "../src/pages/PageNotFound";
 import ProjectInfo from "../src/pages/ProjectInfo";
-import StudyRoom from "./pages/Sessions/Sessions.jsx";
+import StudyRoom from "./pages/Sessions.jsx";
 import OtpInput from "./Auth/Verifyotp.jsx";
-import ChatRooms from "./pages/ChatRoom/Index";
+import ProfileSettings from "./pages/ProfileSettings";
+import { UserProfileProvider } from "@/contexts/UserProfileContext";
+import GoogleRedirect from "./Auth/GoogleRedirect";
+import Auth from "./Auth/Auth";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="study-room" element={<StudyRoom />} />
-          <Route path="chat-room" element={<ChatRooms />} />
-          <Route path="stats" element={<Stats />} />
-          <Route path="games/*" element={<GameRoom />} />
-          <Route path="course" element={<CourseRoom />} />
-          <Route path="verify" element={<OtpInput />} />
-          <Route path="project-details" element={<ProjectInfo />} />
-          <Route path="profile/*" element={<ProfileRoutes />} />
-          <Route path="authenticate" element={<SignUp />} />
+    <UserProfileProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="study-room" element={<StudyRoom />} />
+            <Route path="stats" element={<Stats />} />
+            <Route path="games/*" element={<GameRoom />} />
+            <Route path="project-details" element={<ProjectInfo />} />
+            <Route path="profile/" element={<ProfileSettings />} />
+          </Route>
           <Route path="signout" element={<Signout />} />
-
+          <Route path="verify" element={<OtpInput />} />
+          {/* <Route path="authenticate" element={<SignUp />} /> */}
+          <Route path="authenticate" element={<Auth />} />
+          <Route path="/auth/google/callback" element={<GoogleRedirect />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </UserProfileProvider>
   );
 }
 
