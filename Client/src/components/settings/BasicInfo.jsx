@@ -183,8 +183,8 @@ export default function BasicInfo() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-[var(--bg-sec)]">
-                    <User className="w-8 h-8 text-[var(--txt-dim)]" />
+                  <div className="aspect-square w-full h-full flex items-center justify-center bg-[var(--bg-sec)]">
+                    <User className="w-14 h-14 text-[var(--txt-dim)]" />
                   </div>
                 )}
               </div>

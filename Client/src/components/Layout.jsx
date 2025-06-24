@@ -5,10 +5,9 @@ import {
   GamepadIcon,
   LogIn,
   Radio,
-  User,
+  Settings,
   BadgeInfo,
   MessageSquareText,
-  FileVideo2,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -132,15 +131,13 @@ function Layout() {
               ref={(el) => (linkRefs.current["/authenticate"] = el)}
             />
           )}
-          {token && (
-            <SidebarLink
-              to="/profile"
-              IconComponent={User}
-              label="Profile"
-              isActive={location.pathname === "/profile"}
-              ref={(el) => (linkRefs.current["/profile"] = el)}
-            />
-          )}
+          <SidebarLink
+            to="/settings"
+            IconComponent={Settings}
+            label="Settings"
+            isActive={location.pathname === "/settings"}
+            ref={(el) => (linkRefs.current["/settings"] = el)}
+          />
         </div>
 
         {/* Render the animated active indicator only if not on the home page */}

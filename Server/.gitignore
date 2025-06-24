@@ -1,3 +1,5 @@
+.env
+
 # Logs
 logs
 *.log
@@ -25,4 +27,3 @@ dist-ssr
 
 uploads/
 
-.env
