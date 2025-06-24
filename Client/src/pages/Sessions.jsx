@@ -1,9 +1,9 @@
 import { useState } from "react";
-import StudyRoom from "./studyRoomSection/StudyRoom.jsx";
-import OnlineFriends from "./friendsSection/OnlineFriends.jsx";
-import FriendRequests from "./friendsSection/FriendsRequests.jsx";
-import SuggestedFriends from "./friendsSection/SuggestedFriends.jsx";
-import SentRequests from "./friendsSection/SentRequests";
+import StudyRoom from "../components/studyRoomSection/StudyRoom.jsx";
+import OnlineFriends from "../components/friendsSection/OnlineFriends.jsx";
+import FriendRequests from "../components/friendsSection/FriendsRequests.jsx";
+import SuggestedFriends from "../components/friendsSection/SuggestedFriends.jsx";
+import SentRequests from "../components/friendsSection/SentRequests.jsx";
 
 function Session() {
   const [view, setView] = useState("suggested");

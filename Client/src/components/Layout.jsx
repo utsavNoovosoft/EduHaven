@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
-import ThemeToggle from "./ThemeToggle";
 import {
   BarChart2,
   GamepadIcon,
@@ -77,7 +76,7 @@ function Layout() {
               <img
                 src="./Logo.svg"
                 alt="Logo"
-                className={`w-full m-auto object-contain p-4 dark:invert ${
+                className={`w-full m-auto object-contain p-4 logo-filter ${
                   isHome ? "opacity-100" : "opacity-80"
                 }`}
               />
@@ -91,13 +90,13 @@ function Layout() {
               isActive={location.pathname === "/study-room"}
               ref={(el) => (linkRefs.current["/study-room"] = el)}
             />
-            <SidebarLink
+            {/* <SidebarLink
               to="/chat-room"
               IconComponent={MessageSquareText}
               label="chat"
               isActive={location.pathname === "/chat-room"}
               ref={(el) => (linkRefs.current["/chat-room"] = el)}
-            />
+            /> */}
             <SidebarLink
               to="/stats"
               IconComponent={BarChart2}
@@ -112,13 +111,6 @@ function Layout() {
               isActive={location.pathname === "/games"}
               ref={(el) => (linkRefs.current["/games"] = el)}
             />
-            <SidebarLink
-              to="/course"
-              IconComponent={FileVideo2}
-              label="course"
-              isActive={location.pathname === "/course"}
-              ref={(el) => (linkRefs.current["/course"] = el)}
-            />
           </div>
           <hr className="border-sec my-5 mx-4" />
           <SidebarLink
@@ -131,8 +123,6 @@ function Layout() {
         </div>
 
         <div className="space-y-2 w-full">
-          {/* Theme toggle button now uses the rounded-lg variable */}
-          <ThemeToggle />
           {!token && (
             <SidebarLink
               to="/authenticate"

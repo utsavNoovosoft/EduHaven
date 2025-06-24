@@ -1,10 +1,10 @@
 import { Headphones } from "lucide-react";
-import Calender from "./calenderComponent/CalendarComponent.jsx";
-import TimerComponent from "./timerComponent/TimerComponent.jsx";
-import NotesComponent from "./goalsAndNotes/NotesComponent.jsx";
-import GoalsComponent from "./goalsAndNotes/GoalsComponent.jsx";
-import StudyStats from "./timerComponent/TimerStats.jsx";
-import NavBar from "./navBar/NavBar.jsx";
+import Calender from "@/components/home/calenderComponent/CalendarComponent.jsx";
+import TimerComponent from "@/components/home/timerComponent/TimerComponent.jsx";
+import StudyStats from "@/components/home/timerComponent/TimerStats";
+import NotesComponent from "@/components/home/goalsAndNotes/NotesComponent.jsx";
+import GoalsComponent from "@/components/home/goalsAndNotes/GoalsComponent.jsx";
+import NavBar from "@/components/home/navBar/NavBar";
 
 function StudyRoom() {
   return (

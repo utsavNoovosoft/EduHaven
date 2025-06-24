@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import GameRoom from "./GameRoom";
-import TicTacToe from "./games/tic-tac-toe/TicTacToe.jsx";
-import Snake from "./games/SnakeGame.jsx";
-import TypingGame from "./games/TypingGame";
-import SpaceType from "./games/SpaceType";
+import GameRoom from "../components/gameRoomComponents/GameRoom";
+import TicTacToe from "../components/games/tic-tac-toe/TicTacToe.jsx";
+import Snake from "../components/games/SnakeGame.jsx";
+import TypingGame from "../components/games/TypingGame";
+import SpaceType from "../components/games/SpaceType";
 
 const GameRoutes = () => {
   return (

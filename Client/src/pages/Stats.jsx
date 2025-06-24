@@ -1,11 +1,11 @@
-import ProfileCard from "./ProfileCard";
-import MonthlyLevel from "./MonthlyLevel";
-import Achievements from "./Achievements";
-import Badges from "./Badges";
-import StudyStats from "./StudyStats";
-import Goals from "./Goals";
-import Leaderboard from "./Leaderboard";
-import Test from "./Test.jsx";
+import ProfileCard from "../components/stats/ProfileCard";
+import MonthlyLevel from "../components/stats/MonthlyLevel";
+import Achievements from "../components/stats/Achievements";
+import Badges from "../components/stats/Badges";
+import StudyStats from "../components/stats/StudyStats";
+import Goals from "../components/stats/Goals";
+import Leaderboard from "../components/stats/Leaderboard";
+import Test from "../components/stats/Test.jsx";
 
 const Stats = () => {
   return (

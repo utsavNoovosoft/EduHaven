@@ -9,16 +9,105 @@
     (function () {
       const storedTheme = localStorage.getItem('theme');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
-        document.documentElement.classList.add('dark');
+
+      // Updated with all the new themes
+      const validThemes = [
+        'dark', 
+        'theme-forest', 
+        'theme-cyberpunk', 
+        'theme-coffee',
+        'theme-neon-sunset',
+        'theme-ocean-breeze',
+        'theme-volcanic',
+        'theme-mint-dream',
+        'theme-rose-gold',
+        'theme-matrix',
+        'theme-lavender-fields',
+        'theme-midnight-blue',
+        'theme-peachy-keen',
+        'theme-creamsicle',
+        'theme-obsidian',
+        'theme-cotton-candy',
+        'theme-neon-jungle',
+        'theme-space-black',
+        'theme-golden-hour',
+        'theme-sapphire-dream',
+        'theme-coral-reef',
+        'theme-deep-purple',
+        'theme-arctic-mint'
+      ];
+      
+      const fallbackTheme = prefersDark ? 'dark' : 'light';
+
+      const theme = storedTheme && validThemes.includes(storedTheme)
+        ? storedTheme
+        : fallbackTheme;
+
+      if (theme !== 'light') {
+        document.documentElement.classList.add(theme);
       }
+
+      // Add smooth theme transition
+      document.documentElement.style.setProperty('--theme-transition', 'background-color 0.3s ease, color 0.3s ease');
     })();
   </script>
+  
+  <!-- Preload critical fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Enhanced meta tags for better SEO and PWA support -->
+  <meta name="description" content="EduHeaven - Your premium educational platform with beautiful themes and modern interface">
+  <meta name="theme-color" content="#7f23ca">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="EduHeaven">
+  
+  <!-- Favicon variations -->
+  <link rel="apple-touch-icon" href="/Logo.svg">
+  <link rel="mask-icon" href="/Logo.svg" color="#7f23ca">
 
-  <title>EduHeaven</title>
+  <title>EduHeaven - Premium Educational Experience</title>
+  
+  <style>
+    /* Prevent flash of unstyled content */
+    html {
+      background-color: var(--bg-primary, #dfddec);
+      color: var(--txt, #1f2937);
+      transition: var(--theme-transition);
+    }
+    
+    /* Loading state */
+    #root:empty::before {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 32px;
+      height: 32px;
+      margin: -16px 0 0 -16px;
+      border: 3px solid var(--btn, #7f23ca);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Enhanced focus styles for accessibility */
+    *:focus-visible {
+      outline: 2px solid var(--btn, #7f23ca);
+      outline-offset: 2px;
+    }
+  </style>
 </head>
 
 <body>
