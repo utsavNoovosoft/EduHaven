@@ -70,10 +70,12 @@ router.get("/google/callback", async (req, res) => {
         sameSite: "lax",
         maxAge: 24 * 60 * 60 * 1000,
       })
-      .redirect(`http://localhost:5173/auth/google/callback?token=${appToken}`);
+      .redirect(
+        `${process.env.CORS_ORIGIN}/auth/google/callback?token=${appToken}`
+      );
   } catch (err) {
     console.error("Google OAuth error:", err);
-    res.redirect("http://localhost:5173/login?error=oauth_failed");
+    res.redirect(`${process.env.CORS_ORIGIN}/login?error=oauth_failed`);
   }
 });
 
