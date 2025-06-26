@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema(
   {
     FirstName: { type: String, required: true },
-    LastName: { type: String, required: true },
+    LastName: { type: String},
     Email: { type: String, required: true, unique: true },
     // I have modified password required so the user logging with google don't needs it.
     Password: {
