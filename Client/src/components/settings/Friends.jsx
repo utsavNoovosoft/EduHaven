@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { User } from "lucide-react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const getAuthHeader = () => {
   const token = localStorage.getItem("token");
@@ -18,7 +19,7 @@ const Friends = () => {
   const fetchFriends = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/friends",
+        `${backendUrl}/friends`,
         getAuthHeader()
       );
       // Add an `isRemoved` property to each friend (initially false)
@@ -36,7 +37,7 @@ const Friends = () => {
   const removeFriend = async (friendId) => {
     try {
       await axios.delete(
-        `http://localhost:3000/friends/${friendId}`,
+        `${backendUrl}/friends/${friendId}`,
         getAuthHeader()
       );
       setFriends(

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
 import { Plus, X } from "lucide-react";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 function EducationAndSkills() {
   const { user, setUser, fetchUserDetails } = useUserProfile();
@@ -136,7 +137,7 @@ function EducationAndSkills() {
       };
 
       const response = await axios.put(
-        "http://localhost:3000/user/profile",
+        `${backendUrl}/user/profile`,
         updateData,
         {
           headers: {

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Clock12, PlayCircle, RotateCcw } from "lucide-react";
 import AnimatedDigits from "./AnimatedDigits";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 // Study Timer Component (Connected to the backend)
 function StudyTimer() {
@@ -27,7 +28,7 @@ function StudyTimer() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3000/timer", {
+      const response = await fetch(`${backendUrl}/timer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

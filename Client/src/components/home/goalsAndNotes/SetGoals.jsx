@@ -17,6 +17,7 @@ const Setgoals = ({ onGoalCreated }) => {
     const token = localStorage.getItem("token");
     return { headers: { Authorization: `Bearer ${token}` } };
   };
+  const backendUrl = import.meta.env.VITE_API_URL;
 
   const handleCreate = async () => {
     if (!title.trim()) {
@@ -29,7 +30,7 @@ const Setgoals = ({ onGoalCreated }) => {
         ? deadline.toISOString()
         : new Date().toISOString();
       const { data } = await axios.post(
-        "http://localhost:3000/todo",
+        `${backendUrl}/todo`,
         {
           title,
           completed: false,
@@ -85,9 +86,7 @@ const Setgoals = ({ onGoalCreated }) => {
       {/* Render when there's some text in the input */}
       {title.trim() !== "" && (
         <>
-          <p className="text-red-400">
-            Currenty only calender is functional.
-          </p>
+          <p className="text-red-400">Currenty only calender is functional.</p>
           <div className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col">
             <div className="flex-1">
               {/* Repeat Dropdown */}
@@ -100,11 +99,7 @@ const Setgoals = ({ onGoalCreated }) => {
                 >
                   {["Never", "Daily", "Weekly", "Monthly", "Yearly"].map(
                     (r) => (
-                      <option
-                        key={r}
-                        value={r}
-                        className="txt bg-sec"
-                      >
+                      <option key={r} value={r} className="txt bg-sec">
                         {r}
                       </option>
                     )
@@ -128,11 +123,7 @@ const Setgoals = ({ onGoalCreated }) => {
                     "23:00",
                     "23:30",
                   ].map((t) => (
-                    <option
-                      key={t}
-                      value={t}
-                      className="txt bg-sec"
-                    >
+                    <option key={t} value={t} className="txt bg-sec">
                       {t}
                     </option>
                   ))}
@@ -154,11 +145,7 @@ const Setgoals = ({ onGoalCreated }) => {
                     "7 days early (9:00)",
                     "On the day (5:00)",
                   ].map((r) => (
-                    <option
-                      key={r}
-                      value={r}
-                      className="txt bg-sec"
-                    >
+                    <option key={r} value={r} className="txt bg-sec">
                       {r}
                     </option>
                   ))}

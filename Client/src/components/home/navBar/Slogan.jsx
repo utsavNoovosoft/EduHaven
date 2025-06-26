@@ -4,6 +4,7 @@ function Slogan() {
   const [quote, setQuote] = useState("Stay hungry; stay foolish.");
   const [displayMode, setDisplayMode] = useState("quote");
   const [username, setUsername] = useState("User");
+  const backendUrl = import.meta.env.VITE_API_URL;
 
   // Fetch the username from the backend
   const fetchUsername = async () => {
@@ -11,7 +12,7 @@ function Slogan() {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const response = await fetch("http://localhost:3000/user/details", {
+      const response = await fetch(`${backendUrl}/user/details`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

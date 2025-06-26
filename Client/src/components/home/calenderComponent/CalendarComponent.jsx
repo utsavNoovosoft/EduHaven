@@ -4,6 +4,7 @@ import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import EventPopup from "./eventPopup";
 import { motion } from "framer-motion";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -36,7 +37,7 @@ function Calendar() {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/events");
+      const response = await axios.get(`${backendUrl}/events`);
       if (response.data.success) {
         setEvents(response.data.data);
 

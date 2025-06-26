@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
 import { Camera, User, MapPin, FileText } from "lucide-react";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 export default function BasicInfo() {
   const { user, setUser, fetchUserDetails } = useUserProfile();
@@ -79,7 +80,7 @@ export default function BasicInfo() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/upload-profile-picture",
+        `${backendUrl}/user/upload-profile-picture`,
         formData,
         {
           headers: {
@@ -129,7 +130,7 @@ export default function BasicInfo() {
       };
 
       const response = await axios.put(
-        "http://localhost:3000/user/profile",
+        `${backendUrl}/user/profile`,
         updateData,
         {
           headers: {

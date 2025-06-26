@@ -167,13 +167,14 @@ const StudyStats = () => {
   const [view, setView] = useState("daily");
   const [isOpen, setIsOpen] = useState(false);
   const [stats, setStats] = useState([]);
+  const backendUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const handleGetStats = async () => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `http://localhost:3000/timerstats?period=${view}`,
+          `${backendUrl}/timerstats?period=${view}`,
           {
             method: "GET",
             headers: {

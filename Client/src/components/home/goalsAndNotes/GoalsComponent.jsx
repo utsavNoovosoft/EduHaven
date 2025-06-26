@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Pencil, Trash, Check, X } from "lucide-react";
 import Setgoals from "./SetGoals.jsx";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const GoalsComponent = () => {
   const [todos, setTodos] = useState([]);
@@ -26,7 +27,7 @@ const GoalsComponent = () => {
   const fetchTodos = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:3000/todo",
+        `${backendUrl}/todo`,
         getAuthHeader()
       );
       setTodos(sortTodos(data.data));
@@ -49,7 +50,7 @@ const GoalsComponent = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/todo/${id}`, getAuthHeader());
+      await axios.delete(`${backendUrl}/todo/${id}`, getAuthHeader());
       setTodos(sortTodos(todos.filter((todo) => todo._id !== id)));
     } catch (error) {
       console.error("Error deleting todo:", error.message);
@@ -61,7 +62,7 @@ const GoalsComponent = () => {
       const todo = todos.find((t) => t._id === id);
       const updatedTodo = { ...todo, completed: !todo.completed };
       await axios.put(
-        `http://localhost:3000/todo/${id}`,
+        `${backendUrl}/todo/${id}`,
         updatedTodo,
         getAuthHeader()
       );
@@ -82,7 +83,7 @@ const GoalsComponent = () => {
       const todo = todos.find((t) => t._id === editingId);
       const updatedTodo = { ...todo, title: editedTitle };
       await axios.put(
-        `http://localhost:3000/todo/${editingId}`,
+        `${backendUrl}/todo/${editingId}`,
         updatedTodo,
         getAuthHeader()
       );
