@@ -7,13 +7,13 @@ export default function GoogleRedirect() {
 
   useEffect(() => {
     const params = new URLSearchParams(search);
+    console.log(params)
     const token = params.get("token");
     if (token) {
       localStorage.setItem("token", token);
-      // Clean up URL so token isn’t visible in history
       navigate("/", { replace: true });
     } else {
-      navigate("/login");
+      navigate("/authenticate");
     }
   }, [navigate, search]);
 
