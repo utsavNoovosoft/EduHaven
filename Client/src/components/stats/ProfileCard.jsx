@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   User,
   MessageCircle,
@@ -14,6 +14,7 @@ import {
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const ProfileCard = () => {
   const [user, setUser] = useState(null);
@@ -27,7 +28,7 @@ const ProfileCard = () => {
 
         const decoded = jwtDecode(token);
         const response = await axios.get(
-          `http://localhost:3000/user/details?id=${decoded.id}`,
+          `${backendUrl}/user/details?id=${decoded.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -44,7 +44,6 @@ export const signup = async (req, res) => {
     const otp = Math.floor(Math.random() * 1000000)
       .toString()
       .padStart(6, "0");
-
     const activationToken = jwt.sign(
       {
         user,

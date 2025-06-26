@@ -5,6 +5,7 @@ function App() {
   const [duration, setDuration] = useState("");
   const [period, setPeriod] = useState("");
   const [stats, setStats] = useState(null);
+  const backendUrl = import.meta.env.VITE_API_URL;
 
   // Function to get Authorization header from localStorage
   const getAuthHeader = () => {
@@ -18,7 +19,7 @@ function App() {
     const sessionData = { startTime, endTime, duration };
 
     try {
-      const response = await fetch("http://localhost:3000/timer", {
+      const response = await fetch(`${backendUrl}/timer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +39,7 @@ function App() {
   const handleGetStats = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/timerstats?period=${period}`,
+        `${backendUrl}/timerstats?period=${period}`,
         {
           method: "GET",
           ...getAuthHeader(), // Add Authorization header
@@ -71,7 +72,7 @@ function App() {
           id="startTime"
           value={startTime}
           onChange={(e) => {
-            setStartTime(e.target.value)
+            setStartTime(e.target.value);
             if (startTime) {
               console.log("Start Time Set:", startTime);
             }
@@ -111,9 +112,6 @@ function App() {
       <hr />
       <br />
 
-
-
-      
       <h2>Get Statistics</h2>
       <label htmlFor="period">Period (hourly, daily, weekly, monthly):</label>
       <input

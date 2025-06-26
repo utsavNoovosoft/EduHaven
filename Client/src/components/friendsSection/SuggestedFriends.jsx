@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { User, UserPlus, MoreVertical } from "lucide-react";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 function SuggestedFriends({ onViewSentRequests }) {
   const [suggestedFriends, setSuggestedFriends] = useState([]);
@@ -14,7 +15,7 @@ function SuggestedFriends({ onViewSentRequests }) {
   const sendRequest = async (friendId) => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/friends/request/${friendId}`,
+        `${backendUrl}/friends/request/${friendId}`,
         null,
         getAuthHeader()
       );
@@ -31,7 +32,7 @@ function SuggestedFriends({ onViewSentRequests }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/friends/friend-suggestions", getAuthHeader())
+      .get(`${backendUrl}/friends/friend-suggestions`, getAuthHeader())
       .then((response) => {
         setSuggestedFriends(response.data);
       })

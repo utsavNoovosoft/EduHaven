@@ -3,12 +3,13 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 function SignUp() {
   const navigate = useNavigate();
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:3000/auth/google";
+    window.location.href = `${backendUrl}/auth/google`;
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +22,7 @@ function SignUp() {
   const onSubmit = async (data) => {
     console.log("Form submitted:", data);
     try {
-      const url = "http://localhost:3000/signup";
+      const url = "${backendUrl}/signup";
       if (!data.FirstName || !data.LastName) {
         throw new Error("First Name and Last Name are required");
       }

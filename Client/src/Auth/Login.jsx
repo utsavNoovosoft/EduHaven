@@ -3,11 +3,14 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+
+const backendUrl = import.meta.env.VITE_API_URL;
+
 function Login() {
   const navigate = useNavigate();
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:3000/auth/google";
+    window.location.href = `${backendUrl}/auth/google`;
   };
 
   const [showPassword, setShowPassword] = useState(false);
@@ -20,7 +23,7 @@ function Login() {
   const onSubmit = async (data) => {
     console.log("Form submitted:", data);
     try {
-      const url = "http://localhost:3000/login";
+      const url = `${backendUrl}/login`;
       const response = await axios.post(url, data);
       console.log(response.data);
       reset();

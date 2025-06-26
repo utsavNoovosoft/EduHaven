@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const EventPopup = ({ date, onClose, refreshEvents }) => {
   const [event, setEvent] = useState(null);
@@ -14,7 +15,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
     const fetchEvent = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/events-by-date?date=${date}`
+          `${backendUrl}/events-by-date?date=${date}`
         );
         const eventData = response.data.data[0]; // Assuming one event per date
         if (eventData) {
@@ -40,9 +41,9 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
     try {
       const eventData = { title, time, date };
       if (id) {
-        await axios.put(`http://localhost:3000/events/${id}`, eventData);
+        await axios.put(`${backendUrl}/events/${id}`, eventData);
       } else {
-        await axios.post("http://localhost:3000/events", eventData);
+        await axios.post(`${backendUrl}/events`, eventData);
       }
       refreshEvents();
       onClose();
@@ -54,7 +55,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
   const handleDelete = async () => {
     try {
       if (id) {
-        await axios.delete(`http://localhost:3000/events/${id}`);
+        await axios.delete(`${backendUrl}/events/${id}`);
         refreshEvents();
         onClose();
       }

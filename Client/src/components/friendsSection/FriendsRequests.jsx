@@ -1,6 +1,7 @@
 import axios from "axios";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 function FriendRequests() {
   const [friendRequests, setRequests] = useState([]);
@@ -12,7 +13,7 @@ function FriendRequests() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/friends/requests", getAuthHeader())
+      .get(`${backendUrl}/friends/requests`, getAuthHeader())
       .then((res) => {
         setRequests(res.data);
       })
@@ -22,7 +23,7 @@ function FriendRequests() {
   const handleAccept = (friendId) => {
     axios
       .post(
-        `http://localhost:3000/friends/accept/${friendId}`,
+        `${backendUrl}/friends/accept/${friendId}`,
         null,
         getAuthHeader()
       )
@@ -36,7 +37,7 @@ function FriendRequests() {
   const handleReject = (friendId) => {
     axios
       .post(
-        `http://localhost:3000/friends/reject/${friendId}`,
+        `${backendUrl}/friends/reject/${friendId}`,
         null,
         getAuthHeader()
       )

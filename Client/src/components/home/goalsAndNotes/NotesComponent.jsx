@@ -7,6 +7,7 @@ import {
   Plus,
   RefreshCcwDot,
 } from "lucide-react";
+const backendUrl = import.meta.env.VITE_API_URL;
 
 function NotesComponent() {
   const [notes, setNotes] = useState([]);
@@ -41,7 +42,7 @@ function NotesComponent() {
   const fetchNotes = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/note",
+        `${backendUrl}/note`,
         getAuthHeader()
       );
       if (response.data.success) {
@@ -97,7 +98,7 @@ function NotesComponent() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/note",
+        `${backendUrl}/note`,
         {
           title: notes[currentPage].title,
           content: notes[currentPage].content,
@@ -120,7 +121,7 @@ function NotesComponent() {
   const handleDeleteNote = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/note/${id}`,
+        `${backendUrl}/note/${id}`,
         getAuthHeader()
       );
       if (response.data.success) {
@@ -149,7 +150,7 @@ function NotesComponent() {
         handleSync();
         const noteId = notes[currentPage]._id;
         await axios.put(
-          `http://localhost:3000/note/${noteId}`,
+          `${backendUrl}/note/${noteId}`,
           {
             content: updatedText,
           },
@@ -177,7 +178,7 @@ function NotesComponent() {
         handleSync();
         const noteId = notes[currentPage]._id;
         await axios.put(
-          `http://localhost:3000/note/${noteId}`,
+          `${backendUrl}/note/${noteId}`,
           {
             title: updatedTitle,
           },
