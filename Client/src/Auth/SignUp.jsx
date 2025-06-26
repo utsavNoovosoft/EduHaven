@@ -22,11 +22,11 @@ function SignUp() {
   const onSubmit = async (data) => {
     console.log("Form submitted:", data);
     try {
-      const url = "${backendUrl}/signup";
+      const url = `${backendUrl}/signup`;
       if (!data.FirstName || !data.LastName) {
         throw new Error("First Name and Last Name are required");
       }
-      navigate("/verify");
+      // navigate("/verify");
 
       const response = await axios.post(url, data);
       console.log(response.data);
@@ -35,12 +35,14 @@ function SignUp() {
       if (data.token) {
         token = response.data.token;
       }
-      const activationToken = response.data.activationToken;
+      // const activationToken = response.data.activationToken;
 
       if (token) {
         localStorage.setItem("token", token);
-        localStorage.setItem("activationToken", activationToken);
+        // localStorage.setItem("activationToken", activationToken);
       }
+      alert("Account created successfully! Please verify login to continue.");
+      navigate("/authenticate");
     } catch (error) {
       console.error(`Signup failed:`, error.response?.data || error.message);
       alert(error.response?.data?.error || "An error occurred");
