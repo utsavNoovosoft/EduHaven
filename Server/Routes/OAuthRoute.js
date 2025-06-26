@@ -66,7 +66,7 @@ router.get("/google/callback", async (req, res) => {
     res
       .cookie("token", appToken, {
         httpOnly: true,
-        secure: false, // set to true on HTTPS production
+        secure: true, // set to true on HTTPS production
         sameSite: "lax",
         maxAge: 24 * 60 * 60 * 1000,
       })
