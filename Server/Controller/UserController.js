@@ -13,6 +13,10 @@ cloudinary.config({
     process.env.CLOUDINARY_API_SECRET || "BXpWyZHYKbAexc3conUG88t6TVM",
 });
 
+
+
+
+
 export const signup = async (req, res) => {
   try {
     const { FirstName, LastName, Email, Password } = req.body;
@@ -23,63 +27,115 @@ export const signup = async (req, res) => {
     }
 
     // Check if user already exists
-    let user = await User.findOne({ Email: Email });
-    if (user) {
+    let existingUser = await User.findOne({ Email });
+    if (existingUser) {
       return res.status(409).json({ error: "User already exists" });
     }
-    // const imageurl = req.body.imageUrl;
-    // console.log(imageurl)
-    // Hash the password
-    const haspass = await bcrypt.hash(Password, 12);
 
-    // Create a temporary user object (not saved in the database yet)
-    user = {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(Password, 12);
+
+    // Save the user in the database
+    const newUser = await User.create({
       FirstName,
       LastName,
       Email,
-      Password: haspass, // Store hashed password
-      ProfilePicture: "https://cdn-icons-png.flaticon.com/512/219/219986.png", // Default profile picture
-    };
-
-    const otp = Math.floor(Math.random() * 1000000)
-      .toString()
-      .padStart(6, "0");
-    const activationToken = jwt.sign(
-      {
-        user,
-        otp,
-      },
-      process.env.Activation_Secret,
-      {
-        expiresIn: "1d",
-      }
-    );
-
-    const data = {
-      FirstName,
-      otp,
-    };
-
-    await sendMail(Email, "Manish", data);
-
-    const token = generateAuthToken(user);
-
-    res.cookie("activationToken", activationToken, {
-      expires: new Date(Date.now() + 86400000),
-      httpOnly: true,
+      Password: hashedPassword,
+      ProfilePicture: "https://cdn-icons-png.flaticon.com/512/219/219986.png",
     });
 
+    // Generate JWT token
+    const token = generateAuthToken(newUser);
+
+    // Return token and user info (without password)
     return res.status(201).json({
-      message: "OTP sent to your email.",
+      message: "Signup successful",
       token,
-      activationToken,
+      user: {
+        _id: newUser._id,
+        FirstName: newUser.FirstName,
+        LastName: newUser.LastName,
+        Email: newUser.Email,
+        ProfilePicture: newUser.ProfilePicture,
+      },
     });
   } catch (error) {
     console.error("Error during signup:", error);
-
     return res.status(500).json({ error: error.message });
   }
 };
+
+
+//SignUp when we implement email verification
+
+
+// export const signup = async (req, res) => {
+//   try {
+//     const { FirstName, LastName, Email, Password } = req.body;
+
+//     // Validate input fields
+//     if (!FirstName || !LastName || !Email || !Password) {
+//       return res.status(422).json({ error: "Please fill all the fields" });
+//     }
+
+//     // Check if user already exists
+//     let user = await User.findOne({ Email: Email });
+//     if (user) {
+//       return res.status(409).json({ error: "User already exists" });
+//     }
+//     // const imageurl = req.body.imageUrl;
+//     // console.log(imageurl)
+//     // Hash the password
+//     const haspass = await bcrypt.hash(Password, 12);
+
+//     // Create a temporary user object (not saved in the database yet)
+//     user = {
+//       FirstName,
+//       LastName,
+//       Email,
+//       Password: haspass, // Store hashed password
+//       ProfilePicture: "https://cdn-icons-png.flaticon.com/512/219/219986.png", // Default profile picture
+//     };
+
+//     const otp = Math.floor(Math.random() * 1000000)
+//       .toString()
+//       .padStart(6, "0");
+//     const activationToken = jwt.sign(
+//       {
+//         user,
+//         otp,
+//       },
+//       process.env.Activation_Secret,
+//       {
+//         expiresIn: "1d",
+//       }
+//     );
+
+//     const data = {
+//       FirstName,
+//       otp,
+//     };
+
+//     await sendMail(Email, "Manish", data);
+
+//     const token = generateAuthToken(user);
+
+//     res.cookie("activationToken", activationToken, {
+//       expires: new Date(Date.now() + 86400000),
+//       httpOnly: true,
+//     });
+
+//     return res.status(201).json({
+//       message: "OTP sent to your email.",
+//       token,
+//       activationToken,
+//     });
+//   } catch (error) {
+//     console.error("Error during signup:", error);
+
+//     return res.status(500).json({ error: error.message });
+//   }
+// };
 
 export const verifyUser = async (req, res) => {
   try {
