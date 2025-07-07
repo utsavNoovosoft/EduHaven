@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { Send } from "lucide-react";
 import { motion } from "framer-motion";
 const backendUrl = import.meta.env.VITE_API_URL;
 
-const socket = io("${backendUrl}"); 
+const socket = io(`${backendUrl}`); 
 
 const ChatRooms = () => {
   const [messages, setMessages] = useState([]);

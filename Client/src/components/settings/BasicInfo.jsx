@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
-import { Camera, User, MapPin, FileText } from "lucide-react";
+import { Camera, User } from "lucide-react";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 export default function BasicInfo() {

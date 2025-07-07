@@ -54,7 +54,7 @@ const Friends = () => {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold txt">Friends List</h1>
-        <Link to={"/study-room"} className="hover:underline txt">
+        <Link to={"/session"} className="hover:underline txt">
           Find friends
         </Link>
       </div>

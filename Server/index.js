@@ -1,6 +1,13 @@
 import express from "express";
 import { ConnectDB } from "./Database/Db.js";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+import { createServer } from "http";
+import { Server } from "socket.io";
+
 import UserRoutes from "./Routes/UserRoutes.js";
 import TodoRoutes from "./Routes/ToDoRoutes.js";
 import EventRoutes from "./Routes/EventRoutes.js";
@@ -8,64 +15,47 @@ import authRoutes from "./Routes/OAuthRoute.js";
 import NotesRoutes from "./Routes/NotesRoutes.js";
 import { TimerSessionRoutes } from "./Routes/TimerSessionsRoutes.js";
 import FriendsRoutes from "./Routes/FriendsRoutes.js";
-import dotenv from "dotenv";
-import bodyParser from "body-parser";
-import cookieParser from "cookie-parser";
-import { Server } from "socket.io";
+import SessionRoutes from "./Routes/SessionRoutes.js";
 
-dotenv.config();
+import { initializeSocket } from "./Socket/socket.js";
+
 const app = express();
 const port = 3000;
 
+const server = createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
 const corsOptions = {
   origin: process.env.CORS_ORIGIN,
-  credentials: true, // Allow cookies and credentials
+  credentials: true,
 };
 
-// Middleware to handle JSON data
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Example route
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
-
+app.get("/", (req, res) => res.send("Hello, World!"));
 app.use("/", UserRoutes);
 app.use("/auth", authRoutes);
 app.use("/todo", TodoRoutes);
 app.use("/note", NotesRoutes);
 app.use("/events", EventRoutes);
 app.use("/", TimerSessionRoutes);
+app.use("/session-room", SessionRoutes);
 app.use("/friends", FriendsRoutes);
 
-// Start Express server and integrate Socket.io
-const server = app.listen(port, () => {
+initializeSocket(io);
+
+server.listen(port, () => {
   ConnectDB();
   console.log(`Server running at http://localhost:${port}`);
-});
-
-// Attach Socket.io to the existing Express server
-const io = new Server(server, {
-  cors: {
-    origin: process.env.CORS_ORIGIN,
-    methods: ["GET", "POST"],
-  },
-});
-
-// Socket.io logic
-io.on("connection", (socket) => {
-  console.log(`User connected: ${socket.id}`);
-
-  socket.on("message", (data) => {
-    console.log("Received:", data);
-    io.emit("message", data);
-  });
-
-  socket.on("disconnect", () => {
-    console.log(`User disconnected: ${socket.id}`);
-  });
 });
