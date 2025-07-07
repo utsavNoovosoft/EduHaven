@@ -150,7 +150,7 @@ const Ai = () => {
     <div id="manishai">
       {/* Ask AI Button */}
       <button
-        className="flex gap-3 btn shadow-[0_4px_100px_rgba(176,71,255,0.7)] px-5 py-2.5 font-semibold transition duration-200 transform hover:scale-105 ml-9 hover:shadow-[0_4px_100px_rgba(176,71,255,1)]"
+        className="flex gap-3 btn shadow-[0_4px_100px_rgba(176,71,255,0.7)] px-5 py-2.5 font-semibold transition duration-200 transform hover:scale-105 hover:shadow-[0_4px_100px_rgba(176,71,255,1)]"
         onClick={() => {
           const modalEl = document.getElementById("my_modal_1");
           modalEl && modalEl.showModal();

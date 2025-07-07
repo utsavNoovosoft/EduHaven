@@ -12,9 +12,9 @@
 
       // Updated with all the new themes
       const validThemes = [
-        'dark', 
-        'theme-forest', 
-        'theme-cyberpunk', 
+        'dark',
+        'theme-forest',
+        'theme-cyberpunk',
         'theme-coffee',
         'theme-neon-sunset',
         'theme-ocean-breeze',
@@ -36,7 +36,7 @@
         'theme-deep-purple',
         'theme-arctic-mint'
       ];
-      
+
       const fallbackTheme = prefersDark ? 'dark' : 'light';
 
       const theme = storedTheme && validThemes.includes(storedTheme)
@@ -51,25 +51,28 @@
       document.documentElement.style.setProperty('--theme-transition', 'background-color 0.3s ease, color 0.3s ease');
     })();
   </script>
-  
+
   <!-- Preload critical fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
   <!-- Enhanced meta tags for better SEO and PWA support -->
-  <meta name="description" content="EduHeaven - Your premium educational platform with beautiful themes and modern interface">
+  <meta name="description"
+    content="EduHeaven - Your premium educational platform with beautiful themes and modern interface">
   <meta name="theme-color" content="#7f23ca">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="EduHeaven">
-  
+
   <!-- Favicon variations -->
   <link rel="apple-touch-icon" href="/Logo.svg">
   <link rel="mask-icon" href="/Logo.svg" color="#7f23ca">
 
   <title>EduHeaven - Premium Educational Experience</title>
-  
+
   <style>
     /* Prevent flash of unstyled content */
     html {
@@ -77,7 +80,7 @@
       color: var(--txt, #1f2937);
       transition: var(--theme-transition);
     }
-    
+
     /* Loading state */
     #root:empty::before {
       content: '';
@@ -92,16 +95,18 @@
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-    
+
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
-    
+
     /* Smooth scrolling */
     html {
       scroll-behavior: smooth;
     }
-    
+
     /* Enhanced focus styles for accessibility */
     *:focus-visible {
       outline: 2px solid var(--btn, #7f23ca);

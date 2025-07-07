@@ -8,7 +8,6 @@ import "./ReactCustomCalendar.css";
 const Setgoals = ({ onGoalCreated }) => {
   const [title, setTitle] = useState("");
   const [deadline, setDeadline] = useState(null);
-  // New states for the dropdown options
   const [time, setTime] = useState("21:00");
   const [reminder, setReminder] = useState("On the day (9:00)");
   const [repeat, setRepeat] = useState("Daily");
@@ -25,7 +24,6 @@ const Setgoals = ({ onGoalCreated }) => {
       return;
     }
     try {
-      // Use the selected deadline if available; otherwise, default to now
       const dueDate = deadline
         ? deadline.toISOString()
         : new Date().toISOString();
@@ -35,17 +33,11 @@ const Setgoals = ({ onGoalCreated }) => {
           title,
           completed: false,
           dueDate,
-          // Optionally pass the new dropdown values to the backend:
-          // time,
-          // reminder,
-          // repeat,
         },
         getAuthHeader()
       );
-      // Clear the input fields after creation
       setTitle("");
       setDeadline(null);
-      // Inform the parent component about the new goal
       if (onGoalCreated) {
         onGoalCreated(data.data);
       }
@@ -54,7 +46,6 @@ const Setgoals = ({ onGoalCreated }) => {
     }
   };
 
-  // Ensure the Enter key doesn't get intercepted
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();

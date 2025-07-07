@@ -111,7 +111,7 @@ const GoalsComponent = () => {
     <div className="bg-sec txt rounded-3xl py-6 pb-2 w-full mx-auto relative shadow">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-4 px-6">
-        <h1 className="text-2xl font-bold">Goals</h1>
+        <h1 className="text-2xl font-semibold">Goals</h1>
         <div className="flex space-x-4">
           <div className="flex items-center space-x-1">
             <span className="text-green-500">●</span>

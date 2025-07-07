@@ -51,7 +51,7 @@ function FriendRequests() {
   if (friendRequests.length === 0) return null;
 
   return (
-    <section className="bg-sec rounded-3xl p-4">
+    <section className="bg-sec rounded-3xl p-3 2xl:p-4">
       <h3 className="text-xl font-semibold txt">Friend Requests</h3>
       <div className="space-y-4">
         {friendRequests.map((user) => (
@@ -80,13 +80,13 @@ function FriendRequests() {
             <div className="m-4 flex space-x-3">
               <button
                 onClick={() => handleReject(user._id)}
-                className="flex-1 border border-gray-500/50 hover:bg-red-500 text-red-400 hover:text-white text-sm px-3 py-1 rounded-lg flex items-center justify-center gap-1 transition"
+                className="flex-1 border border-gray-500/50 hover:bg-red-500 text-red-400 hover:text-white text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition"
               >
                 Decline
               </button>
               <button
                 onClick={() => handleAccept(user._id)}
-                className="flex-1 border border-gray-500/50 hover:bg-purple-600 hover:text-white text-sm px-3 py-1 rounded-lg flex items-center justify-center gap-1 transition"
+                className="flex-1 btn hover:bg-purple-600 hover:text-white text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition"
               >
                 Accept
               </button>

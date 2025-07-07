@@ -44,7 +44,7 @@ function SuggestedFriends({ onViewSentRequests }) {
   if (suggestedFriends.length === 0) return null;
 
   return (
-    <section className="bg-sec rounded-3xl p-4 relative">
+    <section className="bg-sec rounded-3xl p-4 relative ">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold txt">Suggested Friends</h3>
         <div className="relative">
@@ -67,12 +67,12 @@ function SuggestedFriends({ onViewSentRequests }) {
           )}
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-2">
         {suggestedFriends
           .slice()
           .reverse()
           .map((user) => (
-            <div key={user._id} className="!mt-7">
+            <div key={user._id} className=" relative group py-1 bg-slate-4 00">
               <div className="flex items-center">
                 {user.ProfilePicture ? (
                   <img
@@ -94,7 +94,7 @@ function SuggestedFriends({ onViewSentRequests }) {
                   <p className="text-sm txt-dim line-clamp-1">{user.Bio}</p>
                 </div>
               </div>
-              <div className="m-4">
+              <div className=" absolute top-[8%] right-0 bg-sec p-1.5 px-2 transition-all opacity-0 group-hover:opacity-100">
                 {user.requestSent ? (
                   <button
                     disabled
@@ -105,7 +105,7 @@ function SuggestedFriends({ onViewSentRequests }) {
                 ) : (
                   <button
                     onClick={() => sendRequest(user._id)}
-                    className="w-full border border-gray-500/50 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-sec txt"
+                    className="w-full bg-ter text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
                   >
                     <UserPlus className="w-5 h-5" />
                     Add Friend

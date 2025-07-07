@@ -8,6 +8,7 @@ import Friends from "@/components/settings/Friends";
 import Themes from "@/components/settings/Themes";
 import EducationAndSkills from "@/components/settings/EducationAndSkills";
 import TimeLanguage from "@/components/settings/TimeLanguage";
+import NotLogedInPage from "@/components/NotLogedInPage";
 
 const Settings = () => {
   const { user, fetchUserDetails } = useUserProfile();
@@ -25,30 +26,10 @@ const Settings = () => {
     }
   }, []);
 
-  const loginButton = (
-    <div className="flex flex-col items-center justify-center h-full">
-      <div className=" w-[450px] flex flex-col items-center">
-        <h1 className="mb-4 text-4xl text-[var(--txt)] text-center">
-          You are not logged-in.
-        </h1>
-        <p className="mb-4 text-md text-[var(--txt-dim)] -mt-2 text-center opacity-80">
-          To access your profile, connect with friends, view your stats, and
-          enjoy all features, please log in to your account.
-        </p>
-        <button
-          onClick={() => (window.location.href = "/authenticate")}
-          className="px-5 py-2.5 btn text-white rounded-lg hover:btn-hover mt-6 transition-colors"
-        >
-          Login to Eduhaven
-        </button>
-      </div>
-    </div>
-  );
-
   const renderActiveTab = () => {
     const protectedTabs = ["basic-info", "Edu-&-skills", "account", "friends"];
     if (!user && protectedTabs.includes(activeTab)) {
-      return loginButton;
+      return <NotLogedInPage />;
     }
 
     switch (activeTab) {

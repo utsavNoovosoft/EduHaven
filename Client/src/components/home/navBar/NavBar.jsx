@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Ai from "./AiChatbot.jsx";
 import PinnedLinks from "./PinnedLinks.jsx";
 import Slogan from "./Slogan.jsx";
+import OnlineUsers from "./OnlineUsers.jsx";
 
 function NavBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,7 +19,8 @@ function NavBar() {
     <div className="flex justify-between items-center bg-transparent z-10">
       <PinnedLinks />
       <Slogan />
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4">
+        {isLoggedIn && <OnlineUsers />}
         <Ai onShowId={setSelectedId} />
         {!isLoggedIn && (
           <Link
