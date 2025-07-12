@@ -9,7 +9,7 @@ const useSocket = (user) => {
   const backendUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
     if (!user || !user.token) return;
-    const newSocket = io(backendUrl || "http://localhost:3000", {
+    const newSocket = io(backendUrl, {
       auth: {
         token: user.token,
       },
