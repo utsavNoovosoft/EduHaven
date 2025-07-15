@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import useSocket from "../hooks/useSocket.jsx";
+import UseSocket from "../hooks/UseSocket.jsx";
 import { jwtDecode } from "jwt-decode";
 
 const SocketContext = createContext();
 
-const useSocketContext = () => {
+const UseSocketContext = () => {
   return useContext(SocketContext);
 };
 
@@ -25,7 +25,7 @@ export const SocketProvider = ({ children }) => {
     setUser(userData);
   }, []);
 
-  const { socket, isConnected, onlineUsers } = useSocket(user);
+  const { socket, isConnected, onlineUsers } = UseSocket(user);
 
   return (
     <SocketContext.Provider value={{ socket, isConnected, onlineUsers, user }}>
@@ -33,4 +33,4 @@ export const SocketProvider = ({ children }) => {
     </SocketContext.Provider>
   );
 };
-export default useSocketContext;
+export default UseSocketContext;

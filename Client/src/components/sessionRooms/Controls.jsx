@@ -10,9 +10,9 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 // import useSessionChat from "../../hooks/useSessionChat";
-// import useSocket from "@/hooks/UseSocket";
+// import UseSocket from "@/hooks/UseSocket";
 import { useEffect, useState } from "react";
-import useSocketContext from "@/context/SocketContext";
+import UseSocketContext from "@/context/SocketContext";
 import useSessionRoom from "@/hooks/useSessionRoom";
 
 function Controls({
@@ -34,7 +34,7 @@ function Controls({
     leaveRoom();
     navigate("/session");
   };
-  const { socket, isConnected } = useSocketContext();
+  const { socket, isConnected } = UseSocketContext();
   const { participants, leaveRoom } = useSessionRoom(socket, roomId);
   const [time, setTime] = useState("");
 

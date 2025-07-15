@@ -1,9 +1,9 @@
 import { User } from "lucide-react";
 import { useState } from "react";
-import useSocketContext from "@/context/SocketContext";
+import UseSocketContext from "@/context/SocketContext";
 
 function OnlineFriends() {
-  const { onlineUsers } = useSocketContext();
+  const { onlineUsers } = UseSocketContext();
 
   const maxVisible = 8;
   const visibleUsers = onlineUsers.slice(0, maxVisible);

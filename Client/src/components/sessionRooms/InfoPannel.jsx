@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Check, Clipboard, User, X } from "lucide-react";
 import useSessionRoom from "@/hooks/useSessionRoom.jsx";
 import { useParams } from "react-router-dom";
-import useSocketContext from "@/context/SocketContext.jsx";
+import UseSocketContext from "@/context/SocketContext.jsx";
 import ProfileIcon from "./ProfileIcon.jsx";
 
 function ShowInfo({ setShowInfo }) {
@@ -15,7 +15,7 @@ function ShowInfo({ setShowInfo }) {
     setTimeout(() => setCopied(false), 2000);
   };
   const { id: roomId } = useParams();
-  const { socket } = useSocketContext();
+  const { socket } = UseSocketContext();
 
   const { participants } = useSessionRoom(socket, roomId);
   return (

@@ -1,9 +1,9 @@
-import useSocketContext from "@/context/SocketContext.jsx";
+import UseSocketContext from "@/context/SocketContext.jsx";
 import { User } from "lucide-react";
 import { useState } from "react";
 
 export default function OnlineUsers() {
-  const { onlineUsers } = useSocketContext();
+  const { onlineUsers } = UseSocketContext();
 
   return (
     <div className="flex items-center gap-1">

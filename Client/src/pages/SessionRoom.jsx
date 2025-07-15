@@ -7,17 +7,17 @@ import useSessionChat from "../hooks/useSessionChat.jsx";
 import Controls from "../components/sessionRooms/Controls.jsx";
 import ChatPannel from "@/components/sessionRooms/ChatPannel.jsx";
 import ShowInfo from "@/components/sessionRooms/InfoPannel.jsx";
-import useSocketContext from "@/context/SocketContext.jsx";
+import UseSocketContext from "@/context/SocketContext.jsx";
 import VideoConferenceView from "@/components/sessionRooms/videoMeetComponents/VideoConferenceView.jsx";
 import { useMediaHandlers } from "@/components/sessionRooms/videoMeetComponents/useMediaHandlers.jsx";
-import useConnectToSocketServer from "@/components/sessionRooms/videoMeetComponents/useSocketService.jsx";
+import useConnectToSocketServer from "@/components/sessionRooms/videoMeetComponents/UseSocketService.jsx";
 
 function SessionRoom() {
   const { id: roomId } = useParams();
   const [showChat, setShowChat] = useState(true);
   const [showInfo, setShowInfo] = useState(false);
 
-  const { socket } = useSocketContext();
+  const { socket } = UseSocketContext();
 
   const socketIdRef = useRef();
   const videoRef = useRef([]);

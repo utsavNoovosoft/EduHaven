@@ -2,11 +2,11 @@ import { Outlet, useLocation } from "react-router-dom";
 
 import { motion } from "framer-motion";
 import Sidebar from "./Sidebar.jsx";
-import useSocketContext from "@/context/SocketContext.jsx";
+import UseSocketContext from "@/context/SocketContext.jsx";
 
 function Layout() {
   const location = useLocation();
-  useSocketContext();
+  UseSocketContext();
   return (
     <div className="flex min-h-screen bg-primary txt !transition-colors !duration-500">
       <Sidebar />
