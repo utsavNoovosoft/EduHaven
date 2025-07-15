@@ -1,5 +1,5 @@
 /**
- * useMediaHandlers.js
+ * UseMediaHandlers.js
  *
  * Custom hook that manages media stream handling and user media controls.
  * Handles getUserMedia and getDisplayMedia operations, manages video/audio/screen sharing states,
@@ -15,7 +15,7 @@ import { useState, useEffect, useRef } from "react";
 import { connections, createOfferForConnection } from "./WebRTCConnection.jsx";
 import { createBlackSilence } from "@/utils/mediaUtils.jsx";
 
-export const useMediaHandlers = (
+export const UseMediaHandlers = (
   localVideoref,
   socketIdRef,
   socket,

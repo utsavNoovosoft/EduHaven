@@ -9,7 +9,7 @@ import ChatPannel from "@/components/sessionRooms/ChatPannel.jsx";
 import ShowInfo from "@/components/sessionRooms/InfoPannel.jsx";
 import UseSocketContext from "@/context/SocketContext.jsx";
 import VideoConferenceView from "@/components/sessionRooms/videoMeetComponents/VideoConferenceView.jsx";
-import { useMediaHandlers } from "@/components/sessionRooms/videoMeetComponents/useMediaHandlers.jsx";
+import { UseMediaHandlers } from "@/components/sessionRooms/videoMeetComponents/UseMediaHandlers.jsx";
 import useConnectToSocketServer from "@/components/sessionRooms/videoMeetComponents/UseSocketService.jsx";
 
 function SessionRoom() {
@@ -48,7 +48,7 @@ function SessionRoom() {
     handleVideo,
     handleAudio,
     handleScreen,
-  } = useMediaHandlers(localVideoref, socketIdRef, socket, setScreenAvailable);
+  } = UseMediaHandlers(localVideoref, socketIdRef, socket, setScreenAvailable);
 
   useConnectToSocketServer(socket, socketIdRef, roomId, videoRef, setVideos);
   if (videos) console.log("the list of videos are:", videos);

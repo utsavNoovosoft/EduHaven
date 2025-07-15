@@ -6,7 +6,7 @@ import {
   createOfferForConnection,
 } from "./WebRTCConnection.jsx";
 
-const useConnectToSocketServer = (
+const UseConnectToSocketServer = (
   socket,
   socketIdRef,
   roomId,
@@ -54,4 +54,4 @@ const useConnectToSocketServer = (
     };
   }, [socket]);
 };
-export default useConnectToSocketServer;
+export default UseConnectToSocketServer;
