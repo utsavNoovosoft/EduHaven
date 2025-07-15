@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // import { Video } from "lucide-react";
-import useSessionChat from "../hooks/useSessionChat";
+import useSessionChat from "../hooks/useSessionChat.jsx";
 // import useWebRTC from "../hooks/useWebRTC";
 import Controls from "../components/sessionRooms/Controls.jsx";
-import ChatPannel from "@/components/sessionRooms/ChatPannel";
-import ShowInfo from "@/components/sessionRooms/InfoPannel";
-import useSocketContext from "@/context/SocketContext";
-import VideoConferenceView from "@/components/sessionRooms/videoMeetComponents/VideoConferenceView";
-import { useMediaHandlers } from "@/components/sessionRooms/videoMeetComponents/useMediaHandlers";
-import useConnectToSocketServer from "@/components/sessionRooms/videoMeetComponents/useSocketService";
+import ChatPannel from "@/components/sessionRooms/ChatPannel.jsx";
+import ShowInfo from "@/components/sessionRooms/InfoPannel.jsx";
+import useSocketContext from "@/context/SocketContext.jsx";
+import VideoConferenceView from "@/components/sessionRooms/videoMeetComponents/VideoConferenceView.jsx";
+import { useMediaHandlers } from "@/components/sessionRooms/videoMeetComponents/useMediaHandlers.jsx";
+import useConnectToSocketServer from "@/components/sessionRooms/videoMeetComponents/useSocketService.jsx";
 
 function SessionRoom() {
   const { id: roomId } = useParams();

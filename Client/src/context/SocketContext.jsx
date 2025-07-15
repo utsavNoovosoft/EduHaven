@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import useSocket from "../hooks/useSocket";
+import useSocket from "../hooks/useSocket.jsx";
 import { jwtDecode } from "jwt-decode";
 
 const SocketContext = createContext();

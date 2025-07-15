@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Check, Clipboard, User, X } from "lucide-react";
-import useSessionRoom from "@/hooks/useSessionRoom";
+import useSessionRoom from "@/hooks/useSessionRoom.jsx";
 import { useParams } from "react-router-dom";
-import useSocketContext from "@/context/SocketContext";
-import ProfileIcon from "./ProfileIcon";
+import useSocketContext from "@/context/SocketContext.jsx";
+import ProfileIcon from "./ProfileIcon.jsx";
 
 function ShowInfo({ setShowInfo }) {
   const [copied, setCopied] = useState(false);

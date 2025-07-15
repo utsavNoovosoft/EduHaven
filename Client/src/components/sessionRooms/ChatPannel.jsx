@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { SendHorizontal, X } from "lucide-react";
-import ProfileIcon from "./ProfileIcon";
+import ProfileIcon from "./ProfileIcon.jsx";
 
 function ChatPannel({
   messages,
