@@ -121,7 +121,7 @@ function SessionRoom() {
           )} */}
 
           <video
-            className={"bg-blue-500"}
+            className={"bg-blue-500 h-[200px]"}
             ref={localVideoref}
             autoPlay
             muted

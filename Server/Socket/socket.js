@@ -1,10 +1,12 @@
 import jwt from "jsonwebtoken";
 import { handleRoomOperations } from "./roomHandlers.js";
-import { handleMessageOperations } from './messageHandlers.js';
-import { handleVoiceOperations } from './voiceHandlers.js';
+import { handleMessageOperations } from "./messageHandlers.js";
+// import { handleVoiceOperations } from "./voiceHandlers.js";
 
 const onlineUsers = new Map();
 const userSockets = new Map();
+let connections = {};
+let timeOnline = {};
 
 const authenticateSocket = (socket, next) => {
   try {
@@ -60,7 +62,28 @@ const initializeSocket = (io) => {
 
     handleRoomOperations(socket, io, onlineUsers);
     handleMessageOperations(socket, io);
-    handleVoiceOperations(socket, io);
+    // handleVoiceOperations(socket, io);
+
+    // webrtc handlers:----------------------------------------------
+    socket.on("join-call", (path) => {
+      if (connections[path] === undefined) {
+        connections[path] = [];
+      }
+      connections[path].push(socket.id);
+
+      timeOnline[socket.id] = new Date();
+
+      for (let a = 0; a < connections[path].length; a++) {
+        io.to(connections[path][a]).emit(
+          "user-joined",
+          socket.id,
+          connections[path]
+        );
+      }
+    });
+    socket.on("signal", (toId, message) => {
+      io.to(toId).emit("signal", socket.id, message);
+    });
 
     socket.on("disconnect", () => {
       console.log(`User disconnected: ${socket.name}`);
@@ -69,6 +92,33 @@ const initializeSocket = (io) => {
       userSockets.delete(socket.id);
 
       broadcastOnlineList();
+      // webrtc handlers:----------------------------------------------
+      var diffTime = Math.abs(timeOnline[socket.id] - new Date());
+
+      var key;
+
+      for (const [k, v] of JSON.parse(
+        JSON.stringify(Object.entries(connections))
+      )) {
+        for (let a = 0; a < v.length; ++a) {
+          if (v[a] === socket.id) {
+            key = k;
+
+            for (let a = 0; a < connections[key].length; ++a) {
+              io.to(connections[key][a]).emit("user-left", socket.id);
+            }
+
+            var index = connections[key].indexOf(socket.id);
+
+            connections[key].splice(index, 1);
+
+            if (connections[key].length === 0) {
+              delete connections[key];
+            }
+          }
+        }
+      }
+      //----------------------------------------------
 
       // Leave all rooms and notify
       socket.rooms.forEach((roomId) => {
