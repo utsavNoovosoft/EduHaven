@@ -8,9 +8,9 @@ import Controls from "../components/sessionRooms/Controls.jsx";
 import ChatPannel from "@/components/sessionRooms/ChatPannel.jsx";
 import ShowInfo from "@/components/sessionRooms/InfoPannel.jsx";
 import UseSocketContext from "@/context/SocketContext.jsx";
-import VideoConferenceView from "@/components/sessionRooms/videoMeetComponents/VideoConferenceView.jsx";
-import { UseMediaHandlers } from "@/components/sessionRooms/videoMeetComponents/UseMediaHandlers.jsx";
-import useConnectToSocketServer from "@/components/sessionRooms/videoMeetComponents/UseSocketService.jsx";
+import { UseMediaHandlers } from "@/hooks/WebRTC/UseMediaHandlers.jsx";
+import UseConnectToSocketServer from "@/hooks/WebRTC/UseSocketService.jsx";
+import VideoConferenceView from "@/hooks/WebRTC/VideoConferenceView.jsx";
 
 function SessionRoom() {
   const { id: roomId } = useParams();
@@ -50,7 +50,7 @@ function SessionRoom() {
     handleScreen,
   } = UseMediaHandlers(localVideoref, socketIdRef, socket, setScreenAvailable);
 
-  useConnectToSocketServer(socket, socketIdRef, roomId, videoRef, setVideos);
+  UseConnectToSocketServer(socket, socketIdRef, roomId, videoRef, setVideos);
   if (videos) console.log("the list of videos are:", videos);
 
   if (!socket) {

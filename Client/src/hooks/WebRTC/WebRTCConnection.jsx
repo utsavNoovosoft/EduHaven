@@ -11,7 +11,8 @@
  * - Coordinates media stream sharing between peers
  */
 
-import { createBlackSilence } from "../../../utils/mediaUtils.jsx";
+import { createBlackSilence } from "@/utils/mediaUtils";
+
 
 export const peerConfigConnections = {
   iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
