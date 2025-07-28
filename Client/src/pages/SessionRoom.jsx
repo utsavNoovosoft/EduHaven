@@ -1,9 +1,6 @@
 import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-
-// import { Video } from "lucide-react";
 import useSessionChat from "../hooks/useSessionChat.jsx";
-// import useWebRTC from "../hooks/useWebRTC";
 import Controls from "../components/sessionRooms/Controls.jsx";
 import ChatPannel from "@/components/sessionRooms/ChatPannel.jsx";
 import ShowInfo from "@/components/sessionRooms/InfoPannel.jsx";
@@ -27,19 +24,6 @@ function SessionRoom() {
 
   const { messages, typingUsers, sendMessage, startTyping, stopTyping } =
     useSessionChat(socket, roomId);
-
-  // const {
-  //   isVideoEnabled,
-  //   isScreenSharing,
-  //   localStream,
-  //   peers,
-  //   isAudioEnabled,
-  //   toggleAudio,
-  //   toggleVideo,
-  //   startScreenShare,
-  //   stopScreenShare,
-  //   localVideoRef,
-  // } = useWebRTC(socket, roomId);
 
   const {
     videoToggle,
@@ -159,22 +143,6 @@ function SessionRoom() {
         startScreenShare={handleScreen}
         stopScreenShare={handleScreen}
       />
-
-      {/* <Controls
-        roomId={roomId}
-        showChat={showChat}
-        showInfo={showInfo}
-        setShowChat={setShowChat}
-        setShowInfo={setShowInfo}
-        // pass WebRTC stuff:
-        isAudioEnabled={isAudioEnabled}
-        isVideoEnabled={isVideoEnabled}
-        isScreenSharing={isScreenSharing}
-        toggleAudio={toggleAudio}
-        toggleVideo={toggleVideo}
-        startScreenShare={startScreenShare}
-        stopScreenShare={stopScreenShare}
-      /> */}
     </div>
   );
 }
