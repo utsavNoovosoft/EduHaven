@@ -200,7 +200,7 @@ function NotesComponent() {
 
   return (
     <div className="bg-sec txt rounded-3xl py-6 px-3 w-full mx-auto relative shadow">
-      {error && <p className="text-red-500">{error}</p>}
+      {error && console.error(error)}
 
       {/* Navigation */}
       <div className="flex justify-between px-3">
