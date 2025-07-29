@@ -84,12 +84,21 @@ function Calendar() {
   };
 
   const blankDays = Array(firstDayOfMonth).fill(null);
-  const formattedTime = time.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-  });
+
+  const formattedTime = localStorage.getItem("clock-format") === "24-hour"
+    ? (time.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        }))
+    : (time.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        }));
+
   const [timePart, period] = formattedTime.split(" ");
 
   return (
