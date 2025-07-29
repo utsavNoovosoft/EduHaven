@@ -176,7 +176,7 @@ const Ai = () => {
           height: dimensions.height,
         }}
       >
-        <div className="bg-primary rounded-3xl w-full h-full txt flex flex-col overflow-hidden relative shadow-2xl shadow-purple-800/50">
+        <div className="bg-primary rounded-3xl w-full h-full txt flex flex-col overflow-hidden relative shadow-2xl" style={{boxShadow: `0 0 1rem var(--btn)`}}>
           {/* Resizer handle using the Spline icon */}
           <div
             onMouseDown={handleMouseDown}
@@ -252,7 +252,7 @@ const Ai = () => {
             </div>
             <button
               onClick={generateQuestion}
-              className={`txt font-bold p-3 rounded-full transition-all shadow-[0_4px_20px_rgba(176,71,255,0.3)] hover:shadow-[0_4px_70px_rgba(176,71,255,0.4)] ${
+              className={`txt font-bold p-3 rounded-full transition-all shadow-[0_4px_20px_rgba(var(--shadow-rgb),0.3)] hover:shadow-[0_4px_70px_rgba(var(--shadow-rgb),0.4)] ${
                 loading
                   ? "bg-sec cursor-not-allowed"
                   : "btn hover:bg-[var(--btn-hover)]"
