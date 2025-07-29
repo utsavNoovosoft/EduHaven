@@ -12,7 +12,8 @@ const backendUrl = import.meta.env.VITE_API_URL;
 function NotesComponent() {
   const [notes, setNotes] = useState([]);
   const [error, setError] = useState("");
-
+  const [titleError, setTitleError] = useState("");
+  const [contentError, setContentError] = useState("")
   const titleTimeoutRef = useRef(null);
   const contentTimeoutRef = useRef(null);
   const [isSynced, setIsSynced] = useState(true);
@@ -59,6 +60,8 @@ function NotesComponent() {
     }
   };
 
+
+
   // This function manages whether to update note or create new.
   const handleSync = () => {
     setRotate(true);
@@ -78,12 +81,16 @@ function NotesComponent() {
   const goToNextPage = () => {
     if (currentPage < notes.length - 1) {
       setCurrentPage((prev) => prev + 1);
+      setTitleError("");
+      setContentError("");
     }
   };
 
   const goToPreviousPage = () => {
     if (currentPage > 0) {
       setCurrentPage((prev) => prev - 1);
+      setTitleError("");
+      setContentError("");
     }
   };
 
@@ -130,66 +137,150 @@ function NotesComponent() {
     } catch (err) {
       setError(
         err.response?.data?.error ||
-          "Failed to delete note try refreshinng page"
+        "Failed to delete note try refreshinng page"
       );
     }
   };
 
-  const handleNoteContentChange = async (event) => {
+  const validateFields=(title,content)=>{
+    if(!title.trim()){
+      setTitleError("*title is required")
+    }
+    else{
+      setTitleError("")
+    }
+
+    if(!content.trim()){
+      setContentError("*content is required")
+    }
+    else{
+      setContentError("")
+    }
+  }
+
+
+  const handleNoteContentChange = (event) => {
     const updatedText = event.target.value;
-    isSynced === true ? (setIsSynced(false), setRotate(false)) : "";
+
+    // Update local state immediately for responsive UI
     setNotes((prevNotes) =>
       prevNotes.map((note, index) =>
         index === currentPage ? { ...note, content: updatedText } : note
       )
     );
 
-    clearTimeout(titleTimeoutRef.current);
-    titleTimeoutRef.current = setTimeout(async () => {
-      try {
-        handleSync();
-        const noteId = notes[currentPage]._id;
-        await axios.put(
-          `${backendUrl}/note/${noteId}`,
-          {
-            content: updatedText,
-          },
-          getAuthHeader()
-        );
-      } catch (err) {
-        console.error("Error updating note content:", err);
-        setIsSynced(true); // hide sync if error occurs
+    // Clear any existing error
+    if (error) setError("");
+
+    // Get current note to check title
+    const currentNote = notes[currentPage];
+    const currentTitle = currentNote?.title || "";
+    validateFields(currentTitle,updatedText)
+    // Only show unsaved state and sync if BOTH title and content have values
+    if (updatedText.trim() && currentTitle.trim()) {
+      if (isSynced) {
+        setIsSynced(false);
+        setRotate(false);
       }
-    }, 3000);
+
+      // Clear existing timeout to reset the debounce
+      clearTimeout(contentTimeoutRef.current);
+
+      contentTimeoutRef.current = setTimeout(async () => {
+       
+        try {
+          const noteId = currentNote?._id;
+
+          if (noteId) {
+            // Make API call to update existing note
+            await axios.put(
+              `${backendUrl}/note/${noteId}`,
+              { content: event.target.value.trim() },
+              getAuthHeader()
+            );
+          } else {
+            // If no ID, this is a new note - create it
+            await handleAddNote();
+            return; // Don't call handleSync as handleAddNote will handle the sync state
+          }
+
+          handleSync();
+        } catch (err) {
+          console.error("Error updating note content:", err);
+          setError("Failed to save changes");
+          setIsSynced(true); // Reset sync state on error
+        }
+      }, 3000);
+    } else {
+      // If either title or content is empty, clear any pending sync
+      clearTimeout(contentTimeoutRef.current);
+      if (!isSynced) {
+        setIsSynced(true);
+        setRotate(false);
+      }
+    }
   };
 
-  const handleTitleChange = async (event) => {
+  const handleTitleChange = (event) => {
     const updatedTitle = event.target.value;
-    isSynced === true ? (setIsSynced(false), setRotate(false)) : "";
     setNotes((prevNotes) =>
       prevNotes.map((note, index) =>
         index === currentPage ? { ...note, title: updatedTitle } : note
       )
     );
 
-    clearTimeout(contentTimeoutRef.current);
-    contentTimeoutRef.current = setTimeout(async () => {
-      try {
-        handleSync();
-        const noteId = notes[currentPage]._id;
-        await axios.put(
-          `${backendUrl}/note/${noteId}`,
-          {
-            title: updatedTitle,
-          },
-          getAuthHeader()
-        );
-      } catch (err) {
-        console.error("Error updating note title:", err);
-        setIsSynced(true);
+    if (error) setError("");
+
+    // Get current note to check content
+    const currentNote = notes[currentPage];
+    const currentContent = currentNote?.content || "";
+    validateFields(updatedTitle,currentContent)
+    // Only show unsaved state and sync if BOTH title and content have values
+    if (updatedTitle.trim() && currentContent.trim()) {
+      if (isSynced) {
+        setIsSynced(false);
+        setRotate(false);
       }
-    }, 3000);
+
+      // Clear existing timeout to reset the debounce
+      clearTimeout(titleTimeoutRef.current);
+
+      titleTimeoutRef.current = setTimeout(async () => {
+        
+        try {
+          const noteId = currentNote?._id;
+
+          if (noteId) {
+            // Make API call to update existing note
+            await axios.put(
+              `${backendUrl}/note/${noteId}`,
+              { title: event.target.value.trim() },
+              getAuthHeader()
+            );
+          } else {
+            await handleAddNote();
+            return;
+          }
+
+          handleSync();
+        } catch (err) {
+          console.error("Error updating note title:", err);
+          setError("Failed to save changes");
+          setIsSynced(true); // Reset sync state on error
+        }
+      }, 3000);
+    } else {
+      // If either title or content is empty, clear any pending sync
+      clearTimeout(titleTimeoutRef.current);
+      if (!isSynced) {
+        setIsSynced(true);
+        setRotate(false);
+      }
+    }
   };
+
+
+
 
   const handleScroll = () => {
     if (textAreaRef.current) {
@@ -219,17 +310,15 @@ function NotesComponent() {
           </span>
           <button
             onClick={goToPreviousPage}
-            className={`p-1.5 rounded-full hover:bg-ter ${
-              currentPage === 0 ? "txt-dim" : ""
-            }`}
+            className={`p-1.5 rounded-full hover:bg-ter ${currentPage === 0 ? "txt-dim" : ""
+              }`}
           >
             <ChevronLeft />
           </button>
           <button
             onClick={goToNextPage}
-            className={`p-1.5 rounded-full hover:bg-ter ${
-              currentPage === notes.length - 1 ? "txt-dim" : ""
-            }`}
+            className={`p-1.5 rounded-full hover:bg-ter ${currentPage === notes.length - 1 ? "txt-dim" : ""
+              }`}
           >
             <ChevronRight />
           </button>
@@ -238,13 +327,17 @@ function NotesComponent() {
 
       {/* Title, Delete and Sync Button */}
       <div className="flex justify-between mt-5 items-center w-full px-3">
-        <input
-          type="text"
-          value={notes[currentPage]?.title || ""}
-          onChange={handleTitleChange}
-          placeholder="Title"
-          className="bg-transparent outline-none p-0.5 text-lg flex-1 w-28 font-semibold text-yellow-400 opacity-85"
-        />
+        <div className="flex-1">
+          <input
+            type="text"
+            value={notes[currentPage]?.title || ""}
+            onChange={handleTitleChange}
+            placeholder="Title"
+            className="bg-transparent outline-none p-0.5 text-lg w-full font-semibold text-yellow-400 opacity-85"
+          />
+          {titleError && <p className="text-red-400 text-xs mt-1">{titleError}</p>}
+        </div>
+
         {!isSynced && (
           <button
             className="text-black text-lg hover:bg-yellow-300 rounded-full mx-3 py-0.5 px-4 bg-yellow-400 flex items-center gap-2 transition-transform transform opacity-100"
@@ -278,6 +371,7 @@ function NotesComponent() {
             marginTop: "2px",
           }}
         ></div>
+      
         <textarea
           ref={textAreaRef}
           id="area"
@@ -292,16 +386,17 @@ function NotesComponent() {
           onChange={handleNoteContentChange}
         ></textarea>
       </div>
+      {contentError && <span className="text-red-400 text-xs mt-1">{contentError}</span>}
 
       {/* Date and Time */}
-      <div className="absolute bottom-3 right-12 txt-dim bg-sec">
+      <div className="absolute bottom-6 right-12 txt-dim bg-sec flex justify-between">
         {notes[currentPage]?.createdAt
           ? new Date(notes[currentPage].createdAt).toLocaleDateString() +
-            "\u00A0\u00A0\u00A0" +
-            new Date(notes[currentPage].createdAt).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })
+          "\u00A0\u00A0\u00A0" +
+          new Date(notes[currentPage].createdAt).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
           : "No date available"}
       </div>
     </div>
