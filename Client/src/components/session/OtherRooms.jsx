@@ -69,9 +69,13 @@ export default function OtherRoom({ otherRooms }) {
       {/* Category toggle horizontal scroll */}
       <div className="relative mb-3 2xl:mb-6">
         <div className="absolute left-0 top-0 h-full w-20 z-10 bg-[linear-gradient(to_right,var(--bg-primary)_0%,var(--bg-primary)_50%,transparent_90%)]">
+          {/*
+          Updated: Made arrow button more see-through (opacity-70, hover:opacity-90)
+          and ensured theme-adaptive background for visibility in all themes.
+        */}
           <button
             onClick={() => scroll("left")}
-            className="mr-auto bg hover:bg-sec text-white px-3 py-1 rounded-full"
+            className="mr-auto bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white px-3 py-1 rounded-full shadow opacity-70 hover:opacity-90 transition-opacity"
           >
             <ChevronLeft size={29} />
           </button>
@@ -99,11 +103,15 @@ export default function OtherRoom({ otherRooms }) {
 
         {/* Right gradient + button */}
         <div className="absolute right-0 top-0 h-full w-24 z-10 bg-gradient-to-l from-[var(--bg-primary)] to-transparent flex items-end justify-center">
+          {/*
+          Updated: Made arrow button more see-through (opacity-70, hover:opacity-90)
+          and ensured theme-adaptive background for visibility in all themes.
+        */}
           <button
             onClick={() => scroll("right")}
-            className="ml-auto bg hover:bg-sec text-white px-3 py-1 rounded-full"
+            className="ml-auto bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white px-3 py-1 rounded-full shadow opacity-70 hover:opacity-90 transition-opacity"
           >
-            <ChevronRight size={29}/>
+            <ChevronRight size={29} />
           </button>
         </div>
       </div>
