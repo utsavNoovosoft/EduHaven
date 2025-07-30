@@ -71,7 +71,7 @@ export default function OtherRoom({ otherRooms }) {
         <div className="absolute left-0 top-0 h-full w-20 z-10 bg-[linear-gradient(to_right,var(--bg-primary)_0%,var(--bg-primary)_50%,transparent_90%)]">
           <button
             onClick={() => scroll("left")}
-            className="mr-auto bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white px-3 py-1 rounded-full shadow opacity-70 hover:opacity-90 transition-opacity"
+            className="mr-auto bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white px-3 py-1 rounded-full"
           >
             <ChevronLeft size={29} />
           </button>
@@ -101,7 +101,7 @@ export default function OtherRoom({ otherRooms }) {
         <div className="absolute right-0 top-0 h-full w-24 z-10 bg-gradient-to-l from-[var(--bg-primary)] to-transparent flex items-end justify-center">
           <button
             onClick={() => scroll("right")}
-            className="ml-auto bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white px-3 py-1 rounded-full shadow opacity-70 hover:opacity-90 transition-opacity"
+            className="ml-auto bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white px-3 py-1 rounded-full"
           >
             <ChevronRight size={29}/>
           </button>
