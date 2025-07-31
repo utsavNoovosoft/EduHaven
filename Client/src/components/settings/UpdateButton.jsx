@@ -1,4 +1,4 @@
-const UpdateButton = ({ onClick, isLoading, isDisabled }) => {
+const UpdateButton = ({ isLoading, isDisabled }) => {
   return (
     <button
       type="submit"
@@ -7,7 +7,6 @@ const UpdateButton = ({ onClick, isLoading, isDisabled }) => {
           ? "bg-[var(--txt-disabled)] cursor-not-allowed"
           : "bg-[var(--btn)] hover:bg-[var(--btn-hover)] hover:shadow-xl transform hover:-translate-y-0.5"
       }`}
-      onClick={onClick}
       disabled={isLoading || isDisabled}
     >
       {isLoading ? (

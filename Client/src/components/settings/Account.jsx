@@ -63,11 +63,7 @@ const Account = () => {
         </div>
 
         <div className="flex justify-end">
-          <UpdateButton
-            onClick={handleUpdate}
-            isLoading={isLoading}
-            isDisabled={!hasChanged}
-          />
+          <UpdateButton isLoading={isLoading} isDisabled={!hasChanged} />
         </div>
       </form>
 
