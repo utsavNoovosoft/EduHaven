@@ -98,13 +98,13 @@ function CreateRoomModal({ isOpen, onClose, onCreate }) {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-5 py-2 rounded-lg border border-txt-dim txt-dim hover:bg-sec transition-colors"
+                  className="bg-ter text-[var(--txt)] px-4 py-2 rounded-lg hover:bg-primary font-medium transition duration-200 w-32"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className=" bg-ter px-5 py-2 rounded-lg btn hover:bg-[var(--btn-hover)] txt transition-colors"
+                  className=" bg-ter px-4 py-2 rounded-lg btn hover:bg-[var(--btn-hover)] txt transition-colors w-32"
                 >
                   Create
                 </button>
