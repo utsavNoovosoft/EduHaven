@@ -7,13 +7,12 @@ import {
   Plus,
   RefreshCcwDot,
 } from "lucide-react";
-const backendUrl = import.meta.env.VITE_API_URL;
+const backendUrl = import.meta.env.VITE_API_URL
 
 function NotesComponent() {
   const [notes, setNotes] = useState([]);
   const [error, setError] = useState("");
-  const [titleError, setTitleError] = useState("");
-  const [contentError, setContentError] = useState("")
+
   const titleTimeoutRef = useRef(null);
   const contentTimeoutRef = useRef(null);
   const [isSynced, setIsSynced] = useState(true);
@@ -60,14 +59,12 @@ function NotesComponent() {
     }
   };
 
-
-
   // This function manages whether to update note or create new.
-  const handleSync = (title,content) => {
+  const handleSync = () => {
     setRotate(true);
     setTimeout(() => setIsSynced(true), 700);
     if (notes[currentPage]._id === undefined) {
-      handleAddNote(title,content);
+      handleAddNote();
       return;
     }
   };
@@ -81,23 +78,19 @@ function NotesComponent() {
   const goToNextPage = () => {
     if (currentPage < notes.length - 1) {
       setCurrentPage((prev) => prev + 1);
-      setTitleError("");
-      setContentError("");
     }
   };
 
   const goToPreviousPage = () => {
     if (currentPage > 0) {
       setCurrentPage((prev) => prev - 1);
-      setTitleError("");
-      setContentError("");
     }
   };
 
-  const handleAddNote = async (title,content) => {
+  const handleAddNote = async () => {
     if (
-      title.trim() === "" ||
-      content.trim() === ""
+      notes[currentPage]?.title.trim() === "" ||
+      notes[currentPage]?.content.trim() === ""
     ) {
       setError("Title and content are required.");
       return;
@@ -107,8 +100,8 @@ function NotesComponent() {
       const response = await axios.post(
         `${backendUrl}/note`,
         {
-          title: title,
-          content: content,
+          title: notes[currentPage].title,
+          content: notes[currentPage].content,
         },
         getAuthHeader()
       );
@@ -137,135 +130,66 @@ function NotesComponent() {
     } catch (err) {
       setError(
         err.response?.data?.error ||
-        "Failed to delete note try refreshinng page"
+          "Failed to delete note try refreshinng page"
       );
     }
   };
 
-  const validateFields=(title,content)=>{
-    if(!title.trim()){
-      setTitleError("*title is required")
-    }
-    else{
-      setTitleError("")
-    }
+  const handleNoteContentChange = async (event) => {
+    const updatedText = event.target.value;
+    isSynced === true ? (setIsSynced(false), setRotate(false)) : "";
+    setNotes((prevNotes) =>
+      prevNotes.map((note, index) =>
+        index === currentPage ? { ...note, content: updatedText } : note
+      )
+    );
 
-    if(!content.trim()){
-      setContentError("*content is required")
-    }
-    else{
-      setContentError("")
-    }
-  }
-
-
-const handleNoteContentChange = (event) => {
-  const updatedText = event.target.value;
-  const noteIndex = currentPage;
-
-  const currentTitle = notes[noteIndex]?.title || "";
-  validateFields(currentTitle, updatedText);
-
-  setNotes((prevNotes) =>
-    prevNotes.map((note, index) =>
-      index === noteIndex ? { ...note, content: updatedText } : note
-    )
-  );
-
-  if (error) setError("");
-
-  if (updatedText.trim() && currentTitle.trim()) {
-    if (isSynced) {
-      setIsSynced(false);
-      setRotate(false);
-    }
-
-    clearTimeout(contentTimeoutRef.current);
-
-    const noteId = notes[noteIndex]?._id;
-    const contentToSave = updatedText.trim();
-
-    contentTimeoutRef.current = setTimeout(async () => {
+    clearTimeout(titleTimeoutRef.current);
+    titleTimeoutRef.current = setTimeout(async () => {
       try {
-        if (noteId) {
-          await axios.put(
-            `${backendUrl}/note/${noteId}`,
-            { content: contentToSave },
-            getAuthHeader()
-          );
-        }
-        handleSync(notes[noteIndex].title,updatedText); // sets synced = true
+        handleSync();
+        const noteId = notes[currentPage]._id;
+        await axios.put(
+          `${backendUrl}/note/${noteId}`,
+          {
+            content: updatedText,
+          },
+          getAuthHeader()
+        );
       } catch (err) {
         console.error("Error updating note content:", err);
-        setError("Failed to save changes");
+        setIsSynced(true); // hide sync if error occurs
+      }
+    }, 3000);
+  };
+
+  const handleTitleChange = async (event) => {
+    const updatedTitle = event.target.value;
+    isSynced === true ? (setIsSynced(false), setRotate(false)) : "";
+    setNotes((prevNotes) =>
+      prevNotes.map((note, index) =>
+        index === currentPage ? { ...note, title: updatedTitle } : note
+      )
+    );
+
+    clearTimeout(contentTimeoutRef.current);
+    contentTimeoutRef.current = setTimeout(async () => {
+      try {
+        handleSync();
+        const noteId = notes[currentPage]._id;
+        await axios.put(
+          `${backendUrl}/note/${noteId}`,
+          {
+            title: updatedTitle,
+          },
+          getAuthHeader()
+        );
+      } catch (err) {
+        console.error("Error updating note title:", err);
         setIsSynced(true);
       }
     }, 3000);
-  } else {
-    clearTimeout(contentTimeoutRef.current);
-    if (!isSynced) {
-      setIsSynced(true);
-      setRotate(false);
-    }
-  }
-};
-
-
-const handleTitleChange = (event) => {
-  const updatedTitle = event.target.value;
-  const noteIndex = currentPage;
-
-  const currentContent = notes[noteIndex]?.content || "";
-  validateFields(updatedTitle, currentContent);
-
-  // Update title in local state
-  setNotes((prevNotes) =>
-    prevNotes.map((note, index) =>
-      index === noteIndex ? { ...note, title: updatedTitle } : note
-    )
-  );
-
-  if (error) setError("");
-  const noteId = notes[noteIndex]?._id;
-
-  if (updatedTitle.trim() && currentContent.trim()) {
-    if (isSynced) {
-      setIsSynced(false);
-      setRotate(false);
-    }
-
-    clearTimeout(titleTimeoutRef.current);
-
-    
-    const titleToSave = updatedTitle.trim();
-
-    titleTimeoutRef.current = setTimeout(async () => {
-      try {
-        if (noteId) {
-          await axios.put(
-            `${backendUrl}/note/${noteId}`,
-            { title: titleToSave },
-            getAuthHeader()
-          );
-        }
-        handleSync(updatedTitle,notes[noteIndex].content); // sets synced = true after delay
-      } catch (err) {
-        console.error("Error updating note title:", err);
-        setError("Failed to save changes");
-        setIsSynced(true); // Reset sync state on error
-      }
-    }, 3000);
-  } else {
-    clearTimeout(titleTimeoutRef.current);
-    if (!isSynced) {
-      setIsSynced(true);
-      setRotate(false);
-    }
-  }
-};
-
-
-
+  };
 
   const handleScroll = () => {
     if (textAreaRef.current) {
@@ -276,7 +200,7 @@ const handleTitleChange = (event) => {
 
   return (
     <div className="bg-sec txt rounded-3xl py-6 px-3 w-full mx-auto relative shadow">
-      {error && console.error(error)}
+      {error && <p className="text-red-500">{error}</p>}
 
       {/* Navigation */}
       <div className="flex justify-between px-3">
@@ -295,15 +219,17 @@ const handleTitleChange = (event) => {
           </span>
           <button
             onClick={goToPreviousPage}
-            className={`p-1.5 rounded-full hover:bg-ter ${currentPage === 0 ? "txt-dim" : ""
-              }`}
+            className={`p-1.5 rounded-full hover:bg-ter ${
+              currentPage === 0 ? "txt-dim" : ""
+            }`}
           >
             <ChevronLeft />
           </button>
           <button
             onClick={goToNextPage}
-            className={`p-1.5 rounded-full hover:bg-ter ${currentPage === notes.length - 1 ? "txt-dim" : ""
-              }`}
+            className={`p-1.5 rounded-full hover:bg-ter ${
+              currentPage === notes.length - 1 ? "txt-dim" : ""
+            }`}
           >
             <ChevronRight />
           </button>
@@ -311,18 +237,14 @@ const handleTitleChange = (event) => {
       </div>
 
       {/* Title, Delete and Sync Button */}
-      <div className="flex justify-between mt-5 items-center w-full px-3 mb-1.5">
-        <div className="flex-1 relative">
-          <input
-            type="text"
-            value={notes[currentPage]?.title || ""}
-            onChange={handleTitleChange}
-            placeholder="Title"
-            className="bg-transparent outline-none p-0.5 text-lg w-full font-semibold text-yellow-400 opacity-85"
-          />
-          {titleError && <p className="text-red-400 text-xs absolute -bottom-3">{titleError}</p>}
-        </div>
-
+      <div className="flex justify-between mt-5 items-center w-full px-3">
+        <input
+          type="text"
+          value={notes[currentPage]?.title || ""}
+          onChange={handleTitleChange}
+          placeholder="Title"
+          className="bg-transparent outline-none p-0.5 text-lg flex-1 w-28 font-semibold text-yellow-400 opacity-85"
+        />
         {!isSynced && (
           <button
             className="text-black text-lg hover:bg-yellow-300 rounded-full mx-3 py-0.5 px-4 bg-yellow-400 flex items-center gap-2 transition-transform transform opacity-100"
@@ -356,7 +278,6 @@ const handleTitleChange = (event) => {
             marginTop: "2px",
           }}
         ></div>
-      
         <textarea
           ref={textAreaRef}
           id="area"
@@ -371,17 +292,16 @@ const handleTitleChange = (event) => {
           onChange={handleNoteContentChange}
         ></textarea>
       </div>
-      {contentError && <span className="text-red-400 text-xs mt-1 absolute bottom-4 left-3">{contentError}</span>}
 
       {/* Date and Time */}
-      <div className="absolute bottom-4 right-12 txt-dim bg-sec flex justify-between">
+      <div className="absolute bottom-3 right-12 txt-dim bg-sec">
         {notes[currentPage]?.createdAt
           ? new Date(notes[currentPage].createdAt).toLocaleDateString() +
-          "\u00A0\u00A0\u00A0" +
-          new Date(notes[currentPage].createdAt).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })
+            "\u00A0\u00A0\u00A0" +
+            new Date(notes[currentPage].createdAt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
           : "No date available"}
       </div>
     </div>
