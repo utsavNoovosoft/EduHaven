@@ -1,4 +1,4 @@
-const UpdateButton = ({ isLoading, isDisabled }) => {
+const UpdateButton = ({ label, isLoading, isDisabled }) => {
   return (
     <button
       type="submit"
@@ -15,7 +15,7 @@ const UpdateButton = ({ isLoading, isDisabled }) => {
           Updating...
         </div>
       ) : (
-        "Update Account"
+        label
       )}
     </button>
   );

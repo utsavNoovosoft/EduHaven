@@ -325,6 +325,7 @@ export default function BasicInfo() {
         {/* Submit Button */}
         <div className="flex justify-end">
           <UpdateButton
+            label="Update Profile"
             isLoading={isProfileUpdateLoading}
             isDisabled={!hasChanged}
           />

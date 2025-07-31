@@ -63,7 +63,11 @@ const Account = () => {
         </div>
 
         <div className="flex justify-end">
-          <UpdateButton isLoading={isLoading} isDisabled={!hasChanged} />
+          <UpdateButton
+            label="Update Account"
+            isLoading={isLoading}
+            isDisabled={!hasChanged}
+          />
         </div>
       </form>
 
