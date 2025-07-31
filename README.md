@@ -13,6 +13,13 @@
 
 - **User Dashboard**: Tracks tasks completed, study time, and productivity stats.
 - **To-Do List**: Helps users organize and manage their tasks efficiently.
+- **Enhanced Goals System**: 
+  - **Data Persistence**: All goals persist in database across sessions
+  - **Smart Organization**: Three collapsible sections (Daily Habits, Other Goals, Closed Goals)
+  - **Repeat Functionality**: Daily habits automatically recreate when completed
+  - **Deadline Tracking**: Visual indicators for time left, due today, or overdue
+- **To-Do List**: Helps users organize and manage their tasks efficiently.
+- **Note-Making**: Rich-text editor to create, edit, and organize notes.
 - **Note-Making**: Rich-text editor to create, edit, and organize notes.
 - **Real-Time Study Rooms**:
   - Chat and collaborate with friends.

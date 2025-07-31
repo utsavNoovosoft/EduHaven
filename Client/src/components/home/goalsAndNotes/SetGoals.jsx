@@ -10,7 +10,7 @@ const Setgoals = ({ onGoalCreated }) => {
   const [deadline, setDeadline] = useState(null);
   const [time, setTime] = useState("21:00");
   const [reminder, setReminder] = useState("On the day (9:00)");
-  const [repeat, setRepeat] = useState("Daily");
+  const [repeat, setRepeat] = useState("Never");
 
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
@@ -24,20 +24,33 @@ const Setgoals = ({ onGoalCreated }) => {
       return;
     }
     try {
-      const dueDate = deadline
-        ? deadline.toISOString()
-        : new Date().toISOString();
+      const dueDate = deadline ? deadline.toISOString() : new Date().toISOString();
+      
+      // Prepare task data
+      const taskData = {
+        title,
+        completed: false,
+        dueDate,
+        deadline: deadline ? deadline.toISOString() : null,
+        repeatEnabled: repeat !== "Never",
+        repeatType: repeat.toLowerCase(),
+        reminderTime: reminder,
+        timePreference: time,
+      };
+
       const { data } = await axios.post(
         `${backendUrl}/todo`,
-        {
-          title,
-          completed: false,
-          dueDate,
-        },
+        taskData,
         getAuthHeader()
       );
+      
+      // Reset form
       setTitle("");
       setDeadline(null);
+      setTime("21:00");
+      setRepeat("Never");
+      setReminder("On the day (9:00)");
+      
       if (onGoalCreated) {
         onGoalCreated(data.data);
       }
@@ -77,7 +90,6 @@ const Setgoals = ({ onGoalCreated }) => {
       {/* Render when there's some text in the input */}
       {title.trim() !== "" && (
         <>
-          <p className="text-red-400">Currenty only calender is functional.</p>
           <div className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col">
             <div className="flex-1">
               {/* Repeat Dropdown */}
