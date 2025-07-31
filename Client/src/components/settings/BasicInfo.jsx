@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
 import { Camera, User } from "lucide-react";
+import UpdateButton from "./UpdateButton";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 export default function BasicInfo() {
@@ -21,6 +22,8 @@ export default function BasicInfo() {
   const [isProfilePicLoading, setIsProfilePicLoading] = useState(false);
   const [isProfileUpdateLoading, setIsProfileUpdateLoading] = useState(false);
   const fileInputRef = useRef(null);
+  const [initialProfileData, setInitialProfileData] = useState(null);
+  const [hasChanged, setHasChanged] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -31,20 +34,33 @@ export default function BasicInfo() {
         if (!user) {
           fetchUserDetails(decoded.id);
         } else {
-          setProfileData({
+          const userData = {
             FirstName: user.FirstName || "",
             LastName: user.LastName || "",
             ProfilePicture: user.ProfilePicture || null,
             Bio: user.Bio || "",
             Country: user.Country || "",
             Gender: user.Gender || "",
-          });
+          };
+          setProfileData(userData);
+          setInitialProfileData(userData);
         }
       } catch (error) {
         console.error("Error decoding token:", error);
       }
     }
   }, [user]);
+
+  useEffect(() => {
+    if (!initialProfileData) return;
+
+    const isChanged =
+      Object.keys(profileData).some(
+        (key) => profileData[key] !== initialProfileData[key]
+      ) || profilePic !== null;
+
+    setHasChanged(isChanged);
+  }, [profileData, profilePic]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -143,12 +159,14 @@ export default function BasicInfo() {
       toast.success("Profile updated successfully");
       setProfileData(response.data);
       setUser(response.data);
+      setInitialProfileData(response.data);
       setProfilePic(null);
     } catch (error) {
       console.error("Profile update error:", error);
       toast.error(error.response?.data?.error || "Failed to update profile");
     } finally {
       setIsProfileUpdateLoading(false);
+      setHasChanged(false);
     }
   };
 
@@ -306,24 +324,11 @@ export default function BasicInfo() {
 
         {/* Submit Button */}
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className={`px-8 py-3 rounded-lg font-semibold text-white transition-all duration-200 shadow-lg ${
-              isProfileUpdateLoading
-                ? "bg-[var(--txt-disabled)] cursor-not-allowed"
-                : "bg-[var(--btn)] hover:bg-[var(--btn-hover)] hover:shadow-xl transform hover:-translate-y-0.5"
-            }`}
-            disabled={isProfileUpdateLoading}
-          >
-            {isProfileUpdateLoading ? (
-              <div className="flex items-center">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                Updating Profile...
-              </div>
-            ) : (
-              "Update Profile"
-            )}
-          </button>
+          <UpdateButton
+            label="Update Profile"
+            isLoading={isProfileUpdateLoading}
+            isDisabled={!hasChanged}
+          />
         </div>
       </form>
     </div>

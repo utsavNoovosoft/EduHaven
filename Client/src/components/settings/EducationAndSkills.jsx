@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
 import { Plus, X } from "lucide-react";
+import UpdateButton from "./UpdateButton";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 function EducationAndSkills() {
@@ -24,6 +25,8 @@ function EducationAndSkills() {
   const [interestsList, setInterestsList] = useState([]);
   const [newSkill, setNewSkill] = useState("");
   const [newInterest, setNewInterest] = useState("");
+  const [initialData, setInitialData] = useState(null);
+  const [hasChanged, setHasChanged] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -35,7 +38,7 @@ function EducationAndSkills() {
         if (!user) {
           fetchUserDetails(decoded.id);
         } else {
-          setProfileData({
+          const initial = {
             University: user.University || "",
             FieldOfStudy: user.FieldOfStudy || "",
             GraduationYear: user.GraduationYear || "",
@@ -44,7 +47,9 @@ function EducationAndSkills() {
               skills: "",
               additionalNotes: "",
             },
-          });
+          };
+          setInitialData(initial);
+          setProfileData(initial);
 
           // Parse skills and interests into arrays
           if (user.OtherDetails?.skills) {
@@ -69,6 +74,13 @@ function EducationAndSkills() {
       }
     }
   }, [user]);
+
+  useEffect(() => {
+    if (!initialData) return;
+
+    const isEqual = JSON.stringify(profileData) === JSON.stringify(initialData);
+    setHasChanged(!isEqual);
+  }, [profileData, initialData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -149,11 +161,13 @@ function EducationAndSkills() {
 
       toast.success("Education & Skills updated successfully");
       setUser(response.data);
+      setInitialData(response.data);
     } catch (error) {
       console.error("Profile update error:", error);
       toast.error(error.response?.data?.error || "Failed to update profile");
     } finally {
       setIsLoading(false);
+      setHasChanged(false);
     }
   };
 
@@ -341,24 +355,11 @@ function EducationAndSkills() {
 
         {/* Submit Button */}
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className={`px-8 py-3 rounded-lg font-semibold transition-all duration-200 shadow-lg ${
-              isLoading
-                ? "bg-[var(--txt-disabled)] cursor-not-allowed"
-                : "bg-[var(--btn)] hover:bg-[var(--btn-hover)] hover:shadow-xl transform hover:-translate-y-0.5"
-            }`}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <div className="flex items-center">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                Updating...
-              </div>
-            ) : (
-              "Update Profile"
-            )}
-          </button>
+          <UpdateButton
+            label="Update Profile"
+            isLoading={isLoading}
+            isDisabled={!hasChanged}
+          />
         </div>
       </form>
     </div>
