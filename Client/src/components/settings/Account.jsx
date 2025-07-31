@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import UpdateButton from "./UpdateButton";
 
 const Account = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [hasChanged, setHasChanged] = useState(false);
+
+  useEffect(() => {
+    setHasChanged(email !== "" && password !== "");
+  }, [email, password]);
 
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -57,24 +63,11 @@ const Account = () => {
         </div>
 
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className={`px-8 py-3 rounded-lg font-semibold transition-all duration-200 shadow-lg ${
-              isLoading
-                ? "bg-[var(--txt-disabled)] cursor-not-allowed"
-                : "bg-[var(--btn)] hover:bg-[var(--btn-hover)] hover:shadow-xl transform hover:-translate-y-0.5"
-            }`}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <div className="flex items-center">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                Updating...
-              </div>
-            ) : (
-              "Update Account"
-            )}
-          </button>
+          <UpdateButton
+            onClick={handleUpdate}
+            isLoading={isLoading}
+            isDisabled={!hasChanged}
+          />
         </div>
       </form>
 
