@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 function CreateRoomModal({ isOpen, onClose, onCreate }) {
   const [roomName, setRoomName] = useState("");
@@ -14,8 +15,6 @@ function CreateRoomModal({ isOpen, onClose, onCreate }) {
     setcateogery("");
     onClose();
   };
-
-  if (!isOpen) return null;
 
   const categories = [
     { value: "", label: "Select a cateogery" },
@@ -37,69 +36,84 @@ function CreateRoomModal({ isOpen, onClose, onCreate }) {
   ];
 
   return (
-    <div
-      className="fixed inset-0 flex items-center justify-center backdrop-blur-sm z-50"
-      style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
-    >
-      <div className="p-8 rounded-2xl w-96 shadow-2xl transition-all bg-sec">
-        <h2 className="text-2xl font-semibold txt mb-6">Create a New Room</h2>
-        <form onSubmit={handleSubmit}>
-          <label className="block mb-2 font-medium txt">Room Name</label>
-          <input
-            type="text"
-            value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
-            placeholder="Enter room name"
-            className="w-full px-4 py-3 mb-6 rounded-lg bg-sec txt placeholder:txt-dim border border-gray-500/50 focus:outline-none"
-            style={{ "--tw-ring-color": "var(--btn)" }}
-          />
-
-          <label className="block mb-2 font-medium txt">cateogery</label>
-          <select
-            value={cateogery}
-            onChange={(e) => setcateogery(e.target.value)}
-            className="w-full px-4 py-3 mb-6 rounded-lg bg-sec txt border border-gray-500/50 focus:outline-none"
-            style={{ "--tw-ring-color": "var(--btn)" }}
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          key="backdrop"
+          className="fixed inset-0 flex items-center justify-center backdrop-blur-sm z-50"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div
+            key="modal"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="p-8 rounded-2xl w-96 shadow-2xl transition-all bg-sec"
           >
-            {categories.map((opt) => (
-              <option
-                key={opt.value}
-                value={opt.value}
-                disabled={opt.value === ""}
+            <h2 className="text-2xl font-semibold txt mb-6">Create a New Room</h2>
+            <form onSubmit={handleSubmit}>
+              <label className="block mb-2 font-medium txt">Room Name</label>
+              <input
+                type="text"
+                value={roomName}
+                onChange={(e) => setRoomName(e.target.value)}
+                placeholder="Enter room name"
+                className="w-full px-4 py-3 mb-6 rounded-lg bg-sec txt placeholder:txt-dim border border-gray-500/50 focus:outline-none"
+                style={{ "--tw-ring-color": "var(--btn)" }}
+              />
+
+              <label className="block mb-2 font-medium txt">cateogery</label>
+              <select
+                value={cateogery}
+                onChange={(e) => setcateogery(e.target.value)}
+                className="w-full px-4 py-3 mb-6 rounded-lg bg-sec txt border border-gray-500/50 focus:outline-none"
+                style={{ "--tw-ring-color": "var(--btn)" }}
               >
-                {opt.label}
-              </option>
-            ))}
-          </select>
+                {categories.map((opt) => (
+                  <option
+                    key={opt.value}
+                    value={opt.value}
+                    disabled={opt.value === ""}
+                  >
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
 
-          <label className="block mb-2 font-medium txt">Room Description</label>
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="e.g., A room for CS students"
-            className="w-full px-4 py-3 mb-6 rounded-lg bg-sec txt placeholder:txt-dim border border-gray-500/50 focus:outline-none"
-            style={{ "--tw-ring-color": "var(--btn)" }}
-          />
+              <label className="block mb-2 font-medium txt">Room Description</label>
+              <input
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="e.g., A room for CS students"
+                className="w-full px-4 py-3 mb-6 rounded-lg bg-sec txt placeholder:txt-dim border border-gray-500/50 focus:outline-none"
+                style={{ "--tw-ring-color": "var(--btn)" }}
+              />
 
-          <div className="flex justify-end gap-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-5 py-2 rounded-lg border border-txt-dim txt-dim hover:bg-sec transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-5 py-2 rounded-lg btn hover:bg-[var(--btn-hover)] txt transition-colors"
-            >
-              Create
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-5 py-2 rounded-lg border border-txt-dim txt-dim hover:bg-sec transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className=" bg-ter px-5 py-2 rounded-lg btn hover:bg-[var(--btn-hover)] txt transition-colors"
+                >
+                  Create
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
