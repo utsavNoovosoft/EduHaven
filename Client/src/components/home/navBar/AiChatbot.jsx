@@ -29,7 +29,15 @@ const messageVariants = {
 
 const Ai = () => {
   const [question, setQuestion] = useState("");
-  const [messages, setMessages] = useState([]);
+
+  const [messages, setMessages] = useState(() => {
+    const saved = localStorage.getItem("edu_chat");
+    return saved ? JSON.parse(saved) : [];
+  });
+  useEffect(() => {
+    localStorage.setItem("edu_chat", JSON.stringify(messages));
+  }, [messages]);
+
   const [loading, setLoading] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [dimensions, setDimensions] = useState({ width: 350, height: 500 });
@@ -115,6 +123,12 @@ const Ai = () => {
     setIsChatOpen(false);
   };
 
+  const clearChat = () => {
+    setMessages([]);
+    localStorage.removeItem("edu_chat");
+    toast.info("Chat history cleared");
+  };
+
   // --- Resizable functionality from the top-left corner ---
   const handleMouseDown = (e) => {
     resizing.current = true;
@@ -176,7 +190,10 @@ const Ai = () => {
           height: dimensions.height,
         }}
       >
-        <div className="bg-primary rounded-3xl w-full h-full txt flex flex-col overflow-hidden relative shadow-2xl" style={{boxShadow: `0 0 1rem var(--btn)`}}>
+        <div
+          className="bg-primary rounded-3xl w-full h-full txt flex flex-col overflow-hidden relative shadow-2xl"
+          style={{ boxShadow: `0 0 1rem var(--btn)` }}
+        >
           {/* Resizer handle using the Spline icon */}
           <div
             onMouseDown={handleMouseDown}
@@ -191,12 +208,21 @@ const Ai = () => {
             style={{ borderColor: "var(--bg-sec)" }}
           >
             <h3 className="text-lg txt-dim font-semibold pl-8">Ask AI</h3>
-            <button
-              onClick={closeModal}
-              className="hover:txt transition p-2 txt-dim"
-            >
-              <X className="h-6 w-6" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={clearChat}
+                className="hover:text-red-500 transition p-2 txt-dim"
+                title="Clear Chat"
+              >
+                🗑️
+              </button>
+              <button
+                onClick={closeModal}
+                className="hover:txt transition p-2 txt-dim"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
           </div>
 
           {/* Chat area */}
