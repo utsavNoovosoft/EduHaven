@@ -240,6 +240,11 @@ function PinnedLinks() {
             </div>
           ))}
 
+          {/* Popup blocker note */}
+          <div className="text-xs text-gray-400 mt-2 px-2">
+            Note: Your browser's popup blocker may prevent all links from opening at once. Please allow popups for this site if you want to open multiple links together.
+          </div>
+
           {/* "Add Link" button */}
           <button
             onClick={handleAddNew}
