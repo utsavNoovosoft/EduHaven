@@ -41,7 +41,7 @@ function SignUp() {
         localStorage.setItem("token", token);
         // localStorage.setItem("activationToken", activationToken);
       }
-      alert("Account created successfully! Please verify login to continue.");
+      alert("Account created successfully! Please login to continue.");
       navigate("/authenticate");
     } catch (error) {
       console.error(`Signup failed:`, error.response?.data || error.message);
