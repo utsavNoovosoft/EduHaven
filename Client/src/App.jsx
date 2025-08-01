@@ -17,6 +17,8 @@ import GoogleRedirect from "./Auth/GoogleRedirect";
 import Auth from "./Auth/Auth";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { SocketProvider } from "./context/SocketContext";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -43,6 +45,14 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </RouterSelector>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover
+          theme="light"
+        />
       </SocketProvider>
     </UserProfileProvider>
   );
