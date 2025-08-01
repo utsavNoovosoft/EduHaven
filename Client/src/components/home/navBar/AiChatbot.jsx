@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
-import { BotMessageSquare, X, ArrowUp, Loader, Spline } from "lucide-react";
+import { BotMessageSquare, X, ArrowUp, Loader, Spline, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -214,7 +214,7 @@ const Ai = () => {
                 className="hover:text-red-500 transition p-2 txt-dim"
                 title="Clear Chat"
               >
-                🗑️
+                <Trash2 />
               </button>
               <button
                 onClick={closeModal}
