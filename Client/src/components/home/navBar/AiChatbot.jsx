@@ -1,6 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
-import { BotMessageSquare, X, ArrowUp, Loader, Spline, Trash2 } from "lucide-react";
+import {
+  BotMessageSquare,
+  X,
+  ArrowUp,
+  Loader,
+  Spline,
+  Trash2,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -210,13 +217,6 @@ const Ai = () => {
             <h3 className="text-lg txt-dim font-semibold pl-8">Ask AI</h3>
             <div className="flex items-center gap-1">
               <button
-                onClick={clearChat}
-                className="hover:text-red-500 transition p-2 txt-dim"
-                title="Clear Chat"
-              >
-                <Trash2 />
-              </button>
-              <button
                 onClick={closeModal}
                 className="hover:txt transition p-2 txt-dim"
               >
@@ -260,6 +260,20 @@ const Ai = () => {
               ))
             )}
           </div>
+
+          {/* Clear Chat Button at Bottom (only if messages exist) */}
+          {messages.length > 0 && (
+            <div className="flex justify-end px-4 pb-2">
+              <button
+                onClick={clearChat}
+                className="text-sm text-red-400 hover:text-red-500 flex items-center gap-1 transition"
+                title="Clear Chat"
+              >
+                <Trash2 className="w-4 h-4" />
+                <span>Clear Chat</span>
+              </button>
+            </div>
+          )}
 
           {/* Input area */}
           <div
