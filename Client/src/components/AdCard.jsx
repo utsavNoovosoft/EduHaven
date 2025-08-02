@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-const icn = "/focusDockIcon.jpg";
+const icn = "/focusDocKIcon.jpg";
 const display = "/focusDockDisplay.jpg";
 const display2 = "/focusDockDisplay2.jpg";
 const display3 = "/focusDockDisplay3.jpg";
