@@ -301,7 +301,9 @@ function PinnedLinks() {
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full mt-1 p-2 border border-gray-300 rounded bg-gray-800 text-gray-80 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full mt-1 p-2 border border-gray-500 rounded-lg 
+               bg-transparent txt placeholder:text-sm
+               focus:outline-none focus:ring-2 focus:ring-current"
                   placeholder="e.g. Amazon"
                 />
               </label>
@@ -315,7 +317,9 @@ function PinnedLinks() {
                   type="text"
                   value={mainLink}
                   onChange={(e) => setMainLink(e.target.value)}
-                  className="w-full mt-1 p-2 border border-gray-300 rounded  bg-gray-800 text-gray-80 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full mt-1 p-2 border border-gray-500 rounded-lg 
+               bg-transparent txt placeholder:text-sm
+               focus:outline-none focus:ring-2 focus:ring-current"
                   placeholder="e.g. amazon.com (protocol will be added automatically)"
                 />
               </label>
@@ -327,7 +331,9 @@ function PinnedLinks() {
                     type="text"
                     value={linkVal}
                     onChange={(e) => handleExtraLinkChange(idx, e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded bg-gray-800 text-gray-80 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full mt-1 p-2 border border-gray-500 rounded-lg 
+               bg-transparent txt placeholder:text-sm
+               focus:outline-none focus:ring-2 focus:ring-current"
                     placeholder="Another link..."
                   />
                 </div>
@@ -337,7 +343,7 @@ function PinnedLinks() {
               <button
                 type="button"
                 onClick={handleAddAnotherLink}
-                className="text-sm flex font-medium items-center gap-1 mt-2 text-blue-600 hover:text-blue-800"
+                className="text-sm flex font-medium items-center gap-1 mt-2 txt hover:opacity-80 transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 Add another tab
@@ -347,7 +353,7 @@ function PinnedLinks() {
               <div className="flex justify-end mt-6">
                 <button
                   onClick={handleSaveLink}
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-2 rounded txt btn hover:bg-ter/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current transition-colors"
                 >
                   {editItemId ? "Save" : "Add"}
                 </button>
