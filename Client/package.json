@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "build-extension_old": "vite build extension",
-    "build-extension":  "vite build --mode extension",
+    "build-extension": "vite build --mode extension",
     "lint": "eslint .",
     "preview": "vite preview"
   },

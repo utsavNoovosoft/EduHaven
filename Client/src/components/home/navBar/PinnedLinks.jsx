@@ -31,6 +31,7 @@ function normalizeUrl(url) {
 function PinnedLinks() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showPopupBlockerModal, setShowPopupBlockerModal] = useState(false);
   const [editItemId, setEditItemId] = useState(null);
   const [title, setTitle] = useState("");
   const [mainLink, setMainLink] = useState("");
@@ -38,11 +39,13 @@ function PinnedLinks() {
   const [pinnedLinks, setPinnedLinks] = useState([]);
   const [extraLinks, setExtraLinks] = useState([]);
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [linksToOpen, setLinksToOpen] = useState([]);
 
   // Refs for click outside detection
   const dropdownRef = useRef(null);
   const modalRef = useRef(null);
   const buttonRef = useRef(null);
+  const popupBlockerModalRef = useRef(null);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -54,10 +57,9 @@ function PinnedLinks() {
     localStorage.setItem("pinnedLinks", JSON.stringify(linksArray));
   };
 
-  // Handle clicks outside dropdown and modal
+  // Handle clicks outside dropdown and modals
   useEffect(() => {
     function handleClickOutside(event) {
-      // Close dropdown if clicking outside
       if (
         showDropdown &&
         dropdownRef.current &&
@@ -69,7 +71,6 @@ function PinnedLinks() {
         setOpenMenuId(null);
       }
 
-      // Close modal if clicking outside modal content
       if (
         showModal &&
         modalRef.current &&
@@ -81,13 +82,21 @@ function PinnedLinks() {
         setMainLink("");
         setExtraLinks([]);
       }
+
+      if (
+        showPopupBlockerModal &&
+        popupBlockerModalRef.current &&
+        !popupBlockerModalRef.current.contains(event.target)
+      ) {
+        setShowPopupBlockerModal(false);
+      }
     }
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showDropdown, showModal]);
+  }, [showDropdown, showModal, showPopupBlockerModal]);
 
   const handleSaveLink = () => {
     if (!title.trim() || !mainLink.trim()) return;
@@ -167,12 +176,47 @@ function PinnedLinks() {
     setExtraLinks(updated);
   };
 
+  // --- MODIFIED openWorkspace function ---
   const openWorkspace = (links) => {
-    // Normalize URLs and open them
-    links.forEach((link) => {
+    // If there's only one link, just open it without the popup check
+    if (links.length <= 1) {
+      window.open(normalizeUrl(links[0]), "_blank", "noopener,noreferrer");
+      setShowDropdown(false);
+      return;
+    }
+
+    // Attempt to open the first link in a new window as the "popup test".
+    // This call must be a direct result of a user click to avoid being blocked.
+    const firstLink = normalizeUrl(links[0]);
+    const testWindow = window.open(firstLink, "_blank", "noopener,noreferrer");
+
+    // Check if the popup was blocked
+    if (
+      !testWindow ||
+      testWindow.closed ||
+      typeof testWindow.closed === "undefined"
+    ) {
+      // Popups were blocked, show the modal.
+      setLinksToOpen(links);
+      setShowPopupBlockerModal(true);
+    } else {
+      // Popups are enabled. Now open the rest of the links, starting from the second one.
+      links.slice(1).forEach((link) => {
+        const normalizedLink = normalizeUrl(link);
+        window.open(normalizedLink, "_blank", "noopener,noreferrer");
+      });
+    }
+
+    setShowDropdown(false);
+  };
+
+  const handleRetryOpenLinks = () => {
+    linksToOpen.forEach((link) => {
       const normalizedLink = normalizeUrl(link);
       window.open(normalizedLink, "_blank", "noopener,noreferrer");
     });
+    setShowPopupBlockerModal(false);
+    setLinksToOpen([]);
   };
 
   return (
@@ -245,7 +289,6 @@ function PinnedLinks() {
             </div>
           ))}
 
-          {/* "Add Link" button */}
           <button
             onClick={handleAddNew}
             className="block w-full px-4 py-2 txt hover:bg-ter rounded mt-1 flex items-center gap-2"
@@ -361,6 +404,34 @@ function PinnedLinks() {
             </motion.div>
           </motion.div>
         </AnimatePresence>
+      )}
+
+      {/* --- NEW POPUP BLOCKER MODAL --- */}
+      {showPopupBlockerModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-30">
+          <div
+            ref={popupBlockerModalRef}
+            className="bg-sec p-6 rounded-lg shadow-lg w-full max-w-sm text-center"
+          >
+            <h3 className="text-xl font-bold txt mb-4">Popups Blocked</h3>
+            <p className="txt mb-4">
+              Your browser is blocking the links from opening. Please disable
+              the popup blocker for this site and try again.
+            </p>
+            <button
+              onClick={handleRetryOpenLinks}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              I've enabled popups
+            </button>
+            <button
+              onClick={() => setShowPopupBlockerModal(false)}
+              className="mt-4 block w-full text-center text-sm text-gray-400 hover:text-gray-200"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

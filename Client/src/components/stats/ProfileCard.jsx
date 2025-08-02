@@ -58,10 +58,10 @@ const ProfileCard = () => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 lg:w-[20%] min-w-72 h-fit relative overflow-hidden">
+    <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 w-full h-fit relative overflow-hidden">
       {/* nav */}
       <div className=" flex justify-end gap-6 px-4">
-        <Link to={"/profile/"}>
+        <Link to={"/settings/"}>
           <Edit3 className="h-6 w-6 text-gray-400 hover:text-white" />
         </Link>
         <Share2 className=" h-6 w-6 text-gray-400 hover:text-white" />
