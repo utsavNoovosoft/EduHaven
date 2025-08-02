@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import icn from "../../public/focusDockIcon.jpg";
-import display from "../../public/focusDockDisplay.jpg";
-import display2 from "../../public/focusDockDisplay2.jpg";
-import display3 from "../../public/focusDockDisplay3.jpg";
+import { useState, useEffect } from "react";
+const icn = "../../public/focusDockIcon.jpg";
+const display = "../../public/focusDockDisplay.jpg";
+const display2 = "../../public/focusDockDisplay2.jpg";
+const display3 = "../../public/focusDockDisplay3.jpg";
 
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.rishukumarcodes.Standbyclock";
