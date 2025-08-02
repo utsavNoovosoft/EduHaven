@@ -107,7 +107,7 @@ const Whacamole = () => {
     }
   };
 
-  const btnClass = "px-6 py-2 rounded-full text-white font-semibold hover:opacity-90 transition";
+  const btnClass = "px-10 py-2 rounded-full text-white font-semibold hover:opacity-90 transition";
 
   return (
     <div
@@ -163,13 +163,13 @@ const Whacamole = () => {
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-70 z-20">
           <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl text-center">
             <h2 className="text-4xl font-bold text-white mb-4">GAME OVER!</h2>
-            <p className="text-xl text-white mb-6">Final Score: {score}</p>
+            <h4 className="text-xl text-white mb-6">Final Score: {score}</h4>
             <div className="flex justify-center gap-6">
               <button
                 onClick={() => window.location.reload()}
-                className={`${btnClass} bg-green-500`}
+                className={`${btnClass} bg-green-500 flex items-center gap-2 justify-center`}
               >
-                Play Again
+                <RefreshCw size={20} /> Play Again
               </button>
               <Link to="/games" className={`${btnClass} bg-red-500 flex items-center gap-2 justify-center`}>
                 <ArrowLeft size={20} /> Exit
