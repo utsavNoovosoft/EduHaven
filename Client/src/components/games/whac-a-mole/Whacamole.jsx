@@ -21,6 +21,7 @@ const Whacamole = () => {
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
   const [gameItems, setGameItems] = useState([]); // { id, type, position }
   const [gameOver, setGameOver] = useState(false);
+  const [hiScore,setHiScore] = useState(0);
 
   const [playBonk] = useSound(bonkSfx, { volume: 0.5, interrupt: true, html5: true });
   const [playMiss] = useSound(missSfx, { volume: 0.5, interrupt: true, html5: true });
@@ -28,12 +29,29 @@ const Whacamole = () => {
   const timerRef = useRef(null);
   const spawnRef = useRef(null);
 
-  // End game
-  const endGame = useCallback(() => {
-    setGameOver(true);
-    clearInterval(timerRef.current);
-    clearTimeout(spawnRef.current);
-  }, []);
+  // End game logic
+const endGame = useCallback(() => {
+  setGameOver(true);
+  clearInterval(timerRef.current);
+  clearTimeout(spawnRef.current);
+
+  // Check & Save High Score
+  setHiScore(prevHighScore => {
+    if (score > prevHighScore) {
+      localStorage.setItem("whacHiScore", score);
+      return score;
+    }
+    return prevHighScore;
+  });
+}, [score]);
+
+  // on mount we set the highscore
+  useEffect(() => {
+    const prevScore = localStorage.getItem("whacHiScore");
+    if(prevScore){
+      setHiScore(parseInt(prevScore));
+    }
+  },[]);
 
   // Countdown timer
   useEffect(() => {
@@ -126,6 +144,7 @@ const Whacamole = () => {
           <div className="flex justify-center gap-12 text-2xl font-bold text-white drop-shadow-lg">
             <div>SCORE: {score}</div>
             <div>TIME: {timeLeft}</div>
+            <div>HIGH SCORE: {hiScore}</div>
           </div>
         </div>
 
