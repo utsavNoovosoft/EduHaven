@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-const icn = "../../public/focusDockIcon.jpg";
-const display = "../../public/focusDockDisplay.jpg";
-const display2 = "../../public/focusDockDisplay2.jpg";
-const display3 = "../../public/focusDockDisplay3.jpg";
+const icn = "/focusDockIcon.jpg";
+const display = "/focusDockDisplay.jpg";
+const display2 = "/focusDockDisplay2.jpg";
+const display3 = "/focusDockDisplay3.jpg";
 
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=com.rishukumarcodes.Standbyclock";
