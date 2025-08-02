@@ -1,43 +1,42 @@
 // Whacamole.jsx
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { RefreshCw, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import useSound from "use-sound";
 import bonkSfx from "./assets/Miss.wav";
 import missSfx from "./assets/Bonk.wav";
+import gameBackground from "./assets/gameBackground.jpg";
+import teddyMole from "./assets/Mole.png";
+import evilPlant from "./assets/Plant.png";
 
 const NUM_HOLES = 9;
-const GAME_DURATION = 30; // sec
-const MIN_MOLE_UP = 600; // ms
-const MAX_MOLE_UP = 1200; // ms
+const GAME_DURATION = 30; // seconds
+const MIN_UP = 800;  // Mole/Plant up duration (ms)
+const MAX_UP = 1200;
 
 const Whacamole = () => {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
-  const [activeMole, setActiveMole] = useState(null);
+  const [gameItems, setGameItems] = useState([]); // { id, type, position }
   const [gameOver, setGameOver] = useState(false);
 
-  // sound hooks 
   const [playBonk] = useSound(bonkSfx, { volume: 0.5, interrupt: true, html5: true });
   const [playMiss] = useSound(missSfx, { volume: 0.5, interrupt: true, html5: true });
 
-  const countdownRef = useRef(null);
-  const moleTimeoutRef = useRef(null);
-  const nextMoleTimeoutRef = useRef(null);
+  const timerRef = useRef(null);
+  const spawnRef = useRef(null);
 
+  // End game
   const endGame = useCallback(() => {
     setGameOver(true);
-    clearInterval(countdownRef.current);
-    clearTimeout(moleTimeoutRef.current);
-    clearTimeout(nextMoleTimeoutRef.current);
-    setActiveMole(null);
+    clearInterval(timerRef.current);
+    clearTimeout(spawnRef.current);
   }, []);
 
-  // Countdown clock
+  // Countdown timer
   useEffect(() => {
-    countdownRef.current = setInterval(() => {
-      setTimeLeft((t) => {
+    timerRef.current = setInterval(() => {
+      setTimeLeft(t => {
         if (t <= 1) {
           endGame();
           return 0;
@@ -45,97 +44,129 @@ const Whacamole = () => {
         return t - 1;
       });
     }, 1000);
-
-    return () => clearInterval(countdownRef.current);
+    return () => clearInterval(timerRef.current);
   }, [endGame]);
 
-  // Mole spawn logic using recursive timeout
-  const spawnMole = useCallback(() => {
-    const hole = Math.floor(Math.random() * NUM_HOLES);
-    setActiveMole(hole);
+  // Get a free hole index
+  const getFreePosition = (items) => {
+    const occupied = items.map(item => item.position);
+    const freePositions = Array.from({ length: NUM_HOLES }, (_, i) => i).filter(pos => !occupied.includes(pos));
+    if (freePositions.length === 0) return null;
+    return freePositions[Math.floor(Math.random() * freePositions.length)];
+  };
 
-    // hide mole after random up time
-    const upTime = Math.random() * (MAX_MOLE_UP - MIN_MOLE_UP) + MIN_MOLE_UP;
-    moleTimeoutRef.current = setTimeout(() => {
-      setActiveMole(null);
-      // schedule next mole
-      const wait = Math.random() * 800 + 300;
-      nextMoleTimeoutRef.current = setTimeout(spawnMole, wait);
-    }, upTime);
+  // Spawn item logic
+  const spawnItem = useCallback(() => {
+    setGameItems(currentItems => {
+      const position = getFreePosition(currentItems);
+      if (position === null) return currentItems; // No free hole, skip spawn
+
+      const type = Math.random() < 0.7 ? 'mole' : 'plant';
+      const id = Date.now() + Math.random();
+
+      // Schedule removal after uptime
+      const upTime = Math.random() * (MAX_UP - MIN_UP) + MIN_UP;
+      setTimeout(() => {
+        setGameItems(items => {
+          const itemStillThere = items.find(i => i.id === id);
+          if (itemStillThere && itemStillThere.type === 'mole') {
+            // Mole missed -> penalty
+            setScore(s => Math.max(0, s - 5));
+          }
+          return items.filter(i => i.id !== id);
+        });
+      }, upTime);
+
+      return [...currentItems, { id, type, position }];
+    });
+
+    // Retro-like spawn interval (fixed 900ms rhythm)
+    spawnRef.current = setTimeout(spawnItem, 900);
   }, []);
 
-  // start spawning on mount
   useEffect(() => {
-    spawnMole();
-    return () => {
-      clearTimeout(moleTimeoutRef.current);
-      clearTimeout(nextMoleTimeoutRef.current);
-    };
-  }, [spawnMole]);
+    spawnItem();
+    return () => clearTimeout(spawnRef.current);
+  }, [spawnItem]);
 
-  const handleClick = (index) => {
+  // Handle click on a hole
+  const handleClick = index => {
     if (gameOver) return;
-    if (index === activeMole) {
-      playBonk();
-      setScore((s) => s + 1);
-      setActiveMole(null);
-      clearTimeout(moleTimeoutRef.current);
-      // immediately spawn next
-      nextMoleTimeoutRef.current = setTimeout(spawnMole, 200);
-    } else {
-      playMiss();
-      setScore((s) => Math.max(s - 1, 0));
+    const item = gameItems.find(i => i.position === index);
+    if (item) {
+      if (item.type === 'mole') {
+        playBonk();
+        setScore(s => s + 10);
+      } else {
+        playMiss();
+        endGame();
+      }
+      setGameItems(items => items.filter(i => i.id !== item.id));
     }
   };
 
+  const btnClass = "px-6 py-2 rounded-full text-white font-semibold hover:opacity-90 transition";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 to-black flex flex-col items-center justify-center p-4 text-white">
-      <h1 className="text-4xl mb-4 font-bold">Whac-A-Mole</h1>
-      <div className="flex gap-10 text-lg mb-6">
-        <div>Score: {score}</div>
-        <div>Time Left: {timeLeft}s</div>
-      </div>
-
-      <div className="grid grid-cols-3 gap-6">
-        {Array.from({ length: NUM_HOLES }).map((_, i) => (
-          <div
-            key={i}
-            className="w-24 h-24 bg-purple-800 rounded-full flex items-center justify-center cursor-pointer relative hover:ring-2 hover:ring-purple-400"
-            onClick={() => handleClick(i)}
-          >
-            <AnimatePresence>
-              {activeMole === i && (
-                <motion.div
-                  key={"mole" + i}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="w-16 h-16 bg-purple-400 rounded-full shadow-md"
-                />
-              )}
-            </AnimatePresence>
+    <div
+      className={`min-h-screen relative overflow-hidden`}
+      style={{
+        backgroundImage: `url(${gameBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="relative z-10 p-8">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">WHAC-A-MOLE</h1>
+          <div className="flex justify-center gap-12 text-2xl font-bold text-white drop-shadow-lg">
+            <div>SCORE: {score}</div>
+            <div>TIME: {timeLeft}</div>
           </div>
-        ))}
+        </div>
+
+        {/* Grid */}
+        <div className="grid grid-cols-3 gap-6 mx-auto max-w-md">
+          {Array.from({ length: NUM_HOLES }).map((_, i) => (
+            <div
+              key={i}
+              onClick={() => handleClick(i)}
+              className="relative w-28 h-28 bg-gray-800 rounded-full shadow-lg cursor-pointer flex items-center justify-center"
+            >
+              {gameItems.map(item =>
+                item.position === i && (
+                  <img
+                    key={item.id}
+                    src={item.type === 'mole' ? teddyMole : evilPlant}
+                    alt={item.type}
+                    className="absolute w-20 h-20 object-contain animate-bounce"
+                  />
+                )
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
+      {/* Game Over Overlay */}
       {gameOver && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center text-center">
-          <h2 className="text-3xl font-bold text-purple-300 mb-4">Game Over</h2>
-          <p className="mb-4">Final Score: {score}</p>
-          <div className="flex gap-4">
-            <button
-              onClick={() => window.location.reload()}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg"
-            >
-              <RefreshCw size={20} /> Play Again
-            </button>
-            <Link
-              to="/games"
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg"
-            >
-              <ArrowLeft size={20} /> Exit
-            </Link>
+        <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-70 z-20">
+          <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl text-center">
+            <h2 className="text-4xl font-bold text-white mb-4">GAME OVER!</h2>
+            <p className="text-xl text-white mb-6">Final Score: {score}</p>
+            <div className="flex justify-center gap-6">
+              <button
+                onClick={() => window.location.reload()}
+                className={`${btnClass} bg-green-500`}
+              >
+                Play Again
+              </button>
+              <Link to="/games" className={`${btnClass} bg-red-500 flex items-center gap-2 justify-center`}>
+                <ArrowLeft size={20} /> Exit
+              </Link>
+            </div>
           </div>
         </div>
       )}
