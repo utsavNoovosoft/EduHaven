@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { motion } from "framer-motion";
 import { Clock12, PlayCircle, RotateCcw } from "lucide-react";
 import AnimatedDigits from "./AnimatedDigits";
 
@@ -128,12 +127,11 @@ function StudyTimer() {
       });
 
       const result = await res.json();
-      console.log("Session Saved:", result);
       setHasPosted(true);
       setLastSavedSeconds(getTotalSeconds(time));
       return true;
     } catch (err) {
-      console.error("Failed to post session:", err);
+      console.error("Failed to save session:", err);
       return false;
     }
   }, [startTime, time]);
@@ -150,7 +148,7 @@ function StudyTimer() {
       if (totalMinutes >= 1 && (totalSeconds - lastSavedSeconds) >= 30) {
         const success = await handlePostSession(new Date().toISOString());
         if (success) {
-          console.log("Auto-saved at", new Date().toLocaleTimeString());
+          console.log("🔄 Auto-saved to database at", new Date().toLocaleTimeString());
         }
       }
     }, 30000);
@@ -282,11 +280,9 @@ function StudyTimer() {
       </div>
 
       <div className="flex gap-4 justify-center mt-4">
-        <motion.button
+        <button
           onClick={handleStartPause}
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          className={`relative px-6 py-2 rounded-lg flex items-center gap-2 transition-colors duration-300 ease-in-out ${
+          className={`relative px-6 py-2 rounded-lg flex items-center gap-2 transition-colors duration-300 ease-in-out hover:scale-105 active:scale-95 ${
             isRunning
               ? "bg-black/20 hover:bg-black/30"
               : "bg-purple-600 hover:bg-purple-700"
@@ -308,16 +304,14 @@ function StudyTimer() {
             <Clock12 className="w-5 h-5 animate-spin" />
             <span>Pause</span>
           </span>
-        </motion.button>
+        </button>
 
-        <motion.button
+        <button
           onClick={handleReset}
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          className="hover:bg-red-700 p-2 rounded-lg flex items-center gap-2"
+          className="hover:bg-red-700 p-2 rounded-lg flex items-center gap-2 hover:scale-105 active:scale-95 transition-all duration-200"
         >
           <RotateCcw className="w-5 h-5" />
-        </motion.button>
+        </button>
       </div>
     </div>
   );
