@@ -9,7 +9,7 @@ import {
   FileText,
   SmilePlus,
 } from "lucide-react";
-import AdCard from "@/components/stats/AdCard";
+import AdCard from "@/components/AdCard";
 
 const GITHUB_API_URL = "https://api.github.com/repos/amandollar/EduHaven";
 

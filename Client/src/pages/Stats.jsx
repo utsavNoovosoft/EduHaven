@@ -6,7 +6,7 @@ import StudyStats from "../components/stats/StudyStats";
 import Goals from "../components/stats/Goals";
 import Leaderboard from "../components/stats/Leaderboard";
 import Test from "../components/stats/Test.jsx";
-import AdCard from "@/components/stats/AdCard";
+import AdCard from "@/components/AdCard";
 
 const Stats = () => {
   return (
