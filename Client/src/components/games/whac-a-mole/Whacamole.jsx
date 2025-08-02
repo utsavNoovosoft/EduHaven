@@ -8,6 +8,8 @@ import missSfx from "./assets/Bonk.wav";
 import gameBackground from "./assets/gameBackground.jpg";
 import teddyMole from "./assets/Mole.png";
 import evilPlant from "./assets/Plant.png";
+import burrowHole from "./assets/BurrowHole.png";
+
 
 const NUM_HOLES = 9;
 const GAME_DURATION = 30; // seconds
@@ -133,8 +135,14 @@ const Whacamole = () => {
             <div
               key={i}
               onClick={() => handleClick(i)}
-              className="relative w-28 h-28 bg-gray-800 rounded-full shadow-lg cursor-pointer flex items-center justify-center"
+              className="relative w-28 h-28 cursor-pointer flex items-center justify-center rounded-full overflow-hidden"
+              style={{
+                backgroundImage: `url(${burrowHole})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
             >
+
               {gameItems.map(item =>
                 item.position === i && (
                   <img
