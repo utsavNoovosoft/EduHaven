@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { toast } from "react-toastify";
 import {
   BotMessageSquare,
   X,
@@ -9,7 +8,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import "react-toastify/dist/ReactToastify.css";
 
 const apikey = "AIzaSyBPuUC9dW_uIqC8q9wsSE1zKjgUJR62XxE";
 
@@ -36,6 +34,7 @@ const messageVariants = {
 
 const Ai = () => {
   const [question, setQuestion] = useState("");
+  const chatContainerRef = useRef(null);
 
   const [messages, setMessages] = useState(() => {
     const saved = localStorage.getItem("edu_chat");
@@ -58,14 +57,21 @@ const Ai = () => {
       modalEl.showModal = () => setIsChatOpen(true);
       modalEl.close = () => {
         setIsChatOpen(false);
-        setMessages([]); // Clear messages on close
+        setMessages([]);
       };
     }
   }, []);
 
+  // scroll chat to end
+  useEffect(() => {
+    if (isChatOpen && chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [isChatOpen, messages]);
+
   const generateQuestion = async () => {
     if (!question.trim()) {
-      toast.error("Please enter a question");
       return;
     }
 
@@ -106,16 +112,12 @@ const Ai = () => {
           time: currentTime,
         };
         setMessages((prev) => [...prev, aiMessage]);
-        toast.success("Response generated successfully!");
-      } else {
-        toast.error("No response from AI model");
       }
     } catch (error) {
       console.error("Error generating response:", error);
-      toast.error("Failed to generate response");
     } finally {
       setLoading(false);
-      setQuestion(""); // Clear input field
+      setQuestion("");
     }
   };
 
@@ -126,14 +128,12 @@ const Ai = () => {
   };
 
   const closeModal = () => {
-    setMessages([]); // Clear messages when modal is closed
     setIsChatOpen(false);
   };
 
   const clearChat = () => {
     setMessages([]);
     localStorage.removeItem("edu_chat");
-    toast.info("Chat history cleared");
   };
 
   // --- Resizable functionality from the top-left corner ---
@@ -215,7 +215,17 @@ const Ai = () => {
             style={{ borderColor: "var(--bg-sec)" }}
           >
             <h3 className="text-lg txt-dim font-semibold pl-8">Ask AI</h3>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2.5">
+              {messages.length > 0 && (
+                <button
+                  onClick={clearChat}
+                  className="text-sm txt-dim hover:text-red-500 flex items-center gap-1 transition bg-gray-500/10 hover:bg-gray-500/20 my-auto px-2.5 py-1 rounded-full"
+                  title="Clear Chat"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Clear</span>
+                </button>
+              )}
               <button
                 onClick={closeModal}
                 className="hover:txt transition p-2 txt-dim"
@@ -226,7 +236,10 @@ const Ai = () => {
           </div>
 
           {/* Chat area */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3">
+          <div
+            ref={chatContainerRef}
+            className="flex-1 p-4 overflow-y-auto space-y-3"
+          >
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full">
                 <p className="text-lg font-medium text-center">
@@ -260,20 +273,6 @@ const Ai = () => {
               ))
             )}
           </div>
-
-          {/* Clear Chat Button at Bottom (only if messages exist) */}
-          {messages.length > 0 && (
-            <div className="flex justify-end px-4 pb-2">
-              <button
-                onClick={clearChat}
-                className="text-sm text-red-400 hover:text-red-500 flex items-center gap-1 transition"
-                title="Clear Chat"
-              >
-                <Trash2 className="w-4 h-4" />
-                <span>Clear Chat</span>
-              </button>
-            </div>
-          )}
 
           {/* Input area */}
           <div

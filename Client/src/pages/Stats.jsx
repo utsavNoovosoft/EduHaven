@@ -6,6 +6,7 @@ import StudyStats from "../components/stats/StudyStats";
 import Goals from "../components/stats/Goals";
 import Leaderboard from "../components/stats/Leaderboard";
 import Test from "../components/stats/Test.jsx";
+import AdCard from "@/components/stats/AdCard";
 
 const Stats = () => {
   return (
@@ -18,7 +19,12 @@ const Stats = () => {
       </div>
       {/* content */}
       <div className="flex flex-col lg:flex-row gap-6 w-full content-center">
-        <ProfileCard />
+        <div className="lg:w-[20%] min-w-72 space-y-6">
+          <ProfileCard />
+          <div className="h-auto w-full rounded-3xl bg-sec p-5 space-y-4">
+            <AdCard />
+          </div>
+        </div>
         <div className="flex-1">
           <div className="mb-6">
             <StudyStats />
