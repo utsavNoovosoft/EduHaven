@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import {
   User,
   MessageCircle,
@@ -16,11 +17,19 @@ import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
 const backendUrl = import.meta.env.VITE_API_URL;
 
-const ProfileCard = () => {
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+const ProfileCard = ({ userId, user: propUser, isOwnProfile }) => {
+  const [user, setUser] = useState(propUser || null);
+  const [isLoading, setIsLoading] = useState(!propUser);
 
   useEffect(() => {
+    // If user data is passed as prop, use it
+    if (propUser) {
+      setUser(propUser);
+      setIsLoading(false);
+      return;
+    }
+
+    // Otherwise fetch user data (fallback for backward compatibility)
     const fetchUserProfile = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -43,7 +52,7 @@ const ProfileCard = () => {
       }
     };
     fetchUserProfile();
-  }, []);
+  }, [propUser]);
 
   if (isLoading || !user) {
     return (
@@ -59,12 +68,14 @@ const ProfileCard = () => {
 
   return (
     <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 lg:w-[20%] min-w-72 h-fit relative overflow-hidden">
-      {/* nav */}
-      <div className=" flex justify-end gap-6 px-4">
-        <Link to={"/settings/"}>
-          <Edit3 className="h-6 w-6 text-gray-400 hover:text-white" />
-        </Link>
-        <Share2 className=" h-6 w-6 text-gray-400 hover:text-white" />
+      {/* nav - only show edit button for own profile */}
+      <div className="flex justify-end gap-6 px-4">
+        {isOwnProfile && (
+          <Link to={"/settings/"}>
+            <Edit3 className="h-6 w-6 text-gray-400 hover:text-white" />
+          </Link>
+        )}
+        <Share2 className="h-6 w-6 text-gray-400 hover:text-white" />
       </div>
 
       <div className="mx-4">
@@ -83,11 +94,11 @@ const ProfileCard = () => {
               </div>
             )}
           </div>
-          <div className=" text-center flex-1">
+          <div className="text-center flex-1">
             <span className="block text-2xl font-bold">342</span>
             <span className="text-sm text-white/70">Kudos</span>
           </div>
-          <div className=" text-center flex-1">
+          <div className="text-center flex-1">
             <span className="block text-2xl font-bold">56</span>
             <span className="text-sm text-white/70">Friends</span>
           </div>
@@ -103,20 +114,24 @@ const ProfileCard = () => {
           )}
         </div>
 
-        {/* Action Buttons */}
+        {/* Action Buttons - different for own profile vs others */}
         <div className="flex flex-wrap justify-center gap-4 my-4">
           <button className="bg-white/20 hover:bg-white/30 transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
             <ThumbsUp className="w-5 h-5" />
             <span>Kudos</span>
           </button>
-          <button className="bg-white/20 hover:bg-white/30 transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
-            <MessageCircle className="w-5 h-5" />
-            <span>Chat</span>
-          </button>
-          <button className="bg-purple-600 hover:bg-purple-700 transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
-            <UserPlus className="w-5 h-5" />
-            <span>Add friend</span>
-          </button>
+          {!isOwnProfile && (
+            <>
+              <button className="bg-white/20 hover:bg-white/30 transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
+                <MessageCircle className="w-5 h-5" />
+                <span>Chat</span>
+              </button>
+              <button className="bg-purple-600 hover:bg-purple-700 transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
+                <UserPlus className="w-5 h-5" />
+                <span>Add friend</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -129,7 +144,7 @@ const ProfileCard = () => {
               <p className="text-xs">{user.University || "Field of Study"}</p>
               <p className="text-lg">
                 {user.FieldOfStudy}
-                {", " + user.GraduationYear || ""}
+                {user.GraduationYear ? `, ${user.GraduationYear}` : ""}
               </p>
             </div>
           </div>
@@ -170,6 +185,32 @@ const ProfileCard = () => {
       </div>
     </div>
   );
+};
+
+ProfileCard.propTypes = {
+  userId: PropTypes.string,
+  user: PropTypes.shape({
+    FirstName: PropTypes.string,
+    LastName: PropTypes.string,
+    ProfilePicture: PropTypes.string,
+    Bio: PropTypes.string,
+    FieldOfStudy: PropTypes.string,
+    University: PropTypes.string,
+    GraduationYear: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    Country: PropTypes.string,
+    OtherDetails: PropTypes.shape({
+      skills: PropTypes.string,
+      interests: PropTypes.string,
+      additionalNotes: PropTypes.string,
+    }),
+  }),
+  isOwnProfile: PropTypes.bool,
+};
+
+ProfileCard.defaultProps = {
+  userId: null,
+  user: null,
+  isOwnProfile: true,
 };
 
 export default ProfileCard;
