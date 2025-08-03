@@ -589,6 +589,7 @@ const SpaceType = () => {
   const [particles, setParticles] = useState([]);
   const shipRef = useRef(null);
   const [currentTarget, setCurrentTarget] = useState(null);
+  const [hiScore,setHiScore] = useState(0);
 
   // Sound effects
   const [playLaser] = useSound("./laser.mp3", { volume: 0.5 });
@@ -672,6 +673,29 @@ const SpaceType = () => {
       setEnemies((prev) => [...prev, newEnemy]);
     }
   }, [enemies.length, isPaused, gameOver, level]);
+
+  // get the previous highscore
+  useEffect(() => {
+    const prevScore = localStorage.getItem("spaceTypeHiScore");
+    if(prevScore){
+      setHiScore(parseInt(prevScore));
+    }
+  },[])
+
+  // when game ends highscore is saved.
+  useEffect(() => {
+  if (gameOver) {
+    playGameOver();
+    setHiScore((prevHighScore) => {
+      if (score > prevHighScore) {
+        localStorage.setItem("spaceTypeHiScore", score);
+        return score;
+      }
+      return prevHighScore;
+    });
+  }
+}, [gameOver]);
+
 
   useEffect(() => {
     const spawnInterval = setInterval(spawnEnemy, 2000 - level * 100);
@@ -791,6 +815,7 @@ const SpaceType = () => {
       {/* UI Header */}
       <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center text-white">
         <div className="flex gap-4">
+          <div>HiScore: {hiScore}</div>
           <div>Score: {score}</div>
           <div>Level: {level}</div>
           <div>WPM: {wpm}</div>
