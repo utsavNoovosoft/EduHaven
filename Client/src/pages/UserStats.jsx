@@ -69,7 +69,7 @@ const UserStats = () => {
             <div className="flex items-center justify-center h-screen">
                 <div className="bg-gradient-to-br from-purple-800 to-indigo-900 rounded-3xl shadow-2xl p-6 w-full max-w-sm animate-pulse">
                     <div className="flex flex-col items-center">
-                        <div className="w-32 h-32 bg-gray-700 rounded-full mb-4">yggggu</div>
+                        <div className="w-32 h-32 bg-gray-700 rounded-full mb-4"></div>
                         <div className="h-6 bg-gray-700 rounded w-3/4 mb-4"></div>
                         <div className="h-4 bg-gray-700 rounded w-1/2"></div>
                     </div>
@@ -85,14 +85,18 @@ const UserStats = () => {
     return (
         <>
         <div className="m-6 ">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">Anaylitics</h1>
-                <div className="flex items-center gap-4">
-                    <span className="text-gray-400">Great! keep it up</span>
-                </div>
+            <div className="flex flex-col items-center justify-center my-6 group">
+                <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-400 drop-shadow-lg cursor-pointer">
+                    {user.FirstName} {user.LastName}
+                </h1>
+
+                <div
+                    className="mt-3 mb-3 h-1 w-48 rounded-full bg-gradient-to-r from-purple-500 via-indigo-400 to-blue-500 transition-all duration-300 ease-in-out group-hover:w-2/4 shadow-md"
+                />
             </div>
+
             {/* content */}
-            <div className="flex flex-col lg:flex-row gap-6 w-full content-center">
+            <div className="flex mt-6 flex-col lg:flex-row gap-6 w-full content-center">
                 <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 lg:w-[20%] min-w-72 h-fit relative overflow-hidden">
                     {/* nav */}
                     <div className=" flex justify-end gap-6 px-4">
@@ -205,7 +209,7 @@ const UserStats = () => {
                 </div>
                 <div className="flex-1">
                     <div className="mb-6">
-                        <StudyStats />
+                        <StudyStats/>
                     </div>
                     <div className="flex flex-col xl:flex-col 2xl:flex-row">
                         <div className="flex-1 mr-6">
