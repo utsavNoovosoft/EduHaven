@@ -22,7 +22,7 @@ export default function YourRooms({ myRooms }) {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(res);
-      setSessions((s) => [...s, res]);
+      setSessions((s) => [...s, res.data]); 
     } catch (err) {
       console.error("Create room failed:", err);
     }
