@@ -243,56 +243,32 @@ export default function BasicInfo() {
             <label className="block text-md font-medium text-[var(--txt-dim)]">
               First Name *
             </label>
-            <div className="relative">
-              <input
-                type="text"
-                name="FirstName"
-                value={profileData.FirstName}
-                onChange={handleInputChange}
-                placeholder="Enter your first name"
-                className="w-full px-4 py-3 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all pr-10"
-                required
-                disabled={isProfileUpdateLoading}
-              />
-              {profileData.FirstName && (
-                <button
-                  type="button"
-                  onClick={() => handleClearField("FirstName")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--txt-dim)] hover:text-red-500 transition-colors"
-                  disabled={isProfileUpdateLoading}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              )}
-            </div>
+            <input
+              type="text"
+              name="FirstName"
+              value={profileData.FirstName}
+              onChange={handleInputChange}
+              placeholder="Enter your first name"
+              className="w-full px-4 py-3 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all"
+              required
+              disabled={isProfileUpdateLoading}
+            />
           </div>
 
           <div className="space-y-2">
             <label className="block text-md font-medium text-[var(--txt-dim)]">
               Last Name *
             </label>
-            <div className="relative">
-              <input
-                type="text"
-                name="LastName"
-                value={profileData.LastName}
-                onChange={handleInputChange}
-                placeholder="Enter your last name"
-                className="w-full px-4 py-3 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all pr-10"
-                required
-                disabled={isProfileUpdateLoading}
-              />
-              {profileData.LastName && (
-                <button
-                  type="button"
-                  onClick={() => handleClearField("LastName")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--txt-dim)] hover:text-red-500 transition-colors"
-                  disabled={isProfileUpdateLoading}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              )}
-            </div>
+            <input
+              type="text"
+              name="LastName"
+              value={profileData.LastName}
+              onChange={handleInputChange}
+              placeholder="Enter your last name"
+              className="w-full px-4 py-3 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all"
+              required
+              disabled={isProfileUpdateLoading}
+            />
           </div>
         </div>
 
