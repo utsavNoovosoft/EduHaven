@@ -23,7 +23,6 @@ export default function YourRooms({ myRooms }) {
       const res = await axios.post(`${backendUrl}/session-room`, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(res);
       setSessions((s) => [...s, res.data]); 
     } catch (err) {
       console.error("Create room failed:", err);
