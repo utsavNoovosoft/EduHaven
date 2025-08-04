@@ -43,6 +43,7 @@ function App() {
             <Route path="/auth/google/callback" element={<GoogleRedirect />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="*" element={<PageNotFound />} />
+            <Route path="/stats/:userId" element={<Stats />} />
           </Routes>
         </RouterSelector>
         <ToastContainer
