@@ -9,6 +9,7 @@ import {
   FileText,
   SmilePlus,
 } from "lucide-react";
+import AdCard from "@/components/AdCard";
 
 const GITHUB_API_URL = "https://api.github.com/repos/amandollar/EduHaven";
 
@@ -204,6 +205,9 @@ export default function Info() {
               <li className="p-2">Watchers: {repoData.watchers_count}</li>
               <li className="p-2">Size: {repoData.size} KB</li>
             </ul>
+          </div>
+          <div className="w-72 mt-8 space-y-4">
+            <AdCard />
           </div>
         </div>
       </div>

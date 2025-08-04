@@ -593,6 +593,7 @@ const SpaceType = () => {
   const shipRef = useRef(null);
   const gameContainerRef = useRef(null);
 
+
   // Load high score from localStorage on component mount
   useEffect(() => {
     const savedHighScore = localStorage.getItem('spacetype-highscore');
@@ -712,6 +713,29 @@ const SpaceType = () => {
       setEnemies((prev) => [...prev, newEnemy]);
     }
   }, [enemies.length, isPaused, gameOver, level, gameContainerSize, getWordForLevel]);
+
+  // get the previous highscore
+  useEffect(() => {
+    const prevScore = localStorage.getItem("spaceTypeHiScore");
+    if(prevScore){
+      setHiScore(parseInt(prevScore));
+    }
+  },[])
+
+  // when game ends highscore is saved.
+  useEffect(() => {
+  if (gameOver) {
+    playGameOver();
+    setHiScore((prevHighScore) => {
+      if (score > prevHighScore) {
+        localStorage.setItem("spaceTypeHiScore", score);
+        return score;
+      }
+      return prevHighScore;
+    });
+  }
+}, [gameOver]);
+
 
   useEffect(() => {
     if (gameContainerSize.width === 0) return;

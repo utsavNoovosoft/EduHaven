@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "react-toastify";
 
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -34,10 +35,11 @@ function Login() {
         localStorage.setItem("token", token);
         localStorage.setItem("activationToken", activationToken);
       }
+      toast.success("Login successful! Welcome back.");
       navigate("/");
     } catch (error) {
       console.error(`Login failed:`, error.response?.data || error.message);
-      alert(error.response?.data?.error || "An error occurred");
+      toast.error(error.response?.data?.error || "An error occurred");
     }
   };
   return (

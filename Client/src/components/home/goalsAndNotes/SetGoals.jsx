@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Calendar from "react-calendar";
 import { Plus } from "lucide-react";
@@ -11,6 +11,12 @@ const Setgoals = ({ onGoalCreated }) => {
   const [time, setTime] = useState("21:00");
   const [reminder, setReminder] = useState("On the day (9:00)");
   const [repeat, setRepeat] = useState("Never");
+  const [is24, setIs24] = useState(false);
+
+  useEffect(() => {
+    const format = localStorage.getItem("clock-format");
+    setIs24(format === "24-hour");
+  }, []);
 
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
@@ -25,8 +31,7 @@ const Setgoals = ({ onGoalCreated }) => {
     }
     try {
       const dueDate = deadline ? deadline.toISOString() : new Date().toISOString();
-      
-      // Prepare task data
+
       const taskData = {
         title,
         completed: false,
@@ -43,14 +48,13 @@ const Setgoals = ({ onGoalCreated }) => {
         taskData,
         getAuthHeader()
       );
-      
-      // Reset form
+
       setTitle("");
       setDeadline(null);
       setTime("21:00");
       setRepeat("Never");
       setReminder("On the day (9:00)");
-      
+
       if (onGoalCreated) {
         onGoalCreated(data.data);
       }
@@ -87,12 +91,11 @@ const Setgoals = ({ onGoalCreated }) => {
           <Plus />
         </button>
       </div>
-      {/* Render when there's some text in the input */}
+
       {title.trim() !== "" && (
         <>
           <div className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col">
             <div className="flex-1">
-              {/* Repeat Dropdown */}
               <div className="mb-4 [@container(max-width:420px)]:flex gap-12 items-center">
                 <label className="block font-semibold mb-1">Repeat:</label>
                 <select
@@ -109,30 +112,21 @@ const Setgoals = ({ onGoalCreated }) => {
                   )}
                 </select>
               </div>
-              {/* Time Dropdown */}
+
+              {/* Updated Time Input */}
               <div className="mb-4 [@container(max-width:420px)]:flex gap-16 items-center">
-                <label className="block font-semibold mb-1">Time:</label>
-                <select
-                  className="bg-ter rounded-lg p-2 w-full txt border border-txt-dim"
+                <label className="block font-semibold mb-1">
+                  Time <span className="text-xs text-txt-dim ml-1">({is24 ? "24-hour" : "12-hour"})</span>
+                </label>
+                <input
+                  type="time"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                >
-                  {[
-                    "20:30",
-                    "21:00",
-                    "21:30",
-                    "22:00",
-                    "22:30",
-                    "23:00",
-                    "23:30",
-                  ].map((t) => (
-                    <option key={t} value={t} className="txt bg-sec">
-                      {t}
-                    </option>
-                  ))}
-                </select>
+                  className="bg-ter rounded-lg p-2 w-full txt border border-txt-dim"
+                  step="60"
+                />
               </div>
-              {/* Reminder Dropdown */}
+
               <div className="[@container(max-width:420px)]:flex gap-7 items-center">
                 <label className="block font-semibold mb-1">Reminder:</label>
                 <select
