@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { ChevronDown } from "lucide-react";
 import {
   ComposedChart,
@@ -160,29 +161,70 @@ const computeSummary = (data) => {
 };
 
 // ──────────────────────────────────────────────────────────────
+// Get current user ID from token
+// ──────────────────────────────────────────────────────────────
+
+const getCurrentUserIdFromToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+
+  try {
+    const base64Payload = token.split(".")[1];
+    const payload = JSON.parse(atob(base64Payload));
+    return payload.id;
+  } catch (error) {
+    console.error("Invalid token", error);
+    return null;
+  }
+};
+
+// ──────────────────────────────────────────────────────────────
 // Main Component
 // ──────────────────────────────────────────────────────────────
 
-const StudyStats = () => {
+const StudyStats = ({ userId, isOwnProfile = true }) => {
   const [view, setView] = useState("daily");
   const [isOpen, setIsOpen] = useState(false);
   const [stats, setStats] = useState([]);
+  const [streakData, setStreakData] = useState({
+    rank: null,
+    currentStreak: 0,
+    maxStreak: 0,
+  });
+  const [targetUserId, setTargetUserId] = useState(null);
   const backendUrl = import.meta.env.VITE_API_URL;
+
+  // Determine target user ID based on context
+  useEffect(() => {
+    if (isOwnProfile) {
+      const currentId = getCurrentUserIdFromToken();
+      setTargetUserId(currentId);
+    } else {
+      setTargetUserId(userId);
+    }
+  }, [userId, isOwnProfile]);
 
   useEffect(() => {
     const handleGetStats = async () => {
+      if (!targetUserId) return;
+
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch(
-          `${backendUrl}/timerstats?period=${view}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        
+        // Build API endpoint based on context
+        let endpoint = `${backendUrl}/timerstats?period=${view}`;
+        if (!isOwnProfile) {
+          endpoint += `&userId=${targetUserId}`;
+        }
+
+        const response = await fetch(endpoint, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
         const result = await response.json();
         let timeline = [];
 
@@ -251,13 +293,54 @@ const StudyStats = () => {
             }))
           );
         }
+
+        // Update streak data if available in response
+        if (result.streakData) {
+          setStreakData(result.streakData);
+        }
       } catch (error) {
         console.error("Error fetching stats:", error);
       }
     };
 
     handleGetStats();
-  }, [view]);
+  }, [view, targetUserId, isOwnProfile]);
+
+  // Fetch streak data separately if not included in main stats
+  useEffect(() => {
+    const fetchStreakData = async () => {
+      if (!targetUserId) return;
+
+      try {
+        const token = localStorage.getItem("token");
+        let endpoint = `${backendUrl}/user/streaks`;
+        if (!isOwnProfile) {
+          endpoint += `?userId=${targetUserId}`;
+        }
+
+        const response = await fetch(endpoint, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          setStreakData({
+            rank: result.rank || null,
+            currentStreak: result.currentStreak || 0,
+            maxStreak: result.maxStreak || 0,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching streak data:", error);
+      }
+    };
+
+    fetchStreakData();
+  }, [targetUserId, isOwnProfile]);
 
   const summary = computeSummary(stats);
 
@@ -359,18 +442,32 @@ const StudyStats = () => {
       </div>
       <div className="text-sm text-gray-300 p-6 mt-auto text-left w-fit">
         Rank:
-        <div className="text-4xl mb-8 font-bold text-blue-500">Null</div>
+        <div className="text-4xl mb-8 font-bold text-blue-500">
+          {streakData.rank || "Null"}
+        </div>
         Current Streak:
         <div className="text-4xl mb-8 font-bold text-yellow-500">
-          32 <span className="text-lg font-normal">days</span>
+          {streakData.currentStreak}{" "}
+          <span className="text-lg font-normal">days</span>
         </div>
         Max Streak:
         <div className="text-4xl mb-8 font-bold text-green-500">
-          50 <span className="text-lg font-normal">days</span>
+          {streakData.maxStreak}{" "}
+          <span className="text-lg font-normal">days</span>
         </div>
       </div>
     </div>
   );
+};
+
+StudyStats.propTypes = {
+  userId: PropTypes.string,
+  isOwnProfile: PropTypes.bool,
+};
+
+StudyStats.defaultProps = {
+  userId: null,
+  isOwnProfile: true,
 };
 
 export default StudyStats;

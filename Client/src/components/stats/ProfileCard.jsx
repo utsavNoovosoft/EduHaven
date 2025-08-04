@@ -76,13 +76,63 @@ const ProfileCard = ({ userId, user: propUser, isOwnProfile }) => {
           </Link>
         )}
         <Share2 className="h-6 w-6 text-gray-400 hover:text-white" />
-    <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 w-full h-fit relative overflow-hidden">
-      {/* nav */}
-      <div className=" flex justify-end gap-6 px-4">
-        <Link to={"/settings/"}>
-          <Edit3 className="h-6 w-6 text-gray-400 hover:text-white" />
-        </Link>
-        <Share2 className=" h-6 w-6 text-gray-400 hover:text-white" />
+      </div>
+
+      <div className="mx-4">
+        {/* Profile  */}
+        <div className="relative flex items-center mb-4 gap-4">
+          <div className="w-28 h-28 rounded-full shadow-lg overflow-hidden">
+            {user.ProfilePicture ? (
+              <img
+                src={user.ProfilePicture}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-indigo-600/50 flex items-center justify-center">
+                <User className="w-16 h-16 text-white/70" />
+              </div>
+            )}
+          </div>
+          <div className="text-center flex-1">
+            <span className="block text-2xl font-bold">342</span>
+            <span className="text-sm text-white/70">Kudos</span>
+          </div>
+          <div className="text-center flex-1">
+            <span className="block text-2xl font-bold">56</span>
+            <span className="text-sm text-white/70">Friends</span>
+          </div>
+        </div>
+
+        {/* User Info */}
+        <div className="text-white">
+          <h2 className="text-xl font-bold">
+            {user.FirstName} {user.LastName}
+          </h2>
+          {user?.Bio && (
+            <p className="text-white/80 mb-4 max-w-xs">{user.Bio}</p>
+          )}
+        </div>
+
+        {/* Action Buttons - different for own profile vs others */}
+        <div className="flex flex-wrap justify-center gap-4 my-4">
+          <button className="bg-white/20 hover:bg-white/30 transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
+            <ThumbsUp className="w-5 h-5" />
+            <span>Kudos</span>
+          </button>
+          {!isOwnProfile && (
+            <>
+              <button className="bg-white/20 hover:bg-white/30 transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
+                <MessageCircle className="w-5 h-5" />
+                <span>Chat</span>
+              </button>
+              <button className="bg-purple-600 hover:bg-purple-700 transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
+                <UserPlus className="w-5 h-5" />
+                <span>Add friend</span>
+              </button>
+            </>
+          )}
+        </div>  
       </div>
 
       <div className="mx-4">
@@ -147,13 +197,6 @@ const ProfileCard = ({ userId, user: propUser, isOwnProfile }) => {
         {user.FieldOfStudy && (
           <div className="flex items-center gap-4 text-white/80">
             <Landmark className="h-7 w-7" />
-            <div>
-              <p className="text-xs">{user.University || "Field of Study"}</p>
-              <p className="text-lg">
-                {user.FieldOfStudy}
-                {user.GraduationYear ? `, ${user.GraduationYear}` : ""}
-              </p>
-            </div>
           </div>
         )}
 
