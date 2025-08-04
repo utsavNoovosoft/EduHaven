@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
@@ -17,13 +16,12 @@ const getAuthHeader = () => {
   return { headers: { Authorization: `Bearer ${token}` } };
 };
 
-const Leaderboard = ({ userId, isOwnProfile = true }) => {
+const Leaderboard = () => {
   const [view, setView] = useState("weekly");
   const [isOpen, setIsOpen] = useState(false);
   const [friendsOnly, setFriendsOnly] = useState(false);
   const [leaderboard, setLeaderboard] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [targetUserId, setTargetUserId] = useState(null);
 
   // Theme state
   const [theme, setTheme] = useState({
@@ -61,42 +59,25 @@ const Leaderboard = ({ userId, isOwnProfile = true }) => {
   };
 
   useEffect(() => {
-    const currentId = getCurrentUserIdFromToken();
-    setCurrentUserId(currentId);
-    
-    // Set target user ID based on context
-    if (isOwnProfile) {
-      setTargetUserId(currentId);
-    } else {
-      setTargetUserId(userId);
-    }
-  }, [userId, isOwnProfile]);
+    const id = getCurrentUserIdFromToken();
+    setCurrentUserId(id);
+  }, []);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        // Different API endpoints based on context
-        let endpoint = `${backendUrl}/leaderboard?period=${view}`;
-        
-        if (isOwnProfile) {
-          // For own profile, show full leaderboard with friends filter option
-          endpoint += `&friendsOnly=${friendsOnly}`;
-        } else {
-          // For other user's profile, show leaderboard focused around that user
-          endpoint += `&focusUserId=${targetUserId}`;
-        }
-
-        const res = await axios.get(endpoint, getAuthHeader());
+        const res = await axios.get(
+          `${backendUrl}/leaderboard?period=${view}&friendsOnly=${friendsOnly}`,
+          getAuthHeader()
+        );
         setLeaderboard(res.data);
       } catch (error) {
         console.error("Failed to fetch leaderboard:", error);
       }
     };
 
-    if (targetUserId) {
-      fetchLeaderboard();
-    }
-  }, [friendsOnly, view, targetUserId, isOwnProfile]);
+    fetchLeaderboard();
+  }, [friendsOnly, view]);
 
   const handleDropdownClick = (viewType) => {
     setView(viewType);
@@ -107,8 +88,6 @@ const Leaderboard = ({ userId, isOwnProfile = true }) => {
     setFriendsOnly((prev) => !prev);
   };
 
-  // Find the user we're focusing on (current user for own profile, target user for others)
-  const focusUser = leaderboard.find((user) => user.userId === targetUserId);
   const currentUser = leaderboard.find((user) => user.userId === currentUserId);
 
   const getBadge = (rank) => {
@@ -166,31 +145,29 @@ const Leaderboard = ({ userId, isOwnProfile = true }) => {
         </DropdownMenu>
       </nav>
 
-      {/* Friends Only Toggle - only show for own profile */}
-      {isOwnProfile && (
-        <div className="mt-4 flex pl-6 items-center gap-2">
-          <label className="text-sm" style={{ color: theme.text }}>
-            Friends Only
-          </label>
-          <Button
-            variant="outline"
-            onClick={handleFriendsOnlyToggle}
-            className="relative w-14 h-8 rounded-full px-0 border-2 transition-all duration-200"
+      {/* Friends Only Toggle */}
+      <div className="mt-4 flex pl-6 items-center gap-2">
+        <label className="text-sm" style={{ color: theme.text }}>
+          Friends Only
+        </label>
+        <Button
+          variant="outline"
+          onClick={handleFriendsOnlyToggle}
+          className="relative w-14 h-8 rounded-full px-0 border-2 transition-all duration-200"
+          style={{
+            backgroundColor: friendsOnly ? theme.accent : theme.tertiary,
+            borderColor: friendsOnly ? theme.accent : theme.tertiary,
+          }}
+        >
+          <span
+            className="absolute top-0.5 left-0.5 w-6 h-6 rounded-full transition-transform duration-200"
             style={{
-              backgroundColor: friendsOnly ? theme.accent : theme.tertiary,
-              borderColor: friendsOnly ? theme.accent : theme.tertiary,
+              backgroundColor: theme.primary,
+              transform: friendsOnly ? "translateX(24px)" : "translateX(0px)",
             }}
-          >
-            <span
-              className="absolute top-0.5 left-0.5 w-6 h-6 rounded-full transition-transform duration-200"
-              style={{
-                backgroundColor: theme.primary,
-                transform: friendsOnly ? "translateX(24px)" : "translateX(0px)",
-              }}
-            ></span>
-          </Button>
-        </div>
-      )}
+          ></span>
+        </Button>
+      </div>
 
       {/* Leaderboard */}
       <div className="mt-4">
@@ -200,19 +177,17 @@ const Leaderboard = ({ userId, isOwnProfile = true }) => {
         >
           {leaderboard.slice(0, 10).map((user, index) => {
             const isCurrentUser = user.userId === currentUserId;
-            const isFocusUser = user.userId === targetUserId;
-            const shouldHighlight = isOwnProfile ? isCurrentUser : isFocusUser;
 
             return (
               <li
                 key={user.userId}
                 className="flex justify-between items-center py-3 px-5 transition-all duration-200"
                 style={{
-                  backgroundColor: shouldHighlight
+                  backgroundColor: isCurrentUser
                     ? theme.accent
                     : theme.secondary,
-                  color: shouldHighlight ? theme.tertiary : theme.text,
-                  fontWeight: shouldHighlight ? "600" : "normal",
+                  color: isCurrentUser ? theme.tertiary : theme.text,
+                  fontWeight: isCurrentUser ? "600" : "normal",
                 }}
               >
                 <span className="flex items-center gap-2">
@@ -226,18 +201,9 @@ const Leaderboard = ({ userId, isOwnProfile = true }) => {
         </ul>
       </div>
 
-      {/* User Position Display */}
-      {focusUser && (
+      {/* Current User Position */}
+      {currentUserId && currentUser && (
         <div className="mt-4 text-lg font-semibold">
-          {isOwnProfile ? "Your" : `${focusUser.username}'s`} Position:{" "}
-          {leaderboard.findIndex((u) => u.userId === targetUserId) + 1} -{" "}
-          ({focusUser.totalDuration} minutes)
-        </div>
-      )}
-
-      {/* Additional context for viewing other user's profile */}
-      {!isOwnProfile && currentUser && (
-        <div className="mt-2 text-sm" style={{ color: theme.text + "80" }}>
           Your Position:{" "}
           {leaderboard.findIndex((u) => u.userId === currentUserId) + 1} -{" "}
           ({currentUser.totalDuration} minutes)
@@ -245,16 +211,6 @@ const Leaderboard = ({ userId, isOwnProfile = true }) => {
       )}
     </div>
   );
-};
-
-Leaderboard.propTypes = {
-  userId: PropTypes.string,
-  isOwnProfile: PropTypes.bool,
-};
-
-Leaderboard.defaultProps = {
-  userId: null,
-  isOwnProfile: true,
 };
 
 export default Leaderboard;
