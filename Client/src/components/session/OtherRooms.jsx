@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import RoomCard from "./RoomCard";
+import RoomCard, { RoomCardSkeleton } from "./RoomCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const CATEGORIES = [
@@ -25,10 +25,17 @@ export default function OtherRoom({ otherRooms }) {
   const [sessions, setSessions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isLoading, setIsLoading] = useState(true);
   const scrollRef = useRef(null);
 
   useEffect(() => {
-    setSessions(otherRooms.map((r) => ({ ...r, joins: r.joins ?? 0 })));
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setSessions(otherRooms.map((r) => ({ ...r, joins: r.joins ?? 0 })));
+      setIsLoading(false);
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [otherRooms]);
 
   const filteredSessions = sessions.filter((room) => {
@@ -60,7 +67,7 @@ export default function OtherRoom({ otherRooms }) {
         <input
           type="text"
           placeholder="Search rooms..."
-          className="w-[270px] px-4 py-2 mb-3 border rounded-full bg-transparent text-white placeholder-gray-400 border-gray-600 "
+          className="w-[270px] px-4 py-2 mb-3 border rounded-full bg-transparent text-white placeholder-gray-400 border-gray-600"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -86,11 +93,10 @@ export default function OtherRoom({ otherRooms }) {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`whitespace-nowrap px-4 py-1.5 rounded-full border text-sm transition ${
-                selectedCategory === cat
+              className={`whitespace-nowrap px-4 py-1.5 rounded-full border text-sm transition ${selectedCategory === cat
                   ? "btn text-white border-[var(--btn)]"
                   : "bg-transparent txt border-gray-500/20 hover:bg-[var(--btn-hover)] hover:text-white"
-              }`}
+                }`}
             >
               {cat}
             </button>
@@ -103,20 +109,29 @@ export default function OtherRoom({ otherRooms }) {
             onClick={() => scroll("right")}
             className="ml-auto bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white px-3 py-1 rounded-full"
           >
-            <ChevronRight size={29}/>
+            <ChevronRight size={29} />
           </button>
         </div>
       </div>
 
-      {/* Filtered sessions */}
-      {filteredSessions.length === 0 ? (
-        <div className="mx-auto txt-dim w-fit mt-10 text-lg">No results</div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSessions.map((room) => (
-            <RoomCard key={room._id} room={room} showCategory={false} />
+      {!isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <RoomCardSkeleton key={index} showCategory={true} />
           ))}
         </div>
+      ) : (
+        <>
+          {filteredSessions.length === 0 ? (
+            <div className="mx-auto txt-dim w-fit mt-10 text-lg">No results</div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {filteredSessions.map((room) => (
+                <RoomCard key={room._id} room={room} showCategory={true} />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );
