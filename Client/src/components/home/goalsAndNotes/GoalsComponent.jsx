@@ -70,6 +70,10 @@ const GoalsComponent = () => {
 
   // Organize todos into sections
   const organizeTodos = () => {
+    if (!todos || !Array.isArray(todos)) {
+      return { dailyHabits: [], otherGoals: [], closedGoals: [] };
+    }
+
     const dailyHabits = todos.filter(
       (todo) => todo.repeatEnabled && todo.status === "open"
     );

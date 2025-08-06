@@ -424,3 +424,10 @@ body {
     background: rgba(155, 154, 154, 0.6);
   }
 }
+
+/* Calendar Event title background */
+@layer components {
+  .popup-overlay {
+    @apply bg-black/40 backdrop-blur-sm;
+  }
+}

@@ -122,7 +122,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-overlay"
+        className="fixed inset-0 z-50 flex items-center justify-center popup-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
