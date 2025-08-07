@@ -5,7 +5,7 @@ const UpdateButton = ({ label, isLoading, isDisabled }) => {
       disabled={isLoading || isDisabled}
       className={`px-8 py-3 rounded-lg font-semibold transition-all duration-200 shadow-lg ${
         isLoading || isDisabled
-          ? "bg-[var(--txt-disabled)] cursor-not-allowed"
+          ? "bg-[var(--btn)] opacity-50 cursor-not-allowed"
           : "bg-[var(--btn)] hover:bg-[var(--btn-hover)] hover:shadow-xl transform hover:-translate-y-0.5"
       }`}
     >
