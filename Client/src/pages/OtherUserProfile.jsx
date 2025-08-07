@@ -56,7 +56,7 @@ const OtherUserProfile = () => {
   return (
     <div className="m-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{userStats.name}'s Profile</h1>
+        <h1 className="text-2xl font-bold">{userStats.name}</h1>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6 w-full content-center">
