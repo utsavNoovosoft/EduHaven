@@ -5,6 +5,7 @@ import Home from "./pages/Home.jsx";
 import Stats from "./pages/Stats";
 import GameRoom from "./routes/GameRoutes.jsx";
 import Signout from "./Auth/Signout";
+import UserProfile from "./pages/OtherUserProfile";
 // import SignUp from "./Auth/Authenticate.jsx";
 import PageNotFound from "../src/pages/PageNotFound";
 import ProjectInfo from "../src/pages/ProjectInfo";
@@ -33,6 +34,7 @@ function App() {
               <Route path="games/*" element={<GameRoom />} />
               <Route path="project-details" element={<ProjectInfo />} />
               <Route path="settings/" element={<Settings />} />
+              <Route path="user/:userId" element={<UserProfile />} />
               <Route path="*" element={<PageNotFound />} />
             </Route>
 

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { User, UserPlus, MoreVertical } from "lucide-react";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 function SuggestedFriends({ onViewSentRequests }) {
+  const navigate = useNavigate();
   const [suggestedFriends, setSuggestedFriends] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -28,6 +30,10 @@ function SuggestedFriends({ onViewSentRequests }) {
     } catch (error) {
       console.error("Error adding friend:", error.response.data);
     }
+  };
+
+  const handleViewProfile = (userId) => {
+    navigate(`/user/${userId}`);
   };
 
   useEffect(() => {
@@ -94,21 +100,28 @@ function SuggestedFriends({ onViewSentRequests }) {
                   <p className="text-sm txt-dim line-clamp-1">{user.Bio}</p>
                 </div>
               </div>
-              <div className=" absolute top-[8%] right-0 bg-sec p-1.5 px-2 transition-all opacity-0 group-hover:opacity-100">
+              <div className="absolute top-[8%] right-0 bg-sec p-1.5 px-2 transition-all opacity-0 group-hover:opacity-100 flex gap-2">
+                <button
+                  onClick={() => handleViewProfile(user._id)}
+                  className="bg-ter text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
+                >
+                  <User className="w-4 h-4" />
+                  Profile
+                </button>
                 {user.requestSent ? (
                   <button
                     disabled
-                    className="w-full border border-gray-500/50 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition bg-sec txt"
+                    className="border border-gray-500/50 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition bg-sec txt"
                   >
                     Request Sent
                   </button>
                 ) : (
                   <button
                     onClick={() => sendRequest(user._id)}
-                    className="w-full bg-ter text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
+                    className="bg-ter text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
                   >
-                    <UserPlus className="w-5 h-5" />
-                    Add Friend
+                    <UserPlus className="w-4 h-4" />
+                    Add
                   </button>
                 )}
               </div>

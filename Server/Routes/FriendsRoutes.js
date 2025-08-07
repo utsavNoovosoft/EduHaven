@@ -8,6 +8,7 @@ import {
   rejectRequest,
   viewSentRequests,
   removeFriend,
+  getUserStats,
 } from "../Controller/FriendsController.js";
 
 import authMiddleware from "../Middlewares/authMiddleware.js";
@@ -22,5 +23,7 @@ router.get("/requests", authMiddleware, incomingRequests);
 router.post("/accept/:friendId", authMiddleware, acceptRequest);
 router.post("/reject/:friendId", authMiddleware, rejectRequest);
 router.delete("/:friendId", authMiddleware, removeFriend);
+// Add to your existing routes file or create a new UsersController.js
+router.get("/:userId/stats", authMiddleware, getUserStats);  // Add this line
 
 export default router;
