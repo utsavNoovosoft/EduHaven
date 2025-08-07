@@ -5,7 +5,7 @@ const ConfirmLogoutModal = ({ onConfirm, onCancel }) => {
     <AnimatePresence>
       <motion.div
         key="backdrop"
-        className="fixed inset-0 z-50 backdrop-blur-sm bg-black/40 flex items-center justify-center transition-colors"
+        className="fixed inset-0 z-50 popup-overlay flex items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

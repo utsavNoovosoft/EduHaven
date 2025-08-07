@@ -29,7 +29,7 @@ function CreateRoomModal({ isOpen, onClose, onCreate }) {
     { value: "Entrepreneurship/startup", label: "Entrepreneurship/startup" },
     { value: "marketing", label: "Marketing" },
     { value: "Side-Hustles", label: "Side-Hustles" },
-    { value: "Freelancing ", label: "Freelancing " },
+    { value: "Freelancing", label: "Freelancing" }, //Removed extra space which causing error
     { value: "Hobbies", label: "Hobbies" },
     { value: "fitness", label: "fitness" },
     { value: "Art/design", label: "Art/Design" },
@@ -40,7 +40,7 @@ function CreateRoomModal({ isOpen, onClose, onCreate }) {
       {isOpen && (
         <motion.div
           key="backdrop"
-          className="fixed inset-0 flex items-center justify-center backdrop-blur-sm z-50"
+          className="fixed inset-0 flex items-center justify-center popup-overlay z-50"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
