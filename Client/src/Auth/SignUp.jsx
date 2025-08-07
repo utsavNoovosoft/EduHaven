@@ -4,8 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "react-toastify";
-const backendUrl = import.meta.env.VITE_API_URL; 
-
+const backendUrl = import.meta.env.VITE_API_URL;
 
 function SignUp() {
   const navigate = useNavigate();
@@ -21,6 +20,7 @@ function SignUp() {
     formState: { errors, isSubmitting },
     reset,
   } = useForm();
+
   const onSubmit = async (data) => {
     console.log("Form submitted:", data);
     try {
@@ -28,23 +28,26 @@ function SignUp() {
       if (!data.FirstName || !data.LastName) {
         throw new Error("First Name and Last Name are required");
       }
-      navigate("/verify");
 
       const response = await axios.post(url, data);
-      console.log(response.data);
+
       reset();
-      var token = undefined;
-      if (data.token) {
-        token = response.data.token;
-      }
-      const activationToken = response.data.activationToken;
+
+      const { token, activationToken } = response.data;
 
       if (token) {
         localStorage.setItem("token", token);
-        localStorage.setItem("activationToken", activationToken);
       }
-      toast.success("Account created successfully! Please login to continue.");
-      navigate("/authenticate");
+
+      if (activationToken) {
+        localStorage.setItem("activationToken", activationToken);
+        navigate("/verify"); 
+      } else {
+        toast.success(
+          "Account created successfully! Please login to continue."
+        );
+        navigate("/authenticate");
+      }
     } catch (error) {
       console.error(`Signup failed:`, error.response?.data || error.message);
       toast.error(error.response?.data?.error || "An error occurred");
@@ -58,7 +61,10 @@ function SignUp() {
         </h2>
       </div>
 
-      <button onClick={handleGoogleLogin} className="flex items-center justify-center gap-2 border border-gray-400 rounded-xl text-black dark:text-white font-semibold p-2 text-lg w-full">
+      <button
+        onClick={handleGoogleLogin}
+        className="flex items-center justify-center gap-2 border border-gray-400 rounded-xl text-black dark:text-white font-semibold p-2 text-lg w-full"
+      >
         <img src="/GoogleIcon.svg" alt="Google sign-in" className="size-6" />
 
         <p>Continue with google</p>
