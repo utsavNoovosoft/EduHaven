@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { motion } from "framer-motion";
 import { Clock12, PlayCircle, RotateCcw } from "lucide-react";
 import AnimatedDigits from "./AnimatedDigits";
 
@@ -280,9 +281,11 @@ function StudyTimer() {
       </div>
 
       <div className="flex gap-4 justify-center mt-4">
-        <button
+        <motion.button
           onClick={handleStartPause}
-          className={`relative px-6 py-2 rounded-lg flex items-center gap-2 transition-colors duration-300 ease-in-out hover:scale-105 active:scale-95 ${
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          className={`relative px-6 py-2 rounded-lg flex items-center gap-2 transition-colors duration-300 ease-in-out ${
             isRunning
               ? "bg-black/20 hover:bg-black/30"
               : "bg-purple-600 hover:bg-purple-700"
@@ -304,16 +307,20 @@ function StudyTimer() {
             <Clock12 className="w-5 h-5 animate-spin" />
             <span>Pause</span>
           </span>
-        </button>
-
-        <button
+        </motion.button>
+        <motion.button
           onClick={handleReset}
-          className="hover:bg-red-700 p-2 rounded-lg flex items-center gap-2 hover:scale-105 active:scale-95 transition-all duration-200"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          className="hover:bg-red-700 p-2 rounded-lg flex items-center gap-2"
         >
           <RotateCcw className="w-5 h-5" />
-        </button>
+        </motion.button>
       </div>
-    </div>
+
+
+      </div>
+    
   );
 }
 
