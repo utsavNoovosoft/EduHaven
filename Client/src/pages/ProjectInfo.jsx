@@ -13,13 +13,13 @@ import AdCard from "@/components/AdCard";
 
 const GITHUB_API_URL = "https://api.github.com/repos/amandollar/EduHaven";
 
-// Skeleton components
+// Updated Skeleton components
 const TextSkeleton = ({ width = "full", height = "4" }) => (
-  <div className={`bg-gray-200 dark:bg-gray-700 rounded h-${height} w-${width} animate-pulse`}></div>
+  <div className={`bg-sec rounded h-${height} w-${width} animate-pulse`}></div>
 );
 
 const AvatarSkeleton = () => (
-  <div className="bg-gray-200 dark:bg-gray-700 rounded-full w-15 h-15 sm:w-24 sm:h-24 animate-pulse"></div>
+  <div className="bg-sec rounded-full w-15 h-15 sm:w-24 sm:h-24 animate-pulse"></div>
 );
 
 const ContributorSkeleton = () => (
