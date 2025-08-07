@@ -3,6 +3,7 @@ import { parseISO } from "date-fns";
 import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import EventPopup from "./eventPopup";
+import AllEventsPopup from "./AllEventsPopup";
 import { motion } from "framer-motion";
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -22,7 +23,7 @@ function Calendar() {
   ).getDay();
   const daysArray = [...Array(daysInMonth).keys()].map((day) => day + 1);
   const [selectedDay, setSelectedDay] = useState(null);
-  // (Assuming selectedEvent is handled in EventPopup or elsewhere)
+  const [showAllEvents, setShowAllEvents] = useState(false);
   const [time, setTime] = useState(new Date());
   const [, setSelectedEvent] = useState(null);
 
@@ -184,9 +185,18 @@ function Calendar() {
 
         {/* Upcoming Events Section with subtle animations */}
         <div className="p-6 rounded-3xl bg-ter flex-1 mt-6">
-          <h3 className="text-lg font-semibold txt mb-4">
-            Upcoming Events:
-          </h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold txt">
+              Upcoming Events:
+            </h3>
+            <button
+              onClick={() => setShowAllEvents(true)}
+              className="text-sm txt-dim hover:txt transition-colors flex items-center gap-1"
+            >
+              See all
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
           {upcomingEvents.length > 0 ? (
             <motion.ul
               className="txt space-y-6 pl-2"
@@ -245,6 +255,14 @@ function Calendar() {
         <EventPopup
           date={selectedDay}
           onClose={handleClosePopup}
+          refreshEvents={fetchEvents}
+        />
+      )}
+
+      {showAllEvents && (
+        <AllEventsPopup
+          events={events}
+          onClose={() => setShowAllEvents(false)}
           refreshEvents={fetchEvents}
         />
       )}
