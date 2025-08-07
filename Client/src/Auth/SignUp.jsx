@@ -4,7 +4,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "react-toastify";
-const backendUrl = import.meta.env.VITE_API_URL;
+const backendUrl = import.meta.env.VITE_API_URL; 
+
 
 function SignUp() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function SignUp() {
       if (!data.FirstName || !data.LastName) {
         throw new Error("First Name and Last Name are required");
       }
-      // navigate("/verify");
+      navigate("/verify");
 
       const response = await axios.post(url, data);
       console.log(response.data);
@@ -36,11 +37,11 @@ function SignUp() {
       if (data.token) {
         token = response.data.token;
       }
-      // const activationToken = response.data.activationToken;
+      const activationToken = response.data.activationToken;
 
       if (token) {
         localStorage.setItem("token", token);
-        // localStorage.setItem("activationToken", activationToken);
+        localStorage.setItem("activationToken", activationToken);
       }
       toast.success("Account created successfully! Please login to continue.");
       navigate("/authenticate");
