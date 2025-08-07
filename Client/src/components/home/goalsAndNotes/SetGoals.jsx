@@ -95,7 +95,7 @@ const Setgoals = ({ onGoalCreated }) => {
 
       {title.trim() !== "" && (
         <>
-          <div className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col">
+          <motion.div initial={{opacity:0,scaleX:0}} animate={{opacity:1 , scaleX:1 , transition:{duration:0.2, ease:"easeInOut"}}  } className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col">
             <div className="flex-1">
               <div className="mb-4 [@container(max-width:420px)]:flex gap-12 items-center">
                 <label className="block font-semibold mb-1">Repeat:</label>
@@ -159,7 +159,7 @@ const Setgoals = ({ onGoalCreated }) => {
                 prev2Label={null}
               />
             </div>
-          </div>
+          </motion.div>
         </>
       )}
     </div>
