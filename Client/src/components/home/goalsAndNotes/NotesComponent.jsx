@@ -411,20 +411,25 @@ function NotesComponent() {
                 autoFocus={notes[currentPage]?.content === ""}
               ></textarea>
             </div>
-            {contentError && (
-              <span className="text-red-400 text-xs mt-1 absolute bottom-4 left-3">{contentError}</span>
-            )}
 
-            {/* Date and Time */}
-            <div className="mt-2 px-3 txt-dim text-sm">
-              {notes[currentPage]?.createdAt
-                ? new Date(notes[currentPage].createdAt).toLocaleDateString() +
-                  "\u00A0\u00A0\u00A0" +
-                  new Date(notes[currentPage].createdAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
-                : "No date available"}
+            {/* Error and Date Section */}
+            <div className="flex justify-between items-end mt-2 px-3">
+              {/* Content Error */}
+              {contentError && (
+                <span className="text-red-400 text-xs">{contentError}</span>
+              )}
+              
+              {/* Date and Time */}
+              <div className="txt-dim text-sm">
+                {notes[currentPage]?.createdAt
+                  ? new Date(notes[currentPage].createdAt).toLocaleDateString() +
+                    "\u00A0\u00A0\u00A0" +
+                    new Date(notes[currentPage].createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "No date available"}
+              </div>
             </div>
 
             {/* Floating New Note Button */}
