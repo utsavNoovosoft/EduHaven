@@ -4,6 +4,7 @@ import Calendar from "react-calendar";
 import { Plus } from "lucide-react";
 import "react-calendar/dist/Calendar.css";
 import "./ReactCustomCalendar.css";
+import { motion } from "framer-motion";
 
 const Setgoals = ({ onGoalCreated }) => {
   const [title, setTitle] = useState("");
@@ -87,9 +88,9 @@ const Setgoals = ({ onGoalCreated }) => {
           autoFocus
           className="w-full bg-transparent border-b border-txt-dim txt-dim py-2 px-2 focus:outline-none"
         />
-        <button onClick={handleCreate} className="txt ml-2">
+        <motion.button whileTap={{rotate:90}} onClick={handleCreate} className="txt ml-2">
           <Plus />
-        </button>
+        </motion.button>
       </div>
 
       {title.trim() !== "" && (

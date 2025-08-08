@@ -1,150 +1,46 @@
-import { createTransport } from "nodemailer";
+import { Resend } from "resend";
+import dotenv from "dotenv";
+dotenv.config();
+const resend = new Resend(process.env.RESEND_KEY);
 
-const sendMail = async (Email, subject, emailData) => {
-  const transport = createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    auth: {
-      user: process.env.Gmail,
-      pass: process.env.Password,
-    },
-  });
+const sendEmail = async (Email, FirstName, otp) => {
+  try {
+    const response = await resend.emails.send({
+      from: "Eduahaven <noreply@eduhaven.online>",
+      to: Email,
+      subject: "Confirm your Email Address – Eduahaven",
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #ffffff;">
+          <h2 style="color: #4A90E2;">Hello ${FirstName},</h2>
+          <p style="font-size: 16px; color: #333333;">
+            Thanks for signing up for <strong>Eduahaven</strong>! To verify your email address, please use the OTP below:
+          </p>
 
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OTP Verification</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        h1 {
-            color: red;
-        }
-        p {
-            margin-bottom: 20px;
-            color: #666;
-        }
-        .otp {
-            font-size: 36px;
-            color: #7b68ee; /* Purple text */
-            margin-bottom: 30px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>OTP Verification</h1>
-        <p>Hello ${emailData.FirstName} your (One-Time Password) for your account verification is.</p>
-        <p class="otp">${emailData.otp}</p> 
-    </div>
-</body>
-</html>
-`;
+          <div style="text-align: center; margin: 30px 0;">
+            <span style="display: inline-block; background-color: #f5f5f5; padding: 15px 25px; font-size: 24px; font-weight: bold; color: #222; letter-spacing: 3px; border-radius: 6px;">
+              ${otp}
+            </span>
+          </div>
 
-  await transport.sendMail({
-    from: process.env.Gmail,
-    to: Email,
-    subject,
-    html,
-  });
+          <p style="font-size: 14px; color: #777777;">
+            This code will expire in 10 minutes. If you didn’t request this email, you can safely ignore it.
+          </p>
+
+          <p style="font-size: 16px; color: #333333;">Welcome aboard, <br/>The Eduahaven Team</p>
+
+          <hr style="margin: 40px 0; border: none; border-top: 1px solid #eeeeee;" />
+
+          <p style="font-size: 12px; color: #999999; text-align: center;">
+            You received this email because you signed up for Eduahaven. If this wasn't you, please disregard this message.
+          </p>
+        </div>
+      `,
+    });
+
+    console.log("Email sent!", response);
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
 };
 
-export default sendMail;
-
-export const sendForgotMail = async (subject, data) => {
-  const transport = createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    auth: {
-      user: process.env.Gmail,
-      pass: process.env.Password,
-    },
-  });
-
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reset Your Password</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f3f3;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      background-color: #ffffff;
-      padding: 20px;
-      margin: 20px auto;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      max-width: 600px;
-    }
-    h1 {
-      color: #5a2d82;
-    }
-    p {
-      color: #666666;
-    }
-    .button {
-      display: inline-block;
-      padding: 15px 25px;
-      margin: 20px 0;
-      background-color: #5a2d82;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-    .footer {
-      margin-top: 20px;
-      color: #999999;
-      text-align: center;
-    }
-    .footer a {
-      color: #5a2d82;
-      text-decoration: none;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Reset Your Password</h1>
-    <p>Hello,</p>
-    <p>You have requested to reset your password. Please click the button below to reset your password.</p>
-    <a href="${process.env.frontendurl}/reset-password/${data.token}" class="button">Reset Password</a>
-    <p>If you did not request this, please ignore this email.</p>
-    <div class="footer">
-      <p>Thank you,<br>Your Website Team</p>
-      <p><a href="https://yourwebsite.com">yourwebsite.com</a></p>
-    </div>
-  </div>
-</body>
-</html>
-`;
-
-  await transport.sendMail({
-    from: process.env.Gmail,
-    to: data.email,
-    subject,
-    html,
-  });
-};
+export default sendEmail;
