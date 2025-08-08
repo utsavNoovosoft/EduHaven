@@ -10,6 +10,7 @@ import {
   SmilePlus,
 } from "lucide-react";
 import AdCard from "@/components/AdCard";
+import { motion } from "framer-motion";
 
 const GITHUB_API_URL = "https://api.github.com/repos/amandollar/EduHaven";
 
@@ -65,15 +66,17 @@ export default function Info() {
       {/* Navbar - Always visible */}
       <nav className="flex items-center justify-between">
         <h1 className="text-3xl font-bold txt">Our Open-Source Work</h1>
-        <a
+        <motion.a
           href={repoData?.html_url || "#"}
           target="_blank"
           rel="noopener noreferrer"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           className="rounded-xl hover:bg-sec flex gap-3 items-center px-4 py-3 bg-ter"
         >
           <Github className="w-6 h-6" />
           Open on Github
-        </a>
+        </motion.a>
       </nav>
 
       {/* Description - Skeleton when loading */}
