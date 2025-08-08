@@ -31,7 +31,9 @@ const Setgoals = ({ onGoalCreated }) => {
       return;
     }
     try {
-      const dueDate = deadline ? deadline.toISOString() : new Date().toISOString();
+      const dueDate = deadline
+        ? deadline.toISOString()
+        : new Date().toISOString();
 
       const taskData = {
         title,
@@ -78,7 +80,7 @@ const Setgoals = ({ onGoalCreated }) => {
       }`}
       style={{ containerType: "inline-size" }}
     >
-      <motion.div initial={{opacity:0, scale:0}} animate={{opacity:1,scale:1,transition:{duration:0.5}}} className="flex items-center px-2">
+      <div className="flex items-center px-2">
         <input
           type="text"
           placeholder="Type a goal..."
@@ -88,14 +90,27 @@ const Setgoals = ({ onGoalCreated }) => {
           autoFocus
           className="w-full bg-transparent border-b border-txt-dim txt-dim py-2 px-2 focus:outline-none"
         />
-        <motion.button whileTap={{rotate:90}} onClick={handleCreate} className="txt ml-2">
+        <motion.button
+          whileTap={{ rotate: 90, transition: { duration: 0.2 } }}
+          animate={{ rotate: 0, transition: { duration: 0 } }}
+          onClick={handleCreate}
+          className="txt ml-2"
+        >
           <Plus />
         </motion.button>
-      </motion.div>
+      </div>
 
       {title.trim() !== "" && (
         <>
-          <motion.div initial={{opacity:0,y:20}} animate={{opacity:1 , y:0 , transition:{duration:0.5, ease:"easeInOut"}}  } className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.2, ease: "easeInOut" },
+            }}
+            className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col"
+          >
             <div className="flex-1">
               <div className="mb-4 [@container(max-width:420px)]:flex gap-12 items-center">
                 <label className="block font-semibold mb-1">Repeat:</label>
@@ -117,7 +132,10 @@ const Setgoals = ({ onGoalCreated }) => {
               {/* Updated Time Input */}
               <div className="mb-4 [@container(max-width:420px)]:flex gap-16 items-center">
                 <label className="block font-semibold mb-1">
-                  Time <span className="text-xs text-txt-dim ml-1">({is24 ? "24-hour" : "12-hour"})</span>
+                  Time{" "}
+                  <span className="text-xs text-txt-dim ml-1">
+                    ({is24 ? "24-hour" : "12-hour"})
+                  </span>
                 </label>
                 <input
                   type="time"
