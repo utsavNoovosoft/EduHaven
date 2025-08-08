@@ -1,12 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { User, UserPlus, MoreVertical } from "lucide-react";
+import { useNavigate } from "react-router-dom"; 
 const backendUrl = import.meta.env.VITE_API_URL;
 
 function SuggestedFriends({ onViewSentRequests }) {
   const [suggestedFriends, setSuggestedFriends] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdrownRef = useRef(null);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -57,6 +59,9 @@ function SuggestedFriends({ onViewSentRequests }) {
 
   if (suggestedFriends.length === 0) return null;
 
+  // Limit to the first 15 results
+  const limitedFriends = suggestedFriends.slice(0, 15);
+
   return (
     <section className="bg-sec rounded-3xl p-4 relative ">
       <div className="flex justify-between items-center mb-4">
@@ -82,11 +87,11 @@ function SuggestedFriends({ onViewSentRequests }) {
         </div>
       </div>
       <div className="space-y-2">
-        {suggestedFriends
-          .slice()
+        {limitedFriends
+          .slice() 
           .reverse()
           .map((user) => (
-            <div key={user._id} className=" relative group py-1 bg-slate-4 00">
+            <div key={user._id} className=" relative group py-1 bg-slate-400">
               <div className="flex items-center">
                 {user.ProfilePicture ? (
                   <img
@@ -129,6 +134,17 @@ function SuggestedFriends({ onViewSentRequests }) {
             </div>
           ))}
       </div>
+      {/* Find More Users Link */}
+      {suggestedFriends.length < 15 && (
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => navigate("/friends")}
+            className="text-sm text-blue-500 hover:underline"
+          >
+            Find More Users
+          </button>
+        </div>
+      )}
     </section>
   );
 }
