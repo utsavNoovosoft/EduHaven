@@ -299,25 +299,13 @@ function NotesComponent() {
             <div className="flex justify-between px-3 mb-4">
               <div className="flex gap-4 items-center">
                 <h3 className="text-2xl font-semibold">Notes</h3>
-                {/* Note selector dropdown */}
-                <select
-                  value={currentPage}
-                  onChange={(e) => setCurrentPage(parseInt(e.target.value))}
-                  className="bg-white/10 border border-white/20 rounded-lg px-3 py-1 text-sm txt focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                >
-                  {notes.map((note, idx) => (
-                    <option key={idx} value={idx} className="bg-sec">
-                      {note.title || `Note ${idx + 1}`}
-                    </option>
-                  ))}
-                </select>
                 {/* Add Note Button */}
                 <button
                   onClick={addNewPage}
-                  className="flex items-center gap-2 px-3 py-1 bg-yellow-400 hover:bg-yellow-300 text-black rounded-lg font-medium transition-colors"
+                  className="flex items-center gap-1.5 px-2.5 py-1 bg-yellow-400 hover:bg-yellow-300 text-black rounded-md font-medium text-sm transition-colors"
                   title="Add New Note"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-3.5 h-3.5" />
                   Add
                 </button>
               </div>
