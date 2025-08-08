@@ -276,7 +276,7 @@ function NotesComponent() {
     <div className="bg-sec txt rounded-3xl py-6 px-3 w-full mx-auto relative shadow">
       {error && console.error(error)}
 
-      {/* If there are no notes, show blurred box with plus icon */}
+      {/* If there are no notes, show  box with plus icon */}
       {notes.length === 0 && (
         <div className="flex flex-col items-center justify-center h-64 w-full bg-white/20 backdrop-blur-md rounded-2xl border-2 border-dashed border-yellow-300 mb-6">
           <button
@@ -293,142 +293,148 @@ function NotesComponent() {
       {/* If there are notes, show navigation and note editor */}
       {notes.length > 0 && (
         <>
-          {/* List of notes (sidebar style) */}
-          <div className="flex gap-4 h-80">
-            <div className="w-48 flex-shrink-0">
-              <div className="bg-white/10 rounded-xl p-2 h-64 overflow-y-auto">
-                {notes.map((note, idx) => (
+          {/* Note editor */}
+          <div className="flex flex-col">
+            {/* Navigation */}
+            <div className="flex justify-between px-3 mb-4">
+              <div className="flex gap-4 items-center">
+                <h3 className="text-2xl font-semibold">Notes</h3>
+                {/* Note selector dropdown */}
+                <select
+                  value={currentPage}
+                  onChange={(e) => setCurrentPage(parseInt(e.target.value))}
+                  className="bg-white/10 border border-white/20 rounded-lg px-3 py-1 text-sm txt focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                >
+                  {notes.map((note, idx) => (
+                    <option key={idx} value={idx} className="bg-sec">
+                      {note.title || `Note ${idx + 1}`}
+                    </option>
+                  ))}
+                </select>
+                {/* Add Note Button */}
+                <button
+                  onClick={addNewPage}
+                  className="flex items-center gap-2 px-3 py-1 bg-yellow-400 hover:bg-yellow-300 text-black rounded-lg font-medium transition-colors"
+                  title="Add New Note"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add
+                </button>
+              </div>
+              <div className="flex space-x-2 items-center">
+                <span className="text-yellow-300 opacity-90 text-lg">
+                  {notes.length > 0 ? `${currentPage + 1}/${notes.length}` : "1/1"}
+                </span>
+                <button
+                  onClick={goToPreviousPage}
+                  className={`p-1.5 rounded-full hover:bg-ter ${currentPage === 0 ? "txt-dim" : ""}`}
+                >
+                  <ChevronLeft />
+                </button>
+                <button
+                  onClick={goToNextPage}
+                  className={`p-1.5 rounded-full hover:bg-ter ${currentPage === notes.length - 1 ? "txt-dim" : ""}`}
+                >
+                  <ChevronRight />
+                </button>
+              </div>
+            </div>
+
+            {/* Title, Delete and Sync Button */}
+            <div className="flex justify-between items-center w-full px-3 mb-4">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  value={notes[currentPage]?.title || ""}
+                  onChange={handleTitleChange}
+                  placeholder="Title"
+                  autoFocus
+                  className="bg-transparent outline-none p-0.5 text-lg w-full font-semibold text-yellow-400 opacity-85"
+                />
+                {titleError && (
+                  <p className="text-red-400 text-xs absolute -bottom-3">{titleError}</p>
+                )}
+              </div>
+              {!isSynced && (
+                <button className="text-black text-lg hover:bg-yellow-300 rounded-full mx-3 py-0.5 px-4 bg-yellow-400 flex items-center gap-2 transition-transform transform opacity-100">
+                  sync
                   <div
-                    key={idx}
-                    className={`p-2 rounded-lg cursor-pointer mb-2 transition-colors ${idx === currentPage ? 'bg-yellow-200/80 text-black font-bold' : 'hover:bg-yellow-100/60'}`}
-                    onClick={() => setCurrentPage(idx)}
+                    className="h-4"
+                    style={{
+                      transform: rotate ? "rotate(-360deg)" : "rotate(0deg)",
+                      transition: "transform 0.7s ease-in-out",
+                    }}
                   >
-                    <div className="truncate text-base">{note.title || <span className="italic text-gray-400">Untitled</span>}</div>
-                    <div className="text-xs text-gray-500 truncate">{note.content?.slice(0, 30) || <span className="italic">No content</span>}</div>
+                    <RefreshCcwDot className="h-4" />
                   </div>
-                ))}
-              </div>
-              <button
-                className="mt-3 w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
-                onClick={addNewPage}
-              >
-                <Plus className="w-5 h-5" /> New Note
-              </button>
-            </div>
-
-            {/* Note editor */}
-            <div className="flex-1 flex flex-col">
-              {/* Navigation */}
-              <div className="flex justify-between px-3 mb-4">
-                <div className="flex gap-4 items-center">
-                  <h3 className="text-2xl font-semibold">Notes</h3>
-                </div>
-                <div className="flex space-x-2 items-center">
-                  <span className="text-yellow-300 opacity-90 text-lg">
-                    {notes.length > 0 ? `${currentPage + 1}/${notes.length}` : "1/1"}
-                  </span>
-                  <button
-                    onClick={goToPreviousPage}
-                    className={`p-1.5 rounded-full hover:bg-ter ${currentPage === 0 ? "txt-dim" : ""}`}
-                  >
-                    <ChevronLeft />
-                  </button>
-                  <button
-                    onClick={goToNextPage}
-                    className={`p-1.5 rounded-full hover:bg-ter ${currentPage === notes.length - 1 ? "txt-dim" : ""}`}
-                  >
-                    <ChevronRight />
-                  </button>
-                </div>
-              </div>
-
-              {/* Title, Delete and Sync Button */}
-              <div className="flex justify-between items-center w-full px-3 mb-4">
-                <div className="flex-1 relative">
-                  <input
-                    type="text"
-                    value={notes[currentPage]?.title || ""}
-                    onChange={handleTitleChange}
-                    placeholder="Title"
-                    autoFocus
-                    className="bg-transparent outline-none p-0.5 text-lg w-full font-semibold text-yellow-400 opacity-85"
-                  />
-                  {titleError && (
-                    <p className="text-red-400 text-xs absolute -bottom-3">{titleError}</p>
-                  )}
-                </div>
-                {!isSynced && (
-                  <button className="text-black text-lg hover:bg-yellow-300 rounded-full mx-3 py-0.5 px-4 bg-yellow-400 flex items-center gap-2 transition-transform transform opacity-100">
-                    sync
-                    <div
-                      className="h-4"
-                      style={{
-                        transform: rotate ? "rotate(-360deg)" : "rotate(0deg)",
-                        transition: "transform 0.7s ease-in-out",
-                      }}
-                    >
-                      <RefreshCcwDot className="h-4" />
-                    </div>
-                  </button>
-                )}
-                {notes.length > 0 && (
-                  <button 
-                    onClick={() => handleDeleteNote(notes[currentPage]?._id)}
-                    className="p-1.5 rounded-full hover:bg-red-500/20 transition-colors"
-                    title="Delete note"
-                  >
-                    <Trash className="h-5 txt-dim hover:text-red-500" />
-                  </button>
-                )}
-              </div>
-
-              {/* Content */}
-              <div className="relative w-full h-64 overflow-hidden bg-white/5 rounded-lg border border-white/10">
-                <div
-                  className="absolute w-full pointer-events-none"
-                  style={{
-                    backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent 24px, rgba(255, 255, 255, 0.15) 24px, rgba(255, 255, 255, 0.15) 25px)`,
-                    backgroundSize: "100% 32px",
-                    transform: `translateY(-${scrollPosition}px)`,
-                    height: `${Math.max(scrollHeight, 256)}px`,
-                    marginTop: "8px",
-                    zIndex: 1,
-                  }}
-                ></div>
-                <textarea
-                  ref={textAreaRef}
-                  id="area"
-                  className="relative w-full h-full bg-transparent txt-dim p-2 px-3 outline-none resize-none font-kalam font-light"
-                  style={{
-                    lineHeight: "32px",
-                    paddingTop: "8px",
-                    paddingBottom: "40px",
-                    zIndex: 2,
-                    position: "relative",
-                  }}
-                  placeholder="Take a note..."
-                  onScroll={handleScroll}
-                  value={notes[currentPage]?.content}
-                  onChange={handleNoteContentChange}
-                  autoFocus={notes[currentPage]?.content === ""}
-                ></textarea>
-              </div>
-              {contentError && (
-                <span className="text-red-400 text-xs mt-1 absolute bottom-4 left-3">{contentError}</span>
+                </button>
               )}
-
-              {/* Date and Time */}
-              <div className="mt-2 px-3 txt-dim text-sm">
-                {notes[currentPage]?.createdAt
-                  ? new Date(notes[currentPage].createdAt).toLocaleDateString() +
-                    "\u00A0\u00A0\u00A0" +
-                    new Date(notes[currentPage].createdAt).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
-                  : "No date available"}
-              </div>
+              {notes.length > 0 && (
+                <button 
+                  onClick={() => handleDeleteNote(notes[currentPage]?._id)}
+                  className="p-1.5 rounded-full hover:bg-red-500/20 transition-colors"
+                  title="Delete note"
+                >
+                  <Trash className="h-5 txt-dim hover:text-red-500" />
+                </button>
+              )}
             </div>
+
+            {/* Content */}
+            <div className="relative w-full h-64 overflow-hidden bg-white/5 rounded-lg border border-white/10">
+              <div
+                className="absolute w-full pointer-events-none"
+                style={{
+                  backgroundImage: `repeating-linear-gradient(to bottom, transparent, transparent 24px, rgba(255, 255, 255, 0.15) 24px, rgba(255, 255, 255, 0.15) 25px)`,
+                  backgroundSize: "100% 32px",
+                  transform: `translateY(-${scrollPosition}px)`,
+                  height: `${Math.max(scrollHeight, 256)}px`,
+                  marginTop: "8px",
+                  zIndex: 1,
+                }}
+              ></div>
+              <textarea
+                ref={textAreaRef}
+                id="area"
+                className="relative w-full h-full bg-transparent txt-dim p-2 px-3 outline-none resize-none font-kalam font-light"
+                style={{
+                  lineHeight: "32px",
+                  paddingTop: "8px",
+                  paddingBottom: "40px",
+                  zIndex: 2,
+                  position: "relative",
+                }}
+                placeholder="Take a note..."
+                onScroll={handleScroll}
+                value={notes[currentPage]?.content}
+                onChange={handleNoteContentChange}
+                autoFocus={notes[currentPage]?.content === ""}
+              ></textarea>
+            </div>
+            {contentError && (
+              <span className="text-red-400 text-xs mt-1 absolute bottom-4 left-3">{contentError}</span>
+            )}
+
+            {/* Date and Time */}
+            <div className="mt-2 px-3 txt-dim text-sm">
+              {notes[currentPage]?.createdAt
+                ? new Date(notes[currentPage].createdAt).toLocaleDateString() +
+                  "\u00A0\u00A0\u00A0" +
+                  new Date(notes[currentPage].createdAt).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "No date available"}
+            </div>
+
+            {/* Floating New Note Button */}
+            <button
+              className="fixed bottom-6 right-6 w-14 h-14 bg-yellow-400 hover:bg-yellow-300 text-black rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
+              onClick={addNewPage}
+              title="Add New Note"
+            >
+              <Plus className="w-6 h-6" />
+            </button>
           </div>
         </>
       )}
