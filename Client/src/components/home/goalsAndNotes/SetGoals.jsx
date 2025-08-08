@@ -78,7 +78,7 @@ const Setgoals = ({ onGoalCreated }) => {
       }`}
       style={{ containerType: "inline-size" }}
     >
-      <div className="flex items-center px-2">
+      <motion.div initial={{opacity:0, scale:0}} animate={{opacity:1,scale:1,transition:{duration:0.5}}} className="flex items-center px-2">
         <input
           type="text"
           placeholder="Type a goal..."
@@ -91,11 +91,11 @@ const Setgoals = ({ onGoalCreated }) => {
         <motion.button whileTap={{rotate:90}} onClick={handleCreate} className="txt ml-2">
           <Plus />
         </motion.button>
-      </div>
+      </motion.div>
 
       {title.trim() !== "" && (
         <>
-          <motion.div initial={{opacity:0,scaleX:0}} animate={{opacity:1 , scaleX:1 , transition:{duration:0.2, ease:"easeInOut"}}  } className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col">
+          <motion.div initial={{opacity:0,y:20}} animate={{opacity:1 , y:0 , transition:{duration:0.5, ease:"easeInOut"}}  } className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col">
             <div className="flex-1">
               <div className="mb-4 [@container(max-width:420px)]:flex gap-12 items-center">
                 <label className="block font-semibold mb-1">Repeat:</label>
