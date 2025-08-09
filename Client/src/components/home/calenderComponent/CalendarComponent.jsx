@@ -221,7 +221,7 @@ function Calendar() {
                 return (
                   <motion.li
                     key={event._id}
-                    className="pl-3 border-l-4 border-purple-500"
+                    className="pl-3 border-l-4"
                     variants={{
                       hidden: { opacity: 0, y: 10 },
                       visible: { opacity: 1, y: 0 },
