@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify"; 
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -11,6 +13,7 @@ function FriendsPage() {
   const [friendRequests, setFriendRequests] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
   const [allFriends, setAllFriends] = useState([]);
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
   const getAuthHeader = () => {
@@ -31,8 +34,10 @@ function FriendsPage() {
           user._id === friendId ? { ...user, requestSent: true } : user
         )
       );
+      toast.success("Friend request sent!"); 
     } catch (error) {
       console.error("Error adding friend:", error.response.data);
+      toast.error("Error sending friend request!"); 
     }
   };
 
@@ -46,8 +51,10 @@ function FriendsPage() {
       setSentRequests((prevRequests) =>
         prevRequests.filter((request) => request._id !== friendId)
       );
+      toast.info("Friend request canceled."); 
     } catch (error) {
       console.error("Error canceling friend request:", error.response?.data || error.message);
+      toast.error("Error canceling friend request!"); 
     }
   };
 
@@ -61,8 +68,10 @@ function FriendsPage() {
       setFriendRequests((prevRequests) =>
         prevRequests.filter((request) => request._id !== friendId)
       );
+      toast.error("Friend request rejected."); 
     } catch (error) {
       console.error("Error rejecting friend request:", error.response?.data || error.message);
+      toast.error("Error rejecting friend request!"); 
     }
   };
 
@@ -81,8 +90,10 @@ function FriendsPage() {
         ...prevFriends,
         { ...friendRequests.find((user) => user._id === friendId) },
       ]);
+      toast.success("Friend request accepted!"); 
     } catch (error) {
       console.error("Error accepting friend request:", error.response?.data || error.message);
+      toast.error("Error accepting friend request!"); 
     }
   };
 
@@ -96,36 +107,63 @@ function FriendsPage() {
       setAllFriends((prevFriends) =>
         prevFriends.filter((friend) => friend._id !== friendId)
       );
+      toast.success("Friend removed!"); 
     } catch (error) {
       console.error("Error removing friend:", error.response?.data || error.message);
+      toast.error("Error removing friend!");
     }
   };
 
   const fetchData = (tab) => {
+    setLoading(true); // Start loading
     switch (tab) {
       case "suggested":
         axios
           .get(`${backendUrl}/friends/friend-suggestions`, getAuthHeader())
-          .then((response) => setSuggestedFriends(response.data))
-          .catch((error) => console.error("Error fetching suggested friends:", error));
+          .then((response) => {
+            setSuggestedFriends(response.data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching suggested friends:", error);
+            setLoading(false); 
+          });
         break;
       case "friendRequests":
         axios
           .get(`${backendUrl}/friends/requests`, getAuthHeader())
-          .then((response) => setFriendRequests(response.data))
-          .catch((error) => console.error("Error fetching friend requests:", error));
+          .then((response) => {
+            setFriendRequests(response.data);
+            setLoading(false); 
+          })
+          .catch((error) => {
+            console.error("Error fetching friend requests:", error);
+            setLoading(false); 
+          });
         break;
       case "sentRequests":
         axios
           .get(`${backendUrl}/friends/sent-requests`, getAuthHeader())
-          .then((response) => setSentRequests(response.data))
-          .catch((error) => console.error("Error fetching sent requests:", error));
+          .then((response) => {
+            setSentRequests(response.data);
+            setLoading(false); 
+          })
+          .catch((error) => {
+            console.error("Error fetching sent requests:", error);
+            setLoading(false); 
+          });
         break;
       case "allFriends":
         axios
           .get(`${backendUrl}/friends`, getAuthHeader())
-          .then((response) => setAllFriends(response.data))
-          .catch((error) => console.error("Error fetching all friends:", error));
+          .then((response) => {
+            setAllFriends(response.data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching all friends:", error);
+            setLoading(false);
+          });
         break;
       default:
         break;
@@ -205,6 +243,12 @@ function FriendsPage() {
     </div>
   );
 
+  const renderLoadingMessage = () => (
+    <div className="text-center text-gray-500">
+      <p>Loading...</p>
+    </div>
+  );
+
   return (
     <div className="flex">
       {/* Left Tab Navigation */}
@@ -258,30 +302,36 @@ function FriendsPage() {
             : "All Friends"}
         </h2>
         <div className="space-y-4">
-          {selectedTab === "suggested" &&
-            (suggestedFriends.length > 0 ? (
-              suggestedFriends.map(renderUserCard)
-            ) : (
-              renderEmptyMessage()
-            ))}
-          {selectedTab === "friendRequests" &&
-            (friendRequests.length > 0 ? (
-              friendRequests.map(renderUserCard)
-            ) : (
-              renderEmptyMessage()
-            ))}
-          {selectedTab === "sentRequests" &&
-            (sentRequests.length > 0 ? (
-              sentRequests.map(renderUserCard)
-            ) : (
-              renderEmptyMessage()
-            ))}
-          {selectedTab === "allFriends" &&
-            (allFriends.length > 0 ? (
-              allFriends.map(renderUserCard)
-            ) : (
-              renderEmptyMessage()
-            ))}
+          {loading ? (
+            renderLoadingMessage() 
+          ) : (
+            <>
+              {selectedTab === "suggested" &&
+                (suggestedFriends.length > 0 ? (
+                  suggestedFriends.map(renderUserCard)
+                ) : (
+                  renderEmptyMessage()
+                ))}
+              {selectedTab === "friendRequests" &&
+                (friendRequests.length > 0 ? (
+                  friendRequests.map(renderUserCard)
+                ) : (
+                  renderEmptyMessage()
+                ))}
+              {selectedTab === "sentRequests" &&
+                (sentRequests.length > 0 ? (
+                  sentRequests.map(renderUserCard)
+                ) : (
+                  renderEmptyMessage()
+                ))}
+              {selectedTab === "allFriends" &&
+                (allFriends.length > 0 ? (
+                  allFriends.map(renderUserCard)
+                ) : (
+                  renderEmptyMessage()
+                ))}
+            </>
+          )}
         </div>
       </div>
     </div>
