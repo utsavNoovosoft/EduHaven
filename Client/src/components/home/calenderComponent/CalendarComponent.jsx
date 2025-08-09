@@ -230,7 +230,7 @@ function Calendar() {
                 return (
                   <motion.li
                     key={event._id}
-                    className="pl-3 border-l-4"
+                    className="pl-3 border-l-4 border-[var(--btn)]"
                     variants={{
                       hidden: { opacity: 0, y: 10 },
                       visible: { opacity: 1, y: 0 },
