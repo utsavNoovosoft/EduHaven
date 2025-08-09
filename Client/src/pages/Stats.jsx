@@ -27,7 +27,7 @@ const Stats = () => {
     }
   }, []);
 
-  if (user) {
+  if (!user) {
     return <NotLogedInPage />;
   }
 
