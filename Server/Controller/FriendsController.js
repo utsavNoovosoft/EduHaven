@@ -165,6 +165,22 @@ export const viewSentRequests = async (req, res) => {
   }
 };
 
-export const removeSentRequest = async(req, res) =>{
-  
-}
+export const removeSentRequest = async (req, res) => {
+  try {
+    const userId = req.user._id;   
+    const { friendId } = req.params; 
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: { sentRequests: friendId }
+    });
+
+    await User.findByIdAndUpdate(friendId, {
+      $pull: { friendRequests: userId }
+    });
+
+    res.json({ message: "Friend request canceled successfully." });
+  } catch (err) {
+    console.error("Error removing sent request:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+};

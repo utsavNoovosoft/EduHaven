@@ -36,6 +36,71 @@ function FriendsPage() {
     }
   };
 
+  const cancelRequest = async (friendId) => {
+    try {
+      const response = await axios.delete(
+        `${backendUrl}/friends/sent-requests/${friendId}`,
+        getAuthHeader()
+      );
+      console.log(response.data.message);
+      setSentRequests((prevRequests) =>
+        prevRequests.filter((request) => request._id !== friendId)
+      );
+    } catch (error) {
+      console.error("Error canceling friend request:", error.response?.data || error.message);
+    }
+  };
+
+  const rejectRequest = async (friendId) => {
+    try {
+      const response = await axios.delete(
+        `${backendUrl}/friends/reject/${friendId}`,
+        getAuthHeader()
+      );
+      console.log(response.data.message);
+      setFriendRequests((prevRequests) =>
+        prevRequests.filter((request) => request._id !== friendId)
+      );
+    } catch (error) {
+      console.error("Error rejecting friend request:", error.response?.data || error.message);
+    }
+  };
+
+  const acceptRequest = async (friendId) => {
+    try {
+      const response = await axios.post(
+        `${backendUrl}/friends/accept/${friendId}`,
+        null,
+        getAuthHeader()
+      );
+      console.log(response.data.message);
+      setFriendRequests((prevRequests) =>
+        prevRequests.filter((request) => request._id !== friendId)
+      );
+      setAllFriends((prevFriends) => [
+        ...prevFriends,
+        { ...friendRequests.find((user) => user._id === friendId) },
+      ]);
+    } catch (error) {
+      console.error("Error accepting friend request:", error.response?.data || error.message);
+    }
+  };
+
+  const removeFriend = async (friendId) => {
+    try {
+      const response = await axios.delete(
+        `${backendUrl}/friends/${friendId}`,
+        getAuthHeader()
+      );
+      console.log(response.data.message);
+      setAllFriends((prevFriends) =>
+        prevFriends.filter((friend) => friend._id !== friendId)
+      );
+    } catch (error) {
+      console.error("Error removing friend:", error.response?.data || error.message);
+    }
+  };
+
   const fetchData = (tab) => {
     switch (tab) {
       case "suggested":
@@ -46,7 +111,7 @@ function FriendsPage() {
         break;
       case "friendRequests":
         axios
-          .get(`${backendUrl}/friends/received-requests`, getAuthHeader())
+          .get(`${backendUrl}/friends/requests`, getAuthHeader())
           .then((response) => setFriendRequests(response.data))
           .catch((error) => console.error("Error fetching friend requests:", error));
         break;
@@ -58,7 +123,7 @@ function FriendsPage() {
         break;
       case "allFriends":
         axios
-          .get(`${backendUrl}/friends/all-friends`, getAuthHeader())
+          .get(`${backendUrl}/friends`, getAuthHeader())
           .then((response) => setAllFriends(response.data))
           .catch((error) => console.error("Error fetching all friends:", error));
         break;
@@ -89,20 +154,45 @@ function FriendsPage() {
         </div>
       </div>
       <div className="mt-3">
-        {user.requestSent ? (
-          <button
-            disabled
-            className="w-full border border-gray-500/50 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition bg-sec txt"
-          >
-            Request Sent
-          </button>
-        ) : (
+        {selectedTab === "suggested" && !user.requestSent && (
           <button
             onClick={() => sendRequest(user._id)}
             className="w-full bg-ter text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
           >
             <UserPlus className="w-5 h-5" />
             Add Friend
+          </button>
+        )}
+        {selectedTab === "friendRequests" && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => acceptRequest(user._id)}
+              className="w-1/2 bg-green-500 text-sm px-3 py-1.5 rounded-lg transition hover:bg-green-600 txt"
+            >
+              Accept
+            </button>
+            <button
+              onClick={() => rejectRequest(user._id)}
+              className="w-1/2 bg-red-500 text-sm px-3 py-1.5 rounded-lg transition hover:bg-red-600 txt"
+            >
+              Reject
+            </button>
+          </div>
+        )}
+        {selectedTab === "sentRequests" && (
+          <button
+            onClick={() => cancelRequest(user._id)}
+            className="w-full bg-yellow-500 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-yellow-600 txt"
+          >
+            Cancel Request
+          </button>
+        )}
+        {selectedTab === "allFriends" && (
+          <button
+            onClick={() => removeFriend(user._id)}
+            className="w-full bg-red-500 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-red-600 txt"
+          >
+            Remove Friend
           </button>
         )}
       </div>
