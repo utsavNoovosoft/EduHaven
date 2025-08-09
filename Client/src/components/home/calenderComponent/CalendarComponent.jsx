@@ -187,7 +187,7 @@ function Calendar() {
                   key={day}
                   onClick={() => handleDayClick(day)}
                   className={`flex items-center justify-center p-2.5 text-sm rounded-full txt cursor-pointer transition-all duration-200 ease-in-out h-9 
-                  ${isToday ? "bg-purple-600 hover:bg-purple-700" : ""}
+                  ${isToday ? "btn" : ""}
                   ${hasEvent && !isToday ? "bg-ter hover:bg-ter" : ""}
                   ${!isToday && !hasEvent ? "hover:bg-ter" : ""}`}
                 >
@@ -230,7 +230,7 @@ function Calendar() {
                 return (
                   <motion.li
                     key={event._id}
-                    className="pl-3 border-l-4 border-purple-500"
+                    className="pl-3 border-l-4 border-[var(--btn)]"
                     variants={{
                       hidden: { opacity: 0, y: 10 },
                       visible: { opacity: 1, y: 0 },
