@@ -267,12 +267,9 @@ const StudyStats = () => {
   };
 
   return (
-    <div className="flex bg-[#2D364A] rounded-3xl text-center w-full overflow-hidden">
+    <div className="flex bg-[var(--bg-ter)] rounded-3xl text-center w-full overflow-hidden">
       {/* Chart showing Total Study Hours and Study-Room Hours */}
-      <div
-        className="flex-1 bg-gray-800 pr-4 rounded-3xl"
-        style={{ background: "#1e293b" }}
-      >
+      <div className="flex-1 bg-[var(--bg-sec)] pr-4 rounded-3xl">
         {/* Header with computed summary study stats */}
         <div className="flex flex-col md:flex-row justify-between items-center m-6">
           <div className="font-semibold">
@@ -320,35 +317,36 @@ const StudyStats = () => {
           >
             <defs>
               <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#a855f7" stopOpacity={0.5} />
-                <stop offset="100%" stopColor="#a855f7" stopOpacity={0} />
+                <stop offset="0%" stopColor="var(--btn)" stopOpacity={0.5} />
+                <stop offset="100%" stopColor="var(--btn)" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
-            <XAxis dataKey="name" stroke="#94a3b8" />
-            <YAxis stroke="#94a3b8" />
+            <CartesianGrid stroke="var(--txt-disabled)" strokeDasharray="3 3" />
+            <XAxis dataKey="name" stroke="var(--txt-dim)" />
+            <YAxis stroke="var(--txt-dim)" />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#1e293b",
-                border: "0",
+                backgroundColor: "var(--bg-primary)",
+                border: "none",
                 borderRadius: "0.8rem",
+                color: "var(--txt)",
               }}
-              itemStyle={{ color: "#fff" }}
-              labelStyle={{ color: "#d09eff" }}
+              itemStyle={{ color: "var(--txt)" }}
+              labelStyle={{ color: "var(--btn)" }}
             />
             <Area
               type="monotone"
               dataKey="totalHours"
-              stroke="#a855f7"
+              stroke="var(--btn-hover)"
               strokeWidth={2}
               fill="url(#colorHours)"
-              dot={{ r: 2, fill: "#a855f7" }}
+              dot={{ r: 2, fill: "var(--btn-hover)" }}
               activeDot={{ r: 6 }}
             />
             <Area
               type="monotone"
               dataKey="studyRoomHours"
-              stroke="#7b3eb5"
+              stroke="var(--btn)"
               strokeWidth={2}
               fill="url(#colorHours)"
               dot={{ r: 0 }}
@@ -357,7 +355,7 @@ const StudyStats = () => {
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-      <div className="text-sm text-gray-300 p-6 mt-auto text-left w-fit">
+      <div className="text-sm p-6 mt-auto text-left w-fit">
         Rank:
         <div className="text-4xl mb-8 font-bold text-blue-500">Null</div>
         Current Streak:

@@ -3,6 +3,7 @@ import { parseISO } from "date-fns";
 import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import EventPopup from "./eventPopup";
+import AllEventsPopup from "./AllEventsPopup";
 import { motion } from "framer-motion";
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -22,6 +23,7 @@ function Calendar() {
   ).getDay();
   const daysArray = [...Array(daysInMonth).keys()].map((day) => day + 1);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [showAllEvents, setShowAllEvents] = useState(false);
   const [time, setTime] = useState(new Date());
   const [, setSelectedEvent] = useState(null);
 
@@ -37,17 +39,17 @@ function Calendar() {
   const fetchEvents = async () => {
     try {
       // Get authentication token from localStorage
-      const token = localStorage.getItem('token');
-      
+      const token = localStorage.getItem("token");
+
       if (!token) {
-        console.error('No authentication token found');
+        console.error("No authentication token found");
         return;
       }
 
       const response = await axios.get(`${backendUrl}/events`, {
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.data.success) {
@@ -61,7 +63,7 @@ function Calendar() {
         futureEvents.sort(
           (a, b) => new Date(a.date) - new Date(b.date) // Sort by date
         );
-        setUpcomingEvents(futureEvents.slice(0, 2)); // Limit to two events
+        setUpcomingEvents(futureEvents.slice(0, 10)); // Limit to ten events
       } else {
         console.error("Failed to fetch events:", response.data.error);
       }
@@ -69,7 +71,7 @@ function Calendar() {
       console.error("Error fetching events:", error.message);
       // Handle unauthorized access
       if (error.response?.status === 401) {
-        console.error('Unauthorized: Please log in again');
+        console.error("Unauthorized: Please log in again");
         // You might want to redirect to login page here
       }
     }
@@ -101,19 +103,20 @@ function Calendar() {
 
   const blankDays = Array(firstDayOfMonth).fill(null);
 
-  const formattedTime = localStorage.getItem("clock-format") === "24-hour"
-    ? (time.toLocaleTimeString("en-US", {
+  const formattedTime =
+    localStorage.getItem("clock-format") === "24-hour"
+      ? time.toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit",
           hour12: false,
-        }))
-    : (time.toLocaleTimeString("en-US", {
+        })
+      : time.toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit",
           hour12: true,
-        }));
+        });
 
   const [timePart, period] = formattedTime.split(" ");
 
@@ -159,10 +162,7 @@ function Calendar() {
           </div>
           <div className="grid grid-cols-7 gap-[0.4rem]">
             {"Su Mo Tu We Th Fr Sa".split(" ").map((day) => (
-              <div
-                key={day}
-                className="text-center text-xs font-md txt-dim"
-              >
+              <div key={day} className="text-center text-xs font-md txt-dim">
                 {day}
               </div>
             ))}
@@ -200,12 +200,21 @@ function Calendar() {
 
         {/* Upcoming Events Section with subtle animations */}
         <div className="p-6 rounded-3xl bg-ter flex-1 mt-6">
-          <h3 className="text-lg font-semibold txt mb-4">
-            Upcoming Events:
-          </h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold txt">
+              Upcoming Events:
+            </h3>
+            <button
+              onClick={() => setShowAllEvents(true)}
+              className="text-sm txt-dim hover:txt transition-colors flex items-center gap-1"
+            >
+              See all
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
           {upcomingEvents.length > 0 ? (
             <motion.ul
-              className="txt space-y-6 pl-2"
+              className="txt space-y-6 pl-2 pr-3 overflow-x-scroll max-h-[120px]"
               initial="hidden"
               animate="visible"
               variants={{
@@ -261,6 +270,14 @@ function Calendar() {
         <EventPopup
           date={selectedDay}
           onClose={handleClosePopup}
+          refreshEvents={fetchEvents}
+        />
+      )}
+
+      {showAllEvents && (
+        <AllEventsPopup
+          events={events}
+          onClose={() => setShowAllEvents(false)}
           refreshEvents={fetchEvents}
         />
       )}

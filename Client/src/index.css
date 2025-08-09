@@ -423,6 +423,10 @@ body {
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(155, 154, 154, 0.6);
   }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 }
 
 /* Calendar Event title background */
