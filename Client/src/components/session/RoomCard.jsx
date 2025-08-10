@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function RoomCard({ room, onDelete, showCategory = true }) {
+export default function RoomCard({ room, onDelete, showCategory }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const dropdownRef = useRef(null);
@@ -81,6 +81,7 @@ export default function RoomCard({ room, onDelete, showCategory = true }) {
           <h3 className="text-xl font-semibold txt">{room.name}</h3>
           {isPinned && (
             <span title="Pinned">
+              {" "}
               <Pin size={18} className="rotate-45 ml-1" />
             </span>
           )}
@@ -117,7 +118,7 @@ export default function RoomCard({ room, onDelete, showCategory = true }) {
             onClick={handleCopyLink}
             className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
           >
-            <Link size={20} />
+            <Link size={20}/>
             Copy Link
           </button>
 
@@ -135,17 +136,19 @@ export default function RoomCard({ room, onDelete, showCategory = true }) {
         </div>
       )}
 
-      {/* Category label - only show if showCategory is true */}
       {showCategory && (
         <p className="txt-dim mb-4 capitalize">
           Category: <span className="font-medium">{room.cateogery}</span>
         </p>
       )}
 
-      {/* Description */}
+      <p className="txt-dim mb-2">
+        <span className="font-medium">{room.joins}</span> student
+        {room.joins !== 1 && "s"} studying
+      </p>
+
       {room.description && <p className="txt-dim mb-4">{room.description}</p>}
 
-      {/* Join button */}
       <button
         onClick={handleJoin}
         className="w-full btn px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
@@ -156,56 +159,3 @@ export default function RoomCard({ room, onDelete, showCategory = true }) {
     </div>
   );
 }
-
-// Individual skeleton element component
-function SkeletonElement({ className, delay = 0 }) {
-  return (
-    <div 
-      className={`${className} rounded relative overflow-hidden bg-gray-700/30`}
-    >
-      <div 
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"
-        style={{ animationDelay: `${delay}ms` }}
-      />
-    </div>
-  );
-}
-
-export function RoomCardSkeleton({ showCategory = true }) {
-  return (
-    <>
-      <style jsx global>{`
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-        .animate-shimmer {
-          animation: shimmer 2s ease-in-out infinite;
-        }
-      `}</style>
-      
-      <div className="relative bg-sec backdrop-blur-md p-6 rounded-3xl shadow">
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center gap-2">
-            <SkeletonElement className="h-6 w-32" delay={0} />
-            <div className="w-5 h-5"></div>
-          </div>
-          <SkeletonElement className="w-6 h-6" delay={100} />
-        </div>
-
-        {showCategory && (
-          <div className="mb-4">
-            <SkeletonElement className="h-4 w-28" delay={200} />
-          </div>
-        )}
-
-        <div className="mb-4 space-y-2">
-          <SkeletonElement className="h-4 w-full" delay={300} />
-          <SkeletonElement className="h-4 w-3/4" delay={400} />
-        </div>
-
-        <SkeletonElement className="w-full h-10 rounded-lg" delay={500} />
-      </div>
-    </>
-  );
-}  
