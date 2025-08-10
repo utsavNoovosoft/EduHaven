@@ -10,7 +10,8 @@ function UserCard({
   onRemoveFriend,
 }) {
   return (
-    <div className="bg-[var(--bg-ter)] p-4 rounded-xl shadow-md mb-4">
+    <div className="bg-[var(--bg-ter)] p-4 rounded-xl shadow-md">
+      {/* {console.log(user)} */}
       <div className="flex items-center">
         <img
           src={user.ProfilePicture}
@@ -20,6 +21,18 @@ function UserCard({
         <div className="ml-4 flex-1">
           <h4 className="text-lg font-semibold">{`${user.FirstName} ${user.LastName || ""}`}</h4>
           <p className="text-sm text-gray-500">{user.Bio}</p>
+
+          <div className="mt-2">
+            {user.OtherDetails?.interests ? (
+              <span className="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded-full inline-block">
+                {user.OtherDetails.interests  }
+              </span>
+            ) : (
+              <span className="text-xs text-gray-400 bg-gray-200 px-2 py-1 rounded-full inline-block">
+                No interests available
+              </span>
+            )}
+          </div>
         </div>
       </div>
 

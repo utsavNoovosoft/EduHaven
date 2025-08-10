@@ -27,7 +27,8 @@ function MainContent({
 
   const renderUsers = () =>
     users.length > 0 ? (
-      users.map((user) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {users.map((user) => (
         <UserCard
           key={user._id}
           user={user}
@@ -38,7 +39,8 @@ function MainContent({
           onRejectRequest={onRejectRequest}
           onRemoveFriend={onRemoveFriend}
         />
-      ))
+      ))}
+      </div>
     ) : (
       <div className="text-center text-gray-500">Nothing to display</div>
     );
