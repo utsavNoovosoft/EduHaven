@@ -302,11 +302,10 @@ function NotesComponent() {
                 {/* Add Note Button */}
                 <button
                   onClick={addNewPage}
-                  className="flex items-center gap-1.5 px-2.5 py-1 bg-yellow-400 hover:bg-yellow-300 text-black rounded-md font-medium text-sm transition-colors"
+                  className="flex items-center justify-center w-10 h-10 txt hover:bg-white/10 rounded-full transition-all duration-200"
                   title="Add New Note"
                 >
-                  <Plus className="w-3.5 h-3.5" />
-                  Add
+                  <Plus className="w-5 h-5" />
                 </button>
               </div>
               <div className="flex space-x-2 items-center">
@@ -369,7 +368,7 @@ function NotesComponent() {
             </div>
 
             {/* Content */}
-            <div className="relative w-full h-64 overflow-hidden bg-white/5 rounded-lg border border-white/10">
+            <div className="relative w-full h-64 overflow-hidden">
               <div
                 className="absolute w-full pointer-events-none"
                 style={{
@@ -407,8 +406,8 @@ function NotesComponent() {
                 <span className="text-red-400 text-xs">{contentError}</span>
               )}
               
-              {/* Date and Time */}
-              <div className="txt-dim text-sm">
+              {/* Date and Time - Always on the right */}
+              <div className="txt-dim text-sm ml-auto">
                 {notes[currentPage]?.createdAt
                   ? new Date(notes[currentPage].createdAt).toLocaleDateString() +
                     "\u00A0\u00A0\u00A0" +
