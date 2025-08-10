@@ -50,11 +50,11 @@ const Goals = () => {
   };
 
   return (
-    <div className="bg-gray-800 p-6 pl-0 rounded-3xl shadow-md text-center w-full">
+    <div className="bg-[var(--bg-sec)] p-6 pl-0 rounded-3xl shadow-md text-center w-full">
       <nav className="flex justify-between items-center pl-6">
         <h3 className="text-lg font-semibold flex items-center gap-2">
-          <CheckCircle className="w-5 h-5 text-green-500" /> <strong>13</strong>
-          /<strong>135</strong>
+          <CheckCircle className="w-5 h-5" /> <strong>13</strong>/
+          <strong>135</strong>
           Goals done
         </h3>
         <DropdownMenu>
@@ -86,9 +86,18 @@ const Goals = () => {
       <div className="mt-4 w-full" style={{ height: 300 }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data[view]}>
-            <XAxis dataKey="name" stroke="#ddd" />
-            <YAxis stroke="#ddd" />
-            <Tooltip />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip
+              contentStyle={{
+                background: "var(--bg-ter)",
+                color: "var(--txt)",
+                border: "none",
+                borderRadius: "0.5rem",
+                boxShadow:
+                  "0 4px 6px -1px rgba(var(--shadow-rgb), 0.1), 0 2px 4px -1px rgba(var(--shadow-rgb), 0.06)",
+              }}
+            />
             <Line
               type="monotone"
               dataKey="completed"
