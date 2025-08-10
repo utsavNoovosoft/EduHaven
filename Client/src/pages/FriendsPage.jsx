@@ -179,8 +179,8 @@ function FriendsPage() {
   };
 
   const renderUserCard = (user) => (
-    <div key={user._id} className="bg-white p-4 rounded-xl shadow-md mb-4">
-      <div className="flex items-center">
+    <div key={user._id} className="bg-[var(--bg-ter)] p-4 rounded-xl shadow-md mb-4">
+      <div className="flex items-center ">
         <img
           src={user.ProfilePicture}
           alt="Profile"
@@ -195,7 +195,7 @@ function FriendsPage() {
         {selectedTab === "suggested" && !user.requestSent && (
           <button
             onClick={() => sendRequest(user._id)}
-            className="w-full bg-ter text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
+            className="w-full bg-[var(--btn)] text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition text-white hover:bg-[var(--btn-hover)] txt"
           >
             <UserPlus className="w-5 h-5" />
             Add Friend
@@ -205,13 +205,13 @@ function FriendsPage() {
           <div className="flex gap-2">
             <button
               onClick={() => acceptRequest(user._id)}
-              className="w-1/2 bg-green-500 text-sm px-3 py-1.5 rounded-lg transition hover:bg-green-600 txt"
+              className="w-1/2 bg-[var(--btn)] text-white text-sm px-3 py-1.5 rounded-lg transition hover:bg-[var(--btn-hover)] txt"
             >
               Accept
             </button>
             <button
               onClick={() => rejectRequest(user._id)}
-              className="w-1/2 bg-red-500 text-sm px-3 py-1.5 rounded-lg transition hover:bg-red-600 txt"
+              className="w-1/2 bg-[var(--btn)] text-sm text-white px-3 py-1.5 rounded-lg transition hover:bg-[var(--btn-hover)] txt"
             >
               Reject
             </button>
@@ -220,7 +220,7 @@ function FriendsPage() {
         {selectedTab === "sentRequests" && (
           <button
             onClick={() => cancelRequest(user._id)}
-            className="w-full bg-yellow-500 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-yellow-600 txt"
+            className="w-full bg-[var(--btn)] text-sm text-white px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
           >
             Cancel Request
           </button>
@@ -228,7 +228,7 @@ function FriendsPage() {
         {selectedTab === "allFriends" && (
           <button
             onClick={() => removeFriend(user._id)}
-            className="w-full bg-red-500 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-red-600 txt"
+            className="w-full bg-[var(--btn)] text-sm text-white px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
           >
             Remove Friend
           </button>
@@ -252,13 +252,13 @@ function FriendsPage() {
   return (
     <div className="flex">
       {/* Left Tab Navigation */}
-      <div className="w-1/4 bg-gray-100 p-4 rounded-xl mr-6">
-        <h3 className="text-xl font-semibold mb-4">Friends</h3>
+      <div className="w-1/4 p-4 rounded-xl mr-6 bg-[var(--bg-sec)]">
+        <h3 className="text-xl font-semibold mb-4 text-[var(--txt)]">Friends</h3>
         <div className="space-y-2">
           <button
             onClick={() => handleTabClick("suggested")}
             className={`w-full text-left px-4 py-2 rounded-lg ${
-              selectedTab === "suggested" ? "bg-blue-100" : "hover:bg-gray-200"
+              selectedTab === "suggested" ? "bg-[var(--btn)] text-white" : "hover:bg-[var(--bg-ter)]"
             }`}
           >
             Suggested
@@ -266,7 +266,7 @@ function FriendsPage() {
           <button
             onClick={() => handleTabClick("friendRequests")}
             className={`w-full text-left px-4 py-2 rounded-lg ${
-              selectedTab === "friendRequests" ? "bg-blue-100" : "hover:bg-gray-200"
+              selectedTab === "friendRequests" ? "bg-[var(--btn)] text-white" : "hover:bg-[var(--bg-ter)]"
             }`}
           >
             Friend Requests
@@ -274,7 +274,7 @@ function FriendsPage() {
           <button
             onClick={() => handleTabClick("sentRequests")}
             className={`w-full text-left px-4 py-2 rounded-lg ${
-              selectedTab === "sentRequests" ? "bg-blue-100" : "hover:bg-gray-200"
+              selectedTab === "sentRequests" ? "bg-[var(--btn)] text-white" : "hover:bg-[var(--bg-ter)]"
             }`}
           >
             Sent Requests
@@ -282,7 +282,7 @@ function FriendsPage() {
           <button
             onClick={() => handleTabClick("allFriends")}
             className={`w-full text-left px-4 py-2 rounded-lg ${
-              selectedTab === "allFriends" ? "bg-blue-100" : "hover:bg-gray-200"
+              selectedTab === "allFriends" ? "bg-[var(--btn)] text-white" : "hover:bg-[var(--bg-ter)]"
             }`}
           >
             All Friends
@@ -291,8 +291,8 @@ function FriendsPage() {
       </div>
 
       {/* Right Content Area */}
-      <div className="w-3/4 bg-white p-6 rounded-xl shadow-md">
-        <h2 className="text-2xl font-semibold mb-4">
+      <div className="w-3/4 bg-[var(--bg-sec)] p-6 rounded-xl shadow-md">
+        <h2 className="text-2xl font-semibold mb-4 text-[var(--txt)]">
           {selectedTab === "suggested"
             ? "Suggested Friends"
             : selectedTab === "friendRequests"

@@ -135,7 +135,7 @@ function SuggestedFriends({ onViewSentRequests }) {
           ))}
       </div>
       {/* Find More Users Link */}
-      {suggestedFriends.length < 15 && (
+      {suggestedFriends.length > 15 && (
         <div className="mt-4 text-center">
           <button
             onClick={() => navigate("/friends")}
