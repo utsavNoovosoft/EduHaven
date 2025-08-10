@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { UserPlus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify"; 
-import 'react-toastify/dist/ReactToastify.css'; 
+import { toast } from "react-toastify";
+import TabNavigation from "../components/friendsPage/TabNavigation";
+import MainContent from "../components/friendsPage/MainContent";
 
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -13,8 +12,7 @@ function FriendsPage() {
   const [friendRequests, setFriendRequests] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
   const [allFriends, setAllFriends] = useState([]);
-  const [loading, setLoading] = useState(false); 
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
@@ -23,317 +21,137 @@ function FriendsPage() {
 
   const sendRequest = async (friendId) => {
     try {
-      const response = await axios.post(
-        `${backendUrl}/friends/request/${friendId}`,
-        null,
-        getAuthHeader()
+      await axios.post(`${backendUrl}/friends/request/${friendId}`, null, getAuthHeader());
+      setSuggestedFriends((prev) =>
+        prev.map((u) => (u._id === friendId ? { ...u, requestSent: true } : u))
       );
-      console.log("Response:", response.data.message);
-      setSuggestedFriends((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === friendId ? { ...user, requestSent: true } : user
-        )
-      );
-      toast.success("Friend request sent!"); 
+      toast.success("Friend request sent!");
     } catch (error) {
-      console.error("Error adding friend:", error.response.data);
-      toast.error("Error sending friend request!"); 
+      toast.error("Error sending friend request!");
     }
   };
 
   const cancelRequest = async (friendId) => {
     try {
-      const response = await axios.delete(
-        `${backendUrl}/friends/sent-requests/${friendId}`,
-        getAuthHeader()
-      );
-      console.log(response.data.message);
-      setSentRequests((prevRequests) =>
-        prevRequests.filter((request) => request._id !== friendId)
-      );
-      toast.info("Friend request canceled."); 
+      await axios.delete(`${backendUrl}/friends/sent-requests/${friendId}`, getAuthHeader());
+      setSentRequests((prev) => prev.filter((r) => r._id !== friendId));
+      toast.info("Friend request canceled.");
     } catch (error) {
-      console.error("Error canceling friend request:", error.response?.data || error.message);
-      toast.error("Error canceling friend request!"); 
+      toast.error("Error canceling friend request!");
     }
   };
 
   const rejectRequest = async (friendId) => {
     try {
-      const response = await axios.delete(
-        `${backendUrl}/friends/reject/${friendId}`,
-        getAuthHeader()
-      );
-      console.log(response.data.message);
-      setFriendRequests((prevRequests) =>
-        prevRequests.filter((request) => request._id !== friendId)
-      );
-      toast.error("Friend request rejected."); 
+      await axios.delete(`${backendUrl}/friends/reject/${friendId}`, getAuthHeader());
+      setFriendRequests((prev) => prev.filter((r) => r._id !== friendId));
+      toast.error("Friend request rejected.");
     } catch (error) {
-      console.error("Error rejecting friend request:", error.response?.data || error.message);
-      toast.error("Error rejecting friend request!"); 
+      toast.error("Error rejecting friend request!");
     }
   };
 
   const acceptRequest = async (friendId) => {
     try {
-      const response = await axios.post(
-        `${backendUrl}/friends/accept/${friendId}`,
-        null,
-        getAuthHeader()
-      );
-      console.log(response.data.message);
-      setFriendRequests((prevRequests) =>
-        prevRequests.filter((request) => request._id !== friendId)
-      );
-      setAllFriends((prevFriends) => [
-        ...prevFriends,
-        { ...friendRequests.find((user) => user._id === friendId) },
-      ]);
-      toast.success("Friend request accepted!"); 
+      await axios.post(`${backendUrl}/friends/accept/${friendId}`, null, getAuthHeader());
+      const acceptedUser = friendRequests.find((u) => u._id === friendId);
+      setFriendRequests((prev) => prev.filter((r) => r._id !== friendId));
+      setAllFriends((prev) => [...prev, acceptedUser]);
+      toast.success("Friend request accepted!");
     } catch (error) {
-      console.error("Error accepting friend request:", error.response?.data || error.message);
-      toast.error("Error accepting friend request!"); 
+      toast.error("Error accepting friend request!");
     }
   };
 
   const removeFriend = async (friendId) => {
     try {
-      const response = await axios.delete(
-        `${backendUrl}/friends/${friendId}`,
-        getAuthHeader()
-      );
-      console.log(response.data.message);
-      setAllFriends((prevFriends) =>
-        prevFriends.filter((friend) => friend._id !== friendId)
-      );
-      toast.success("Friend removed!"); 
+      await axios.delete(`${backendUrl}/friends/${friendId}`, getAuthHeader());
+      setAllFriends((prev) => prev.filter((f) => f._id !== friendId));
+      toast.success("Friend removed!");
     } catch (error) {
-      console.error("Error removing friend:", error.response?.data || error.message);
       toast.error("Error removing friend!");
     }
   };
 
   const fetchData = (tab) => {
-    setLoading(true); // Start loading
+    setLoading(true);
+    let endpoint = "";
     switch (tab) {
       case "suggested":
-        axios
-          .get(`${backendUrl}/friends/friend-suggestions`, getAuthHeader())
-          .then((response) => {
-            setSuggestedFriends(response.data);
-            setLoading(false);
-          })
-          .catch((error) => {
-            console.error("Error fetching suggested friends:", error);
-            setLoading(false); 
-          });
+        endpoint = "/friends/friend-suggestions";
         break;
       case "friendRequests":
-        axios
-          .get(`${backendUrl}/friends/requests`, getAuthHeader())
-          .then((response) => {
-            setFriendRequests(response.data);
-            setLoading(false); 
-          })
-          .catch((error) => {
-            console.error("Error fetching friend requests:", error);
-            setLoading(false); 
-          });
+        endpoint = "/friends/requests";
         break;
       case "sentRequests":
-        axios
-          .get(`${backendUrl}/friends/sent-requests`, getAuthHeader())
-          .then((response) => {
-            setSentRequests(response.data);
-            setLoading(false); 
-          })
-          .catch((error) => {
-            console.error("Error fetching sent requests:", error);
-            setLoading(false); 
-          });
+        endpoint = "/friends/sent-requests";
         break;
       case "allFriends":
-        axios
-          .get(`${backendUrl}/friends`, getAuthHeader())
-          .then((response) => {
-            setAllFriends(response.data);
-            setLoading(false);
-          })
-          .catch((error) => {
-            console.error("Error fetching all friends:", error);
-            setLoading(false);
-          });
+        endpoint = "/friends";
         break;
       default:
         break;
     }
+
+    axios
+      .get(`${backendUrl}${endpoint}`, getAuthHeader())
+      .then((res) => {
+        switch (tab) {
+          case "suggested":
+            setSuggestedFriends(res.data);
+            break;
+          case "friendRequests":
+            setFriendRequests(res.data);
+            break;
+          case "sentRequests":
+            setSentRequests(res.data);
+            break;
+          case "allFriends":
+            setAllFriends(res.data);
+            break;
+          default:
+            break;
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
     fetchData(selectedTab);
   }, [selectedTab]);
 
-  const handleTabClick = (tab) => {
-    setSelectedTab(tab);
+  const getDataForTab = () => {
+    switch (selectedTab) {
+      case "suggested":
+        return suggestedFriends;
+      case "friendRequests":
+        return friendRequests;
+      case "sentRequests":
+        return sentRequests;
+      case "allFriends":
+        return allFriends;
+      default:
+        return [];
+    }
   };
-
-  const renderUserCard = (user) => (
-    <div key={user._id} className="bg-[var(--bg-ter)] p-4 rounded-xl shadow-md mb-4">
-      <div className="flex items-center ">
-        <img
-          src={user.ProfilePicture}
-          alt="Profile"
-          className="w-14 h-14 rounded-full"
-        />
-        <div className="ml-4 flex-1">
-          <h4 className="text-lg font-semibold">{`${user.FirstName} ${user.LastName || ""}`}</h4>
-          <p className="text-sm text-gray-500">{user.Bio}</p>
-        </div>
-      </div>
-      <div className="mt-3">
-        {selectedTab === "suggested" && !user.requestSent && (
-          <button
-            onClick={() => sendRequest(user._id)}
-            className="w-full bg-[var(--btn)] text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition text-white hover:bg-[var(--btn-hover)] txt"
-          >
-            <UserPlus className="w-5 h-5" />
-            Add Friend
-          </button>
-        )}
-        {selectedTab === "friendRequests" && (
-          <div className="flex gap-2">
-            <button
-              onClick={() => acceptRequest(user._id)}
-              className="w-1/2 bg-[var(--btn)] text-white text-sm px-3 py-1.5 rounded-lg transition hover:bg-[var(--btn-hover)] txt"
-            >
-              Accept
-            </button>
-            <button
-              onClick={() => rejectRequest(user._id)}
-              className="w-1/2 bg-[var(--btn)] text-sm text-white px-3 py-1.5 rounded-lg transition hover:bg-[var(--btn-hover)] txt"
-            >
-              Reject
-            </button>
-          </div>
-        )}
-        {selectedTab === "sentRequests" && (
-          <button
-            onClick={() => cancelRequest(user._id)}
-            className="w-full bg-[var(--btn)] text-sm text-white px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
-          >
-            Cancel Request
-          </button>
-        )}
-        {selectedTab === "allFriends" && (
-          <button
-            onClick={() => removeFriend(user._id)}
-            className="w-full bg-[var(--btn)] text-sm text-white px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
-          >
-            Remove Friend
-          </button>
-        )}
-      </div>
-    </div>
-  );
-
-  const renderEmptyMessage = () => (
-    <div className="text-center text-gray-500">
-      <p>Nothing to display</p>
-    </div>
-  );
-
-  const renderLoadingMessage = () => (
-    <div className="text-center text-gray-500">
-      <p>Loading...</p>
-    </div>
-  );
 
   return (
     <div className="flex">
-      {/* Left Tab Navigation */}
-      <div className="w-1/4 p-4 rounded-xl mr-6 bg-[var(--bg-sec)]">
-        <h3 className="text-xl font-semibold mb-4 text-[var(--txt)]">Friends</h3>
-        <div className="space-y-2">
-          <button
-            onClick={() => handleTabClick("suggested")}
-            className={`w-full text-left px-4 py-2 rounded-lg ${
-              selectedTab === "suggested" ? "bg-[var(--btn)] text-white" : "hover:bg-[var(--bg-ter)]"
-            }`}
-          >
-            Suggested
-          </button>
-          <button
-            onClick={() => handleTabClick("friendRequests")}
-            className={`w-full text-left px-4 py-2 rounded-lg ${
-              selectedTab === "friendRequests" ? "bg-[var(--btn)] text-white" : "hover:bg-[var(--bg-ter)]"
-            }`}
-          >
-            Friend Requests
-          </button>
-          <button
-            onClick={() => handleTabClick("sentRequests")}
-            className={`w-full text-left px-4 py-2 rounded-lg ${
-              selectedTab === "sentRequests" ? "bg-[var(--btn)] text-white" : "hover:bg-[var(--bg-ter)]"
-            }`}
-          >
-            Sent Requests
-          </button>
-          <button
-            onClick={() => handleTabClick("allFriends")}
-            className={`w-full text-left px-4 py-2 rounded-lg ${
-              selectedTab === "allFriends" ? "bg-[var(--btn)] text-white" : "hover:bg-[var(--bg-ter)]"
-            }`}
-          >
-            All Friends
-          </button>
-        </div>
-      </div>
-
-      {/* Right Content Area */}
-      <div className="w-3/4 bg-[var(--bg-sec)] p-6 rounded-xl shadow-md">
-        <h2 className="text-2xl font-semibold mb-4 text-[var(--txt)]">
-          {selectedTab === "suggested"
-            ? "Suggested Friends"
-            : selectedTab === "friendRequests"
-            ? "Friend Requests"
-            : selectedTab === "sentRequests"
-            ? "Sent Requests"
-            : "All Friends"}
-        </h2>
-        <div className="space-y-4">
-          {loading ? (
-            renderLoadingMessage() 
-          ) : (
-            <>
-              {selectedTab === "suggested" &&
-                (suggestedFriends.length > 0 ? (
-                  suggestedFriends.map(renderUserCard)
-                ) : (
-                  renderEmptyMessage()
-                ))}
-              {selectedTab === "friendRequests" &&
-                (friendRequests.length > 0 ? (
-                  friendRequests.map(renderUserCard)
-                ) : (
-                  renderEmptyMessage()
-                ))}
-              {selectedTab === "sentRequests" &&
-                (sentRequests.length > 0 ? (
-                  sentRequests.map(renderUserCard)
-                ) : (
-                  renderEmptyMessage()
-                ))}
-              {selectedTab === "allFriends" &&
-                (allFriends.length > 0 ? (
-                  allFriends.map(renderUserCard)
-                ) : (
-                  renderEmptyMessage()
-                ))}
-            </>
-          )}
-        </div>
-      </div>
+      <TabNavigation selectedTab={selectedTab} onTabClick={setSelectedTab} />
+      <MainContent
+        selectedTab={selectedTab}
+        loading={loading}
+        users={getDataForTab()}
+        onSendRequest={sendRequest}
+        onCancelRequest={cancelRequest}
+        onAcceptRequest={acceptRequest}
+        onRejectRequest={rejectRequest}
+        onRemoveFriend={removeFriend}
+      />
     </div>
   );
 }
