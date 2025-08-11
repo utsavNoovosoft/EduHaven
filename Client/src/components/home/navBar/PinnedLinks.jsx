@@ -395,7 +395,7 @@ function PinnedLinks() {
 
               <motion.button
                 onClick={handleAddNew}
-                className=" w-full px-4 py-2 txt hover:bg-ter rounded-md mt-2 flex items-center gap-2 transition-colors duration-200 border-t border-opacity-20 border-gray-300 pt-3"
+                className="block w-full px-4 py-2 txt hover:bg-ter rounded-md mt-2 flex items-center gap-2 transition-colors duration-200 border-t border-opacity-20 border-gray-300 pt-3"
                 initial={{
                   opacity: 0,
                   y: 10
