@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-const apikey = "AIzaSyBPuUC9dW_uIqC8q9wsSE1zKjgUJR62XxE";
+const apikey = import.meta.env.VITE_GEMINI_KEY ;
 
 // Variants for the chat panel
 const panelVariants = {
