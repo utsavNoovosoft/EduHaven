@@ -4,9 +4,10 @@ import Calendar from "react-calendar";
 import { Plus } from "lucide-react";
 import "react-calendar/dist/Calendar.css";
 import "./ReactCustomCalendar.css";
+import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 
-const Setgoals = ({ onGoalCreated }) => {
+const Setgoals = ({ onGoalCreated}) => {
   const [title, setTitle] = useState("");
   const [deadline, setDeadline] = useState(null);
   const [time, setTime] = useState("21:00");
@@ -27,7 +28,7 @@ const Setgoals = ({ onGoalCreated }) => {
 
   const handleCreate = async () => {
     if (!title.trim()) {
-      alert("Title is required!");
+      toast.warning("Title is required!");
       return;
     }
     try {
