@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Setgoals from "./SetGoals.jsx";
 import DeadlinePickerModal from "./DeadlinePickerModal.jsx";
+import { motion } from "framer-motion";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 const GoalsComponent = () => {
@@ -254,9 +255,22 @@ const GoalsComponent = () => {
     }
   };
 
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: { staggerChildren: 0.05 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.25 } },
+  };
+
   const renderTodoItem = (todo) => (
-    <div
+    <motion.div
       key={todo._id}
+      variants={itemVariants}
       className="group flex items-center space-x-2 p-2 px-4 rounded-lg hover:bg-ter cursor-pointer"
     >
       <label className="relative flex items-center">
@@ -364,7 +378,7 @@ const GoalsComponent = () => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 
   const renderSection = (title, items, sectionKey) => (
@@ -385,7 +399,12 @@ const GoalsComponent = () => {
       </button>
 
       {!collapsedSections[sectionKey] && (
-        <div className="mt-2">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="mt-2"
+        >
           {items.length === 0 ? (
             <div className="txt-dim text-center py-4">
               No {title.toLowerCase()} available
@@ -393,7 +412,7 @@ const GoalsComponent = () => {
           ) : (
             items.map(renderTodoItem)
           )}
-        </div>
+        </motion.div>
       )}
     </div>
   );
@@ -415,13 +434,14 @@ const GoalsComponent = () => {
             <span className="txt-dim">●</span>
             <span>{closedCount} Closed</span>
           </div>
-          <button
+          <motion.button
+          whileTap={{rotate:180}}
             onClick={recreateDailyHabits}
             className="p-1 rounded hover:bg-ter txt-dim hover:txt transition-colors"
             title="Recreate daily habits"
           >
             <RefreshCw className="h-4 w-4" />
-          </button>
+          </motion.button>
         </div>
       </div>
 
