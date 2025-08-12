@@ -3,6 +3,7 @@ import { parseISO } from "date-fns";
 import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import EventPopup from "./eventPopup";
+import AllEventsPopup from "./AllEventsPopup";
 import { motion } from "framer-motion";
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -22,6 +23,7 @@ function Calendar() {
   ).getDay();
   const daysArray = [...Array(daysInMonth).keys()].map((day) => day + 1);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [showAllEvents, setShowAllEvents] = useState(false);
   const [time, setTime] = useState(new Date());
   const [, setSelectedEvent] = useState(null);
 
@@ -185,7 +187,7 @@ function Calendar() {
                   key={day}
                   onClick={() => handleDayClick(day)}
                   className={`flex items-center justify-center p-2.5 text-sm rounded-full txt cursor-pointer transition-all duration-200 ease-in-out h-9 
-                  ${isToday ? "bg-purple-600 hover:bg-purple-700" : ""}
+                  ${isToday ? "btn" : ""}
                   ${hasEvent && !isToday ? "bg-ter hover:bg-ter" : ""}
                   ${!isToday && !hasEvent ? "hover:bg-ter" : ""}`}
                 >
@@ -198,7 +200,18 @@ function Calendar() {
 
         {/* Upcoming Events Section with subtle animations */}
         <div className="p-6 rounded-3xl bg-ter flex-1 mt-6">
-          <h3 className="text-lg font-semibold txt mb-4">Upcoming Events:</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold txt">
+              Upcoming Events:
+            </h3>
+            <button
+              onClick={() => setShowAllEvents(true)}
+              className="text-sm txt-dim hover:txt transition-colors flex items-center gap-1"
+            >
+              See all
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
           {upcomingEvents.length > 0 ? (
             <motion.ul
               className="txt space-y-6 pl-2 pr-3 overflow-x-scroll max-h-[120px]"
@@ -217,7 +230,7 @@ function Calendar() {
                 return (
                   <motion.li
                     key={event._id}
-                    className="pl-3 border-l-4 border-purple-500"
+                    className="pl-3 border-l-4 border-[var(--btn)]"
                     variants={{
                       hidden: { opacity: 0, y: 10 },
                       visible: { opacity: 1, y: 0 },
@@ -257,6 +270,14 @@ function Calendar() {
         <EventPopup
           date={selectedDay}
           onClose={handleClosePopup}
+          refreshEvents={fetchEvents}
+        />
+      )}
+
+      {showAllEvents && (
+        <AllEventsPopup
+          events={events}
+          onClose={() => setShowAllEvents(false)}
           refreshEvents={fetchEvents}
         />
       )}
