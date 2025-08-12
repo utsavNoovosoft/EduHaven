@@ -176,7 +176,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
             )}
             <button
               onClick={handleCreateOrUpdate}
-              className="flex-1 m-auto w-min rounded-lg bg-purple-600 py-2 text-center text-white font-semibold shadow hover:bg-purple-700 transition"
+              className="btn flex-1 m-auto w-min rounded-lg py-2 text-center text-white font-semibold shadow transition"
             >
               {event ? "Update" : "Create"}
             </button>

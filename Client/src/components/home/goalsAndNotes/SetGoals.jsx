@@ -4,8 +4,10 @@ import Calendar from "react-calendar";
 import { Plus } from "lucide-react";
 import "react-calendar/dist/Calendar.css";
 import "./ReactCustomCalendar.css";
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
-const Setgoals = ({ onGoalCreated }) => {
+const Setgoals = ({ onGoalCreated}) => {
   const [title, setTitle] = useState("");
   const [deadline, setDeadline] = useState(null);
   const [time, setTime] = useState("21:00");
@@ -26,11 +28,13 @@ const Setgoals = ({ onGoalCreated }) => {
 
   const handleCreate = async () => {
     if (!title.trim()) {
-      alert("Title is required!");
+      toast.warning("Title is required!");
       return;
     }
     try {
-      const dueDate = deadline ? deadline.toISOString() : new Date().toISOString();
+      const dueDate = deadline
+        ? deadline.toISOString()
+        : new Date().toISOString();
 
       const taskData = {
         title,
@@ -87,14 +91,27 @@ const Setgoals = ({ onGoalCreated }) => {
           autoFocus
           className="w-full bg-transparent border-b border-txt-dim txt-dim py-2 px-2 focus:outline-none"
         />
-        <button onClick={handleCreate} className="txt ml-2">
+        <motion.button
+          whileTap={{ rotate: 90, transition: { duration: 0.2 } }}
+          animate={{ rotate: 0, transition: { duration: 0 } }}
+          onClick={handleCreate}
+          className="txt ml-2"
+        >
           <Plus />
-        </button>
+        </motion.button>
       </div>
 
       {title.trim() !== "" && (
         <>
-          <div className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.2, ease: "easeInOut" },
+            }}
+            className="mt-3 mb-4 flex gap-6 [@container(max-width:420px)]:flex-col"
+          >
             <div className="flex-1">
               <div className="mb-4 [@container(max-width:420px)]:flex gap-12 items-center">
                 <label className="block font-semibold mb-1">Repeat:</label>
@@ -116,7 +133,10 @@ const Setgoals = ({ onGoalCreated }) => {
               {/* Updated Time Input */}
               <div className="mb-4 [@container(max-width:420px)]:flex gap-16 items-center">
                 <label className="block font-semibold mb-1">
-                  Time <span className="text-xs text-txt-dim ml-1">({is24 ? "24-hour" : "12-hour"})</span>
+                  Time{" "}
+                  <span className="text-xs text-txt-dim ml-1">
+                    ({is24 ? "24-hour" : "12-hour"})
+                  </span>
                 </label>
                 <input
                   type="time"
@@ -158,7 +178,7 @@ const Setgoals = ({ onGoalCreated }) => {
                 prev2Label={null}
               />
             </div>
-          </div>
+          </motion.div>
         </>
       )}
     </div>
