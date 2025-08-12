@@ -18,7 +18,6 @@ const getAuthHeader = () => {
 
 const Leaderboard = () => {
   const [view, setView] = useState("weekly");
-  const [isOpen, setIsOpen] = useState(false);
   const [friendsOnly, setFriendsOnly] = useState(false);
   const [leaderboard, setLeaderboard] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
@@ -81,7 +80,6 @@ const Leaderboard = () => {
 
   const handleDropdownClick = (viewType) => {
     setView(viewType);
-    setIsOpen(false);
   };
 
   const handleFriendsOnlyToggle = () => {
@@ -113,27 +111,22 @@ const Leaderboard = () => {
         </h3>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              className="flex items-center gap-1"
-              onClick={() => setIsOpen(!isOpen)}
-            >
+            <Button variant="outline" className="flex items-center gap-1">
               {view.charAt(0).toUpperCase() + view.slice(1)}{" "}
-              <ChevronDown className="w-4 h-4" />
+              <ChevronDown className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          {isOpen && (
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleDropdownClick("daily")}>
-                Daily
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDropdownClick("weekly")}>
-                Weekly
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDropdownClick("monthly")}>
-                Monthly
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          )}
+          <DropdownMenuContent align="end" className="bg-[var(--bg-sec)]">
+            <DropdownMenuItem onSelect={() => handleDropdownClick("daily")}>
+              Daily
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleDropdownClick("weekly")}>
+              Weekly
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleDropdownClick("monthly")}>
+              Monthly
+            </DropdownMenuItem>
+          </DropdownMenuContent>
         </DropdownMenu>
       </nav>
 
