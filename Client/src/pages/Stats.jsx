@@ -13,7 +13,7 @@ import Leaderboard from "../components/stats/Leaderboard";
 import Test from "../components/stats/Test.jsx";
 import AdCard from "@/components/AdCard";
 
-const StatsPage = ({ isCurrentUser = false }) => {
+const Stats = ({ isCurrentUser = false }) => {
   const { userId } = useParams();
   const { user: currentUser, fetchUserDetails } = useUserProfile();
   const [userStats, setUserStats] = useState(null);
@@ -133,4 +133,4 @@ const StatsPage = ({ isCurrentUser = false }) => {
   );
 };
 
-export default StatsPage;
+export default Stats;
