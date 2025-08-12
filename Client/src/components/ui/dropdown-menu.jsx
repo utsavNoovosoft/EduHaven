@@ -1,44 +1,47 @@
-import { useState } from "react";
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import { ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import * as React from "react"
+import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
+import { cn } from "@/lib/utils"
 
-const DropdownMenu = ({ children }) => {
-  return <div className="relative inline-block text-left">{children}</div>;
-};
+const DropdownMenu = DropdownMenuPrimitive.Root
 
-const DropdownMenuTrigger = React.forwardRef(({ className, ...props }, ref) => (
-  <Button
+const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
+
+const DropdownMenuContent = React.forwardRef(({ className, sideOffset = 4, ...props }, ref) => (
+  <DropdownMenuPrimitive.Portal>
+    <DropdownMenuPrimitive.Content
+      ref={ref}
+      sideOffset={sideOffset}
+      className={cn(
+        "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white p-1 text-neutral-950 shadow-md dark:bg-neutral-950 dark:text-neutral-50",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out",
+        "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+        "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+        "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2",
+        "data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        className
+      )}
+      {...props}
+    />
+  </DropdownMenuPrimitive.Portal>
+))
+DropdownMenuContent.displayName = "DropdownMenuContent"
+
+const DropdownMenuItem = React.forwardRef(({ className, inset, ...props }, ref) => (
+  <DropdownMenuPrimitive.Item
     ref={ref}
-    className={cn("flex items-center gap-1", className)}
+    className={cn(
+      "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-neutral-100 focus:bg-neutral-100 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800",
+      inset && "pl-8",
+      className
+    )}
     {...props}
   />
-));
-DropdownMenuTrigger.displayName = "DropdownMenuTrigger";
+))
+DropdownMenuItem.displayName = "DropdownMenuItem"
 
-const DropdownMenuContent = ({ children, align = "end" }) => {
-  return (
-    <div
-      className={cn(
-        "absolute mt-2 w-48 border bg-primary rounded-md shadow-lg z-50",
-        align === "end" ? "right-0" : "left-0"
-      )}
-    >
-      <div className="py-1">{children}</div>
-    </div>
-  );
-};
-
-const DropdownMenuItem = ({ children, onClick }) => {
-  return (
-    <button
-      onClick={onClick}
-      className="block w-full px-4 py-2 text-left text-sm hover:bg-[var(--bg-ter)]"
-    >
-      {children}
-    </button>
-  );
-};
-
-export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem };
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+}
