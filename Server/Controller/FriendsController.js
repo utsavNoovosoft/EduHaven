@@ -165,10 +165,6 @@ export const viewSentRequests = async (req, res) => {
   }
 };
 
-export const removeSentRequest = async(req, res) => {
-  // Your existing implementation here
-}
-
 // Enhanced getUserStats function (ONLY CHANGE MADE)
 export const getUserStats = async (req, res) => {
   try {

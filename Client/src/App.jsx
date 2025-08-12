@@ -2,10 +2,9 @@ import { Routes, Route } from "react-router-dom";
 import RouterSelector from "./lib/RouterSelector";
 import Layout from "./components/Layout";
 import Home from "./pages/Home.jsx";
-import Stats from "./pages/Stats";
+import StatsPage from "./pages/Stats"; // Updated import name
 import GameRoom from "./routes/GameRoutes.jsx";
 import Signout from "./Auth/Signout";
-import UserProfile from "./pages/OtherUserProfile";
 // import SignUp from "./Auth/Authenticate.jsx";
 import PageNotFound from "../src/pages/PageNotFound";
 import ProjectInfo from "../src/pages/ProjectInfo";
@@ -30,11 +29,11 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="session" element={<Session />} />
-              <Route path="stats" element={<Stats />} />
+              <Route path="stats" element={<StatsPage isCurrentUser={true} />} /> {/* Updated */}
               <Route path="games/*" element={<GameRoom />} />
               <Route path="project-details" element={<ProjectInfo />} />
               <Route path="settings/" element={<Settings />} />
-              <Route path="user/:userId" element={<UserProfile />} />
+              <Route path="user/:userId" element={<StatsPage isCurrentUser={false} />} /> {/* Updated */}
               <Route path="*" element={<PageNotFound />} />
             </Route>
 
