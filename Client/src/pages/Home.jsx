@@ -6,9 +6,20 @@ import GoalsComponent from "@/components/home/goalsAndNotes/GoalsComponent.jsx";
 import NavBar from "@/components/home/navBar/NavBar";
 import PinnedRooms from "@/components/home/PinnedRooms";
 import LandingPage from "./LandingPage";
+import { useEffect, useState } from "react";
 
 function StudyRoom() {
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setToken(localStorage.getItem("token"));
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   if (!token) {
     return <LandingPage />;

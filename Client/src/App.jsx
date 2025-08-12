@@ -34,7 +34,6 @@ function App() {
               <Route path="games/*" element={<GameRoom />} />
               <Route path="project-details" element={<ProjectInfo />} />
               <Route path="settings/" element={<Settings />} />
-              <Route path="*" element={<PageNotFound />} />
               <Route path="friends" element={<FriendsPage/>} />
             </Route>
 
