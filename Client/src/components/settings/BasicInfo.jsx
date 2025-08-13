@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
 import { Camera, User, Trash2 } from "lucide-react";
 import UpdateButton from "./UpdateButton";
+import { convertImageToWebp } from "@/lib/cwebp";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 export default function BasicInfo() {
@@ -100,7 +101,11 @@ export default function BasicInfo() {
 
     setIsProfilePicLoading(true);
     const formData = new FormData();
-    formData.append("profilePicture", profilePic);
+
+    // Convert images to webp
+    const profilePicWebp = await convertImageToWebp(profilePic);
+
+    formData.append("profilePicture", profilePicWebp);
 
     try {
       const response = await axios.post(
