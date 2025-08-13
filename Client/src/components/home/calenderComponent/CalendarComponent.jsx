@@ -6,11 +6,21 @@ import EventPopup from "./eventPopup";
 import AllEventsPopup from "./AllEventsPopup";
 import { motion } from "framer-motion";
 const backendUrl = import.meta.env.VITE_API_URL;
+import { format } from "date-fns";
+import CalendarDayTooltip from "./CalendarDayTooltip";
 
 function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
+
+  const [eventsByDate, setEventsByDate] = useState({});
+  const [hoveredDate, setHoveredDate] = useState(null);
+  const [cardPosition, setCardPosition] = useState({
+    top: 0,
+    left: 0,
+  });
+
   const daysInMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
@@ -78,6 +88,18 @@ function Calendar() {
   };
 
   useEffect(() => {
+    const eventsMap = events.reduce((acc, event) => {
+      const formattedDateKey = format(parseISO(event.date), "yyyy-MM-dd");
+      if (!acc[formattedDateKey]) {
+        acc[formattedDateKey] = [];
+      }
+      acc[formattedDateKey].push(event);
+      return acc;
+    }, {});
+    setEventsByDate(eventsMap);
+  }, [events]);
+
+  useEffect(() => {
     fetchEvents();
 
     const interval = setInterval(() => {
@@ -120,9 +142,40 @@ function Calendar() {
 
   const [timePart, period] = formattedTime.split(" ");
 
+  const getFormattedDate = (day) => {
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const paddedDay = String(day).padStart(2, "0");
+    return `${year}-${month}-${paddedDay}`;
+  };
+
+  const setCalendarDayTooltipPosition = (dayRect, containerRect) => {
+    const maxCalendarDayTooltipWidth = 240;
+    const maxCalendarDayTooltipHeight = 200;
+
+    // initial centered position below the day
+    let left =
+      dayRect.left -
+      containerRect.left +
+      dayRect.width / 2 -
+      maxCalendarDayTooltipWidth / 2;
+    let top = dayRect.bottom - containerRect.top - 12;
+
+    // clamp horizontally inside container
+    if (left < 0) left = 0;
+    if (left + maxCalendarDayTooltipWidth > containerRect.width)
+      left = containerRect.width - maxCalendarDayTooltipWidth;
+
+    // clamp vertically inside container
+    if (top + maxCalendarDayTooltipHeight > containerRect.height)
+      top = containerRect.height - maxCalendarDayTooltipHeight;
+
+    setCardPosition({ top, left });
+  };
+
   return (
     <>
-      <div className="bg-sec pt-6 w-[25%] min-w-fit rounded-3xl shadow flex flex-col max-h-[750px]">
+      <div className="bg-sec pt-6 w-[25%] min-w-fit rounded-3xl shadow flex flex-col max-h-[750px] relative calendar-container">
         {/* Header: Time and Day */}
         <div className="px-6">
           <h1 className="text-5xl font-thin txt mb-2">
@@ -174,36 +227,63 @@ function Calendar() {
                 day === new Date().getDate() &&
                 currentDate.getMonth() === new Date().getMonth() &&
                 currentDate.getFullYear() === new Date().getFullYear();
-              const hasEvent = Object.values(events).some((event) => {
-                const eventDate = parseISO(event.date);
-                return (
-                  eventDate.getDate() === day &&
-                  eventDate.getMonth() === currentDate.getMonth() &&
-                  eventDate.getFullYear() === currentDate.getFullYear()
-                );
-              });
+
+              const formattedDate = getFormattedDate(day);
+
+              const dayEvents = eventsByDate[formattedDate] || [];
+              const hasEvent = dayEvents.length > 0;
+
               return (
-                <div
-                  key={day}
-                  onClick={() => handleDayClick(day)}
-                  className={`flex items-center justify-center p-2.5 text-sm rounded-full txt cursor-pointer transition-all duration-200 ease-in-out h-9 
-                  ${isToday ? "bg-purple-600 hover:bg-purple-700" : ""}
-                  ${hasEvent && !isToday ? "bg-ter hover:bg-ter" : ""}
-                  ${!isToday && !hasEvent ? "hover:bg-ter" : ""}`}
-                >
-                  {day}
+                <div key={day} className="relative group">
+                  <div
+                    onClick={() => handleDayClick(day)}
+                    className={`calendar-day-cell relative flex items-center justify-center p-2.5 text-sm rounded-full txt cursor-pointer transition-all duration-200 ease-in-out h-9 
+                      ${isToday ? "bg-purple-600 hover:bg-purple-700" : ""}
+                      ${hasEvent && !isToday ? "bg-ter hover:bg-ter" : ""}
+                      ${!isToday && !hasEvent ? "hover:bg-ter" : ""}`}
+                    onMouseEnter={(e) => {
+                      if (hasEvent) {
+                        setHoveredDate(formattedDate);
+
+                        const dayRect = e.currentTarget.getBoundingClientRect();
+                        const containerRect = e.currentTarget
+                          .closest(".calendar-container")
+                          .getBoundingClientRect();
+                        setCalendarDayTooltipPosition(dayRect, containerRect);
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredDate(null);
+                    }}
+                  >
+                    {day}
+                  </div>
                 </div>
               );
             })}
+            {hoveredDate && (
+              <CalendarDayTooltip
+                className="calendar-tooltip"
+                date={hoveredDate}
+                events={eventsByDate[hoveredDate] || []}
+                position={cardPosition}
+                onMouseEnter={() => {
+                  const formattedDate = getFormattedDate(
+                    new Date(hoveredDate).getDate()
+                  );
+                  setHoveredDate(formattedDate);
+                }}
+                onMouseLeave={() => {
+                  setHoveredDate(null);
+                }}
+              />
+            )}
           </div>
         </div>
-
         {/* Upcoming Events Section with subtle animations */}
         <div className="p-6 rounded-3xl bg-ter flex-1 mt-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold txt">
-              Upcoming Events:
-            </h3>
+            <h3 className="text-lg font-semibold txt">Upcoming Events:</h3>
             <button
               onClick={() => setShowAllEvents(true)}
               className="text-sm txt-dim hover:txt transition-colors flex items-center gap-1"
