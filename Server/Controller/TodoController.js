@@ -1,4 +1,5 @@
 import Task from "../Model/ToDoModel.js";
+import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 
 export const getAllTodos = async (req, res) => {
   try {
@@ -6,8 +7,75 @@ export const getAllTodos = async (req, res) => {
       return res.status(401).json({ success: false, error: 'Unauthorized. User ID missing.' });
     }
 
-    const tasks = await Task.find({ user: req.user.id }).sort({ createdAt: -1 });
-    res.status(200).json({ success: true, data: tasks });
+    const view = req.query.view || "all"; 
+    const now = new Date();
+    let startDate, endDate;
+
+    // Determine date range
+    if (view === "daily") {
+      startDate = startOfWeek(now, { weekStartsOn: 1 }); // Monday
+      endDate = endOfDay(now);
+    } else if (view === "weekly") {
+      startDate = startOfMonth(now);
+      endDate = endOfMonth(now);
+    } else if (view === "monthly") {
+      startDate = new Date(now.getFullYear(), 0, 1); 
+      endDate = new Date(now.getFullYear(), 11, 31); 
+    }
+
+    const query = { user: req.user.id };
+    if (view !== "all") {
+      query.createdAt = { $gte: startDate, $lte: endDate };
+    }
+
+    const tasks = await Task.find(query).sort({ createdAt: -1 });
+
+    // Group by view
+    const grouped = {};
+
+    tasks.forEach((task) => {
+      const createdAt = new Date(task.createdAt);
+      let key;
+
+      if (view === "daily") {
+        key = createdAt.toLocaleDateString("en-US", { weekday: "short" }); 
+      } else if (view === "weekly") {
+        key = `Week ${Math.ceil(createdAt.getDate() / 7)}`;
+      } else if (view === "monthly") {
+        key = createdAt.toLocaleDateString("en-US", { month: "short" }); 
+      }
+
+      if (!grouped[key]) grouped[key] = { name: key, completed: 0, pending: 0 };
+      if (task.completed) grouped[key].completed += 1;
+      else grouped[key].pending += 1;
+    });
+
+    // Fill in missing labels for chart continuity
+    const finalData = [];
+
+    if (view === "daily") {
+      const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      days.forEach((day) => {
+        finalData.push(grouped[day] || { name: day, completed: 0, pending: 0 });
+      });
+    } else if (view === "weekly") {
+      for (let i = 1; i <= 4; i++) {
+        const label = `Week ${i}`;
+        finalData.push(grouped[label] || { name: label, completed: 0, pending: 0 });
+      }
+    } else if (view === "monthly") {
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      months.forEach((month) => {
+        finalData.push(grouped[month] || { name: month, completed: 0, pending: 0 });
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: finalData,
+      total: tasks.length,
+      completed: tasks.filter((t) => t.completed).length,
+    });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -30,7 +98,7 @@ export const createTodo = async (req, res) => {
     const { title, dueDate, deadline, repeatEnabled, repeatType, reminderTime, timePreference } = req.body;
     console.log('create todo');
     const userId = req.user._id;
-    
+
     // Validation
     if (!title || !dueDate) {
       return res.status(400).json({ success: false, error: 'Title and due date are required.' });
@@ -163,10 +231,10 @@ export const recreateDailyHabits = async (req, res) => {
 
     console.log(`Created ${newTasks.length} daily habits`);
 
-    res.status(200).json({ 
-      success: true, 
+    res.status(200).json({
+      success: true,
       message: `Created ${newTasks.length} daily habits`,
-      data: newTasks 
+      data: newTasks
     });
   } catch (error) {
     console.error('Error in recreateDailyHabits:', error);
