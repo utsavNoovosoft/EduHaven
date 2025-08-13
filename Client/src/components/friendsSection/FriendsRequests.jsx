@@ -49,7 +49,6 @@ function FriendRequests() {
   };
 
   if (friendRequests.length === 0) return null;
-
   return (
     <section className="bg-sec rounded-3xl p-3 2xl:p-4">
       <h3 className="text-xl font-semibold txt">Friend Requests</h3>

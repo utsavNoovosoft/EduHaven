@@ -17,8 +17,27 @@ import { Link } from "react-router-dom";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 const ProfileCard = () => {
+  const getAuthHeader = () => {
+    const token = localStorage.getItem("token");
+    return { headers: { Authorization: `Bearer ${token}` } };
+  };
+
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [friendsCount, setFriendsCount] = useState(0);
+
+  useEffect(() => {
+      const friendsCount = async() => {
+        try {
+          const response = await axios.get(`${backendUrl}/friends/count`, getAuthHeader());
+          setFriendsCount(response.data.count);
+          console.log("Friends count is:", response.data.count);
+        } catch (error) {
+          console.error("Error fetching friends count:", error);
+        }
+      };
+      friendsCount();
+      }, []);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -44,6 +63,8 @@ const ProfileCard = () => {
     };
     fetchUserProfile();
   }, []);
+
+
   if (isLoading || !user) {
     return (
       <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 w-full h-fit relative overflow-hidden">
@@ -131,7 +152,7 @@ const ProfileCard = () => {
           </div>
           <div className="text-center flex-1">
             <span className="block text-2xl font-bold text-[var(--text-primary)]">
-              56
+              {friendsCount}
             </span>
             <span className="text-sm text-[var(--text-secondary)]">
               Friends
