@@ -6,6 +6,7 @@ export default {
     extend: {
       fontFamily: {
         kalam: ["Kalam", "cursive"], // Kalam font used in notes (home- page)
+        poppins: ["Poppins", "sans-serif"], // used on landing page.
       },
       borderRadius: {
         lg: "var(--radius)",

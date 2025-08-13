@@ -17,6 +17,7 @@ import GoogleRedirect from "./Auth/GoogleRedirect";
 import Auth from "./Auth/Auth";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { SocketProvider } from "./context/SocketContext";
+import FriendsPage from "./pages/FriendsPage.jsx";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -33,7 +34,7 @@ function App() {
               <Route path="games/*" element={<GameRoom />} />
               <Route path="project-details" element={<ProjectInfo />} />
               <Route path="settings/" element={<Settings />} />
-              <Route path="*" element={<PageNotFound />} />
+              <Route path="friends" element={<FriendsPage/>} />
             </Route>
 
             <Route path="session/:id" element={<StudyRoom />} />
