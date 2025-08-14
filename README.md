@@ -131,4 +131,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+
+## Preventing Backend Cold Starts
+The backend is hosted on Render Free Tier and may go to sleep after short inactivity.  
+We have implemented a keep-alive solution using [cron-job.org](https://cron-job.org/) to ping the backend every 1 minute:
+
+- URL: https://eduhaven-backend.onrender.com/
+- Interval: Every 1 minute
+- Purpose: Prevents backend cold starts for faster response times.
+
+For full details, see [`KEEP_ALIVE.md`](KEEP_ALIVE.md).
+
+
 For any further queries, feel free to reach out on our whatsApp group. Let’s make learning fun and productive!
