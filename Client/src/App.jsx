@@ -19,6 +19,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { SocketProvider } from "./context/SocketContext";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Notion from "./pages/NoteNest";
+import NoteNest from "./pages/NoteNest";
 
 function App() {
   return (
@@ -31,6 +33,7 @@ function App() {
               <Route path="session" element={<Session />} />
               <Route path="stats" element={<Stats />} />
               <Route path="games/*" element={<GameRoom />} />
+              <Route path="notenest" element={<NoteNest />} />
               <Route path="project-details" element={<ProjectInfo />} />
               <Route path="settings/" element={<Settings />} />
               <Route path="*" element={<PageNotFound />} />
