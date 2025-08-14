@@ -291,7 +291,7 @@ const StudyStats = () => {
               </Button>
             </DropdownMenuTrigger>
             {isOpen && (
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" classname="border-none">
                 <DropdownMenuItem onClick={() => handleDropdownClick("hourly")}>
                   Hourly
                 </DropdownMenuItem>
