@@ -7,6 +7,7 @@ import {
   Settings, 
   Edit3,
   BadgeInfo,
+  Users
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -44,9 +45,8 @@ function Sidebar() {
           className="relative flex flex-col items-center justify-center pt-2.5 pb-1.5 group hover:bg-ter rounded-lg transition-colors"
         >
           <IconComponent
-            className={`w-6 h-6 transition-colors duration-300 ${
-              isActive ? "txt" : "!txt-disabled group-hover:txt"
-            }`}
+            className={`w-6 h-6 transition-colors duration-300 ${isActive ? "txt" : "!txt-disabled group-hover:txt"
+              }`}
           />
           <span className="text-xs txt-dim">{label}</span>
         </Link>
@@ -66,9 +66,8 @@ function Sidebar() {
             <img
               src="./Logo.svg"
               alt="Logo"
-              className={`w-full m-auto object-contain p-4 logo-filter ${
-                isHome ? "opacity-100" : "opacity-80"
-              }`}
+              className={`w-full m-auto object-contain p-4 logo-filter ${isHome ? "opacity-100" : "opacity-80"
+                }`}
             />
           </div>
         </Link>
@@ -108,6 +107,14 @@ function Sidebar() {
               isActive={location.pathname === "/notenest"}
               ref={(el) => (linkRefs.current["/notenest"] = el)}
             />        
+          <SidebarLink
+            to="/friends"
+            IconComponent={Users}
+            label="Friends"
+            isActive={location.pathname === "/friends"}
+            ref={(el) => (linkRefs.current["/friends"] = el)}
+          />
+          
         </div>
         <hr className="border-sec my-5 mx-4" />
         <SidebarLink

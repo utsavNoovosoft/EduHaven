@@ -1,3 +1,4 @@
+// CreateRoomModal.jsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -29,7 +30,7 @@ function CreateRoomModal({ isOpen, onClose, onCreate }) {
     { value: "Entrepreneurship/startup", label: "Entrepreneurship/startup" },
     { value: "marketing", label: "Marketing" },
     { value: "Side-Hustles", label: "Side-Hustles" },
-    { value: "Freelancing", label: "Freelancing" }, //Removed extra space which causing error
+    { value: "Freelancing", label: "Freelancing" },
     { value: "Hobbies", label: "Hobbies" },
     { value: "fitness", label: "fitness" },
     { value: "Art/design", label: "Art/Design" },
@@ -66,7 +67,7 @@ function CreateRoomModal({ isOpen, onClose, onCreate }) {
                 style={{ "--tw-ring-color": "var(--btn)" }}
               />
 
-              <label className="block mb-2 font-medium txt">cateogery</label>
+              <label className="block mb-2 font-medium txt">Category</label>
               <select
                 value={cateogery}
                 onChange={(e) => setcateogery(e.target.value)}

@@ -18,7 +18,6 @@ const getAuthHeader = () => {
 
 const Leaderboard = () => {
   const [view, setView] = useState("weekly");
-  const [isOpen, setIsOpen] = useState(false);
   const [friendsOnly, setFriendsOnly] = useState(false);
   const [leaderboard, setLeaderboard] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(null);
@@ -81,7 +80,6 @@ const Leaderboard = () => {
 
   const handleDropdownClick = (viewType) => {
     setView(viewType);
-    setIsOpen(false);
   };
 
   const handleFriendsOnlyToggle = () => {
@@ -105,11 +103,7 @@ const Leaderboard = () => {
 
   return (
     <div
-      className="p-6 pl-0 rounded-3xl shadow-md text-center w-full"
-      style={{
-        backgroundColor: theme.secondary,
-        color: theme.text,
-      }}
+      className="p-6 pl-0 rounded-3xl shadow-md text-center w-full bg-[var(--bg-sec)]"
     >
       <nav className="flex justify-between items-center pl-6">
         <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -117,52 +111,39 @@ const Leaderboard = () => {
         </h3>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              className="flex items-center gap-1"
-              style={{
-                backgroundColor: theme.tertiary,
-                color: theme.text,
-              }}
-              onClick={() => setIsOpen(!isOpen)}
-            >
+            <Button variant="outline" className="flex items-center gap-1">
               {view.charAt(0).toUpperCase() + view.slice(1)}{" "}
-              <ChevronDown className="w-4 h-4" />
+              <ChevronDown className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          {isOpen && (
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => handleDropdownClick("daily")}>
-                Daily
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDropdownClick("weekly")}>
-                Weekly
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDropdownClick("monthly")}>
-                Monthly
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          )}
+          <DropdownMenuContent align="end" className="bg-[var(--bg-sec)]">
+            <DropdownMenuItem onSelect={() => handleDropdownClick("daily")}>
+              Daily
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleDropdownClick("weekly")}>
+              Weekly
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => handleDropdownClick("monthly")}>
+              Monthly
+            </DropdownMenuItem>
+          </DropdownMenuContent>
         </DropdownMenu>
       </nav>
 
       {/* Friends Only Toggle */}
       <div className="mt-4 flex pl-6 items-center gap-2">
-        <label className="text-sm" style={{ color: theme.text }}>
+        <label className="text-sm" >
           Friends Only
         </label>
         <Button
           variant="outline"
           onClick={handleFriendsOnlyToggle}
           className="relative w-14 h-8 rounded-full px-0 border-2 transition-all duration-200"
-          style={{
-            backgroundColor: friendsOnly ? theme.accent : theme.tertiary,
-            borderColor: friendsOnly ? theme.accent : theme.tertiary,
-          }}
         >
           <span
             className="absolute top-0.5 left-0.5 w-6 h-6 rounded-full transition-transform duration-200"
             style={{
-              backgroundColor: theme.primary,
+              backgroundColor: "var(--txt)",
               transform: friendsOnly ? "translateX(24px)" : "translateX(0px)",
             }}
           ></span>
