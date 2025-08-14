@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   font-family: 'Arial', sans-serif;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   margin: 0;
   padding: 0;
@@ -23,15 +23,17 @@
 
 .scoreContainer {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: flex-end;
+  flex-direction: row; /* ⬅ now in one line */
+  gap: 0.5rem;         /* space between score boxes */
+  align-items: center; /* vertically align */
+  justify-content: center; /* keep to the right */
 }
+
 
 .score {
   background: var(--accent);
   color: var(--txt-invert);
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 4rem;
   border-radius: 8px;
   font-weight: bold;
   font-size: 1.1rem;
@@ -160,5 +162,18 @@
   }
   .cell {
     font-size: clamp(0.9rem, 4vw, 1.5rem);
+  }
+}
+nav {
+  min-height: 48px; /* ensures clickable area remains enough */
+}
+
+@media (max-width: 640px) {
+  nav h1 {
+    font-size: 1.1rem;
+  }
+  nav button {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.6rem;
   }
 }
