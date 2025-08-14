@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { useUserProfile , fetchUserStats  } from "@/contexts/UserProfileContext";
+import { useUserProfile, fetchUserStats } from "@/contexts/UserProfileContext";
 import NotLogedInPage from "@/components/NotLogedInPage";
 import ProfileCard from "../components/stats/ProfileCard";
 import MonthlyLevel from "../components/stats/MonthlyLevel";
-import Achievements from "../components/stats/Achievements";
 import Badges from "../components/stats/Badges";
 import StudyStats from "../components/stats/StudyStats";
 import Goals from "../components/stats/Goals";
@@ -23,28 +22,24 @@ const Stats = ({ isCurrentUser = false }) => {
     const fetchStats = async () => {
       try {
         if (isCurrentUser) {
-          // Fetch current user's data
           const token = localStorage.getItem("token");
           if (!token) return;
 
           const decoded = jwtDecode(token);
           await fetchUserDetails(decoded.id);
-          
-          // For current user, we can use the context data directly
+
           setUserStats({
             name: `${currentUser?.FirstName} ${currentUser?.LastName}`,
             bio: currentUser?.Bio,
             profilePicture: currentUser?.ProfilePicture,
             studyStats: currentUser?.StudyStats,
             monthlyLevel: currentUser?.MonthlyLevel,
-            achievements: currentUser?.Achievements,
             badges: currentUser?.Badges,
             goals: currentUser?.Goals,
             leaderboard: currentUser?.Leaderboard,
             testData: currentUser?.TestData,
           });
         } else {
-          // Fetch other user's data
           const res = await fetchUserStats(userId);
 
           const mappedStats = {
@@ -58,7 +53,6 @@ const Stats = ({ isCurrentUser = false }) => {
               lastActive: res.stats.lastActive,
             },
             monthlyLevel: res.stats.monthlyLevel || {},
-            achievements: res.stats.achievements || [],
             badges: res.stats.badges || [],
             goals: res.stats.goals || [],
             leaderboard: res.stats.leaderboard || [],
@@ -77,7 +71,6 @@ const Stats = ({ isCurrentUser = false }) => {
     fetchStats();
   }, [isCurrentUser, userId, currentUser, fetchUserDetails]);
 
-  // For current user, check if logged in
   if (isCurrentUser && !currentUser) {
     return <NotLogedInPage />;
   }
@@ -121,7 +114,6 @@ const Stats = ({ isCurrentUser = false }) => {
               </div>
             </div>
             <div>
-              <Achievements data={userStats.achievements} />
               <Leaderboard data={userStats.leaderboard} />
             </div>
           </div>
