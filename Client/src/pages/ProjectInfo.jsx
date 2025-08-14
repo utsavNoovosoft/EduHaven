@@ -8,6 +8,14 @@ import {
   Calendar,
   FileText,
   SmilePlus,
+  BookOpen,
+  BarChart3,
+  Trophy,
+  MessageCircle,
+  Bot,
+  UserPlus,
+  Video,
+  Target,
 } from "lucide-react";
 import AdCard from "@/components/AdCard";
 import { motion } from "framer-motion";
@@ -31,6 +39,25 @@ const ContributorSkeleton = () => (
   </div>
 );
 
+// Feature item component with subtle animation
+const FeatureItem = ({ icon: Icon, children }) => (
+  <motion.li
+    className="flex items-start gap-3 txt-dim"
+    initial={{ opacity: 0, x: -10 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 0.3 }}
+  >
+    <motion.div
+      whileHover={{ scale: 1.1 }}
+      transition={{ duration: 0.2 }}
+      className="mt-1 flex-shrink-0"
+    >
+      <Icon className="w-5 h-5 text-blue-400" />
+    </motion.div>
+    <span>{children}</span>
+  </motion.li>
+);
+
 export default function Info() {
   const [repoData, setRepoData] = useState(null);
   const [contributors, setContributors] = useState([]);
@@ -44,12 +71,12 @@ export default function Info() {
           fetch(GITHUB_API_URL),
           fetch(`${GITHUB_API_URL}/contributors`)
         ]);
-        
+
         const [repoJson, contributorsJson] = await Promise.all([
           repoResponse.json(),
           contributorsResponse.json()
         ]);
-        
+
         setRepoData(repoJson);
         setContributors(contributorsJson);
       } catch (error) {
@@ -124,32 +151,57 @@ export default function Info() {
 
           <hr className="opacity-40" />
 
-          {/* Key features - Static content remains */}
+          {/* Key features - Updated with professional icons */}
           <div className="grid lg:grid-cols-2 gap-6">
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center txt">
                 Key Features
               </h2>
-              <ul className="txt-dim space-y-2">
-                <li>✅ Add notes, Set goals, Add Events for organised learning</li>
-                <li>📊 Analytics Productivity tracking with real-time insights.</li>
-                <li>🎮 Gamification Badges & streaks to boost motivation.</li>
+              <ul className="space-y-3">
+                <FeatureItem icon={BookOpen}>
+                  Add notes, Set goals, Add Events for organised learning
+                </FeatureItem>
+                <FeatureItem icon={BarChart3}>
+                  Analytics Productivity tracking with real-time insights
+                </FeatureItem>
+                <FeatureItem icon={Trophy}>
+                  Gamification Badges & streaks to boost motivation
+                </FeatureItem>
               </ul>
-            </div>
-            <div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
               <h2 className="text-lg sm:text-2xl font-semibold mb-4 flex items-center txt">
                 Real-Time Collaboration
               </h2>
-              <ul className="list-none list-inside txt-dim space-y-2">
-                <li>💬 Study Rooms Live chat, audio/video calls via WebRTC.</li>
-                <li>🤖 AI Chatbot Study assistance & productivity guidance.</li>
-                <li>👥 Social Features Add friends, track, and collaborate.</li>
+              <ul className="space-y-3">
+                <FeatureItem icon={Video}>
+                  Study Rooms Live chat, audio/video calls via WebRTC
+                </FeatureItem>
+                <FeatureItem icon={Bot}>
+                  AI Chatbot Study assistance & productivity guidance
+                </FeatureItem>
+                <FeatureItem icon={UserPlus}>
+                  Social Features Add friends, track, and collaborate
+                </FeatureItem>
               </ul>
-            </div>
+            </motion.div>
           </div>
 
           {/* Why it stands out - Static content */}
-          <div className="mt-6">
+          <motion.div
+            className="mt-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             <h3 className="text-lg sm:text-2xl font-semibold mb-4 gap-2 flex items-center txt">
               <SmilePlus /> Why It Stands Out?
             </h3>
@@ -159,47 +211,58 @@ export default function Info() {
               personalized learning. By leveraging real-time features and
               gamification, it ensures students stay engaged and on track.
             </p>
-          </div>
+          </motion.div>
 
           <hr className="opacity-40" />
 
           {/* Team members - Skeleton when loading */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
             <h2 className="text-lg lg:text-2xl font-semibold mb-4 flex items-center txt">
               <Users className="mr-2" /> Team members
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4">
               {isLoading
                 ? Array(8).fill(0).map((_, i) => <ContributorSkeleton key={i} />)
-                : contributors.map((contributor) => (
-                    <a
-                      key={contributor.id}
-                      href={contributor.html_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex flex-col items-center p-3 hover:bg-sec rounded-3xl text-center text-xs sm:text-sm"
-                    >
-                      <img
-                        src={contributor.avatar_url}
-                        alt={contributor.login}
-                        className="w-15 h-15 sm:w-24 sm:h-24 rounded-full mb-1"
-                      />
-                      <p className="mt-2 font-medium txt">{contributor.login}</p>
-                      <p className="txt-dim">
-                        Contributions: {contributor.contributions}
-                      </p>
-                    </a>
-                  )
-                )}
+                : contributors.map((contributor, index) => (
+                  <motion.a
+                    key={contributor.id}
+                    href={contributor.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center p-3 hover:bg-sec rounded-3xl text-center text-xs sm:text-sm"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <img
+                      src={contributor.avatar_url}
+                      alt={contributor.login}
+                      className="w-15 h-15 sm:w-24 sm:h-24 rounded-full mb-1"
+                    />
+                    <p className="mt-2 font-medium txt">{contributor.login}</p>
+                    <p className="txt-dim">
+                      Contributions: {contributor.contributions}
+                    </p>
+                  </motion.a>
+                ))}
             </div>
-          </div>
+          </motion.div>
           <hr className="opacity-40" />
         </div>
 
         {/* Right section - Skeleton for dynamic content */}
         <div className="flex-shrink-0">
           {/* About - Skeleton when loading */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
             <h2 className="semi-bold text-xl txt">About</h2>
             <div className="text-sm sm:text-base txt-dim">
               <div className="flex items-center gap-1 p-2 txt-dim">
@@ -220,10 +283,15 @@ export default function Info() {
                 {isLoading ? <TextSkeleton width="24" /> : new Date(repoData?.updated_at).toLocaleDateString()}
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Additional Details - Skeleton when loading */}
-          <div className="mt-9">
+          <motion.div
+            className="mt-9"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
             <h2 className="semi-bold text-xl txt">Additional Details</h2>
             <ul className="list-disc pl-4 sm:pl-5 text-xs sm:text-base txt-dim mx-2">
               <li className="p-2">
@@ -244,10 +312,15 @@ export default function Info() {
                 Size: {isLoading ? <TextSkeleton width="16" /> : `${repoData?.size} KB`}
               </li>
             </ul>
-          </div>
-          <div className="w-72 mt-8 space-y-4">
+          </motion.div>
+          <motion.div
+            className="w-72 mt-8 space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
             <AdCard />
-          </div>
+          </motion.div>
         </div>
       </div>
 
