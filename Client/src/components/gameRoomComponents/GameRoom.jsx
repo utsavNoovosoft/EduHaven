@@ -5,6 +5,7 @@ import SnakeIcon from "..//../assets/icon/SnakeIcon";
 import SpaceTypeIcon from "../../assets/icon/SpaceTypeIcon";
 import TicTacToeIcon from "../../assets/icon/TicTacToeIcon";
 import WacAMole from "@/assets/icon/WacAMole";
+import Game2048Icon from "@/assets/icon/Game2048Icon";
 
 function GameRoom() {
   const games = [
@@ -27,6 +28,11 @@ function GameRoom() {
       name: "Whac-a-mole",
       path: "whac-a-mole",
       Icon: WacAMole,
+    },
+    {
+      name: "2048",
+      path: "2048",
+      Icon: Game2048Icon,
     },
   ];
 

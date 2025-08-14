@@ -95,7 +95,7 @@ const Setgoals = ({ onGoalCreated}) => {
           whileTap={{ rotate: 90, transition: { duration: 0.2 } }}
           animate={{ rotate: 0, transition: { duration: 0 } }}
           onClick={handleCreate}
-          className="txt ml-2"
+          className="txt  ml-2"
         >
           <Plus />
         </motion.button>
