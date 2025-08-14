@@ -1,0 +1,7 @@
+.add-goal-btn:hover,
+.add-goal-btn:focus {
+  background: var(--button-txt);  /* Swap colors on hover */
+  color: var(--button-bg);      /* Swap back to original */
+  border-color: var(--button-bg);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
