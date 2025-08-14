@@ -6,6 +6,7 @@ import "react-calendar/dist/Calendar.css";
 import "./ReactCustomCalendar.css";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import styles from "./SetGoals.module.css";
 
 const Setgoals = ({ onGoalCreated}) => {
   const [title, setTitle] = useState("");
@@ -91,14 +92,19 @@ const Setgoals = ({ onGoalCreated}) => {
           autoFocus
           className="w-full bg-transparent border-b border-txt-dim txt-dim py-2 px-2 focus:outline-none"
         />
-        <motion.button
-          whileTap={{ rotate: 90, transition: { duration: 0.2 } }}
-          animate={{ rotate: 0, transition: { duration: 0 } }}
-          onClick={handleCreate}
-          className="txt  ml-2"
-        >
-          <Plus />
-        </motion.button>
+          {title.trim() !== "" && (
+            <motion.button
+              whileTap={{ scale: 0.95, transition: { duration: 0.1 } }}
+              whileHover={{ scale: 1.05 }}
+              animate={{ scale: 1, transition: { duration: 0 } }}
+              onClick={handleCreate}
+              className={`add-goal-btn bg-ter ml-2 px-4 py-2 rounded font-semibold shadow focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all border ${styles["add-goal-btn"]}`}
+              aria-label="Add Goal"
+              type="button"
+            >
+              Add
+            </motion.button>
+          )}
       </div>
 
       {title.trim() !== "" && (
