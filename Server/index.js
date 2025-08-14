@@ -52,6 +52,7 @@ app.use("/events", EventRoutes);
 app.use("/", TimerSessionRoutes);
 app.use("/session-room", SessionRoutes);
 app.use("/friends", FriendsRoutes);
+app.use("/users", UserRoutes);
 
 initializeSocket(io);
 

@@ -165,17 +165,59 @@ export const viewSentRequests = async (req, res) => {
   }
 };
 
+// Enhanced getUserStats function
+export const getUserStats = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId)
+      .select(
+        "sessionCount totalStudyHours stats ProfilePicture FirstName LastName Bio"
+      )
+      .lean();
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      userInfo: {
+        firstName: user.FirstName,
+        lastName: user.LastName,
+        bio: user.Bio,
+        profilePicture: user.ProfilePicture,
+      },
+      stats: {
+        totalSessions: user.sessionCount || 0,
+        totalHours: user.totalStudyHours || 0,
+        streak: user.stats?.streak || 0,
+        lastActive: user.stats?.lastActive || null,
+      },
+    });
+  } catch (err) {
+    console.error("Error fetching user stats:", err);
+    res.status(500).json({
+      success: false,
+      error: err.message,
+      message: "Error fetching user stats",
+    });
+  }
+};
+
 export const removeSentRequest = async (req, res) => {
   try {
-    const userId = req.user._id;   
-    const { friendId } = req.params; 
+    const userId = req.user._id;
+    const { friendId } = req.params;
 
     await User.findByIdAndUpdate(userId, {
-      $pull: { sentRequests: friendId }
+      $pull: { sentRequests: friendId },
     });
 
     await User.findByIdAndUpdate(friendId, {
-      $pull: { friendRequests: userId }
+      $pull: { friendRequests: userId },
     });
 
     res.json({ message: "Friend request canceled successfully." });

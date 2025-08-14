@@ -8,6 +8,7 @@ import {
   rejectRequest,
   viewSentRequests,
   removeFriend,
+  getUserStats,
   removeSentRequest
 } from "../Controller/FriendsController.js";
 
@@ -23,6 +24,7 @@ router.get("/requests", authMiddleware, incomingRequests);
 router.post("/accept/:friendId", authMiddleware, acceptRequest);
 router.delete("/reject/:friendId", authMiddleware, rejectRequest);
 router.delete("/:friendId", authMiddleware, removeFriend);
+router.get("/:userId/stats", authMiddleware, getUserStats);
 router.delete("/sent-requests/:friendId", authMiddleware, removeSentRequest);
 
 export default router;

@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import RouterSelector from "./lib/RouterSelector";
 import Layout from "./components/Layout";
 import Home from "./pages/Home.jsx";
-import Stats from "./pages/Stats";
+import Stats from "./pages/Stats"; // Updated import name
 import GameRoom from "./routes/GameRoutes.jsx";
 import Signout from "./Auth/Signout";
 // import SignUp from "./Auth/Authenticate.jsx";
@@ -30,11 +30,13 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="session" element={<Session />} />
-              <Route path="stats" element={<Stats />} />
+              <Route path="stats" element={<Stats isCurrentUser={true} />} /> {/* Updated */}
               <Route path="games/*" element={<GameRoom />} />
               <Route path="project-details" element={<ProjectInfo />} />
               <Route path="settings/" element={<Settings />} />
-              <Route path="friends" element={<FriendsPage/>} />
+              <Route path="user/:userId" element={<Stats isCurrentUser={false} />} /> {/* Updated */}
+              <Route path="friends" element={<FriendsPage />} />
+              <Route path="*" element={<PageNotFound />} />
             </Route>
 
             <Route path="session/:id" element={<StudyRoom />} />
