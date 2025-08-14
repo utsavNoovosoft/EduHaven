@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle, ChevronDown } from "lucide-react";
 import {
   LineChart,
@@ -15,46 +15,53 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import axios from "axios";
 
-const data = {
-  daily: [
-    { name: "Mon", completed: 5, pending: 3 },
-    { name: "Tue", completed: 12, pending: 2 },
-    { name: "Wed", completed: 8, pending: 4 },
-    { name: "Thu", completed: 15, pending: 5 },
-    { name: "Fri", completed: 10, pending: 3 },
-    { name: "Sat", completed: 18, pending: 1 },
-    { name: "Sun", completed: 20, pending: 0 },
-  ],
-  weekly: [
-    { name: "Week 1", completed: 40, pending: 10 },
-    { name: "Week 2", completed: 52, pending: 8 },
-    { name: "Week 3", completed: 38, pending: 12 },
-    { name: "Week 4", completed: 60, pending: 6 },
-  ],
-  monthly: [
-    { name: "Jan", completed: 150, pending: 20 },
-    { name: "Feb", completed: 180, pending: 15 },
-    { name: "Mar", completed: 120, pending: 25 },
-    { name: "Apr", completed: 200, pending: 10 },
-  ],
+
+const backendUrl = import.meta.env.VITE_API_URL;
+
+const getAuthHeader = () => {
+  const token = localStorage.getItem("token");
+  return { headers: { Authorization: `Bearer ${token}` } };
 };
 
 const Goals = () => {
   const [view, setView] = useState("weekly");
-  const [isOpen, setIsOpen] = useState(false); // Add state to manage dropdown visibility
+  const [isOpen, setIsOpen] = useState(false);
+  const [chartData, setChartData] = useState({ daily: [], weekly: [], monthly: [] });
+  const [totalStats, setTotalStats] = useState({ completed: 0, total: 0 });
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get(`${backendUrl}/todo?view=${view}`,getAuthHeader());
+        const tasks = response.data.data;
+
+        setChartData((prev) => ({ ...prev, [view]: tasks }));
+        setTotalStats({
+          completed: response.data.completed,
+          total: response.data.total,
+        });
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchTasks();
+  }, [view]);
+
 
   const handleDropdownClick = (viewType) => {
     setView(viewType);
-    setIsOpen(false); // Close the dropdown when an item is selected
+    setIsOpen(false);
   };
 
   return (
     <div className="bg-[var(--bg-sec)] p-6 pl-0 rounded-3xl shadow-md text-center w-full">
       <nav className="flex justify-between items-center pl-6">
         <h3 className="text-lg font-semibold flex items-center gap-2">
-          <CheckCircle className="w-5 h-5" /> <strong>13</strong>/
-          <strong>135</strong>
+          <CheckCircle className="w-5 h-5" /> <strong>{totalStats.completed}</strong>/
+          <strong>{totalStats.total}</strong>
           Goals done
         </h3>
         <DropdownMenu>
@@ -63,7 +70,7 @@ const Goals = () => {
               className="flex items-center gap-1 hover:bg-gray-700"
               onClick={() => setIsOpen(!isOpen)}
             >
-              {view.charAt(0).toUpperCase() + view.slice(1)}{" "}
+              {view.charAt(0).toUpperCase() + view.slice(1)}
               <ChevronDown className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -85,7 +92,7 @@ const Goals = () => {
 
       <div className="mt-4 w-full" style={{ height: 300 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data[view]}>
+          <LineChart data={chartData[view]}>
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip
