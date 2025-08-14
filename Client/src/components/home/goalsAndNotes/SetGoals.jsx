@@ -98,7 +98,7 @@ const Setgoals = ({ onGoalCreated}) => {
               whileHover={{ scale: 1.05 }}
               animate={{ scale: 1, transition: { duration: 0 } }}
               onClick={handleCreate}
-              className={`add-goal-btn bg-ter ml-2 px-4 py-2 rounded font-semibold shadow focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all border ${styles["add-goal-btn"]}`}
+              className={`add-goal-btn ml-2 font-bold shadow focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all ${styles["add-goal-btn"]}`}
               aria-label="Add Goal"
               type="button"
             >
