@@ -23,7 +23,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-    <UserProfileProvider>♦
+    <UserProfileProvider>
       <SocketProvider>
         <RouterSelector>
           <Routes>
