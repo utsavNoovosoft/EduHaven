@@ -34,7 +34,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
             headers: getAuthHeaders()
           }
         );
-        
+       
         const eventData = response.data.data[0]; // Assuming one event per date
         if (eventData) {
           setId(eventData._id);
@@ -73,7 +73,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
         console.error('No authentication token found');
         return;
       }
-
+      console.log(time);
       const eventData = { title, time, date };
       const headers = getAuthHeaders();
 

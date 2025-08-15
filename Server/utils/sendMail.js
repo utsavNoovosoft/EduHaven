@@ -6,8 +6,8 @@ const resend = new Resend(process.env.RESEND_KEY);
 const sendEmail = async (Email, FirstName, otp) => {
   try {
     const response = await resend.emails.send({
-      from: "Eduahaven <noreply@eduhaven.online>",
-      to: Email,
+      from: "onboarding@resend.dev",
+      to: "vikrammc789@gmail.com",
       subject: "Confirm your Email Address – Eduahaven",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #ffffff;">
