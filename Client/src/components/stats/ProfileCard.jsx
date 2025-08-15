@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   User,
-  MessageCircle,
-  ThumbsUp,
   Edit3,
-  Share2,
   UserPlus,
   Landmark,
   Earth,
@@ -17,13 +14,15 @@ import { Link, useParams } from "react-router-dom";
 
 const backendUrl = import.meta.env.VITE_API_URL;
 
-const ProfileCard = ({ isCurrentUser = false }) => {
-  const [user, setUser] = useState(null);
+const ProfileCard = ({ isCurrentUser = false, user }) => {
+  const [userProfile, setUserProfile] = useState(null);
+  const [userStats, setUserStats] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [requestSent, setRequestSent] = useState(false);
   const { userId } = useParams();
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchUserData = async () => {
       try {
         let response;
         if (isCurrentUser) {
@@ -31,45 +30,67 @@ const ProfileCard = ({ isCurrentUser = false }) => {
           if (!token) return;
 
           const decoded = jwtDecode(token);
-          response = await axios.get(
-            `${backendUrl}/user/details?id=${decoded.id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          
+          // Fetch user profile and stats in parallel
+          const [profileResponse, statsResponse] = await Promise.all([
+            axios.get(`${backendUrl}/user/details?id=${decoded.id}`, {
+              headers: { Authorization: `Bearer ${token}` }
+            }),
+            axios.get(`${backendUrl}/user/stats`, {
+              headers: { Authorization: `Bearer ${token}` }
+            })
+          ]);
+          
+          setUserProfile(profileResponse.data);
+          setUserStats(statsResponse.data);
         } else {
-          response = await axios.get(`${backendUrl}/user/details?id=${userId}`);
+          // For non-current user, use the passed user prop
+          setUserProfile(user);
+          // You might want to fetch their stats separately if needed
         }
-        setUser(response.data);
       } catch (error) {
-        console.error("Error fetching user profile:", error);
+        console.error("Error fetching user data:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchUserProfile();
-  }, [isCurrentUser, userId]);
+    fetchUserData();
+  }, [isCurrentUser, user, userId]);
 
-  if (isLoading || !user) {
+  const handleSendFriendRequest = async () => {
+    if (!userId) return;
+    
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      await axios.post(
+        `${backendUrl}/friends/request/${userId}`,
+        null,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      setRequestSent(true);
+      // You could add a toast notification here
+    } catch (error) {
+      console.error("Error sending friend request:", error);
+      // You could add an error toast here
+    }
+  };
+
+  if (isLoading || !userProfile) {
     return (
       <div className="overflow-hidden bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 w-full h-fit relative">
         {/* Skeleton nav */}
         <div className="flex justify-end gap-6 px-4">
           {isCurrentUser && <div className="w-6 h-6 rounded-full bg-gray-400/30"></div>}
-          <div className="w-6 h-6 rounded-full bg-gray-400/30"></div>
         </div>
 
         <div className="mx-4">
           {/* Skeleton profile */}
           <div className="relative flex items-center mb-4 gap-4 ">
-            <div className="shrink-0 w-28 h-28 rounded-full bg-gray-400/30"></div>{" "}
-            <div className="text-center flex-1">
-              <div className="h-8 w-14 mx-auto rounded-md bg-gray-400/30 mb-1 "></div>
-              <div className="h-4 w-18 mx-auto rounded-sm bg-gray-400/20"></div>
-            </div>
+            <div className="shrink-0 w-28 h-28 rounded-full bg-gray-400/30"></div>
             <div className="text-center flex-1">
               <div className="h-8 w-14 mx-auto rounded-md bg-gray-400/30 mb-1"></div>
               <div className="h-4 w-18 mx-auto rounded-sm bg-gray-400/20"></div>
@@ -84,8 +105,6 @@ const ProfileCard = ({ isCurrentUser = false }) => {
 
           {/* Skeleton buttons */}
           <div className="flex flex-wrap justify-center gap-4 my-4">
-            <div className="h-10 rounded-lg bg-gray-400/30 flex-1"></div>
-            <div className="h-10 rounded-lg bg-gray-400/30 flex-1"></div>
             <div className="h-10 rounded-lg bg-gray-400/30 w-full"></div>
           </div>
         </div>
@@ -115,16 +134,15 @@ const ProfileCard = ({ isCurrentUser = false }) => {
             <Edit3 className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)]" />
           </Link>
         )}
-        <Share2 className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)]" />
       </div>
 
       <div className="mx-4">
         {/* Profile  */}
         <div className="relative flex items-center mb-4 gap-4">
           <div className="w-28 h-28 rounded-full shadow-lg overflow-hidden">
-            {user.ProfilePicture ? (
+            {userProfile.ProfilePicture ? (
               <img
-                src={user.ProfilePicture}
+                src={userProfile.ProfilePicture}
                 alt="Profile"
                 className="w-full h-full object-cover"
               />
@@ -136,13 +154,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
           </div>
           <div className="text-center flex-1">
             <span className="block text-2xl font-bold text-[var(--text-primary)]">
-              342
-            </span>
-            <span className="text-sm text-[var(--text-secondary)]">Kudos</span>
-          </div>
-          <div className="text-center flex-1">
-            <span className="block text-2xl font-bold text-[var(--text-primary)]">
-              56
+              {userStats?.friendsCount || 0}
             </span>
             <span className="text-sm text-[var(--text-secondary)]">
               Friends
@@ -153,29 +165,29 @@ const ProfileCard = ({ isCurrentUser = false }) => {
         {/* User Info */}
         <div className="text-[var(--text-primary)]">
           <h2 className="text-xl font-bold">
-            {user.FirstName} {user.LastName}
+            {userProfile.FirstName} {userProfile.LastName}
           </h2>
-          {user?.Bio && (
+          {userProfile?.Bio && (
             <p className="text-[var(--text-secondary)] mb-4 max-w-xs">
-              {user.Bio}
+              {userProfile.Bio}
             </p>
           )}
         </div>
 
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center gap-4 my-4">
-          <button className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
-            <ThumbsUp className="w-5 h-5" />
-            <span>Kudos</span>
-          </button>
-          <button className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
-            <MessageCircle className="w-5 h-5" />
-            <span>Chat</span>
-          </button>
           {!isCurrentUser && (
-            <button className="bg-purple-600 hover:bg-purple-700 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
+            <button
+              onClick={handleSendFriendRequest}
+              disabled={requestSent}
+              className={`transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap ${
+                requestSent
+                  ? 'bg-gray-500 cursor-not-allowed'
+                  : 'bg-purple-600 hover:bg-purple-700'
+              }`}
+            >
               <UserPlus className="w-5 h-5" />
-              <span>Add friend</span>
+              <span>{requestSent ? 'Request Sent' : 'Add friend'}</span>
             </button>
           )}
         </div>
@@ -183,55 +195,58 @@ const ProfileCard = ({ isCurrentUser = false }) => {
 
       {/* Additional Details */}
       <div className="bg-gray-500/20 rounded-3xl p-4 space-y-4">
-        {user.FieldOfStudy && (
+        {userProfile.FieldOfStudy && (
           <div className="flex items-center gap-4 text-[var(--text-secondary)]">
             <Landmark className="h-7 w-7" />
             <div>
-              <p className="text-xs">{user.University || "Field of Study"}</p>
+              <p className="text-xs">{userProfile.University || "Field of Study"}</p>
               <p className="text-lg text-[var(--text-primary)]">
-                {user.FieldOfStudy}
-                {", " + user.GraduationYear || ""}
+                {userProfile.FieldOfStudy}
+                {userProfile.GraduationYear && `, ${userProfile.GraduationYear}`}
               </p>
             </div>
           </div>
         )}
 
-        {user.OtherDetails?.skills && (
+        {userProfile.OtherDetails?.skills && (
           <div className="flex items-center gap-4 text-[var(--text-secondary)]">
             <Puzzle className="h-7 w-7" />
             <div>
               <p className="text-xs">Skills</p>
               <p className="text-lg text-[var(--text-primary)]">
-                {user.OtherDetails.skills}
+                {userProfile.OtherDetails.skills}
               </p>
             </div>
           </div>
         )}
-        {user.OtherDetails?.interests && (
+        
+        {userProfile.OtherDetails?.interests && (
           <div className="flex items-center gap-4 text-[var(--text-secondary)]">
             <DraftingCompass className="h-7 w-7" />
             <div>
               <p className="text-xs">Interests</p>
               <p className="text-lg text-[var(--text-primary)]">
-                {user.OtherDetails.interests}
+                {userProfile.OtherDetails.interests}
               </p>
             </div>
           </div>
         )}
-        {user.Country && (
+        
+        {userProfile.Country && (
           <div className="flex items-center gap-4 text-[var(--text-secondary)]">
             <Earth className="h-7 w-7" />
             <div>
               <p className="text-xs">Country</p>
               <p className="text-lg text-[var(--text-primary)]">
-                {user.Country}
+                {userProfile.Country}
               </p>
             </div>
           </div>
         )}
-        {user.OtherDetails?.additionalNotes && (
+        
+        {userProfile.OtherDetails?.additionalNotes && (
           <div className="flex gap-3 text-[var(--text-secondary)]">
-            <span>{user.OtherDetails.additionalNotes}</span>
+            <span>{userProfile.OtherDetails.additionalNotes}</span>
           </div>
         )}
       </div>
