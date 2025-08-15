@@ -179,32 +179,36 @@ function handleKeyDown(e) {
 
   return (
   <div className={styles.gameContainer}>
-    {/* Navbar - Changed from sticky to fixed positioning */}
-    <nav className="w-full bg-[var(--bg-sec)] shadow-lg border-b border-[rgba(var(--shadow-rgb),0.08)] px-9 sm:px-7 py-1 flex items-center justify-between fixed top-0 left-0 z-20">
+    {/* Navbar - Fixed to properly align with sidebar */}
+    <nav className="bg-[var(--bg-sec)] shadow-lg border-b border-[rgba(var(--shadow-rgb),0.08)] px-6 sm:px-7 py-1 flex items-center justify-between fixed top-0 z-20" 
+      style={{
+        width: '94%',
+        left: '80px'
+      }}>
       {/* Back Button - Left */}
       <button
         onClick={() => window.history.back()}
-        className="flex items-center gap-2 px-4 py-2 text-[var(--txt-dim)] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm"
+        className="flex items-center gap-2 px-3 py-2 text-[var(--txt-dim)] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm"
       >
-        <ArrowLeft size={22} />
+        <ArrowLeft size={20} />
         <span className="hidden sm:inline">Back</span>
       </button>
 
       {/* Title */}
-      <h1 className="text-5xl font-bold txt tracking-wide drop-shadow-sm">
+      <h1 className="text-4xl sm:text-5xl font-bold txt tracking-wide drop-shadow-sm">
         2048
       </h1>
 
       {/* How to Play - Right */}
       <button
         onClick={() => setShowHowToPlay(true)}
-        className="px-4 py-2 text-[var(--txt-dim)] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm"
+        className="px-3 py-2 text-[var(--txt-dim)] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-sm sm:text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm whitespace-nowrap"
       >
         How to Play
       </button>
     </nav>
 
-    {/* Game content with added top margin to account for fixed navbar */}
+    {/* Game content */}
     <div className={styles.game2048}>
       {/* How to Play Modal */}
       {showHowToPlay && (

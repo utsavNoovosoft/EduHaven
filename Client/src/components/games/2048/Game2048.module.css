@@ -1,9 +1,12 @@
 .gameContainer {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 100%; 
   min-height: 100vh;
   background: var(--bg-sec);
+  overflow-x: hidden;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .game2048 {
@@ -15,7 +18,7 @@
   width: 100%;
   padding: 0;
   padding-top: 80px; 
-  margin-top: 2rem; 
+  margin-top: 2rem;
   background: var(--bg-sec);
   box-sizing: border-box;
   flex: 1;
@@ -161,6 +164,11 @@
 
 /* Mobile adjustments */
 @media (max-width: 600px) {
+  .gameContainer {
+    width: calc(100% - 60px);
+    margin-left: 60px;
+  }
+  
   .board {
     width: 95vw;
     padding: 0.8rem;
@@ -173,11 +181,17 @@
     font-size: clamp(0.9rem, 4vw, 1.5rem);
   }
 }
+
 nav {
   min-height: 48px; /* ensures clickable area remains enough */
 }
 
 @media (max-width: 640px) {
+  .gameContainer {
+    width: calc(100% - 50px);
+    margin-left: 50px;
+  }
+  
   .game2048 {
     padding-top: 60px; 
   }
@@ -187,5 +201,17 @@ nav {
   nav button {
     font-size: 0.85rem;
     padding: 0.3rem 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .scoreContainer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .score {
+    padding: 0.5rem 2rem;
+    font-size: 0.9rem;
   }
 }
