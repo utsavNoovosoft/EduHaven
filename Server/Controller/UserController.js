@@ -13,11 +13,6 @@ cloudinary.config({
     process.env.CLOUDINARY_API_SECRET || "BXpWyZHYKbAexc3conUG88t6TVM",
 });
 
-
-
-
-
-
 export const signup = async (req, res) => {
   try {
     const { FirstName, LastName, Email, Password } = req.body;
@@ -60,7 +55,7 @@ export const signup = async (req, res) => {
       }
     );
 
-    await sendMail(Email,FirstName,otp);
+    await sendMail(Email, FirstName, otp);
 
     const token = generateAuthToken(user);
 
@@ -197,6 +192,24 @@ export const updateProfile = async (req, res) => {
     return res
       .status(500)
       .json({ error: "Failed to update profile", details: error.message });
+  }
+};
+
+
+// controllers/userController.js
+
+export const deleteAccount = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    await User.findByIdAndDelete(req.user._id);
+
+    return res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting account:", error);
+    return res.status(500).json({ error: "Failed to delete account" });
   }
 };
 
