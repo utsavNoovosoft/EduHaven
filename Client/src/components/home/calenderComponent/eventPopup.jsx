@@ -73,7 +73,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
         console.error('No authentication token found');
         return;
       }
-      console.log(time);
+     
       const eventData = { title, time, date };
       const headers = getAuthHeaders();
 
@@ -118,7 +118,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
       }
     }
   };
-
+  
   return (
     <AnimatePresence>
       <motion.div
