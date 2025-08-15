@@ -61,12 +61,13 @@ function Calendar() {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      
       if (response.data.success) {
         setEvents(response.data.data);
 
         // Process upcoming events
         const today = new Date();
+        
         const futureEvents = response.data.data.filter(
           (event) => new Date(event.date) >= today
         );
@@ -88,6 +89,7 @@ function Calendar() {
   };
 
   useEffect(() => {
+    
     const eventsMap = events.reduce((acc, event) => {
       const formattedDateKey = format(parseISO(event.date), "yyyy-MM-dd");
       if (!acc[formattedDateKey]) {
@@ -173,6 +175,22 @@ function Calendar() {
     setCardPosition({ top, left });
   };
 
+  const convertTo12HourFormat = (timeString)=>{
+
+    const [hourString, minutes] = timeString.split(":"); 
+    
+    let hour = parseInt(hourString) ;; 
+    
+    const ampm = hour >=12 ? "PM" : "AM" ; 
+    if(hour === 0 ){
+      hour = 12 ;  //12 AM 
+    }else if (hour > 12){
+      hour = hour -  12  ; 
+    }
+
+    return `${hour}:${minutes} ${ampm}` ; 
+
+  }
   return (
     <>
       <div className="bg-sec pt-6 w-[25%] min-w-fit rounded-3xl shadow flex flex-col max-h-[750px] relative calendar-container">
@@ -306,6 +324,7 @@ function Calendar() {
               }}
             >
               {upcomingEvents.map((event) => {
+                const eventTime = convertTo12HourFormat(event.time);
                 const eventDate = new Date(event.date);
                 return (
                   <motion.li
@@ -321,11 +340,7 @@ function Calendar() {
                         {eventDate.toLocaleDateString()}
                       </div>
                       <div className="text-xs txt-dim">
-                        {eventDate.toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })}
+                        {eventTime}
                       </div>
                     </div>
                     <span className="block mt-1">{event.title}</span>
