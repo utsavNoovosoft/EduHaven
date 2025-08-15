@@ -4,7 +4,8 @@ import {
   GamepadIcon,
   LogIn,
   Radio,
-  Settings,
+  Settings, 
+  Edit3,
   BadgeInfo,
   Users
 } from "lucide-react";
@@ -99,6 +100,13 @@ function Sidebar() {
             isActive={location.pathname === "/games"}
             ref={(el) => (linkRefs.current["/games"] = el)}
           />
+            <SidebarLink
+              to="/notenest"
+              IconComponent={Edit3}  
+              label="NoteNest"
+              isActive={location.pathname === "/notenest"}
+              ref={(el) => (linkRefs.current["/notenest"] = el)}
+            />        
           <SidebarLink
             to="/friends"
             IconComponent={Users}

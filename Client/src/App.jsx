@@ -20,6 +20,8 @@ import { SocketProvider } from "./context/SocketContext";
 import FriendsPage from "./pages/FriendsPage.jsx";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Notion from "./pages/NoteNest";
+import NoteNest from "./pages/NoteNest";
 
 function App() {
   return (
@@ -32,6 +34,7 @@ function App() {
               <Route path="session" element={<Session />} />
               <Route path="stats" element={<Stats isCurrentUser={true} />} /> {/* Updated */}
               <Route path="games/*" element={<GameRoom />} />
+              <Route path="notenest" element={<NoteNest />} />
               <Route path="project-details" element={<ProjectInfo />} />
               <Route path="settings/" element={<Settings />} />
               <Route path="user/:userId" element={<Stats isCurrentUser={false} />} /> {/* Updated */}
