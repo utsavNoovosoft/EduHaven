@@ -159,7 +159,7 @@ export default function NoteNest() {
       
       {/* RIGHT SIDE - Tools */}
       <div className="w-1/2 flex flex-col rounded-md p-4 bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] shadow-lg text-white border text-center">
-        <h2 className="text-2xl font-bold mb-5 text-cyan-400 tracking-wide">NoteNest Tools</h2>
+        <h2 className="text-2xl font-bold mb-5 text-cyan-400 tracking-wide">NoteNest</h2>
         <nav className="flex gap-3 flex-wrap mb-6">
 {['calculator', 'graph', 'unitconverter', 'MindMap', 'flashcard', 'tasktracker', 'canvas'].map((tool) => (
             <button key={tool} onClick={() => setActiveTool(tool)}  className={`px-4 py-2 rounded-lg font-semibold tracking-wide transition 

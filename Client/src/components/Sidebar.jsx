@@ -7,7 +7,8 @@ import {
   Settings, 
   Edit3,
   BadgeInfo,
-  Users
+  Users, 
+  Wrench
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -102,8 +103,8 @@ function Sidebar() {
           />
             <SidebarLink
               to="/notenest"
-              IconComponent={Edit3}  
-              label="NoteNest"
+              IconComponent={Wrench}  
+              label="Tools"
               isActive={location.pathname === "/notenest"}
               ref={(el) => (linkRefs.current["/notenest"] = el)}
             />        
