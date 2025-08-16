@@ -45,7 +45,7 @@ const Leaderboard = () => {
         setTimeout(() => {
           setLeaderboard(res.data);
           setLoading(false);
-        }, 300); 
+        }, 300);
       } catch (error) {
         console.error("Failed to fetch leaderboard:", error);
         setLoading(false);
@@ -141,41 +141,53 @@ const Leaderboard = () => {
         </div>
       </div>
 
-      {/* Leaderboard Cards */}
-      <div
-        className={`space-y-3 transform transition-all duration-500 ${
-          loading ? "opacity-0 -translate-y-2" : "opacity-100 translate-y-0"
-        }`}
-      >
-        {leaderboard.slice(0, 10).map((user, index) => {
-          const isCurrentUser = user.userId === currentUserId;
-          return (
-            <div
-              key={user.userId}
-              className={`flex items-center justify-between px-5 py-4 rounded-xl transition-all border ${
-                isCurrentUser
-                  ? "bg-[var(--btn)] border-[var(--btn-hover)]"
-                  : "bg-[var(--bg-primary)] hover:bg-[var(--bg-ter)] border-gray-200"
-              }`}
-            >
-              {/* Username & Badge */}
-              <div className="flex flex-col">
-                <span className="font-semibold text-md text-[var(--txt)]">
-                  {user.username}
-                </span>
-                {getBadge(index)}
-              </div>
+      {/* Column Headers */}
+      <div className="grid grid-cols-3 px-5 pb-2 text-sm font-semibold text-[var(--txt-dim)]">
+        <div>Rank</div>
+        <div className="text-center">Username</div>
+        <div className="text-right">Time (mins)</div>
+      </div>
 
-              <span className="text-sm font-medium text-[var(--txt-dim)]">
-                {user.totalDuration} mins
-              </span>
-            </div>
-          );
-        })}
+      {/* Leaderboard Content */}
+      <div
+        className={`space-y-3 transition-all duration-500 ${
+          loading ? "opacity-0 -translate-y-2" : "opacity-100 translate-y-0"
+        } min-h-[500px]`}
+      >
+        {!loading && leaderboard.length === 0 ? (
+          <div className="flex items-center justify-center h-full text-[var(--txt-dim)] text-sm font-medium">
+            No records found for this timeframe.
+          </div>
+        ) : (
+          leaderboard.slice(0, 10).map((user, index) => {
+            const isCurrentUser = user.userId === currentUserId;
+            return (
+              <div
+                key={user.userId}
+                className={`grid grid-cols-3 items-center px-5 py-4 rounded-xl transition-all border text-sm ${
+                  isCurrentUser
+                    ? "bg-[var(--btn)] border-[var(--btn-hover)] text-white"
+                    : "bg-[var(--bg-primary)] hover:bg-[var(--bg-ter)] border-gray-200 text-[var(--txt)]"
+                }`}
+              >
+                
+                <div className="flex justify-start">{getBadge(index)}</div>
+
+                
+                <div className="text-center font-semibold">{user.username}</div>
+
+               
+                <div className="text-right font-medium text-[var(--txt-dim)]">
+                  {user.totalDuration} mins
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
 
       {/* Footer */}
-      {currentUser && (
+      {currentUser && leaderboard.length > 0 && (
         <div className="mt-6 text-center text-lg font-semibold text-[var(--txt-dim)]">
           Your Position:{" "}
           {leaderboard.findIndex((u) => u.userId === currentUserId) + 1}{" "}
