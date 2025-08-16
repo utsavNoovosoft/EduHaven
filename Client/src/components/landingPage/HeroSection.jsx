@@ -89,6 +89,9 @@ function FloatingProfile({ profile, delay = 0, area = "bottom" }) {
         transform: "translate(-50%, -50%)",
         animation: `floatWave${profile.id} ${waveSpeed}ms ease-in-out infinite`,
       }}
+      role="button"
+      tabIndex={0}
+      aria-label={`${profile.name}, ${profile.role}`}
     >
       <style jsx>{`
         @keyframes floatWave${profile.id} {
@@ -101,86 +104,51 @@ function FloatingProfile({ profile, delay = 0, area = "bottom" }) {
           }
           25% {
             transform: translate(-50%, -50%)
-              translate(${waveAmplitude * 0.9}%, ${waveAmplitude * 0.7}%);
+              translate(${waveAmplitude * 0.8}%, ${waveAmplitude * 0.9}%);
           }
           37.5% {
             transform: translate(-50%, -50%)
-              translate(${waveAmplitude}%, ${waveAmplitude * 0.2}%);
+              translate(${waveAmplitude}%, 0%);
           }
           50% {
             transform: translate(-50%, -50%)
-              translate(${waveAmplitude * 0.8}%, -${waveAmplitude * 0.4}%);
+              translate(${waveAmplitude * 0.8}%, -${waveAmplitude * 0.9}%);
           }
           62.5% {
             transform: translate(-50%, -50%)
-              translate(${waveAmplitude * 0.3}%, -${waveAmplitude * 0.9}%);
+              translate(${waveAmplitude * 0.4}%, -${waveAmplitude * 0.9}%);
           }
           75% {
             transform: translate(-50%, -50%)
-              translate(-${waveAmplitude * 0.2}%, -${waveAmplitude * 0.8}%);
+              translate(0%, -${waveAmplitude * 0.9}%);
           }
           87.5% {
             transform: translate(-50%, -50%)
-              translate(-${waveAmplitude * 0.6}%, -${waveAmplitude * 0.3}%);
+              translate(-${waveAmplitude * 0.4}%, -${waveAmplitude * 0.9}%);
           }
           100% {
             transform: translate(-50%, -50%) translate(0px, 0px);
           }
         }
       `}</style>
-      <motion.div
-        className="flex flex-col items-center text-center"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: delay + 0.3, duration: 0.5 }}
+      <div
+        className={`w-16 h-16 rounded-full bg-gradient-to-br ${profile.color} p-0.5 shadow-lg group-hover:shadow-xl transition-all duration-300`}
       >
-        {/* Avatar with online indicator */}
-        <motion.div
-          className="relative w-12 h-12 mb-2"
-          whileHover={{
-            rotate: [0, -10, 10, 0],
-            transition: { duration: 0.5 },
-          }}
-        >
-          <motion.img
+        <div className="w-full h-full rounded-full overflow-hidden">
+          <img
             src={profile.avatar}
-            alt={profile.name}
-            className="w-full h-full rounded-full object-cover shadow-lg group-hover:shadow-xl transition-shadow duration-300"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{
-              delay: delay + 0.5,
-              duration: 0.6,
-              type: "spring",
-              bounce: 0.4,
-            }}
+            alt={`${profile.name} - ${profile.role}`}
+            className="w-full h-full object-cover"
+            loading="lazy"
           />
-          {/* Online indicator */}
-          <motion.div
-            className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{
-              delay: delay + 0.8,
-              duration: 0.4,
-              type: "spring",
-              bounce: 0.6,
-            }}
-          >
-            <div className="w-full h-full bg-green-400 rounded-full animate-ping opacity-75"></div>
-          </motion.div>
-        </motion.div>
-
-        {/* Name */}
-        <motion.p
-          className="text-xs font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap bg-white dark:bg-gray-800 px-2 py-1 rounded-full shadow-sm bg-opacity-80 backdrop-blur-sm"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: delay + 1, duration: 0.4 }}
-        >
+        </div>
+      </div>
+      <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+        <div className="bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap">
           {profile.name}
-        </motion.p>
-      </motion.div>
+        </div>
+        <div className="w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black mx-auto"></div>
+      </div>
     </motion.div>
   );
 }
@@ -189,14 +157,13 @@ function HeroSection() {
   const navigate = useNavigate();
 
   return (
-    <motion.div
-      className="relative h-[calc(100vh-50px)] mx-auto overflow-hidden"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
+    <section 
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      aria-labelledby="hero-heading"
+      role="banner"
     >
-      {/* Floating profiles */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
+      {/* Floating Profiles */}
+      <div className="absolute inset-0 pointer-events-none">
         {profiles.slice(0, 2).map((profile, index) => (
           <FloatingProfile
             key={profile.id}
@@ -224,7 +191,7 @@ function HeroSection() {
       </div>
 
       {/* Screenshot */}
-      <motion.div
+      <motion.figure
         className="w-fit mx-auto mb-16 relative overflow-hidden group"
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -233,26 +200,30 @@ function HeroSection() {
         <div
           className="h-[50vh] aspect-[2/1] bg-cover bg-center"
           style={{ backgroundImage: "url('/Page1LightScreenshot.png')" }}
+          role="img"
+          aria-label="EduHaven platform screenshot showing study room interface"
         >
           <div className="absolute bottom-0 left-0 w-full h-[45vh] bg-gradient-to-t from-[var(--bg-primary)] to-transparent"></div>
         </div>
-      </motion.div>
+        <figcaption className="sr-only">EduHaven Study Platform Interface</figcaption>
+      </motion.figure>
 
       {/* Text content */}
-      <motion.div
+      <motion.header
         className="absolute top-[40%] left-0 z-20 w-full flex flex-col items-center justify-center text-center"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0 }}
       >
-        <motion.h2
+        <motion.h1
+          id="hero-heading"
           className="text-[4vw] font-light txt bg-clip-text font-poppins"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
         >
           Everything you need in one place
-        </motion.h2>
+        </motion.h1>
         <motion.h2
           className="text-[2.5vw] font-light txt-dim bg-clip-text font-poppins mb-16"
           initial={{ opacity: 0, y: 20 }}
@@ -269,10 +240,11 @@ function HeroSection() {
           transition={{ duration: 0.6, delay: 1 }}
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
+          aria-label="Get started with EduHaven - Create your account or sign in"
         >
           Get started
         </motion.button>
-      </motion.div>
+      </motion.header>
 
       {/* Background ambient effects */}
       <motion.div
@@ -280,6 +252,7 @@ function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0 }}
+        aria-hidden="true"
       >
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500 rounded-full opacity-10 blur-3xl animate-pulse"></div>
         <div
@@ -291,7 +264,7 @@ function HeroSection() {
           style={{ animationDelay: "4s" }}
         ></div>
       </motion.div>
-    </motion.div>
+    </section>
   );
 }
 
