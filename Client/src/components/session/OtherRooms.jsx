@@ -43,7 +43,7 @@ function RoomCardSkeleton() {
   );
 }
 
-export default function OtherRoom({ otherRooms, isLoading = true }) {
+export default function OtherRoom({ otherRooms, isLoading = false }) {
   const [sessions, setSessions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -74,7 +74,7 @@ export default function OtherRoom({ otherRooms, isLoading = true }) {
     }
   };
 
-  const showSkeletons = isLoading && sessions.length === 0;
+  const showSkeletons = !isLoading && sessions.length === 0;
 
   return (
     <div>
