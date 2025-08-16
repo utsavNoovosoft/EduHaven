@@ -105,13 +105,20 @@ We welcome contributions to make **EduHaven** better for students everywhere! He
    git checkout -b feature-name
    ```
 3. Make your changes and test them thoroughly.
+- For frontend changes, also run:
+  ```bash
+  npm run build
+  ```
+  and verify there are no build errors. 
+
 4. Commit and push your changes:
    ```bash
    git add .
    git commit -m "Add a brief description of your changes"
    git push origin feature-name
    ```
-5. Create a Pull Request (PR) with a detailed explanation of your changes.
+5. Before pushing frontend changes, **run** `npm run build` locally to ensure the project builds successfully. Catch & solve any potential deployment issues early, if any.
+6. Create a Pull Request (PR) with a detailed explanation of your changes.
 
 ## Roadmap
 
