@@ -38,17 +38,15 @@ const GoalsComponent = () => {
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
-  const fetchTodos = async () => {
-    try {
-      const { data } = await axios.get(`${backendUrl}/todo`, getAuthHeader());
-      setTodos(data.data);
-    } catch (error) {
-      console.error("Error fetching todos:", error.message);
-      if (error.response?.status === 401) {
-        // window.location.href = "/login";
-      }
-    }
-  };
+const fetchTodos = async () => {
+  try {
+    const { data } = await axios.get(`${backendUrl}/todo`, getAuthHeader());
+    console.log("Fetched todos:", data.data);
+    setTodos(data.data); // ✅ Will now be the actual Task documents
+  } catch (error) {
+    console.error("Error fetching todos:", error.message);
+  }
+};
 
   // Recreate daily habits on component mount
   const recreateDailyHabits = async () => {
