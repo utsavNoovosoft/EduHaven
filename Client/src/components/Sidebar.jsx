@@ -95,25 +95,25 @@ function Sidebar() {
             ref={(el) => (linkRefs.current["/stats"] = el)}
           />
           <SidebarLink
-            to="/games"
-            IconComponent={GamepadIcon}
-            label="Games"
-            isActive={location.pathname === "/games"}
-            ref={(el) => (linkRefs.current["/games"] = el)}
-          />
-            <SidebarLink
-              to="/notenest"
-              IconComponent={Wrench}  
-              label="Tools"
-              isActive={location.pathname === "/notenest"}
-              ref={(el) => (linkRefs.current["/notenest"] = el)}
-            />        
-          <SidebarLink
             to="/friends"
             IconComponent={Users}
             label="Friends"
             isActive={location.pathname === "/friends"}
             ref={(el) => (linkRefs.current["/friends"] = el)}
+          />
+          <SidebarLink
+            to="/notenest"
+            IconComponent={Wrench}  
+            label="Tools"
+            isActive={location.pathname === "/notenest"}
+            ref={(el) => (linkRefs.current["/notenest"] = el)}
+          />        
+          <SidebarLink
+            to="/games"
+            IconComponent={GamepadIcon}
+            label="Games"
+            isActive={location.pathname === "/games"}
+            ref={(el) => (linkRefs.current["/games"] = el)}
           />
           
         </div>
