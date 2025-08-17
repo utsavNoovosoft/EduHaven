@@ -21,6 +21,7 @@ import FriendsPage from "./pages/FriendsPage.jsx";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NoteNest from "./pages/NoteNest";
+import Delete from "./components/settings/Delete";
 
 function App() {
   return (
@@ -39,6 +40,8 @@ function App() {
               <Route path="settings/" element={<Settings />} />
               <Route path="friends" element={<FriendsPage />} />
               <Route path="*" element={<PageNotFound />} />
+              <Route path="/delete-account" element={<Delete />} />
+
             </Route>
 
             <Route path="session/:id" element={<StudyRoom />} />

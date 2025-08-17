@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import UpdateButton from "./UpdateButton";
+import { useNavigate } from "react-router-dom";
 
 const Account = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -22,41 +24,9 @@ const Account = () => {
     }, 1000);
   };
 
-  const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete your account?")) return;
-
-    try {
-      setIsLoading(true);
-      const token = localStorage.getItem("token");
-
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/user/delete`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      let data = {};
-      try {
-        data = await res.json();
-      } catch {
-        data = {};
-      }
-
-      if (!res.ok) throw new Error(data.error || "Failed to delete account");
-
-      toast.success(data.message || "Account deleted successfully");
-
-      localStorage.removeItem("token");
-      setTimeout(() => window.location.reload(), 1000);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleRequestDeletion = () => {
+    navigate("/delete-account");
   };
-
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -105,10 +75,9 @@ const Account = () => {
       <div className="mt-8 border-t border-gray-400/40 pt-6">
         <button
           type="button"
-          onClick={handleDelete}
+          onClick={handleRequestDeletion}
           className="px-6 py-3 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700 transition-all shadow-md"
-        >
-          Delete Account
+        >Request Account Deletion
         </button>
       </div>
     </div>
