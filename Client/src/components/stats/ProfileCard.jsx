@@ -14,10 +14,11 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { set } from "date-fns";
 const backendUrl = import.meta.env.VITE_API_URL;
 
-const ProfileCard = () => {
+const ProfileCard = ({isCurrentUser = false}) => {
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
     return { headers: { Authorization: `Bearer ${token}` } };
@@ -28,6 +29,7 @@ const ProfileCard = () => {
   const [friendsCount, setFriendsCount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [friendsList, setFriendsList] = useState([]);
+  const { userId } = useParams();
 
   const popupRef = useRef(null);
 
@@ -58,23 +60,26 @@ const ProfileCard = () => {
       fetchFriendsList();
     }, []);
 
-    
-
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
+        let response;
+        if (isCurrentUser) {
+          const token = localStorage.getItem("token");
+          if (!token) return;
 
-        const decoded = jwtDecode(token);
-        const response = await axios.get(
-          `${backendUrl}/user/details?id=${decoded.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+          const decoded = jwtDecode(token);
+          response = await axios.get(
+            `${backendUrl}/user/details?id=${decoded.id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        } else {
+          response = await axios.get(`${backendUrl}/user/details?id=${userId}`);
+        }
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -83,7 +88,7 @@ const ProfileCard = () => {
       }
     };
     fetchUserProfile();
-  }, []);
+  }, [isCurrentUser, userId]);
 
   useEffect(() => {
     if (showPopup) {
@@ -105,7 +110,7 @@ const ProfileCard = () => {
       <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 w-full h-fit relative overflow-hidden">
         {/* Skeleton nav */}
         <div className="flex justify-end gap-6 px-4">
-          <div className="w-6 h-6 rounded-full bg-gray-400/30"></div>
+          {isCurrentUser && <div className="w-6 h-6 rounded-full bg-gray-400/30"></div>}
           <div className="w-6 h-6 rounded-full bg-gray-400/30"></div>
         </div>
 
@@ -157,9 +162,11 @@ const ProfileCard = () => {
     <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 w-full h-fit relative overflow-hidden">
       {/* nav */}
       <div className="flex justify-end gap-6 px-4">
-        <Link to={"/settings/"}>
-          <Edit3 className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)]" />
-        </Link>
+        {isCurrentUser && (
+          <Link to={"/settings/"}>
+            <Edit3 className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)]" />
+          </Link>
+        )}
         <Share2 className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)]" />
       </div>
 
@@ -281,10 +288,12 @@ const ProfileCard = () => {
             <MessageCircle className="w-5 h-5" />
             <span>Chat</span>
           </button>
-          <button className="bg-purple-600 hover:bg-purple-700 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
-            <UserPlus className="w-5 h-5" />
-            <span>Add friend</span>
-          </button>
+          {!isCurrentUser && (
+            <button className="bg-purple-600 hover:bg-purple-700 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
+              <UserPlus className="w-5 h-5" />
+              <span>Add friend</span>
+            </button>
+          )}
         </div>
       </div>
 
