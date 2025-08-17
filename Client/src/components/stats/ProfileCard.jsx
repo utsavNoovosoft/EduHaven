@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   User,
   MessageCircle,
@@ -10,10 +10,12 @@ import {
   Earth,
   DraftingCompass,
   Puzzle,
+  X
 } from "lucide-react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
+import { set } from "date-fns";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 const ProfileCard = () => {
@@ -25,9 +27,13 @@ const ProfileCard = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [friendsCount, setFriendsCount] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
+  const [friendsList, setFriendsList] = useState([]);
+
+  const popupRef = useRef(null);
 
   useEffect(() => {
-      const friendsCount = async() => {
+      const fetchFriendsCount = async() => {
         try {
           const response = await axios.get(`${backendUrl}/friends/count`, getAuthHeader());
           setFriendsCount(response.data.count);
@@ -36,8 +42,24 @@ const ProfileCard = () => {
           console.error("Error fetching friends count:", error);
         }
       };
-      friendsCount();
-      }, []);
+
+      const fetchFriendsList = async () => {
+        try {
+          const response = await axios.get(
+            `${backendUrl}/friends`,
+            getAuthHeader()
+          );
+          setFriendsList(response.data);
+        } catch (error) {
+          console.error("Error fetching friends list:", error);
+        }
+      };
+
+      fetchFriendsCount();
+      fetchFriendsList();
+    }, []);
+
+    
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -64,6 +86,20 @@ const ProfileCard = () => {
     fetchUserProfile();
   }, []);
 
+  useEffect(() => {
+    if (showPopup) {
+      const handleClickOutside = (event) => {
+        if (popupRef.current && !popupRef.current.contains(event.target)) {
+          setShowPopup(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [showPopup]);
 
   if (isLoading || !user) {
     return (
@@ -150,7 +186,11 @@ const ProfileCard = () => {
             </span>
             <span className="text-sm text-[var(--text-secondary)]">Kudos</span>
           </div>
-          <div className="text-center flex-1">
+          <div 
+            onClick={() => setShowPopup(!showPopup)} 
+            className="text-center flex-1 cursor-pointer hover:bg-white/20 rounded-lg p-2 transition-colors"
+            ref={popupRef}
+          >
             <span className="block text-2xl font-bold text-[var(--text-primary)]">
               {friendsCount}
             </span>
@@ -158,6 +198,66 @@ const ProfileCard = () => {
               Friends
             </span>
           </div>
+
+          {/* Updated Popup */}
+          {showPopup && (
+            <div className="fixed bg-transparent/40 inset-0 flex items-center justify-center z-50 p-4">
+              <div 
+                ref={popupRef}
+                className="w-full max-w-md h-3/5 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl shadow-2xl flex flex-col"
+              >
+                {/* Header */}
+                <div className="bg-gradient-to-r from-indigo-700 to-purple-700 p-4 flex items-center justify-between flex-shrink-0 mb-6">
+                  <h2 className="text-2xl font-bold text-white">Friends List</h2>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-indigo-100 bg-gradient-to-r from-indigo-500 to-purple-600 px-3 py-1 rounded-full">
+                      {friendsCount} friends
+                    </span>
+                    <button
+                      onClick={() => setShowPopup(false)}
+                      className="text-white hover:text-indigo-200 transition-colors p-1"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Scrollable Friends List */}
+                <div className="flex-1 overflow-y-auto">
+                  <div className="bg-gradient-to-r from-indigo-500 to-purple-600">
+                    {friendsList.map((friend) => (
+                      <div 
+                        key={friend._id}
+                        className="flex items-center gap-3 p-4 cursor-pointer"
+                      >
+                        <div className="w-10 h-10 rounded-full flex-shrink-0">
+                          {friend.ProfilePicture ? (
+                            <img
+                              src={friend.ProfilePicture}
+                              className="w-full h-full object-cover"
+                              alt={`${friend.FirstName}'s profile`}
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center">
+                              <User className="w-5 h-5 text-white" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <p className="text-yellow-100 font-bold text-xl truncate">
+                            {friend.FirstName
+                              ? `${friend.FirstName} ${friend.LastName || ""}`
+                              : "old-user"}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* User Info */}
