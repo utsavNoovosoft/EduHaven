@@ -17,7 +17,6 @@ const EduHavenLanding = () => {
       <MakeFriends />
       <GoalsAndEvents />
       <CTASection />
-      <Footer />
     </div>
   );
 };
