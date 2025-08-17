@@ -1,0 +1,298 @@
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft } from "lucide-react";
+import styles from './Game2048.module.css';
+
+const Game2048 = () => {
+  const [board, setBoard] = useState(getInitialBoard());
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem("hiScore-2048");
+    return saved ? parseInt(saved) : 0;
+  });
+  const [gameOver, setGameOver] = useState(false);
+  const [showHowToPlay, setShowHowToPlay] = useState(false);
+
+  function getInitialBoard() {
+    const board = Array(4).fill().map(() => Array(4).fill(0));
+    addNewTile(board);
+    addNewTile(board);
+    return board;
+  }
+
+  function addNewTile(board) {
+    const emptyTiles = [];
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        if (board[i][j] === 0) {
+          emptyTiles.push({ x: i, y: j });
+        }
+      }
+    }
+    if (emptyTiles.length > 0) {
+      const { x, y } = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
+      board[x][y] = Math.random() < 0.9 ? 2 : 4;
+    }
+  }
+
+  function moveBoard(direction) {
+    if (gameOver) return;
+    let newBoard = JSON.parse(JSON.stringify(board));
+    let moved = false;
+    let newScore = score;
+
+    // Helper to move and merge a single row left
+    function moveRowLeft(row) {
+      let arr = row.filter(cell => cell !== 0);
+      for (let i = 0; i < arr.length - 1; i++) {
+        if (arr[i] === arr[i + 1]) {
+          arr[i] *= 2;
+          newScore += arr[i];
+          arr[i + 1] = 0;
+          moved = true;
+        }
+      }
+      arr = arr.filter(cell => cell !== 0);
+      while (arr.length < 4) arr.push(0);
+      return arr;
+    }
+
+    // Correct direction mapping
+    // left: 0, up: 3, right: 2, down: 1
+    const directionMap = { left: 0, up: 3, right: 2, down: 1 };
+    let times = directionMap[direction];
+    let rotated = board;
+    for (let t = 0; t < times; t++) {
+      rotated = rotate(rotated);
+    }
+    let result = rotated.map(moveRowLeft);
+    // Rotate back
+    for (let t = 0; t < (4 - times) % 4; t++) {
+      result = rotate(result);
+    }
+    let finalBoard = result;
+
+    // Check if board changed
+    if (JSON.stringify(finalBoard) !== JSON.stringify(board)) {
+      moved = true;
+    }
+
+    if (moved) {
+      addNewTile(finalBoard);
+      setBoard(finalBoard);
+      setScore(newScore);
+      checkGameOver(finalBoard);
+    }
+  }
+
+  // Rotate 90 degrees clockwise
+  function rotate(board) {
+    return board[0].map((_, i) => board.map(row => row[i]).reverse());
+  }
+
+  function rotateBoard(board, times = 1) {
+    for (let t = 0; t < times; t++) {
+      const N = board.length;
+      for (let i = 0; i < N / 2; i++) {
+        for (let j = i; j < N - i - 1; j++) {
+          const temp = board[i][j];
+          board[i][j] = board[N - 1 - j][i];
+          board[N - 1 - j][i] = board[N - 1 - i][N - 1 - j];
+          board[N - 1 - i][N - 1 - j] = board[j][N - 1 - i];
+          board[j][N - 1 - i] = temp;
+        }
+      }
+    }
+  }
+
+  function checkGameOver(board) {
+    // Check if board is full
+    let isFull = true;
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        if (board[i][j] === 0) {
+          isFull = false;
+          break;
+        }
+      }
+    }
+
+    if (!isFull) return;
+
+    // Check for possible merges
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        if (
+          (i < 3 && board[i][j] === board[i + 1][j]) ||
+          (j < 3 && board[i][j] === board[i][j + 1])
+        ) {
+          return;
+        }
+      }
+    }
+
+    setGameOver(true);
+    // Update high score if needed
+    if (score > highScore) {
+      setHighScore(score);
+      localStorage.setItem("hiScore-2048", score);
+    }
+  }
+
+function handleKeyDown(e) {
+  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+    e.preventDefault(); // ✅ stops page scrolling
+  }
+  switch (e.key) {
+    case 'ArrowUp':
+      moveBoard('up');
+      break;
+    case 'ArrowDown':
+      moveBoard('down');
+      break;
+    case 'ArrowLeft':
+      moveBoard('left');
+      break;
+    case 'ArrowRight':
+      moveBoard('right');
+      break;
+    default:
+      break;
+  }
+}
+
+
+  function resetGame() {
+    setBoard(getInitialBoard());
+    setScore(0);
+  setGameOver(false);
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [board, gameOver]);
+
+  // Save high score to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("hiScore-2048", highScore);
+  }, [highScore]);
+
+  return (
+  <div className={styles.gameContainer}>
+    {/* Navbar - Fixed to properly align with sidebar */}
+    <nav className="bg-[var(--bg-sec)] shadow-lg border-b border-[rgba(var(--shadow-rgb),0.08)] px-6 sm:px-7 py-1 flex items-center justify-between fixed top-0 z-20" 
+      style={{
+        width: '94%',
+        left: '80px'
+      }}>
+      {/* Back Button - Left */}
+      <button
+        onClick={() => window.history.back()}
+        className="flex items-center gap-2 px-3 py-2 text-[var(--txt-dim)] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm"
+      >
+        <ArrowLeft size={20} />
+        <span className="hidden sm:inline">Back</span>
+      </button>
+
+      {/* Title */}
+      <h1 className="text-4xl sm:text-5xl font-bold txt tracking-wide drop-shadow-sm">
+        2048
+      </h1>
+
+      {/* How to Play - Right */}
+      <button
+        onClick={() => setShowHowToPlay(true)}
+        className="px-3 py-2 text-[var(--txt-dim)] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-sm sm:text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm whitespace-nowrap"
+      >
+        How to Play
+      </button>
+    </nav>
+
+    {/* Game content */}
+    <div className={styles.game2048}>
+      {/* How to Play Modal */}
+      {showHowToPlay && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-[var(--bg-primary)] rounded-xl shadow-lg p-8 max-w-md w-full relative">
+            <button
+              className="absolute top-2 right-2 px-2 py-1 text-[var(--txt-dim)] bg-sec rounded-lg cursor-pointer hover:bg-ter"
+              onClick={() => setShowHowToPlay(false)}
+            >
+              Close
+            </button>
+            <h2 className="text-xl font-bold mb-2">How to Play 2048</h2>
+            <ul className="list-disc pl-5 space-y-2 text-base">
+              <li>Use your arrow keys to move the tiles.</li>
+              <li>When two tiles with the same number touch, they merge into one.</li>
+              <li>Each merge increases your score by the value of the new tile.</li>
+              <li>Try to reach the 2048 tile!</li>
+              <li>The game ends when no moves are possible.</li>
+              <li>Your highest score is saved automatically.</li>
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {/* Score Area */}
+      <div className={styles.header}>
+        <div className={styles.scoreContainer} style={{ flexDirection: 'row', gap: '0.5rem' }}>
+          <div className={styles.score}>Score: {score}</div>
+          <div
+            className={styles.score}
+            style={{ color: '#4f46e5', fontWeight: 'bold' }}
+          >
+            High Score: {highScore}
+          </div>
+        </div>
+      </div>
+
+      {/* Board */}
+      <div className={styles.board}>
+        {board.map((row, i) => (
+          <div key={i} className={styles.row}>
+            {row.map((cell, j) => (
+              <div
+                key={`${i}-${j}`}
+                className={`${styles.cell} ${cell ? styles['tile' + cell] : ''}`}
+                style={{
+                  boxShadow: cell ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+                  border: cell ? '2px solid #edc22e' : '2px solid #eee4da',
+                  color: cell >= 8 ? '#f9f6f2' : '#776e65',
+                  fontWeight: cell >= 128 ? 'bold' : 'normal',
+                  fontSize: cell >= 1024 ? '1.1rem' : '1.3rem',
+                  background: cell ? undefined : '#faf8ef',
+                  transition: 'all 0.2s',
+                }}
+              >
+                {cell !== 0 && cell}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      {/* New Game button at bottom */}
+      <div style={{ marginTop: "1rem", textAlign: "center", background: "var(--bg-ter)", padding: "1rem", borderRadius: "8px" }}>
+        <button onClick={resetGame} className={styles.newGameButton}>
+          New Game
+        </button>
+      </div>
+
+      {/* Game Over Overlay */}
+      {gameOver && (
+        <div className={styles.gameOver}>
+          <div className={styles.gameOverContent}>
+            <h2>Game Over!</h2>
+            <p>Final Score: {score}</p>
+            <p>High Score: {highScore}</p>
+            <button onClick={resetGame}>Try Again</button>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+);
+
+};
+
+export default Game2048;

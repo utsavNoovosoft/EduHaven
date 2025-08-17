@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import RouterSelector from "./lib/RouterSelector";
 import Layout from "./components/Layout";
 import Home from "./pages/Home.jsx";
-import Stats from "./pages/Stats";
+import Stats from "./pages/Stats"; // Updated import name
 import GameRoom from "./routes/GameRoutes.jsx";
 import Signout from "./Auth/Signout";
 // import SignUp from "./Auth/Authenticate.jsx";
@@ -17,8 +17,11 @@ import GoogleRedirect from "./Auth/GoogleRedirect";
 import Auth from "./Auth/Auth";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import { SocketProvider } from "./context/SocketContext";
+import FriendsPage from "./pages/FriendsPage.jsx";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Notion from "./pages/NoteNest";
+import NoteNest from "./pages/NoteNest";
 
 function App() {
   return (
@@ -29,10 +32,13 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="session" element={<Session />} />
-              <Route path="stats" element={<Stats />} />
+              <Route path="stats" element={<Stats isCurrentUser={true} />} /> {/* Updated */}
               <Route path="games/*" element={<GameRoom />} />
+              <Route path="notenest" element={<NoteNest />} />
               <Route path="project-details" element={<ProjectInfo />} />
               <Route path="settings/" element={<Settings />} />
+              <Route path="user/:userId" element={<Stats isCurrentUser={false} />} /> {/* Updated */}
+              <Route path="friends" element={<FriendsPage />} />
               <Route path="*" element={<PageNotFound />} />
             </Route>
 

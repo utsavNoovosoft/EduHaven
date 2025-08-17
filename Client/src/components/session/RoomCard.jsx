@@ -9,19 +9,19 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function RoomCard({ room, onDelete, showCategory }) {
+export default function RoomCard({ room, onDelete, showCategory, loading }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!room) return;
     const pinned = JSON.parse(localStorage.getItem("pinnedRooms") || "[]");
     const found = pinned.some((r) => r._id === room._id);
     setIsPinned(found);
-  }, [room._id]);
+  }, [room?._id]);
 
-  // close menu if clicking outside
   useEffect(() => {
     if (!menuOpen) return;
     const onClickOutside = (e) => {
@@ -34,10 +34,12 @@ export default function RoomCard({ room, onDelete, showCategory }) {
   }, [menuOpen]);
 
   const handleJoin = () => {
+    if (loading) return;
     navigate(`/session/${room._id}`);
   };
 
   const handlePin = () => {
+    if (loading) return;
     try {
       const raw = localStorage.getItem("pinnedRooms") || "[]";
       const arr = JSON.parse(raw);
@@ -55,6 +57,7 @@ export default function RoomCard({ room, onDelete, showCategory }) {
   };
 
   const handleUnpin = () => {
+    if (loading) return;
     try {
       const raw = localStorage.getItem("pinnedRooms") || "[]";
       const arr = JSON.parse(raw).filter((r) => r._id !== room._id);
@@ -67,12 +70,40 @@ export default function RoomCard({ room, onDelete, showCategory }) {
   };
 
   const handleCopyLink = () => {
+    if (loading) return;
     const link = `${window.location.origin}/session/${room._id}`;
     navigator.clipboard.writeText(link).catch((err) => {
       console.error("Failed to copy link: ", err);
     });
     setMenuOpen(false);
   };
+
+  if (loading) {
+    return (
+      <div className="relative bg-sec backdrop-blur-md p-6 rounded-3xl shadow animate-pulse">
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center gap-2">
+            <div className="h-6 w-40 bg-gray-300 rounded-md"></div>
+          </div>
+          <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+        </div>
+
+        {showCategory && (
+          <div className="mb-4">
+            <div className="h-4 w-24 bg-gray-300 rounded-md mb-1"></div>
+            <div className="h-4 w-32 bg-gray-300 rounded-md"></div>
+          </div>
+        )}
+
+        <div className="mb-4">
+          <div className="h-3 w-full bg-gray-300 rounded-md mb-2"></div>
+          <div className="h-3 w-4/5 bg-gray-300 rounded-md"></div>
+        </div>
+
+        <div className="w-full h-10 bg-gray-300 rounded-lg"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative bg-sec backdrop-blur-md p-6 rounded-3xl shadow">
@@ -141,11 +172,6 @@ export default function RoomCard({ room, onDelete, showCategory }) {
           Category: <span className="font-medium">{room.cateogery}</span>
         </p>
       )}
-
-      <p className="txt-dim mb-2">
-        <span className="font-medium">{room.joins}</span> student
-        {room.joins !== 1 && "s"} studying
-      </p>
 
       {room.description && <p className="txt-dim mb-4">{room.description}</p>}
 

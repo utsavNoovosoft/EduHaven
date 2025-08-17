@@ -1,12 +1,18 @@
 import Calender from "@/components/home/calenderComponent/CalendarComponent.jsx";
 import TimerComponent from "@/components/home/timerComponent/TimerComponent.jsx";
 import StudyStats from "@/components/home/timerComponent/TimerStats";
-import NotesComponent from "@/components/home/goalsAndNotes/NotesComponent.jsx";
-import GoalsComponent from "@/components/home/goalsAndNotes/GoalsComponent.jsx";
+import NotesComponent from "@/components/home/notes/NotesComponent.jsx";
+import GoalsComponent from "@/components/home/goals/GoalsComponent.jsx";
 import NavBar from "@/components/home/navBar/NavBar";
 import PinnedRooms from "@/components/home/PinnedRooms";
+import LandingPage from "./LandingPage";
 
 function StudyRoom() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    return <LandingPage />;
+  }
   return (
     <>
       <style>

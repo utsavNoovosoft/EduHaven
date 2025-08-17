@@ -22,10 +22,41 @@ const Account = () => {
     }, 1000);
   };
 
-  const handleDelete = () => {
-    // Add real deletion logic here
-    toast.warn("Delete account action triggered");
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete your account?")) return;
+
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/user/delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      let data = {};
+      try {
+        data = await res.json();
+      } catch {
+        data = {};
+      }
+
+      if (!res.ok) throw new Error(data.error || "Failed to delete account");
+
+      toast.success(data.message || "Account deleted successfully");
+
+      localStorage.removeItem("token");
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
 
   return (
     <div className="max-w-2xl mx-auto">

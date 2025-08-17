@@ -1,114 +1,84 @@
-import React from "react";
-import { Trophy, Users, Star } from "lucide-react";
 import LionComponent from "./LionComponent";
 import { Link } from "react-router-dom";
 
-import SnakeIcon from "..//../assets/icon/SnakeIcon"
+import SnakeIcon from "..//../assets/icon/SnakeIcon";
 import SpaceTypeIcon from "../../assets/icon/SpaceTypeIcon";
 import TicTacToeIcon from "../../assets/icon/TicTacToeIcon";
+import WacAMole from "@/assets/icon/WacAMole";
+import SudokuIcon from "../../assets/icon/SudokuIcon.jsx"; 
+import Game2048Icon from "@/assets/icon/Game2048Icon";
 
 function GameRoom() {
   const games = [
     {
-      name: "Space-Type-2",
-      difficulty: "Medium",
-      path: "space-type-2",
+      name: "Space-Type",
+      path: "space-type",
       Icon: SpaceTypeIcon,
     },
     {
       name: "Hungry Snake",
-      difficulty: "Easy",
       path: "snake",
       Icon: SnakeIcon,
     },
     {
       name: "Tic-Tac-Toe",
-      difficulty: "Medium",
       path: "tic-tac-toe",
       Icon: TicTacToeIcon,
     },
     {
-      name: "typing-game-old",
-      difficulty: "Medium",
-      path: "typing-game",
-      Icon: SpaceTypeIcon,
+      name: "Whac-a-mole",
+      path: "whac-a-mole",
+      Icon: WacAMole,
     },
     {
-      name: "Whac-a-mole",
-      difficulty: "Medium",
-      path: "whac-a-mole",
-      Icon: SpaceTypeIcon, // Using SpaceTypeIcon here as svg was not available
+      name: "2048",
+      path: "2048",
+      Icon: Game2048Icon,
+    },
+     {
+      name: "Sudoku",
+      path: "sudoku",
+      Icon: SudokuIcon, 
     },
   ];
 
   return (
-    <div className="m-6 min-h-screen bg-[hsl(var(--background))] txt transition-colors duration-300">
-      {/* Navbar */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold txt">Game Room</h1>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-ter px-4 py-2 rounded-xl">
-            <Trophy className="text-[hsl(var(--accent))]" />
-            <span className="txt-dim">1,234 points</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Hero section */}
-      <div className="relative w-[svw] h-[50vh] pb-5 overflow-hidden">
+    <div className="m-6  bg-[hsl(var(--background))] txt transition-colors duration-300 overflow-x-hidden">
+      <h1 className="text-2xl font-bold txt">Game Room</h1>
+      <div className="relative w-[svw] h-[50vh] pb-5">
         <div className="absolute h-1/2 w-[calc(100vw-6rem)] right-0">
-          <div className="relative bottom-[45%] left-[30%]">
+          <div className="relative bottom-[100%] left-[30%]">
             <LionComponent />
           </div>
         </div>
         <div className="flex flex-col justify-center h-full z-10 relative">
-          <h1 className="text-[5vw] font-extrabold text-[hsl(var(--accent))] py-3 px-28 select-none">
+          <h1 className="text-[5vw] font-extrabold text-[var(--btn-hover)] py-3 px-28 select-none">
             Enough grinding,
           </h1>
-          <h2 className="text-[4vw] font-semibold text-[hsl(var(--accent)/0.6)] py-3 px-28 select-none">
+          <h2 className="text-[4vw] font-semibold text-[var(--txt-disabled)] py-3 px-28 select-none">
             time to chill & relax!
           </h2>
         </div>
       </div>
 
-      {/* Games Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-8">
-        {games.map(({ name, difficulty, path, Icon }) => (
+      <div className="flex flex-wrap gap-2">
+        {games.map(({ name, path, Icon }) => (
           <Link
             key={name}
             to={path}
-            className="bg-sec txt-dim hover:bg-ter rounded-xl transition duration-200 hover:scale-105 flex gap-3 p-6"
+            className="txt-dim hover:border-[var(--bg-ter)] border border-transparent rounded-3xl transition duration-200 p-4"
           >
             {Icon && (
-              <div className="p-4 opacity-90 flex items-center justify-center">
-                <Icon className="w-16 h-16 text-[hsl(var(--accent))]" />
+              <div className="p-12 opacity-90 flex items-center justify-center bg-sec rounded-3xl">
+                <Icon className="w-24 h-24" />
               </div>
             )}
-            <div className="flex flex-col flex-1 justify-center h-[130px]">
-              <h3 className="text-xl font-bold txt pb-1">{name}</h3>
-
-              <div className="flex items-center gap-2 text-sm mb-4">
-                <Users className="w-4 h-4" />
-                <span>single-player</span>
-              </div>
-
-              <div className="flex">
-                {[1, 2, 3].map((star) => (
-                  <Star
-                    key={star}
-                    className={`w-4 h-4 ${
-                      star <= difficulty.length ? "text-yellow-400" : "text-gray-500"
-                    }`}
-                  />
-                ))}
-              </div>
+            <div className="flex flex-col flex-1 justify-center p-2 bg-te r">
+              <h3 className="text-lg font-semibold txt pb-1">{name}</h3>
             </div>
           </Link>
         ))}
       </div>
-
-      {/* Spacer */}
-      <div className="h-[200px]"></div>
     </div>
   );
 }
