@@ -43,7 +43,7 @@ const Delete = () => {
             localStorage.removeItem("token");
 
             setTimeout(() => {
-                navigate("/login");
+                navigate("/");
             }, 1500);
         } catch (error) {
             toast.error(error.message);
