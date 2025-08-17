@@ -22,6 +22,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Notion from "./pages/NoteNest";
 import NoteNest from "./pages/NoteNest";
+import Delete from "./components/settings/Delete";
 
 function App() {
   return (
@@ -40,6 +41,8 @@ function App() {
               <Route path="user/:userId" element={<Stats isCurrentUser={false} />} /> {/* Updated */}
               <Route path="friends" element={<FriendsPage />} />
               <Route path="*" element={<PageNotFound />} />
+              <Route path="/delete-account" element={<Delete />} />
+
             </Route>
 
             <Route path="session/:id" element={<StudyRoom />} />
