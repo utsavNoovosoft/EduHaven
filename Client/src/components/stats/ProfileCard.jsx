@@ -201,10 +201,10 @@ const ProfileCard = () => {
 
           {/* Updated Popup */}
           {showPopup && (
-            <div className="fixed bg-transparent/40 inset-0 flex items-center justify-center z-50 p-4">
+            <div className="fixed bg-transparent/50 inset-0 flex items-center justify-center z-50 p-4 sm:p-4">
               <div 
                 ref={popupRef}
-                className="w-full max-w-md h-3/5 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl shadow-2xl flex flex-col"
+                className="w-full max-w-80  sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-2/5 sm:h-96 md:h-[28rem] lg:h-[32rem] bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl shadow-2xl flex flex-col "
               >
                 {/* Header */}
                 <div className="bg-gradient-to-r from-indigo-700 to-purple-700 p-4 flex items-center justify-between flex-shrink-0 mb-6">
