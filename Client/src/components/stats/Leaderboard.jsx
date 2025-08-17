@@ -91,6 +91,18 @@ const Leaderboard = () => {
     }
   };
 
+  const formatDuration = (minutes) => {
+    const days = Math.floor(minutes / (60 * 24));
+    const hours = Math.floor((minutes % (60 * 24)) / 60);
+    const remainingMinutes = minutes % 60;
+
+    let result = "";
+    if (days > 0) result += `${days}d `;
+    if (hours > 0) result += `${hours}h `;
+    if (remainingMinutes > 0 || result === "") result += `${remainingMinutes}m`;
+    return result.trim();
+  };
+
   return (
     <div className="p-6 w-full bg-[var(--bg-sec)] mx-auto shadow-2xl rounded-3xl">
       {/* Header */}
@@ -127,14 +139,12 @@ const Leaderboard = () => {
             <span className="text-sm">Friends Only</span>
             <button
               onClick={handleFriendsOnlyToggle}
-              className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors duration-300 ${
-                friendsOnly ? "bg-[var(--btn)]" : "bg-[var(--bg-ter)]"
-              }`}
+              className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors duration-300 ${friendsOnly ? "bg-[var(--btn)]" : "bg-[var(--bg-ter)]"
+                }`}
             >
               <div
-                className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${
-                  friendsOnly ? "translate-x-7" : "translate-x-0"
-                }`}
+                className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${friendsOnly ? "translate-x-7" : "translate-x-0"
+                  }`}
               />
             </button>
           </div>
@@ -145,14 +155,13 @@ const Leaderboard = () => {
       <div className="grid grid-cols-3 px-5 pb-2 text-sm font-semibold text-[var(--txt-dim)]">
         <div>Rank</div>
         <div className="text-center">Username</div>
-        <div className="text-right">Time (mins)</div>
+        <div className="text-right">Time</div>
       </div>
 
       {/* Leaderboard Content */}
       <div
-        className={`space-y-3 transition-all duration-500 ${
-          loading ? "opacity-0 -translate-y-2" : "opacity-100 translate-y-0"
-        } min-h-[500px]`}
+        className={`space-y-3 transition-all duration-500 ${loading ? "opacity-0 -translate-y-2" : "opacity-100 translate-y-0"
+          } min-h-[500px]`}
       >
         {!loading && leaderboard.length === 0 ? (
           <div className="flex items-center justify-center h-full text-[var(--txt-dim)] text-sm font-medium">
@@ -164,22 +173,22 @@ const Leaderboard = () => {
             return (
               <div
                 key={user.userId}
-                className={`grid grid-cols-3 items-center px-5 py-4 rounded-xl transition-all border text-sm ${
-                  isCurrentUser
+                className={`grid grid-cols-3 items-center px-5 py-4 rounded-xl transition-all border text-sm ${isCurrentUser
                     ? "bg-[var(--btn)] border-[var(--btn-hover)] text-white"
                     : "bg-[var(--bg-primary)] hover:bg-[var(--bg-ter)] border-gray-200 text-[var(--txt)]"
-                }`}
+                  }`}
               >
-                
                 <div className="flex justify-start">{getBadge(index)}</div>
 
-                
                 <div className="text-center font-semibold">{user.username}</div>
 
-               
-                <div className="text-right font-medium text-[var(--txt-dim)]">
-                  {user.totalDuration} mins
+                <div
+                  className={`text-right font-medium ${isCurrentUser ? "text-white" : "text-[var(--txt-dim)]"
+                    }`}
+                >
+                  {formatDuration(user.totalDuration)}
                 </div>
+
               </div>
             );
           })
@@ -190,8 +199,8 @@ const Leaderboard = () => {
       {currentUser && leaderboard.length > 0 && (
         <div className="mt-6 text-center text-lg font-semibold text-[var(--txt-dim)]">
           Your Position:{" "}
-          {leaderboard.findIndex((u) => u.userId === currentUserId) + 1}{" "}
-          ({currentUser.totalDuration} mins)
+          {leaderboard.findIndex((u) => u.userId === currentUserId) + 1} (
+          {formatDuration(currentUser.totalDuration)})
         </div>
       )}
     </div>
