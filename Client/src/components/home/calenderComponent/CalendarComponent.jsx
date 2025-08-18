@@ -256,7 +256,7 @@ function Calendar() {
                   <div
                     onClick={() => handleDayClick(day)}
                     className={`calendar-day-cell relative flex items-center justify-center p-2.5 text-sm rounded-full txt cursor-pointer transition-all duration-200 ease-in-out h-9 
-                      ${isToday ? "bg-purple-600 hover:bg-purple-700" : ""}
+                      ${isToday ? "bg-[var(--btn)] text-white" : ""}
                       ${hasEvent && !isToday ? "bg-ter hover:bg-ter" : ""}
                       ${!isToday && !hasEvent ? "hover:bg-ter" : ""}`}
                     onMouseEnter={(e) => {
