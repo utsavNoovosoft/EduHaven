@@ -1,5 +1,5 @@
 [![join our group on discord](./Client/public/joinDiscordIcon.png)
-](https://discord.gg/r55948xy)
+](https://discord.gg/yMBMNdmC)
 
 # EduHaven
 
