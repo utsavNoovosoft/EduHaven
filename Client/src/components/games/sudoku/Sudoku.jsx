@@ -27,6 +27,7 @@ export default function Sudoku() {
   );
   const [seconds, setSeconds] = useState(0);
   const [status, setStatus] = useState("");
+  const [showHowToPlay, setShowHowToPlay] = useState(false); // ✅ New state
   const timerRef = useRef(null);
 
   const emptyCount = countEmptyCells(board);
@@ -152,6 +153,7 @@ export default function Sudoku() {
   return (
     <div className="flex w-full justify-center px-4 py-8">
       <div className="w-full max-w-4xl rounded-2xl border border-slate-700 bg-slate-900/60 p-5 shadow-xl">
+        {/* Header with Timer */}
         <div className="mb-4 flex items-center justify-between gap-3">
           <h1 className="text-2xl font-semibold tracking-wide text-emerald-300">
             🧩 Sudoku Game
@@ -165,6 +167,39 @@ export default function Sudoku() {
           </div>
         </div>
 
+        {/* ✅ How to Play button below Timer */}
+        <div className="mb-4">
+          <button
+            onClick={() => setShowHowToPlay(true)}
+            className="px-3 py-2 text-slate-300 bg-slate-800 rounded-lg cursor-pointer transition-all duration-200 text-sm sm:text-base font-medium hover:bg-slate-700 shadow-sm"
+          >
+            How to Play
+          </button>
+        </div>
+
+        {/* ✅ How to Play Modal */}
+        {showHowToPlay && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+            <div className="bg-slate-900 rounded-xl shadow-lg p-8 max-w-md w-full relative">
+              <button
+                className="absolute top-2 right-2 px-2 py-1 text-slate-400 bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-600"
+                onClick={() => setShowHowToPlay(false)}
+              >
+                Close
+              </button>
+              <h2 className="text-xl font-bold mb-2 text-emerald-300">How to Play Sudoku</h2>
+              <ul className="list-disc pl-5 space-y-2 text-base text-slate-200">
+                <li>Fill the board so that each row, column, and 3x3 grid has numbers 1–9.</li>
+                <li>Each number can appear only once in a row, column, or grid.</li>
+                <li>Use logic, not guessing, to solve the puzzle.</li>
+                <li>Hints will reveal a correct number if you’re stuck.</li>
+                <li>The game ends when the board is correctly filled.</li>
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {/* Difficulty Selector */}
         <div className="mb-5 flex flex-wrap items-center gap-3">
           <label className="text-slate-300">Select Difficulty:</label>
           <select
@@ -180,6 +215,7 @@ export default function Sudoku() {
           </select>
         </div>
 
+        {/* Game Board */}
         <Board
           board={board}
           fixed={fixed}
@@ -187,6 +223,7 @@ export default function Sudoku() {
           onSelect={setSelected}
         />
 
+        {/* Action Buttons */}
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <button
             className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-slate-100 hover:bg-slate-700"
