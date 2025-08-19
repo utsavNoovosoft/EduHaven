@@ -89,8 +89,35 @@ function StudyStats() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="flex items-center justify-center h-full">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-current"></div>
+        <div className="bg-[var(--bg-secondary)] border border-gray-700/10 dark:border-gray-700/30 rounded-3xl shadow p-3 sm:p-4 animate-pulse">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <div className="h-5 w-14 rounded-md bg-gray-500/20" />
+              <div className="h-4 w-4 rounded-sm bg-gray-500/20" />
+            </div>
+            <div className="h-5 w-5 rounded-full bg-gray-500/20" />
+          </div>
+
+          <div className="flex items-center gap-4 mb-3">
+            <div className="h-12 w-12 rounded-full bg-gray-500/20" />
+            <div className="h-6 w-24 rounded-md bg-gray-500/20" />
+          </div>
+
+          <div className="flex items-center gap-4 mb-3">
+            <div className="h-12 w-12 rounded-full bg-gray-500/20" />
+            <div className="h-6 w-16 rounded-md bg-gray-500/20" />
+          </div>
+
+          <div className="flex items-center gap-4 mb-3">
+            <div className="h-12 w-12 rounded-full bg-gray-500/20" />
+            <div className="h-6 w-24 rounded-md bg-gray-500/20" />
+          </div>
+
+          <div className="h-5 w-40 rounded-md bg-gray-500/20 mb-2" />
+
+          <div className="relative w-full h-5 rounded-2xl overflow-hidden bg-gray-500/20">
+            <div className="absolute left-0 top-0 h-5 rounded-2xl bg-white/60 dark:bg-gray-600/50" />
+          </div>
         </div>
       </motion.div>
     );
