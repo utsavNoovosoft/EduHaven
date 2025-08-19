@@ -5,6 +5,7 @@ import SnakeIcon from "..//../assets/icon/SnakeIcon";
 import SpaceTypeIcon from "../../assets/icon/SpaceTypeIcon";
 import TicTacToeIcon from "../../assets/icon/TicTacToeIcon";
 import WacAMole from "@/assets/icon/WacAMole";
+import SudokuIcon from "../../assets/icon/SudokuIcon.jsx"; 
 import Game2048Icon from "@/assets/icon/Game2048Icon";
 
 function GameRoom() {
@@ -34,12 +35,17 @@ function GameRoom() {
       path: "2048",
       Icon: Game2048Icon,
     },
+     {
+      name: "Sudoku",
+      path: "sudoku",
+      Icon: SudokuIcon, 
+    },
   ];
 
   return (
     <div className="m-6  bg-[hsl(var(--background))] txt transition-colors duration-300 overflow-x-hidden">
       <h1 className="text-2xl font-bold txt">Game Room</h1>
-      <div className="relative w-[svw] h-[50vh] pb-5 ">
+      <div className="relative w-[svw] h-[50vh] pb-5">
         <div className="absolute h-1/2 w-[calc(100vw-6rem)] right-0">
           <div className="relative bottom-[100%] left-[30%]">
             <LionComponent />

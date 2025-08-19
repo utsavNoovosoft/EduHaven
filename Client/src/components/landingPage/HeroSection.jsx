@@ -190,7 +190,7 @@ function HeroSection() {
 
   return (
     <motion.div
-      className="relative h-[calc(100vh-50px)] mx-auto overflow-hidden"
+      className="relative h-[calc(100vh-50px)] mx-auto overflow-hidden pt-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}

@@ -83,7 +83,7 @@ export default function Auth() {
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl pointer-events-none" />
 
         <div className="relative z-10">
-          <div className="flex w-full items-center gap-2 mb-10 dark:invert">
+          <div className="flex w-full items-center gap-2 mb-5 dark:invert">
             <img src="/Logo.svg" alt="Logo" className="size-8" />
             <h3 className="text-black font-semibold text-xl">Eduhaven</h3>
           </div>

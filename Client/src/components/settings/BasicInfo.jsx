@@ -5,6 +5,9 @@ import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
 import { Camera, User, Trash2 } from "lucide-react";
 import UpdateButton from "./UpdateButton";
+import { CropModal } from "../CropModal";
+import { getCroppedWebpFile } from "@/utils/imageUtils";
+
 const backendUrl = import.meta.env.VITE_API_URL;
 
 export default function BasicInfo() {
@@ -24,6 +27,8 @@ export default function BasicInfo() {
   const fileInputRef = useRef(null);
   const [initialProfileData, setInitialProfileData] = useState(null);
   const [hasChanged, setHasChanged] = useState(false);
+  const [showCropModal, setShowCropModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -80,16 +85,23 @@ export default function BasicInfo() {
 
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
-    setProfilePic(file);
+    if (file) {
+      const reader = new FileReader();
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setProfileData((prev) => ({
-        ...prev,
-        ProfilePicture: reader.result,
-      }));
-    };
-    reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+        setShowCropModal(true);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleCropDone = (croppedImageFile) => {
+    setProfilePic(croppedImageFile);
+    setProfileData((prev) => ({
+      ...prev,
+      ProfilePicture: URL.createObjectURL(croppedImageFile),
+    }));
   };
 
   const uploadProfilePicture = async () => {
@@ -100,6 +112,7 @@ export default function BasicInfo() {
 
     setIsProfilePicLoading(true);
     const formData = new FormData();
+
     formData.append("profilePicture", profilePic);
 
     try {
@@ -179,6 +192,12 @@ export default function BasicInfo() {
 
   return (
     <div className="max-w-4xl mx-auto ">
+      <CropModal
+        isOpen={showCropModal}
+        onClose={() => setShowCropModal(false)}
+        imageSrc={selectedImage}
+        onCropDone={handleCropDone}
+      />
       <h1 className="text-2xl pb-4 font-semibold text-[var(--txt)] mb-2">
         Basic Information
       </h1>
@@ -345,7 +364,9 @@ export default function BasicInfo() {
                 className="w-full px-4 py-3 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all pr-10"
                 disabled={isProfileUpdateLoading}
               >
-                <option value="">Select Gender</option>
+                <option value="" disabled hidden>
+                  Select Gender
+                </option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
