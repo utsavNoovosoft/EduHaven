@@ -25,8 +25,8 @@ function StudyStats() {
     level: {
       name: "Beginner",
       progress: 0,
-      hoursToNextLevel: "2.0",
-    },
+      hoursToNextLevel: "2.0"
+    }
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -43,13 +43,10 @@ function StudyStats() {
     try {
       if (isRefresh) setRefreshing(true);
       setError(null);
-
-      const response = await axios.get(
-        `${backendUrl}/user-stats`,
-        getAuthHeader()
-      );
+      
+      const response = await axios.get(`${backendUrl}/user-stats`, getAuthHeader());
       const stats = response.data;
-
+      
       // Update study data with real values
       setStudyData({
         Today: `${stats.timePeriods.today} h`,
@@ -57,15 +54,15 @@ function StudyStats() {
         "This month": `${stats.timePeriods.thisMonth} h`,
         "All time": `${stats.timePeriods.allTime} h`,
       });
-
+      
       // Update user stats
       setUserStats({
         rank: stats.rank,
         totalUsers: stats.totalUsers,
         streak: stats.streak,
-        level: stats.level,
+        level: stats.level
       });
-
+      
       setLoading(false);
       setRefreshing(false);
     } catch (error) {
@@ -210,8 +207,8 @@ function StudyStats() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
-          <RefreshCw
-            className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`}
+          <RefreshCw 
+            className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} 
           />
         </motion.button>
       </div>
@@ -223,7 +220,9 @@ function StudyStats() {
         transition={{ duration: 0.3, delay: 0.1 }}
       >
         <Clock4 className="h-12 w-12 p-2.5 bg-green-400/70 rounded-full text-gray-100" />
-        <p className="text-2xl txt-dim font-bold">{studyData[selectedTime]}</p>
+        <p className="text-2xl txt-dim font-bold">
+          {studyData[selectedTime]}
+        </p>
       </motion.div>
 
       <motion.div
@@ -256,10 +255,9 @@ function StudyStats() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.4 }}
       >
-        {userStats.level.name} ({userStats.level.current || 1}-
-        {userStats.level.current + 1 || 2}h)
+        {userStats.level.name} ({userStats.level.current || 1}-{userStats.level.current + 1 || 2}h)
       </motion.p>
-
+      
       <div className="relative w-full bg-ter h-5 rounded-2xl mt-2">
         <motion.p
           className="absolute h-full w-full pr-5 txt-dim text-sm text-right"
