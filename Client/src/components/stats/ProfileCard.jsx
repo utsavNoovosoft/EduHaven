@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { useState, useEffect, useRef } from "react";
 import {
   User,
@@ -30,6 +31,23 @@ const ProfileCard = ({isCurrentUser = false}) => {
   const [showPopup, setShowPopup] = useState(false);
   const [friendsList, setFriendsList] = useState([]);
   const { userId } = useParams();
+  const [showLink, setShowLink] = useState(false);
+
+   // user part for share functionality
+   const profilelink = user?._id ? `${window.location.origin}/user/${user._id}` : "" ;
+
+   //Logic part for share functionality
+   const togglelink = () => setShowLink((prev) => !prev);
+
+   const copylink =()=>{
+     if(!profilelink) return;
+     navigator.clipboard.writeText(profilelink)
+     .then(() => {
+       toast.success("Copied ");
+       setShowLink(false);
+     })
+     .catch(()=> toast.error("Not Copied "));
+   };
 
   const popupRef = useRef(null);
 
@@ -167,7 +185,35 @@ const ProfileCard = ({isCurrentUser = false}) => {
             <Edit3 className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)]" />
           </Link>
         )}
-        <Share2 className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)]" />
+
+      
+        {user?._id && (
+             <div className="relative inline-block">
+                <Share2
+                     className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
+                     onClick={togglelink}
+                />
+
+               {showLink && (
+                  <div className="absolute top-full mt-2 right-0 flex items-center bg-[#1f2937] rounded-lg px-3 py-2 shadow-md border border-gray-700 w-64 z-20" >
+                          <input
+                               type="text"
+                              value={profilelink}
+                               readOnly
+                               title={profilelink}
+                              className="flex-1 bg-transparent text-sm text-white outline-none truncate"
+                          />
+                      <button
+                        className="ml-2 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-medium text-white transition"
+                          onClick={copylink}
+                       >
+                          Copy
+                       </button>
+                   </div>
+               )}
+             </div>
+           )}
+
       </div>
 
       <div className="mx-4">
