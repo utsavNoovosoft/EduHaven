@@ -115,6 +115,12 @@ function EducationAndSkills() {
         [key]: "",
       },
     }));
+
+    if (key === "skills") {
+      setSkillsList([]);
+    } else if (key === "interests") {
+      setInterestsList([]);
+    }
   };
 
   const addSkill = () => {
