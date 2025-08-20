@@ -347,7 +347,7 @@ const ProfileCard = ({isCurrentUser = false}) => {
       <div className="bg-gray-500/20 rounded-3xl p-4 space-y-4">
         {user.FieldOfStudy && (
           <div className="flex items-center gap-4 text-[var(--text-secondary)]">
-            <Landmark className="h-7 w-7" />
+            <Landmark className="h-7 w-7 flex-shrink-0" />
             <div>
               <p className="text-xs">{user.University || "Field of Study"}</p>
               <p className="text-lg text-[var(--text-primary)]">
@@ -360,7 +360,7 @@ const ProfileCard = ({isCurrentUser = false}) => {
 
         {user.OtherDetails?.skills && (
           <div className="flex items-center gap-4 text-[var(--text-secondary)]">
-            <Puzzle className="h-7 w-7" />
+            <Puzzle className="h-7 w-7 flex-shrink-0" />
             <div>
               <p className="text-xs">Skills</p>
               <p className="text-lg text-[var(--text-primary)]">
@@ -371,7 +371,7 @@ const ProfileCard = ({isCurrentUser = false}) => {
         )}
         {user.OtherDetails?.interests && (
           <div className="flex items-center gap-4 text-[var(--text-secondary)]">
-            <DraftingCompass className="h-7 w-7" />
+            <DraftingCompass className="h-7 w-7 flex-shrink-0" />
             <div>
               <p className="text-xs">Interests</p>
               <p className="text-lg text-[var(--text-primary)]">
