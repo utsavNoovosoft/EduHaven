@@ -1,3 +1,8 @@
+// 🎵 Load sounds
+const moveSound = new Audio("/sounds/move.mp3");
+const winSound = new Audio("/sounds/win.mp3");
+const tieSound = new Audio("/sounds/tie.mp3");
+
 import { useState, useEffect } from "react";
 import { Volume2, VolumeX, RotateCcw, ArrowLeft } from "lucide-react";
 
@@ -237,22 +242,31 @@ function TicTacToe() {
     }
   }, [xIsNext, squares, gameMode, difficulty, winner]);
 
-  const handleMove = (i) => {
-    if (squares[i] || winner) return;
+const handleMove = (i) => {
+  if (squares[i] || winner) return;
 
-    const newSquares = squares.slice();
-    newSquares[i] = xIsNext ? "X" : "O";
-    setSquares(newSquares);
-    setXIsNext(!xIsNext);
+  const newSquares = squares.slice();
+  newSquares[i] = xIsNext ? "X" : "O";
+  setSquares(newSquares);
+  setXIsNext(!xIsNext);
 
-    const result = calculateWinner(newSquares);
-    if (result.winner && result.winner !== "tie") {
-      setScores((prev) => ({
-        ...prev,
-        [result.winner]: prev[result.winner] + 1,
-      }));
-    }
-  };
+  // 🎵 Play move sound
+  if (isSoundEnabled) moveSound.play();
+
+  const result = calculateWinner(newSquares);
+  if (result.winner && result.winner !== "tie") {
+    setScores((prev) => ({
+      ...prev,
+      [result.winner]: prev[result.winner] + 1,
+    }));
+
+    // 🎵 Play win sound
+    if (isSoundEnabled) winSound.play();
+  } else if (result.winner === "tie") {
+    // 🎵 Play tie sound
+    if (isSoundEnabled) tieSound.play();
+  }
+};
 
   const renderStatus = () => {
     if (winner === "tie") return "It's a tie!";
