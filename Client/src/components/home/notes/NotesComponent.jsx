@@ -268,7 +268,7 @@ function NotesComponent() {
           </button>
         </div>
         <div className="flex space-x-2 items-center">
-          <span className="text-yellow-300 opacity-90 text-lg">
+          <span className="opacity-90 text-lg">
             {notes.length > 0 ? `${currentPage + 1}/${notes.length}` : "1/1"}
           </span>
           <button
@@ -298,7 +298,7 @@ function NotesComponent() {
             value={notes[currentPage]?.title || ""}
             onChange={handleTitleChange}
             placeholder="Title"
-            className="bg-transparent outline-none p-0.5 text-lg w-full font-semibold text-yellow-400 opacity-85"
+            className="bg-transparent outline-none p-0.5 text-lg w-full font-semibold opacity-85"
           />
           {titleError && (
             <p className="text-red-400 text-xs absolute -bottom-3">
