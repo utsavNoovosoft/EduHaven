@@ -26,7 +26,7 @@ const ToggleSwitch = ({ label, checked, onChange }) => {
           <span className={styles.toggleLabel}>{label}</span>
           <div 
               className={styles.toggleTrack}
-              style={{ backgroundColor: checked ? 'rgb(79, 70, 229)' : '#cccccc' }} // Keep dynamic background color
+              style={{ backgroundColor: checked ? 'var(--btn)' : '#cccccc' }} // Keep dynamic background color
               onClick={(e) => {
                   e.stopPropagation(); // Prevent dropdown from closing
                   onChange(!checked);
@@ -42,6 +42,9 @@ const ToggleSwitch = ({ label, checked, onChange }) => {
 };
 
 const SnakeGame = () => {
+  const root = document.documentElement; // or any container element
+  const txtDim = getComputedStyle(root).getPropertyValue('--txt-dim').trim();
+  const btn = getComputedStyle(root).getPropertyValue('--btn').trim();
 
   const [hiScore,setHiScore] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -240,7 +243,7 @@ const SnakeGame = () => {
             }
         }
         goalSize = 200;
-        ctx.strokeStyle = "black";
+        ctx.strokeStyle = txtDim;
         goal = p;
       }
       function start() {
@@ -288,7 +291,7 @@ const SnakeGame = () => {
           ctx.fillText(rScore, 0, 0);
           ctx.restore();
         }
-        ctx.fillStyle = "black";
+        ctx.fillStyle = txtDim;
         ctx.fillText(rScore, 0, 0);
         ctx.restore();
       }
@@ -344,11 +347,11 @@ const SnakeGame = () => {
         ctx.font = "20px" + scoreFont; // Increase font size
         ctx.textAlign = "right"; // Align text to the right
         ctx.textBaseline = "top"; // Keep it at the top
-        ctx.fillStyle = "black";
+        ctx.fillStyle = txtDim;
         ctx.fillText(Math.round(score), w - 20, 20);
         ctx.beginPath();
         ctx.arc(goal.x, goal.y, goalSize, 0, Math.PI2, false);
-        ctx.strokeStyle = "black";
+        ctx.strokeStyle = txtDim;
         ctx.stroke();
 
         var p, i, l;
@@ -357,7 +360,7 @@ const SnakeGame = () => {
             p = bodyP[i];
             ctx.beginPath();
             ctx.arc(p.x, p.y, bodyRadius, 0, Math.PI2, false);
-            ctx.strokeStyle = "black";
+            ctx.strokeStyle = txtDim;
             ctx.stroke();
           }
         }
@@ -375,7 +378,7 @@ const SnakeGame = () => {
             .clone()
             .add(bodyM[l - 1].clone().set("d", bodyRadius).toPoint());
           ctx.lineTo(p.x, p.y);
-          ctx.strokeStyle = "black";
+          ctx.strokeStyle = txtDim;
           ctx.stroke();
         }
         if (drawing.contour) {
@@ -409,7 +412,7 @@ const SnakeGame = () => {
             ctx.restore();
           }
           ctx.closePath();
-          ctx.strokeStyle = "black";
+          ctx.strokeStyle = txtDim;
           ctx.stroke();
         }
       }
@@ -465,8 +468,8 @@ const SnakeGame = () => {
           w = c.width = $c.width();
           h = c.height = $c.height();
           if (!played) {
-            ctx.fillStyle = 'black'; 
-            ctx.strokeStyle = "black";
+            ctx.fillStyle = txtDim; 
+            ctx.strokeStyle = txtDim;
             ctx.font = "37px" + fontFamily;
             ctx.textAlign = "center";
             ctx.textBaseline = "bottom";
@@ -497,7 +500,7 @@ const SnakeGame = () => {
         
         <button
           onClick={() => window.history.back()}
-          className="flex items-center gap-2 px-3 py-2 text-[var(--txt-dim)] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm"
+          className="flex items-center gap-2 px-3 py-2 text-[txtDim] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm"
         >
           <ArrowLeft size={20} />
           <span className="hidden sm:inline">Back</span>

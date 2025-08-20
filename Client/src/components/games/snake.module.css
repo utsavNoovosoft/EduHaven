@@ -13,14 +13,16 @@
 
 /* --- High Score Display --- */
 .hiScore {
-  color: #4f46e5;
+  color: var(--btn);
   background-color: var(--accent);
   font-size: 1.1rem;
   font-weight: bold;
   display: flex;
   align-items: center;
 }
-
+.hiScore{
+  color: var(--btn-hover);
+}
 /* --- Game Canvas --- */
 .canvas {
   background: var(--bg-ter);
@@ -72,7 +74,7 @@
 }
 
 .dropdownHeader:hover {
-  border-color: #4f46e5;
+  border-color: var(--txt);
 }
 
 .chevron {
