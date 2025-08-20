@@ -1,69 +1,68 @@
 import React, { useEffect, useState, useRef } from "react";
 import $ from "jquery";
-import styles from './snake.module.css';
+import styles from "./snake.module.css";
 import { ArrowLeft } from "lucide-react";
 
 const ChevronDown = ({ size = 20, className }) => (
-  <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width={size} 
-      height={size} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
   >
-      <polyline points="6 9 12 15 18 9"></polyline>
+    <polyline points="6 9 12 15 18 9"></polyline>
   </svg>
 );
 
 const ToggleSwitch = ({ label, checked, onChange }) => {
   return (
-      <div className={styles.line}>
-          <span className={styles.toggleLabel}>{label}</span>
-          <div 
-              className={styles.toggleTrack}
-              style={{ backgroundColor: checked ? 'var(--btn)' : '#cccccc' }} // Keep dynamic background color
-              onClick={(e) => {
-                  e.stopPropagation(); // Prevent dropdown from closing
-                  onChange(!checked);
-              }}
-          >
-              <div 
-                className={styles.toggleThumb}
-                style={{ transform: checked ? 'translateX(22px)' : 'translateX(0)' }} // Keep dynamic transform
-              ></div>
-          </div>
+    <div className={styles.line}>
+      <span className={styles.toggleLabel}>{label}</span>
+      <div
+        className={styles.toggleTrack}
+        style={{ backgroundColor: checked ? "var(--btn)" : "#cccccc" }} // Keep dynamic background color
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent dropdown from closing
+          onChange(!checked);
+        }}
+      >
+        <div
+          className={styles.toggleThumb}
+          style={{ transform: checked ? "translateX(22px)" : "translateX(0)" }} // Keep dynamic transform
+        ></div>
       </div>
+    </div>
   );
 };
 
 const SnakeGame = () => {
   const root = document.documentElement; // or any container element
-  const txtDim = getComputedStyle(root).getPropertyValue('--txt-dim').trim();
-  const btn = getComputedStyle(root).getPropertyValue('--btn').trim();
+  const txtDim = getComputedStyle(root).getPropertyValue("--txt-dim").trim();
+  const btn = getComputedStyle(root).getPropertyValue("--btn").trim();
 
-  const [hiScore,setHiScore] = useState(0);
+  const [hiScore, setHiScore] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [gameMode, setGameMode] = useState('Modes');
-
+  const [gameMode, setGameMode] = useState("Modes");
 
   // CHANGED: RENAMED 'settings' TO 'drawingOptions' TO MATCH GAME LOGIC AND ADDED CORRECT KEYS
   const [drawingOptions, setDrawingOptions] = useState({
-      circles: true,
-      lines: false,
-      contour: false,
+    contour: true,
+    circles: false,
+    lines: false,
   });
   const dropdownRef = useRef(null);
 
   // CHANGED: ADDED GAME MODES TO THE DROPDOWN LIST
   const dropdownOptions = [
-      { type: 'setting', label: 'Circles', key: 'circles' },
-      { type: 'setting', label: 'Lines', key: 'lines' },
-      { type: 'setting', label: 'Contour', key: 'contour' },
+    { type: "setting", label: "Circles", key: "circles" },
+    { type: "setting", label: "Lines", key: "lines" },
+    { type: "setting", label: "Contour", key: "contour" },
   ];
 
   // Effect to handle clicks outside the dropdown to close it
@@ -73,13 +72,13 @@ const SnakeGame = () => {
         setIsOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownRef]);
 
-    // Handler for changing game mode
+  // Handler for changing game mode
   const handleModeClick = (option) => {
     setGameMode(option.label);
     setIsOpen(false); // Close dropdown when a mode is selected
@@ -87,24 +86,24 @@ const SnakeGame = () => {
 
   // CHANGED: RENAMED HANDLER TO MATCH NEW STATE NAME
   const handleDrawingChange = (key) => {
-      // This directly manipulates the `drawing` object in the game's scope
-      // This is a necessary workaround because the game logic is not React-driven
-      if (window.drawing) {
-        window.drawing[key] = !window.drawing[key];
-      }
-      setDrawingOptions(prevOptions => ({
-          ...prevOptions,
-          [key]: !prevOptions[key]
-      }));
+    // This directly manipulates the `drawing` object in the game's scope
+    // This is a necessary workaround because the game logic is not React-driven
+    if (window.drawing) {
+      window.drawing[key] = !window.drawing[key];
+    }
+    setDrawingOptions((prevOptions) => ({
+      ...prevOptions,
+      [key]: !prevOptions[key],
+    }));
   };
 
   // fetches the prev hi score on mount
-  useEffect(()=>{
+  useEffect(() => {
     const prevHiScore = localStorage.getItem("snakeHiScore");
-    if(prevHiScore){
+    if (prevHiScore) {
       setHiScore(parseInt(prevHiScore));
     }
-  },[]);
+  }, []);
 
   useEffect(() => {
     Math.PI2 = 2 * Math.PI;
@@ -217,7 +216,11 @@ const SnakeGame = () => {
         density,
         score;
       // CHANGED: ATTACHED 'drawing' TO WINDOW SCOPE FOR REACT TO ACCESS
-      var drawing = window.drawing = { circles: true, lines: false, contour: false };
+      var drawing = (window.drawing = {
+        circles: false,
+        lines: false,
+        contour: true,
+      });
 
       function newGoal() {
         var p,
@@ -468,7 +471,7 @@ const SnakeGame = () => {
           w = c.width = $c.width();
           h = c.height = $c.height();
           if (!played) {
-            ctx.fillStyle = txtDim; 
+            ctx.fillStyle = txtDim;
             ctx.strokeStyle = txtDim;
             ctx.font = "37px" + fontFamily;
             ctx.textAlign = "center";
@@ -487,17 +490,16 @@ const SnakeGame = () => {
         })
         .resize(); // Trigger resize function on initial load
 
-        
       // REMOVED: OLD JQUERY EVENT HANDLERS FOR CHECKBOXES
     });
   }, [hiScore]); // ADDED HISCORE TO DEPENDENCY ARRAY
 
   return (
     <div className={styles.snakeGame}>
-      <nav 
-        className="bg-[var(--bg-sec)] shadow-lg border-b border-[rgba(var(--shadow-rgb),0.08)] px-6 sm:px-7 py-1 flex items-center justify-between fixed top-0 z-20" 
-        style={{ width: '94%', left: '80px' }}>
-        
+      <nav
+        className="bg-[var(--bg-sec)] shadow-lg border-b border-[rgba(var(--shadow-rgb),0.08)] px-6 sm:px-7 py-1 flex items-center justify-between fixed top-0 z-20"
+        style={{ width: "94%", left: "80px" }}
+      >
         <button
           onClick={() => window.history.back()}
           className="flex items-center gap-2 px-3 py-2 text-[txtDim] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm"
@@ -506,50 +508,54 @@ const SnakeGame = () => {
           <span className="hidden sm:inline">Back</span>
         </button>
 
-        <div className={styles.hiScore}>
-          High Score: {hiScore}
-        </div>
+        <div className={styles.hiScore}>High Score: {hiScore}</div>
         {/* REMOVED UNNECESSARY WRAPPER DIVS AND CORRECTED className USAGE */}
         <div className={styles.customDropdown} ref={dropdownRef}>
-            <div className={styles.dropdownHeader} onClick={() => setIsOpen(!isOpen)}>
-                <span>{gameMode}</span>
-                <ChevronDown 
-                    size={20} 
-                    className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ''}`} 
-                />
-            </div>
-            {isOpen && (
-                <div className={styles.dropdownList}>
-                    {dropdownOptions.map((option, index) => {
-              
-                        
-                        if (option.type === 'setting') {
-                            return (
-                                <div key={option.key} className={styles.dropdownItemNoHover}>
-                                    <ToggleSwitch
-                                        label={option.label}
-                                        checked={drawingOptions[option.key]}
-                                        onChange={() => handleDrawingChange(option.key)}
-                                    />
-                                </div>
-                            );
-                        }
+          <div
+            className={styles.dropdownHeader}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span>{gameMode}</span>
+            <ChevronDown
+              size={20}
+              className={`${styles.chevron} ${
+                isOpen ? styles.chevronOpen : ""
+              }`}
+            />
+          </div>
+          {isOpen && (
+            <div className={styles.dropdownList}>
+              {dropdownOptions.map((option, index) => {
+                if (option.type === "setting") {
+                  return (
+                    <div
+                      key={option.key}
+                      className={styles.dropdownItemNoHover}
+                    >
+                      <ToggleSwitch
+                        label={option.label}
+                        checked={drawingOptions[option.key]}
+                        onChange={() => handleDrawingChange(option.key)}
+                      />
+                    </div>
+                  );
+                }
 
-                        return (
-                            <div 
-                                key={option.label} 
-                                className={styles.dropdownItem} 
-                                onClick={() => handleModeClick(option)}
-                            >
-                                {option.label}
-                            </div>
-                        );
-                    })}
-                </div>
-            )}
+                return (
+                  <div
+                    key={option.label}
+                    className={styles.dropdownItem}
+                    onClick={() => handleModeClick(option)}
+                  >
+                    {option.label}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </nav>
-      
+
       <canvas className={styles.canvas} id="c"></canvas>
 
       <div className={styles.noticePause}>
