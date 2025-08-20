@@ -22,11 +22,7 @@ function FriendRequests() {
 
   const handleAccept = (friendId) => {
     axios
-      .post(
-        `${backendUrl}/friends/accept/${friendId}`,
-        null,
-        getAuthHeader()
-      )
+      .post(`${backendUrl}/friends/accept/${friendId}`, null, getAuthHeader())
       .then((res) => {
         console.log(res.data);
         setRequests((prev) => prev.filter((user) => user._id !== friendId));
@@ -36,17 +32,15 @@ function FriendRequests() {
 
   const handleReject = (friendId) => {
     axios
-      .post(
-        `${backendUrl}/friends/reject/${friendId}`,
-        null,
-        getAuthHeader()
-      )
+      .post(`${backendUrl}/friends/reject/${friendId}`, null, getAuthHeader())
       .then((res) => {
         console.log(res.data);
         setRequests((prev) => prev.filter((user) => user._id !== friendId));
       })
       .catch((err) => console.error(err.response.data));
   };
+
+  if (friendRequests.length === 0) return null;
 
   return (
     <section className="bg-sec rounded-3xl p-3 2xl:p-4">

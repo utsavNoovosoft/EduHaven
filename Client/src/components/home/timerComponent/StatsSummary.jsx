@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Clock4, Flame, BarChart2, RefreshCw } from "lucide-react";
+import { ChevronDown, Clock4, Flame, BarChart2 } from "lucide-react";
 import axios from "axios";
 
 // Variants for dropdown buttons (using custom variable for hover bg)
@@ -9,7 +9,7 @@ const dropdownButtonVariants = {
   hover: { backgroundColor: "var(--bg-ter)" },
 };
 
-function StudyStats() {
+function StatsSummary() {
   const [selectedTime, setSelectedTime] = useState("Today");
   const [isOpen, setIsOpen] = useState(false);
   const [studyData, setStudyData] = useState({
@@ -25,12 +25,11 @@ function StudyStats() {
     level: {
       name: "Beginner",
       progress: 0,
-      hoursToNextLevel: "2.0"
-    }
+      hoursToNextLevel: "2.0",
+    },
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
 
   const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -39,14 +38,16 @@ function StudyStats() {
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
-  const fetchUserStats = async (isRefresh = false) => {
+  const fetchUserStats = async () => {
     try {
-      if (isRefresh) setRefreshing(true);
       setError(null);
-      
-      const response = await axios.get(`${backendUrl}/user-stats`, getAuthHeader());
+
+      const response = await axios.get(
+        `${backendUrl}/user-stats`,
+        getAuthHeader()
+      );
       const stats = response.data;
-      
+
       // Update study data with real values
       setStudyData({
         Today: `${stats.timePeriods.today} h`,
@@ -54,22 +55,20 @@ function StudyStats() {
         "This month": `${stats.timePeriods.thisMonth} h`,
         "All time": `${stats.timePeriods.allTime} h`,
       });
-      
+
       // Update user stats
       setUserStats({
         rank: stats.rank,
         totalUsers: stats.totalUsers,
         streak: stats.streak,
-        level: stats.level
+        level: stats.level,
       });
-      
+
       setLoading(false);
-      setRefreshing(false);
     } catch (error) {
       console.error("Error fetching user stats:", error);
       setError("Failed to load statistics");
       setLoading(false);
-      setRefreshing(false);
     }
   };
 
@@ -89,14 +88,8 @@ function StudyStats() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="bg-[var(--bg-secondary)] border border-gray-700/10 dark:border-gray-700/30 rounded-3xl shadow p-3 sm:p-4 animate-pulse">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <div className="h-5 w-14 rounded-md bg-gray-500/20" />
-              <div className="h-4 w-4 rounded-sm bg-gray-500/20" />
-            </div>
-            <div className="h-5 w-5 rounded-full bg-gray-500/20" />
-          </div>
+        <div className="animate-pulse">
+          <div className="h-5 w-5 rounded-full bg-gray-500/20 ml-auto -mb-1" />
 
           <div className="flex items-center gap-4 mb-3">
             <div className="h-12 w-12 rounded-full bg-gray-500/20" />
@@ -152,12 +145,11 @@ function StudyStats() {
       transition={{ duration: 0.5 }}
     >
       {/* Header with refresh button */}
-      <div className="flex items-center justify-between mb-2">
-        <div className="relative">
+      <div className="flex items-center justify-between -mb-3">
+        <div className="relative ml-auto">
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center space-x-1 txt-dim hover:txt"
-            whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
             <span>{selectedTime}</span>
@@ -198,19 +190,6 @@ function StudyStats() {
             )}
           </AnimatePresence>
         </div>
-
-        {/* Refresh button */}
-        <motion.button
-          onClick={handleRefresh}
-          disabled={refreshing}
-          className="p-1 hover:bg-ter rounded transition-colors"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <RefreshCw 
-            className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} 
-          />
-        </motion.button>
       </div>
 
       <motion.div
@@ -220,9 +199,7 @@ function StudyStats() {
         transition={{ duration: 0.3, delay: 0.1 }}
       >
         <Clock4 className="h-12 w-12 p-2.5 bg-green-400/70 rounded-full text-gray-100" />
-        <p className="text-2xl txt-dim font-bold">
-          {studyData[selectedTime]}
-        </p>
+        <p className="text-2xl txt-dim font-bold">{studyData[selectedTime]}</p>
       </motion.div>
 
       <motion.div
@@ -255,9 +232,10 @@ function StudyStats() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, delay: 0.4 }}
       >
-        {userStats.level.name} ({userStats.level.current || 1}-{userStats.level.current + 1 || 2}h)
+        {userStats.level.name} ({userStats.level.current || 1}-
+        {userStats.level.current + 1 || 2}h)
       </motion.p>
-      
+
       <div className="relative w-full bg-ter h-5 rounded-2xl mt-2">
         <motion.p
           className="absolute h-full w-full pr-5 txt-dim text-sm text-right"
@@ -278,4 +256,4 @@ function StudyStats() {
   );
 }
 
-export default StudyStats;
+export default StatsSummary;

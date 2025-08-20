@@ -98,7 +98,7 @@ export default function OtherRoom({ otherRooms, isLoading = false }) {
         <div className="absolute left-0 top-0 h-full w-20 z-10 bg-[linear-gradient(to_right,var(--bg-primary)_0%,var(--bg-primary)_50%,transparent_90%)]">
           <button
             onClick={() => scroll("left")}
-            className="mr-auto bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white px-3 py-1 rounded-full"
+            className="mr-auto hover:bg-[var(--bg-sec)] txt px-3 py-1 rounded-full transition-colors"
             disabled={isLoading}
           >
             <ChevronLeft size={29} />
@@ -128,7 +128,7 @@ export default function OtherRoom({ otherRooms, isLoading = false }) {
         <div className="absolute right-0 top-0 h-full w-24 z-10 bg-gradient-to-l from-[var(--bg-primary)] to-transparent flex items-end justify-center">
           <button
             onClick={() => scroll("right")}
-            className="ml-auto bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white px-3 py-1 rounded-full"
+            className="ml-auto hover:bg-[var(--bg-sec)] txt px-3 py-1 rounded-full transition-colors"
             disabled={isLoading}
           >
             <ChevronRight size={29} />
