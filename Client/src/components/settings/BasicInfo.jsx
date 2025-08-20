@@ -372,16 +372,6 @@ export default function BasicInfo() {
                 <option value="Other">Other</option>
                 <option value="Prefer not to say">Prefer not to say</option>
               </select>
-              {profileData.Gender && (
-                <button
-                  type="button"
-                  onClick={() => handleClearField("Gender")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--txt-dim)] hover:text-red-500 transition-colors"
-                  disabled={isProfileUpdateLoading}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              )}
             </div>
           </div>
         </div>
