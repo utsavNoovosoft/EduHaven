@@ -622,8 +622,10 @@ function UnitConverter() {
       </select>
       <div className="flex items-end gap-3">
         <div className="flex-1">
-          <label className="block mb-1 font-semibold text-cyan-300">From</label>
-          <select
+
+          <label htmlFor="input-unit" className="block mb-1 font-semibold text-cyan-300">From</label>
+          <select 
+            id="input-unit"
             value={inputUnit}
             onChange={(e) => setInputUnit(e.target.value)}
             className="w-full p-2 rounded bg-slate-800 border border-cyan-600 text-white"
@@ -652,10 +654,11 @@ function UnitConverter() {
           ⇄
         </button>
         <div className="flex-1">
-          <label className="block mb-1 font-semibold text-cyan-300">To</label>
-          <select
-            value={outputUnit}
-            onChange={(e) => setOutputUnit(e.target.value)}
+          <label htmlFor="output-unit" className="block mb-1 font-semibold text-cyan-300">To</label>
+          <select 
+            id="output-unit" 
+            value={outputUnit} 
+            onChange={(e) => setOutputUnit(e.target.value)} 
             className="w-full p-2 rounded bg-slate-800 border border-cyan-600 text-white"
           >
             {category === "temperature"
