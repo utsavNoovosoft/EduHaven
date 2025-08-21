@@ -147,7 +147,7 @@ function NotesSection() {
 }
 
 export default function NoteNest() {
-  const [activeTool, setActiveTool] = useState("calculator");
+  const [activeTool, setActiveTool] = useState("MindMap");
 
   return (
     <>
@@ -181,29 +181,20 @@ export default function NoteNest() {
                 : "bg-cyan-900/40 hover:bg-cyan-600 hover:shadow-md hover:shadow-cyan-500/50"
             }`}
               >
-                {tool === "calculator"
-                  ? "Scientific Calculator"
-                  : tool === "graph"
-                    ? "Graph Plotter"
-                    : tool === "unitconverter"
-                      ? "Unit Converter"
-                      : tool === "MindMap"
-                        ? "MindMAP"
-                        : tool === "flashcard"
-                          ? "Flashcards"
-                          : tool === "tasktracker"
-                            ? "Task & Assignment Tracker"
-                            : tool === "canvas"
-                              ? "Drawing Canvas"
-                              : ""}
+                {tool === "MindMap"
+                  ? "MindMap"
+                  : tool === "flashcard"
+                    ? "Flashcards"
+                    : tool === "tasktracker"
+                      ? "Task & Assignment Tracker"
+                      : tool === "canvas"
+                        ? "Drawing Canvas"
+                        : ""}
               </button>
             ))}
           </nav>
 
           <div className="flex-1 overflow-auto rounded-md bg-[#182635] p-5 shadow-inner shadow-cyan-800 min-h-[60vh]">
-            {/* {activeTool === "calculator" && <ScientificCalculator />} */}
-            {/* {activeTool === "graph" && <GraphPlotter />} */}
-            {/* {activeTool === "unitconverter" && <UnitConverter />} */}
             {activeTool === "MindMap" && <MindMap />}
             {activeTool === "flashcard" && <FlashcardMaker />}
             {activeTool === "tasktracker" && <TaskAssignmentTracker />}
