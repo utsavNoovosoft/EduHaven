@@ -549,8 +549,13 @@ const GraphPlotter = () => {
       </select>
       <div className="flex items-end gap-3">
         <div className="flex-1">
-          <label className="block mb-1 font-semibold text-cyan-300">From</label>
-          <select value={inputUnit} onChange={(e) => setInputUnit(e.target.value)} className="w-full p-2 rounded bg-slate-800 border border-cyan-600 text-white">
+          <label htmlFor="input-unit" className="block mb-1 font-semibold text-cyan-300">From</label>
+          <select 
+            id="input-unit"
+            value={inputUnit}
+            onChange={(e) => setInputUnit(e.target.value)}
+            className="w-full p-2 rounded bg-slate-800 border border-cyan-600 text-white"
+          >
             {category === "temperature"
               ? units.temperature.map((u) => (
                   <option key={u} value={u}>
@@ -568,8 +573,13 @@ const GraphPlotter = () => {
           ⇄
         </button>
         <div className="flex-1">
-          <label className="block mb-1 font-semibold text-cyan-300">To</label>
-          <select value={outputUnit} onChange={(e) => setOutputUnit(e.target.value)} className="w-full p-2 rounded bg-slate-800 border border-cyan-600 text-white">
+          <label htmlFor="output-unit" className="block mb-1 font-semibold text-cyan-300">To</label>
+          <select 
+            id="output-unit" 
+            value={outputUnit} 
+            onChange={(e) => setOutputUnit(e.target.value)} 
+            className="w-full p-2 rounded bg-slate-800 border border-cyan-600 text-white"
+          >
             {category === "temperature"
               ? units.temperature.map((u) => (
                   <option key={u} value={u}>
