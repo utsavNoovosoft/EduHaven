@@ -61,25 +61,29 @@ const Leaderboard = () => {
   const currentUser = leaderboard.find((user) => user.userId === currentUserId);
 
   const getBadge = (rank) => {
-    const baseBadgeStyle = `inline-flex items-center gap-1 rounded-full text-xs font-medium px-2 py-1`;
+    const baseBadgeStyle = `inline-flex items-center gap-1 rounded-full text-xs font-medium px-2 py-1 -ml-3`;
 
     switch (rank) {
       case 0:
         return (
           <span className={`${baseBadgeStyle} bg-[var(--btn)] text-white`}>
-            🥇 <span>1st</span>
+            🥇 <span>1</span>
           </span>
         );
       case 1:
         return (
-          <span className={`${baseBadgeStyle} bg-[var(--bg-sec)] text-[var(--txt)]`}>
-            🥈 <span>2nd</span>
+          <span
+            className={`${baseBadgeStyle} bg-[var(--bg-sec)] text-[var(--txt)]`}
+          >
+            🥈 <span>2</span>
           </span>
         );
       case 2:
         return (
-          <span className={`${baseBadgeStyle} bg-[var(--bg-ter)] text-[var(--txt)]`}>
-            🥉 <span>3rd</span>
+          <span
+            className={`${baseBadgeStyle} bg-[var(--bg-ter)] text-[var(--txt)]`}
+          >
+            🥉 <span>3</span>
           </span>
         );
       default:
@@ -104,19 +108,34 @@ const Leaderboard = () => {
   };
 
   return (
-    <div className="p-6 w-full bg-[var(--bg-sec)] mx-auto shadow-2xl rounded-3xl">
+    <div className="p-6 w-full bg-[var(--bg-sec)] mx-auto shadow-2xl rounded-3xl min-w-96">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6 flex-wrap gap-3 ">
-        <h2 className="text-3xl font-bold text-[var(--txt)]">Leaderboard</h2>
+      <div className="justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-[var(--txt)]">Leaderboard</h2>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between my-2">
+          {/* Friends Only Toggle */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm">Friends Only</span>
+            <button
+              onClick={handleFriendsOnlyToggle}
+              className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
+                friendsOnly ? "bg-[var(--btn)]" : "bg-[var(--bg-ter)]"
+              }`}
+            >
+              <div
+                className={`w-4 h-4  rounded-full shadow-md transform transition-transform duration-300 ${
+                  friendsOnly
+                    ? "translate-x-4 bg-white"
+                    : "translate-x-0 bg-gray-400"
+                }`}
+              />
+            </button>
+          </div>
           {/* Timeframe Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="flex items-center gap-2 text-sm"
-              >
+              <Button className="text-sm">
                 {view.charAt(0).toUpperCase() + view.slice(1)}{" "}
                 <ChevronDown className="w-4 h-4" />
               </Button>
@@ -133,35 +152,23 @@ const Leaderboard = () => {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-
-          {/* Friends Only Toggle */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm">Friends Only</span>
-            <button
-              onClick={handleFriendsOnlyToggle}
-              className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors duration-300 ${friendsOnly ? "bg-[var(--btn)]" : "bg-[var(--bg-ter)]"
-                }`}
-            >
-              <div
-                className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${friendsOnly ? "translate-x-7" : "translate-x-0"
-                  }`}
-              />
-            </button>
-          </div>
         </div>
       </div>
 
       {/* Column Headers */}
-      <div className="grid grid-cols-3 px-5 pb-2 text-sm font-semibold text-[var(--txt-dim)]">
-        <div>Rank</div>
-        <div className="text-center">Username</div>
+      <div className="flex items-center justify-between px-2 pb-2 text-sm font-semibold text-[var(--txt-dim)]">
+        <div className="flex gap-6">
+          <div>Rank</div>
+          <div className="text-center">User</div>
+        </div>
         <div className="text-right">Time</div>
       </div>
 
       {/* Leaderboard Content */}
       <div
-        className={`space-y-3 transition-all duration-500 ${loading ? "opacity-0 -translate-y-2" : "opacity-100 translate-y-0"
-          } min-h-[500px]`}
+        className={`space-y-2 transition-all duration-500 ${
+          loading ? "opacity-0 -translate-y-2" : "opacity-100 translate-y-0"
+        } min-h-[450px]`}
       >
         {!loading && leaderboard.length === 0 ? (
           <div className="flex items-center justify-center h-full text-[var(--txt-dim)] text-sm font-medium">
@@ -173,22 +180,28 @@ const Leaderboard = () => {
             return (
               <div
                 key={user.userId}
-                className={`grid grid-cols-3 items-center px-5 py-4 rounded-xl transition-all border text-sm ${isCurrentUser
-                    ? "bg-[var(--btn)] border-[var(--btn-hover)] text-white"
-                    : "bg-[var(--bg-primary)] hover:bg-[var(--bg-ter)] border-gray-200 text-[var(--txt)]"
-                  }`}
+                className={`flex items-center justify-between px-5 py-3 rounded-xl transition-all text-sm ${
+                  isCurrentUser
+                    ? "bg-[var(--btn)] text-white"
+                    : "hover:bg-[var(--bg-ter)] text-[var(--txt)]"
+                }`}
               >
-                <div className="flex justify-start">{getBadge(index)}</div>
-
-                <div className="text-center font-semibold">{user.username}</div>
+                <div className="flex gap-2">
+                  <div className="flex justify-start min-w-9">
+                    {getBadge(index)}
+                  </div>
+                  <div className="text-center font-semibold">
+                    {user.username}
+                  </div>
+                </div>
 
                 <div
-                  className={`text-right font-medium ${isCurrentUser ? "text-white" : "text-[var(--txt-dim)]"
-                    }`}
+                  className={`text-right font-medium ${
+                    isCurrentUser ? "text-white" : "text-[var(--txt-dim)]"
+                  }`}
                 >
                   {formatDuration(user.totalDuration)}
                 </div>
-
               </div>
             );
           })

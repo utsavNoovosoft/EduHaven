@@ -1,6 +1,6 @@
 import Calender from "@/components/home/calenderComponent/CalendarComponent.jsx";
 import TimerComponent from "@/components/home/timerComponent/TimerComponent.jsx";
-import StudyStats from "@/components/home/timerComponent/TimerStats";
+import StatsSummary from "@/components/home/timerComponent/StatsSummary";
 import NotesComponent from "@/components/home/notes/NotesComponent.jsx";
 import GoalsComponent from "@/components/home/goals/GoalsComponent.jsx";
 import NavBar from "@/components/home/navBar/NavBar";
@@ -30,7 +30,7 @@ function StudyRoom() {
           <div className="flex-1 h-100 flex flex-col gap-4 2xl:gap-6">
             <div className="flex bg-sec rounded-3xl shadow">
               <TimerComponent />
-              <StudyStats />
+              <StatsSummary />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 2xl:gap-6 flex-1 notes-goals-grid">
               <NotesComponent />

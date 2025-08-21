@@ -75,12 +75,17 @@ const Stats = ({ isCurrentUser = false }) => {
     return <NotLogedInPage />;
   }
 
-  if (loading) return <div className="m-6">Loading profile...</div>;
-  if (!userStats) return <div className="m-6">User not found or error loading profile.</div>;
+  if (loading) return <div className="m-3 2xl:m-6">Loading profile...</div>;
+  if (!userStats)
+    return (
+      <div className="m-3 2xl:m-6">
+        User not found or error loading profile.
+      </div>
+    );
 
   return (
-    <div className="m-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="m-3 2xl:m-6">
+      <div className="flex justify-between items-center mb-3 2xl:mb-6">
         <h1 className="text-2xl font-bold">
           {isCurrentUser ? "Analytics" : userStats.name}
         </h1>
@@ -91,8 +96,8 @@ const Stats = ({ isCurrentUser = false }) => {
         )}
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6 w-full content-center">
-        <div className="lg:w-[20%] min-w-72 space-y-6">
+      <div className="flex flex-col lg:flex-row gap-3 2xl:gap-6 w-full content-center">
+        <div className="lg:w-[20%] min-w-72 space-y-3 2xl:space-y-6">
           <ProfileCard isCurrentUser={isCurrentUser} user={userStats} />
           <div className="h-auto w-full rounded-3xl bg-sec p-5 space-y-4">
             <AdCard />
@@ -100,16 +105,16 @@ const Stats = ({ isCurrentUser = false }) => {
         </div>
 
         <div className="flex-1">
-          <div className="mb-6">
+          <div className="mb-3 2xl:mb-6">
             <StudyStats stats={userStats.studyStats} />
           </div>
           <div className="flex flex-col xl:flex-col 2xl:flex-row">
-            <div className="flex-1 mr-6">
-              <div className="flex gap-6 mb-6">
+            <div className="flex-1 mr-0 2xl:mr-6">
+              <div className="flex gap-3 2xl:gap-6 mb-4 2xl:mb-6">
                 <MonthlyLevel data={userStats.monthlyLevel} />
                 <Badges data={userStats.badges} />
               </div>
-              <div className="gap-6 mb-6">
+              <div className="gap-3 2xl:gap-6 mb-3 2xl:mb-6">
                 <Goals goals={userStats.goals} />
               </div>
             </div>
