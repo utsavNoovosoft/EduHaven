@@ -8,6 +8,7 @@ import {
   uploadProfilePicture,
   verifyUser,
   deleteAccount,
+  giveKudos,
 } from "../Controller/UserController.js";
 import authMiddleware from "../Middlewares/authMiddleware.js";
 import multer from "multer";
@@ -63,6 +64,7 @@ router.post("/signup", signup);
 router.post("/verify", verifyUser);
 router.post("/login", login);
 router.post("/logout", logout);
+router.post("/kudos", authMiddleware, giveKudos);
 router.get("/user/details", getUserDetails);
 router.delete("/user/delete", authMiddleware, deleteAccount);
 router.put("/user/profile", authMiddleware, updateProfile);
