@@ -32,51 +32,53 @@ const ProfileCard = ({isCurrentUser = false}) => {
   const [friendsList, setFriendsList] = useState([]);
   const { userId } = useParams();
   const [showLink, setShowLink] = useState(false);
+  const [kudosCount, setKudosCount] = useState(0);
+  const [hasGivenKudos, setHasGivenKudos] = useState(false);
 
-   // user part for share functionality
+  // user part for share functionality
    const profilelink = user?._id ? `${window.location.origin}/user/${user._id}` : "" ;
 
-   //Logic part for share functionality
-   const togglelink = () => setShowLink((prev) => !prev);
+  //Logic part for share functionality
+  const togglelink = () => setShowLink((prev) => !prev);
 
    const copylink =()=>{
      if(!profilelink) return;
      navigator.clipboard.writeText(profilelink)
-     .then(() => {
-       toast.success("Copied ");
-       setShowLink(false);
-     })
+      .then(() => {
+        toast.success("Copied ");
+        setShowLink(false);
+      })
      .catch(()=> toast.error("Not Copied "));
-   };
+  };
 
   const popupRef = useRef(null);
 
   useEffect(() => {
       const fetchFriendsCount = async() => {
-        try {
+      try {
           const response = await axios.get(`${backendUrl}/friends/count`, getAuthHeader());
-          setFriendsCount(response.data.count);
-          console.log("Friends count is:", response.data.count);
-        } catch (error) {
-          console.error("Error fetching friends count:", error);
-        }
-      };
+        setFriendsCount(response.data.count);
+        console.log("Friends count is:", response.data.count);
+      } catch (error) {
+        console.error("Error fetching friends count:", error);
+      }
+    };
 
-      const fetchFriendsList = async () => {
-        try {
-          const response = await axios.get(
-            `${backendUrl}/friends`,
-            getAuthHeader()
-          );
-          setFriendsList(response.data);
-        } catch (error) {
-          console.error("Error fetching friends list:", error);
-        }
-      };
+    const fetchFriendsList = async () => {
+      try {
+        const response = await axios.get(
+          `${backendUrl}/friends`,
+          getAuthHeader()
+        );
+        setFriendsList(response.data);
+      } catch (error) {
+        console.error("Error fetching friends list:", error);
+      }
+    };
 
-      fetchFriendsCount();
-      fetchFriendsList();
-    }, []);
+    fetchFriendsCount();
+    fetchFriendsList();
+  }, []);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -99,6 +101,8 @@ const ProfileCard = ({isCurrentUser = false}) => {
           response = await axios.get(`${backendUrl}/user/details?id=${userId}`);
         }
         setUser(response.data);
+        setKudosCount(response.data.kudosReceived || 0);
+        setHasGivenKudos(response.data.hasGivenKudos || false); 
       } catch (error) {
         console.error("Error fetching user profile:", error);
       } finally {
@@ -176,6 +180,33 @@ const ProfileCard = ({isCurrentUser = false}) => {
     );
   }
 
+  const handleGiveKudos = async () => {
+    if (isCurrentUser) {
+      toast.error("Kudos can't be given to yourself!");
+      return;
+    }
+
+    if (hasGivenKudos) {
+      toast.info("You already gave kudos to this user!");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${backendUrl}/kudos`,
+        { receiverId: user._id },
+        getAuthHeader()
+      );
+
+      toast.success("🎉 Kudos given successfully!");
+      setKudosCount((prev) => prev + 1);
+      setHasGivenKudos(true);
+    } catch (error) {
+      // console.error(error);
+      toast.error(error.response?.data?.message || "Failed to give kudos.");
+    }
+  };
+
   return (
     <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 w-full h-fit relative overflow-hidden">
       {/* nav */}
@@ -186,33 +217,33 @@ const ProfileCard = ({isCurrentUser = false}) => {
           </Link>
         )}
 
-      
-        {user?._id && (
-             <div className="relative inline-block">
-                <Share2
-                     className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
-                     onClick={togglelink}
-                />
 
-               {showLink && (
+        {user?._id && (
+          <div className="relative inline-block">
+            <Share2
+              className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
+              onClick={togglelink}
+            />
+
+            {showLink && (
                   <div className="absolute top-full mt-2 right-0 flex items-center bg-[#1f2937] rounded-lg px-3 py-2 shadow-md border border-gray-700 w-64 z-20" >
-                          <input
-                               type="text"
-                              value={profilelink}
-                               readOnly
-                               title={profilelink}
-                              className="flex-1 bg-transparent text-sm text-white outline-none truncate"
-                          />
-                      <button
-                        className="ml-2 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-medium text-white transition"
-                          onClick={copylink}
-                       >
-                          Copy
-                       </button>
-                   </div>
-               )}
-             </div>
-           )}
+                <input
+                  type="text"
+                  value={profilelink}
+                  readOnly
+                  title={profilelink}
+                  className="flex-1 bg-transparent text-sm text-white outline-none truncate"
+                />
+                <button
+                  className="ml-2 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-medium text-white transition"
+                  onClick={copylink}
+                >
+                  Copy
+                </button>
+              </div>
+            )}
+          </div>
+        )}
 
       </div>
 
@@ -234,12 +265,12 @@ const ProfileCard = ({isCurrentUser = false}) => {
           </div>
           <div className="text-center flex-1">
             <span className="block text-2xl font-bold text-[var(--text-primary)]">
-              342
+              {kudosCount}
             </span>
             <span className="text-sm text-[var(--text-secondary)]">Kudos</span>
           </div>
-          <div 
-            onClick={() => setShowPopup(!showPopup)} 
+          <div
+            onClick={() => setShowPopup(!showPopup)}
             className="text-center flex-1 cursor-pointer hover:bg-white/20 rounded-lg p-2 transition-colors"
             ref={popupRef}
           >
@@ -254,7 +285,7 @@ const ProfileCard = ({isCurrentUser = false}) => {
           {/* Updated Popup */}
           {showPopup && (
             <div className="fixed bg-transparent/50 inset-0 flex items-center justify-center z-50 p-4 sm:p-4">
-              <div 
+              <div
                 ref={popupRef}
                 className="w-full max-w-80  sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-2/5 sm:h-96 md:h-[28rem] lg:h-[32rem] bg-ter rounded-2xl shadow-2xl flex flex-col "
               >
@@ -278,7 +309,7 @@ const ProfileCard = ({isCurrentUser = false}) => {
                 <div className="flex-1 overflow-y-auto bg-gray-900 pt-4">
                   <div className="bg-gray-900">
                     {friendsList.map((friend) => (
-                      <div 
+                      <div
                         key={friend._id}
                         className="flex items-center gap-3 p-4 cursor-pointer"
                       >
@@ -295,7 +326,7 @@ const ProfileCard = ({isCurrentUser = false}) => {
                             </div>
                           )}
                         </div>
-                        
+
                         <div className="flex-1 min-w-0">
                           <p className="text-white-100 font-bold text-xl truncate">
                             {friend.FirstName
@@ -326,10 +357,21 @@ const ProfileCard = ({isCurrentUser = false}) => {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center gap-4 my-4">
-          <button className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
+          <button
+            onClick={handleGiveKudos}
+            disabled={isCurrentUser || hasGivenKudos}
+            className={`px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1 transition-colors
+            ${
+              isCurrentUser || hasGivenKudos
+                ? "bg-gray-400/30 cursor-not-allowed"
+                : "bg-white/20 hover:bg-white/30 text-[var(--text-primary)]"
+            }
+          `}
+          >
             <ThumbsUp className="w-5 h-5" />
-            <span>Kudos</span>
+            <span>{hasGivenKudos ? "Kudos Given" : "Kudos"}</span>
           </button>
+
           <button className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
             <MessageCircle className="w-5 h-5" />
             <span>Chat</span>

@@ -346,6 +346,46 @@ export const uploadProfilePicture = async (req, res) => {
   }
 };
 
+export const giveKudos = async (req, res) => {
+  try {
+    const giverId = req.user.id;
+    const { receiverId } = req.body; 
+
+    if (giverId === receiverId) {
+      return res
+        .status(400)
+        .json({ message: "You cannot give kudos to yourself." });
+    }
+
+    const giver = await User.findById(giverId);
+    const receiver = await User.findById(receiverId);
+
+    if (!receiver) {
+      return res.status(404).json({ message: "Receiver not found." });
+    }
+
+    if (giver.kudosGiven.includes(receiverId)) {
+      return res
+        .status(400)
+        .json({ message: "You have already given kudos to this user." });
+    }
+
+    giver.kudosGiven.push(receiverId);
+    receiver.kudosReceived = (receiver.kudosReceived || 0) + 1;
+
+    await giver.save();
+    await receiver.save();
+
+    res
+      .status(200)
+      .json({
+        message: "Kudos given successfully!",
+        receiverKudos: receiver.kudosReceived,
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+
 //NEW: Get user stats (for streaks, rank, etc.)
  
 export const getUserStats = async (req, res) => {
