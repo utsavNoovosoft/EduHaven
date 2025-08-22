@@ -202,7 +202,7 @@ const ProfileCard = ({isCurrentUser = false}) => {
       setKudosCount((prev) => prev + 1);
       setHasGivenKudos(true);
     } catch (error) {
-      // console.error(error);
+      console.error(error); // incase anything fails
       toast.error(error.response?.data?.message || "Failed to give kudos.");
     }
   };

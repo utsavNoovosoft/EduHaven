@@ -385,6 +385,8 @@ export const giveKudos = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
+  }
+};
 
 //NEW: Get user stats (for streaks, rank, etc.)
  
