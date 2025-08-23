@@ -85,7 +85,9 @@ function NotesSection() {
               }}
               className="w-8 h-8 rounded border"
               style={{ backgroundColor: color }}
-              title={`Highlight ${color.charAt(0).toUpperCase() + color.slice(1)}`}
+              title={`Highlight ${
+                color.charAt(0).toUpperCase() + color.slice(1)
+              }`}
             />
           ))}
         </div>
@@ -165,7 +167,7 @@ export default function NoteNest() {
             NoteNest
           </h2>
           <nav className="flex gap-3 flex-wrap mb-6">
-            {["calculator", "graph", "unitconverter", "MindMap", "canvas"].map(
+            {["MindMap", "canvas"].map(
               (tool) => (
                 <button
                   key={tool}
@@ -177,17 +179,11 @@ export default function NoteNest() {
                 : "bg-cyan-900/40 hover:bg-cyan-600 hover:shadow-md hover:shadow-cyan-500/50"
             }`}
                 >
-                  {tool === "calculator"
-                    ? "Scientific Calculator"
-                    : tool === "graph"
-                      ? "Graph Plotter"
-                      : tool === "unitconverter"
-                        ? "Unit Converter"
-                        : tool === "MindMap"
-                          ? "MindMAP"
-                          : tool === "canvas"
-                            ? "Drawing Canvas"
-                            : ""}
+                  {tool === "MindMap"
+                    ? "MindMAP"
+                    : tool === "canvas"
+                    ? "Drawing Canvas"
+                    : ""}
                 </button>
               )
             )}
@@ -350,7 +346,11 @@ function MindMap() {
               position: "absolute",
             }}
             className={`bg-[#142337]/90 border border-red-400 rounded p-2 cursor-move flex flex-col items-center gap-2 box-border
-              ${selectedNodeId === id ? "ring-4 ring-cyan-400 ring-opacity-75 shadow-lg" : ""}
+              ${
+                selectedNodeId === id
+                  ? "ring-4 ring-cyan-400 ring-opacity-75 shadow-lg"
+                  : ""
+              }
             `}
           >
             <div
