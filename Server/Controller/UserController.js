@@ -21,7 +21,6 @@ cloudinary.config({
 export const signup = async (req, res) => {
   try {
     const { FirstName, LastName, Email, Password } = req.body;
-
     // Validate input fields
     if (!FirstName || !LastName || !Email || !Password) {
       return res.status(422).json({ error: "Please fill all the fields" });
@@ -29,6 +28,7 @@ export const signup = async (req, res) => {
 
     // Check if user already exists
     let user = await User.findOne({ Email: Email });
+    console.log(user)
     if (user) {
       return res.status(409).json({ error: "User already exists" });
     }
@@ -49,6 +49,7 @@ export const signup = async (req, res) => {
     const otp = Math.floor(Math.random() * 1000000)
       .toString()
       .padStart(6, "0");
+      console.log("otp: ", otp);
     const activationToken = jwt.sign(
       {
         user,
@@ -60,7 +61,8 @@ export const signup = async (req, res) => {
       }
     );
 
-    await sendMail(Email, FirstName, otp);
+    console.log(user)
+    // await sendMail(Email, FirstName, otp);
 
     const token = generateAuthToken(user);
 
@@ -237,6 +239,14 @@ export const deleteAccount = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { Email, Password } = req.body;
+    console.log(Email)
+    console.log(Password)
+    if (!Email) {
+      console.log("no email")
+    }
+    if (!Password) {
+      console.log("no password")
+    }
 
     if (!Email || !Password) {
       return res.status(422).json({ error: "Please fill all the fields" });

@@ -23,7 +23,9 @@ export const userList = async (req, res) => {
         { _id: { $nin: currentUser.sentRequests || [] } },
         { _id: { $nin: currentUser.friendRequests || [] } },
       ],
-    }).select("FirstName LastName ProfilePicture Bio OtherDetails");
+    })
+    .sort({ createdAt: -1 }) //  newest users first
+    .select("FirstName LastName ProfilePicture Bio OtherDetails");
 
     res.json(users);
   } catch (err) {

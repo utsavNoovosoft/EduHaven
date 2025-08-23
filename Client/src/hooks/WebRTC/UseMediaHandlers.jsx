@@ -26,6 +26,7 @@ export const UseMediaHandlers = (
   const [screen, setScreen] = useState();
 
   const socketRef = useRef();
+  
   useEffect(() => {
     if (!socket) return;
     socketRef.current = socket;

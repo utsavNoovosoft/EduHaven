@@ -10,16 +10,16 @@ function UserCard({
   onRemoveFriend,
 }) {
   return (
-    <div className="bg-[var(--bg-ter)] p-4 rounded-xl shadow-md">
+    <div className="bg-[var(--bg-ter)] py-8 px-4 rounded-xl shadow-md relative">
       {/* {console.log(user)} */}
-      <div className="flex items-center">
+      <div className="flex flex-col  items-center justify-center">
         <img
           src={user.ProfilePicture}
           alt="Profile"
-          className="w-14 h-14 rounded-full"
+          className="w-18 aspect-square border rounded-full"
         />
-        <div className="ml-4 flex-1">
-          <h4 className="text-lg font-semibold">{`${user.FirstName} ${user.LastName || ""}`}</h4>
+        <div className="flex flex-col items-center justify-center gap-2 mt-2">
+          <h4 className="text-2xl font-semibold">{`${user.FirstName} ${user.LastName || ""}`}</h4>
           <p className="text-sm text-gray-500">{user.Bio}</p>
 
           <div className="mt-2">
