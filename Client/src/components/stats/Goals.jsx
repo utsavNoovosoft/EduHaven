@@ -16,6 +16,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -24,7 +25,9 @@ const getAuthHeader = () => {
   return { headers: { Authorization: `Bearer ${token}` } };
 };
 
-const Goals = () => {
+const Goals = ({isCurrentUser = false }) => {
+  const { userId } = useParams();
+
   const [view, setView] = useState("weekly");
   const [isOpen, setIsOpen] = useState(false);
   const [chartData, setChartData] = useState({ daily: [], weekly: [], monthly: [] });
@@ -33,10 +36,22 @@ const Goals = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(
-          `${backendUrl}/todo?view=${view}`,
-          getAuthHeader()
-        );
+
+        let response;
+        if (isCurrentUser) {
+          response = await axios.get(
+            `${backendUrl}/todo?view=${view}`,
+            getAuthHeader()
+          );
+        } else {
+          response = await axios.get(
+            `${backendUrl}/todo/user/${userId}?view=${view}`,
+            getAuthHeader()
+          );
+        }
+
+        // console.log(response.data);
+        
 
         setChartData((prev) => ({ ...prev, [view]: response.data.chartData }));
         setTotalStats({

@@ -120,7 +120,7 @@ const Stats = ({ isCurrentUser = false }) => {
                 <Badges data={userStats.badges} />
               </div>
               <div className="gap-3 2xl:gap-6 mb-3 2xl:mb-6">
-                <Goals goals={userStats.goals} />
+                <Goals goals={userStats.goals} isCurrentUser={isCurrentUser} />
               </div>
             </div>
             <div>
