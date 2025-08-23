@@ -48,8 +48,8 @@ const Calculator = () => {
           right: "20px",
           zIndex: 50,
           // pointerEvents: isChatOpen ? "auto" : "none",
-          width: "500px",
-          height: "600px",
+          width: isCalcOpen ? "500px" : "0px",
+          height: isCalcOpen ? "600px" : "0px",
         }}
       >
         <div className="bg-[var(--bg-primary)] p-2 rounded-3xl w-full h-full txt flex flex-col overflow-hidden relative shadow-2xl">
