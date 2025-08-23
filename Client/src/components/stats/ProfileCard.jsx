@@ -377,33 +377,34 @@ const ProfileCard = ({ isCurrentUser = false }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap justify-center gap-4 my-4">
-          <button
-            onClick={handleGiveKudos}
-            disabled={isCurrentUser || hasGivenKudos}
-            className={`px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1 transition-colors
+        {!isCurrentUser && (
+          <div className="flex flex-wrap justify-center gap-4 my-4">
+            <button
+              onClick={handleGiveKudos}
+              disabled={isCurrentUser || hasGivenKudos}
+              className={`px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1 transition-colors
             ${
               isCurrentUser || hasGivenKudos
                 ? "bg-gray-400/30 cursor-not-allowed"
                 : "bg-white/20 hover:bg-white/30 text-[var(--text-primary)]"
             }
-          `}
-          >
-            <ThumbsUp className="w-5 h-5" />
-            <span>{hasGivenKudos ? "Kudos Given" : "Kudos"}</span>
-          </button>
+                `}
+            >
+              <ThumbsUp className="w-5 h-5" />
+              <span>{hasGivenKudos ? "Kudos Given" : "Kudos"}</span>
+            </button>
 
-          <button className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
-            <MessageCircle className="w-5 h-5" />
-            <span>Chat</span>
-          </button>
-          {!isCurrentUser && (
+            <button className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
+              <MessageCircle className="w-5 h-5" />
+              <span>Chat</span>
+            </button>
+
             <button className="bg-purple-600 hover:bg-purple-700 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
               <UserPlus className="w-5 h-5" />
               <span>Add friend</span>
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Additional Details */}
