@@ -59,7 +59,6 @@ export const signup = async (req, res) => {
         expiresIn: "1d",
       }
     );
-
     await sendMail(Email, FirstName, otp);
 
     const token = generateAuthToken(user);
@@ -237,7 +236,6 @@ export const deleteAccount = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { Email, Password } = req.body;
-
     if (!Email || !Password) {
       return res.status(422).json({ error: "Please fill all the fields" });
     }
