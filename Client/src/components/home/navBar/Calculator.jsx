@@ -64,8 +64,8 @@ const Calculator = () => {
                 className={`px-2 py-0  rounded-lg h-9 font-semibold tracking-wide transition
                       ${
                         activeTool === tool
-                          ? "bg-[var(--btn)] text-[var(--txt)] "
-                          : "bg-[var(--bg-sec)] hover:bg-[var(--btn-hover)] "
+                          ? "bg-[var(--btn)] text-white "
+                          : "bg-[var(--bg-sec)] hover:bg-[var(--btn-hover)] hover:text-white"
                       }`}
               >
                 {tool === "calculator"
