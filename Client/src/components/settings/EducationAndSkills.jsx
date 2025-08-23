@@ -205,11 +205,12 @@ function EducationAndSkills() {
         <div className="">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-6 py-2">
             <div className="space-y-2">
-              <label className="block text-md font-medium text-[var(--txt-dim)]">
+              <label htmlFor="university" className="block text-md font-medium text-[var(--txt-dim)]">
                 University/Institution
               </label>
               <div className="relative">
                 <input
+                  id="university"
                   type="text"
                   name="University"
                   value={profileData.University}
@@ -233,11 +234,12 @@ function EducationAndSkills() {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-md font-medium text-[var(--txt-dim)]">
+              <label htmlFor="field-of-study" className="block text-md font-medium text-[var(--txt-dim)]">
                 Field of Study
               </label>
               <div className="relative">
                 <input
+                  id="field-of-study"
                   type="text"
                   name="FieldOfStudy"
                   value={profileData.FieldOfStudy}
@@ -261,11 +263,12 @@ function EducationAndSkills() {
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <label className="block text-md font-medium text-[var(--txt-dim)]">
+              <label htmlFor="graduation" className="block text-md font-medium text-[var(--txt-dim)]">
                 Graduation Year
               </label>
               <div className="relative">
                 <input
+                  id="graduation"
                   type="number"
                   name="GraduationYear"
                   value={profileData.GraduationYear}
@@ -296,7 +299,7 @@ function EducationAndSkills() {
         <div className="px-6 py-2">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="block text-md font-medium text-[var(--txt-dim)]">
+              <label htmlFor="skills" className="block text-md font-medium text-[var(--txt-dim)]">
                 Skills
               </label>
               {profileData.OtherDetails.skills && (
@@ -335,15 +338,28 @@ function EducationAndSkills() {
 
             <div className="flex gap-2">
               <input
+                id="skills"
                 type="text"
                 value={newSkill}
                 onChange={(e) => setNewSkill(e.target.value)}
+
                 placeholder="Add a skill"
                 className="flex-1 px-4 py-2 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all"
                 disabled={isLoading}
               />
               <Button
                 variant="primary"
+                onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault(); // Prevent form submit
+                  addSkill();
+                }
+              }}
+              placeholder="Add a skill"
+              className="flex-1 px-4 py-2 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all"
+              disabled={isLoading}
+            />
+              <button
                 type="button"
                 onClick={addSkill}
                 className="px-4 py-2 bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white rounded-lg transition-colors flex items-center gap-2"
@@ -360,7 +376,7 @@ function EducationAndSkills() {
         <div className="px-6 py-2">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="block text-md font-medium text-[var(--txt-dim)]">
+              <label htmlFor="interests" className="block text-md font-medium text-[var(--txt-dim)]">
                 Interests
               </label>
               {profileData.OtherDetails.interests && (
@@ -399,9 +415,16 @@ function EducationAndSkills() {
 
             <div className="flex gap-2">
               <input
+                id="interests"
                 type="text"
                 value={newInterest}
                 onChange={(e) => setNewInterest(e.target.value)}
+                onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault(); // Prevent form submit
+                  addInterest();
+                }
+              }}
                 placeholder="Add an interest"
                 className="flex-1 px-4 py-2 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all"
                 disabled={isLoading}
@@ -424,7 +447,7 @@ function EducationAndSkills() {
         <div className="px-6 py-2">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="block text-md font-medium text-[var(--txt-dim)]">
+              <label htmlFor="notes" className="block text-md font-medium text-[var(--txt-dim)]">
                 Additional Notes
               </label>
               {profileData.OtherDetails.additionalNotes && (
@@ -442,6 +465,7 @@ function EducationAndSkills() {
             </div>
             <div className="relative">
               <textarea
+                id="notes"
                 value={profileData.OtherDetails.additionalNotes}
                 onChange={(e) =>
                   handleOtherDetailsChange("additionalNotes", e.target.value)

@@ -1,33 +1,35 @@
+
 import React, { useRef,useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 
+
 function NotesSection() {
   const [highlightMode, setHighlightMode] = useState(false);
-  const [highlightColor, setHighlightColor] = useState('yellow');
+  const [highlightColor, setHighlightColor] = useState("yellow");
   const [handwritten, setHandwritten] = useState(false);
   const noteRef = useRef(null);
   const fileInputRef = useRef(null);
 
- const applyHighlight = (color) => {
-  const selection = window.getSelection();
-  if (!selection.rangeCount || selection.isCollapsed) return;
+  const applyHighlight = (color) => {
+    const selection = window.getSelection();
+    if (!selection.rangeCount || selection.isCollapsed) return;
 
-  const range = selection.getRangeAt(0);
+    const range = selection.getRangeAt(0);
 
-  const span = document.createElement('span');
-  span.style.backgroundColor = color;
-  span.style.color = 'black'; 
-  const extractedContents = range.extractContents();
-  span.appendChild(extractedContents);
-  range.insertNode(span);
-  selection.removeAllRanges();
-};
+    const span = document.createElement("span");
+    span.style.backgroundColor = color;
+    span.style.color = "black";
+    const extractedContents = range.extractContents();
+    span.appendChild(extractedContents);
+    range.insertNode(span);
+    selection.removeAllRanges();
+  };
 
   const toggleHandwritten = () => setHandwritten((v) => !v);
-  const handleBold = () => document.execCommand('bold');
+  const handleBold = () => document.execCommand("bold");
 
   const clearNotes = () => {
-    if (noteRef.current) noteRef.current.innerHTML = '';
+    if (noteRef.current) noteRef.current.innerHTML = "";
   };
 
   const handleImageInsert = (e) => {
@@ -35,9 +37,9 @@ function NotesSection() {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      const img = document.createElement('img');
+      const img = document.createElement("img");
       img.src = reader.result;
-      img.style.maxWidth = '100%';
+      img.style.maxWidth = "100%";
       if (noteRef.current) noteRef.current.appendChild(img);
     };
     reader.readAsDataURL(file);
@@ -45,10 +47,12 @@ function NotesSection() {
 
   return (
     <div className="w-1/2 relative flex flex-col border border-gray-300 rounded-md p-6 bg-amber-50 shadow-md select-text">
-        
       {/* Handwritten toggle top-right */}
       <div className="absolute top-4 right-6 flex items-center space-x-2">
-        <label htmlFor="handwrittenToggle" className="font-semibold text-amber-900 select-none">
+        <label
+          htmlFor="handwrittenToggle"
+          className="font-semibold text-amber-900 select-none"
+        >
           Handwritten
         </label>
         <input
@@ -73,6 +77,7 @@ function NotesSection() {
           Bold
         </Button>
 
+
        {/* Highlight colors */}
        <div className="flex items-center space-x-2">
   {['yellow', 'red', 'pink', 'limegreen'].map((color) => (
@@ -90,6 +95,24 @@ function NotesSection() {
     />
   ))}
 </div>
+
+
+        {/* Highlight colors */}
+        <div className="flex items-center space-x-2">
+          {["yellow", "red", "pink", "limegreen"].map((color) => (
+            <button
+              key={color}
+              onClick={() => {
+                const selection = window.getSelection();
+                if (!selection.rangeCount || selection.isCollapsed) return;
+                document.execCommand("hiliteColor", false, color);
+              }}
+              className="w-8 h-8 rounded border"
+              style={{ backgroundColor: color }}
+              title={`Highlight ${color.charAt(0).toUpperCase() + color.slice(1)}`}
+            />
+          ))}
+        </div>
 
 
         <Button
@@ -112,33 +135,32 @@ function NotesSection() {
 
       {/* Editable area */}
       <div
-  ref={noteRef}
-  contentEditable
-  spellCheck={true}
-  suppressContentEditableWarning={true}
-  className={`flex-1 p-6 border border-gray-300 rounded-md overflow-auto outline-none min-h-[60vh] leading-[32px] bg-amber-50 text-amber-900 ${
-    handwritten ? 'italic font-handwriting' : 'not-italic font-sans'
-  }`}
-  style={{
-    backgroundImage:
-      // Line placed 4px below the bottom of each 32px line-height block
-      'repeating-linear-gradient(to bottom, transparent 0, transparent 28px, #3b82f6 29px, transparent 30px)',
-    backgroundSize: '100% 32px', // Matches line height
-    fontFamily: handwritten
-      ? "'Comic Sans MS', cursive, sans-serif"
-      : 'system-ui, sans-serif',
-    whiteSpace: 'pre-wrap',
-    wordBreak: 'break-word',
-    outline: 'none',
-    boxSizing: 'border-box', // Important for padding inside width/height
-  }}
-  onMouseUp={() => {
-    const selection = window.getSelection();
-    if (highlightMode && selection && !selection.isCollapsed) handleHighlight();
-  }}
-></div>
-
-
+        ref={noteRef}
+        contentEditable
+        spellCheck={true}
+        suppressContentEditableWarning={true}
+        className={`flex-1 p-6 border border-gray-300 rounded-md overflow-auto outline-none min-h-[60vh] leading-[32px] bg-amber-50 text-amber-900 ${
+          handwritten ? "italic font-handwriting" : "not-italic font-sans"
+        }`}
+        style={{
+          backgroundImage:
+            // Line placed 4px below the bottom of each 32px line-height block
+            "repeating-linear-gradient(to bottom, transparent 0, transparent 28px, #3b82f6 29px, transparent 30px)",
+          backgroundSize: "100% 32px", // Matches line height
+          fontFamily: handwritten
+            ? "'Comic Sans MS', cursive, sans-serif"
+            : "system-ui, sans-serif",
+          whiteSpace: "pre-wrap",
+          wordBreak: "break-word",
+          outline: "none",
+          boxSizing: "border-box", // Important for padding inside width/height
+        }}
+        onMouseUp={() => {
+          const selection = window.getSelection();
+          if (highlightMode && selection && !selection.isCollapsed)
+            handleHighlight();
+        }}
+      ></div>
 
       <input
         type="file"
@@ -152,7 +174,7 @@ function NotesSection() {
 }
 
 export default function NoteNest() {
-  const [activeTool, setActiveTool] = useState('calculator');
+  const [activeTool, setActiveTool] = useState("MindMap");
 
   return (
      <>
@@ -604,10 +626,18 @@ const GraphPlotter = () => {
           }
 
 
+
+    
+  );
+}
+
+
 // --- ToDo List ---
 
 function MindMap() {
-  const [nodes, setNodes] = useState([{ id: "1", x: 150, y: 150, text: "Root Node" }]);
+  const [nodes, setNodes] = useState([
+    { id: "1", x: 150, y: 150, text: "Root Node" },
+  ]);
   const [edges, setEdges] = useState([]);
   const [draggingNode, setDraggingNode] = useState(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -652,9 +682,11 @@ function MindMap() {
 
   const getDescendants = (nodeId, edges) => {
     let descendants = [];
-    const directChildren = edges.filter(e => e.from === nodeId).map(e => e.to);
+    const directChildren = edges
+      .filter((e) => e.from === nodeId)
+      .map((e) => e.to);
     descendants.push(...directChildren);
-    directChildren.forEach(childId => {
+    directChildren.forEach((childId) => {
       descendants.push(...getDescendants(childId, edges));
     });
     return descendants;
@@ -664,10 +696,13 @@ function MindMap() {
     if (!selectedNodeId) return;
 
     const descendants = getDescendants(selectedNodeId, edges);
-    const allToDelete = [selectedNodeId, ...descendants];  
-      setNodes((nodes) => nodes.filter((node) => !allToDelete.includes(node.id)));
+    const allToDelete = [selectedNodeId, ...descendants];
+    setNodes((nodes) => nodes.filter((node) => !allToDelete.includes(node.id)));
     setEdges((edges) =>
-      edges.filter((edge) => !allToDelete.includes(edge.from) && !allToDelete.includes(edge.to))
+      edges.filter(
+        (edge) =>
+          !allToDelete.includes(edge.from) && !allToDelete.includes(edge.to)
+      )
     );
     setSelectedNodeId(null);
   };
@@ -690,17 +725,48 @@ function MindMap() {
 
   return (
     <div className=" mx-auto relative" style={{ height: 1000 }}>
+
       <div className="absolute top-2 left-2 z-20 flex gap-2 bg-[#1e293b] rounded border border-cyan-600 p-2 shadow-lg " style={{ userSelect: "none" }}>
         <Button variant="primary" onClick={(e) => { e.stopPropagation(); addChildNode();}} className="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 rounded transition disabled:opacity-50 disabled:cursor-not-allowed" disabled={!selectedNodeId}>
+
+      <div
+        className="absolute top-2 left-2 z-20 flex gap-2 bg-[#1e293b] rounded border border-cyan-600 p-2 shadow-lg "
+        style={{ userSelect: "none" }}
+      >
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            addChildNode();
+          }}
+          className="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={!selectedNodeId}
+        >
+
           + Add Node
         </Button>
 
+
         <Button variant="danger" onClick={(e) => {  e.stopPropagation(); deleteNode(); }} className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded transition disabled:opacity-50 disabled:cursor-not-allowed" disabled={!selectedNodeId}>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            deleteNode();
+          }}
+          className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded transition disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={!selectedNodeId}
+        >
           &times; Delete Node
         </Button>
       </div>
 
-      <div  ref={containerRef} className="bg-[#1e293b] rounded border border-cyan-600 text-black select-none overflow-auto bg-amber-50" style={{ height: "100%", position: "relative", userSelect: draggingNode ? "none" : "auto" }}
+      <div
+        ref={containerRef}
+        className="bg-[#1e293b] rounded border border-cyan-600 text-black select-none overflow-auto bg-amber-50"
+        style={{
+          height: "100%",
+          position: "relative",
+          userSelect: draggingNode ? "none" : "auto",
+        }}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onMouseLeave={onMouseUp}
@@ -730,7 +796,12 @@ function MindMap() {
               className="text-white text-center outline-none"
               onBlur={(e) => updateNodeText(id, e.target.innerText)}
               onClick={(e) => e.stopPropagation()}
-              style={{ minHeight: "24px", userSelect: "text", cursor: "text", width: "100%" }}
+              style={{
+                minHeight: "24px",
+                userSelect: "text",
+                cursor: "text",
+                width: "100%",
+              }}
             >
               {text}
             </div>
@@ -780,58 +851,56 @@ function MindMap() {
   );
 }
 
-
 // --- Flashcard Maker ---
 function FlashcardMaker() {
   const [flashcards, setFlashcards] = React.useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('flashcards');
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("flashcards");
       return saved ? JSON.parse(saved) : [];
     }
     return [];
   });
 
   const [notes, setNotes] = React.useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('notes');
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("notes");
       return saved ? JSON.parse(saved) : [];
     }
     return [];
   });
 
-  const [mode, setMode] = React.useState('qa'); // 'qa' or 'note'
+  const [mode, setMode] = React.useState("qa"); // 'qa' or 'note'
 
-  const [formQA, setFormQA] = React.useState({ question: '', answer: '' });
-  const [formNote, setFormNote] = React.useState({ note: '' });
+  const [formQA, setFormQA] = React.useState({ question: "", answer: "" });
+  const [formNote, setFormNote] = React.useState({ note: "" });
 
   React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('flashcards', JSON.stringify(flashcards));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("flashcards", JSON.stringify(flashcards));
     }
   }, [flashcards]);
 
   React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('notes', JSON.stringify(notes));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("notes", JSON.stringify(notes));
     }
   }, [notes]);
 
   const handleChangeQA = (e) =>
     setFormQA((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleChangeNote = (e) =>
-    setFormNote({ note: e.target.value });
+  const handleChangeNote = (e) => setFormNote({ note: e.target.value });
 
   const addFlashcard = () => {
     if (!formQA.question.trim() || !formQA.answer.trim()) return;
     setFlashcards((prev) => [...prev, { id: Date.now(), ...formQA }]);
-    setFormQA({ question: '', answer: '' });
+    setFormQA({ question: "", answer: "" });
   };
 
   const addNote = () => {
     if (!formNote.note.trim()) return;
     setNotes((prev) => [...prev, { id: Date.now(), note: formNote.note }]);
-    setFormNote({ note: '' });
+    setFormNote({ note: "" });
   };
 
   const deleteFlashcard = (id) => {
@@ -885,8 +954,10 @@ function FlashcardMaker() {
               type="button"
             >
               ×
+
             </Button>
             <p className="whitespace-pre-wrap text-base leading-relaxed">{note}</p>
+
           </div>
         ))}
       </div>
@@ -894,7 +965,7 @@ function FlashcardMaker() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (mode === 'qa') addFlashcard();
+          if (mode === "qa") addFlashcard();
           else addNote();
         }}
         className="border-t border-black p-6 bg-gray-100 flex flex-col space-y-9"
@@ -903,11 +974,11 @@ function FlashcardMaker() {
           <Button
             variant="secondary"
             type="button"
-            onClick={() => setMode('qa')}
+            onClick={() => setMode("qa")}
             className={`px-6 py-2 rounded-md font-semibold transition ${
-              mode === 'qa'
-                ? 'bg-black text-white shadow-md'
-                : 'bg-gray-200 text-black hover:bg-gray-300'
+              mode === "qa"
+                ? "bg-black text-white shadow-md"
+                : "bg-gray-200 text-black hover:bg-gray-300"
             }`}
           >
             Add Q/A Flashcard
@@ -915,18 +986,18 @@ function FlashcardMaker() {
           <Button
             variant="secondary"
             type="button"
-            onClick={() => setMode('note')}
+            onClick={() => setMode("note")}
             className={`px-6 py-2 rounded-md font-semibold transition ${
-              mode === 'note'
-                ? 'bg-black text-white shadow-md'
-                : 'bg-gray-200 text-black hover:bg-gray-300'
+              mode === "note"
+                ? "bg-black text-white shadow-md"
+                : "bg-gray-200 text-black hover:bg-gray-300"
             }`}
           >
             Add Note
           </Button>
         </div>
 
-        {mode === 'qa' ? (
+        {mode === "qa" ? (
           <>
             <input
               type="text"
@@ -965,13 +1036,14 @@ function FlashcardMaker() {
           type="submit"
           className="w-full py-3 bg-black text-white rounded font-semibold hover:bg-gray-900 transition"
         >
+
           Add {mode === 'qa' ? 'Flashcard' : 'Note'}
         </Button>
+
       </form>
     </div>
   );
 }
-
 
 //  Drawing Canvas
 function DrawingCanvas() {
@@ -979,7 +1051,7 @@ function DrawingCanvas() {
   const ctxRef = useRef(null);
 
   const [isDrawing, setIsDrawing] = useState(false);
-  const [tool, setTool] = useState("pen"); 
+  const [tool, setTool] = useState("pen");
   const [color, setColor] = useState("#000000");
   const [thickness, setThickness] = useState(2);
   const [startPos, setStartPos] = useState(null);
@@ -1073,7 +1145,11 @@ function DrawingCanvas() {
           <option value="circle">Circle</option>
           <option value="line">Line</option>
         </select>
-        <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+        />
         <input
           type="range"
           min="1"
@@ -1102,28 +1178,26 @@ function DrawingCanvas() {
   );
 }
 
-
-
 // --- Task & Assignment Tracker ---
 function TaskAssignmentTracker() {
   const [tasks, setTasks] = React.useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('tasksAssignments');
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("tasksAssignments");
       return saved ? JSON.parse(saved) : [];
     }
     return [];
   });
 
   const [form, setForm] = React.useState({
-    title: '',
-    description: '',
-    dueDate: '',
-    priority: 'Medium',
+    title: "",
+    description: "",
+    dueDate: "",
+    priority: "Medium",
   });
 
   React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('tasksAssignments', JSON.stringify(tasks));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("tasksAssignments", JSON.stringify(tasks));
     }
   }, [tasks]);
 
@@ -1146,10 +1220,10 @@ function TaskAssignmentTracker() {
     };
     setTasks((prev) => [...prev, newTask]);
     setForm({
-      title: '',
-      description: '',
-      dueDate: '',
-      priority: 'Medium',
+      title: "",
+      description: "",
+      dueDate: "",
+      priority: "Medium",
     });
   };
 
@@ -1183,31 +1257,57 @@ function TaskAssignmentTracker() {
   return (
     <div className="max-w-md mx-auto flex flex-col space-y-6 text-gray-900 dark:text-gray-100">
       <section className="flex flex-col space-y-3">
-        <input type="text" name="title"  placeholder="Task / Assignment Title *" value={form.title} onChange={handleChange} className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-900 dark:placeholder-gray-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition text-black" />
-        <textarea name="description" placeholder="Description (optional)" value={form.description} onChange={handleChange} rows={3} className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md resize-y placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition text-black"/>
+        <input
+          type="text"
+          name="title"
+          placeholder="Task / Assignment Title *"
+          value={form.title}
+          onChange={handleChange}
+          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-900 dark:placeholder-gray-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition text-black"
+        />
+        <textarea
+          name="description"
+          placeholder="Description (optional)"
+          value={form.description}
+          onChange={handleChange}
+          rows={3}
+          className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md resize-y placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition text-black"
+        />
         <div className="flex gap-4">
           <div className="flex-1 flex flex-col">
-            <label htmlFor="dueDate" className="mb-1 text-sm font-semibold text-black-700 dark:text-gray-300">
+            <label
+              htmlFor="dueDate"
+              className="mb-1 text-sm font-semibold text-black-700 dark:text-gray-300"
+            >
               Due Date *
             </label>
-           <input type="date" name="dueDate" id="dueDate" value={form.dueDate} onChange={handleChange} className="p-2 border border-black dark:border-black rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 transition text-black"/>
+            <input
+              type="date"
+              name="dueDate"
+              id="dueDate"
+              value={form.dueDate}
+              onChange={handleChange}
+              className="p-2 border border-black dark:border-black rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 transition text-black"
+            />
           </div>
           <div className="flex-1 flex flex-col">
-            <label htmlFor="priority" className="mb-1 text-sm font-semibold  dark:text-gray-300">
+            <label
+              htmlFor="priority"
+              className="mb-1 text-sm font-semibold  dark:text-gray-300"
+            >
               Priority
             </label>
             <select
-                name="priority"
-                id="priority"
-                value={form.priority}
-                onChange={handleChange}
-                className="p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 transition text-black"
->
-  <option>High</option>
-  <option>Medium</option>
-  <option>Low</option>
-</select>
-
+              name="priority"
+              id="priority"
+              value={form.priority}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 transition text-black"
+            >
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select>
           </div>
         </div>
         <Button
@@ -1248,20 +1348,13 @@ function TaskAssignmentTracker() {
       ) : (
         <ul className="space-y-3 overflow-auto max-h-72">
           {tasks.map(
-            ({
-              id,
-              title,
-              description,
-              dueDate,
-              priority,
-              completed,
-            }) => (
+            ({ id, title, description, dueDate, priority, completed }) => (
               <li
                 key={id}
                 className={`p-4 rounded-lg border ${
                   completed
-                    ? 'border-green-500 bg-green-100/30 line-through text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                    : 'border-gray-300 dark:border-gray-700'
+                    ? "border-green-500 bg-green-100/30 line-through text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                    : "border-gray-300 dark:border-gray-700"
                 } flex flex-col`}
               >
                 <div className="flex justify-between items-center mb-2">
@@ -1286,11 +1379,11 @@ function TaskAssignmentTracker() {
 
                 <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
                   <span>
-                    <strong>Due:</strong>{' '}
+                    <strong>Due:</strong>{" "}
                     {new Date(dueDate).toLocaleDateString(undefined, {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
                     })}
                   </span>
                   <span>

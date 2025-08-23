@@ -37,10 +37,11 @@ const Account = () => {
 
       <form onSubmit={handleUpdate} className="space-y-6">
         <div className="space-y-2">
-          <label className="block text-md font-medium text-[var(--txt-dim)]">
+          <label htmlFor="email" className="block text-md font-medium text-[var(--txt-dim)]">
             Email
           </label>
           <input
+            id="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -51,10 +52,11 @@ const Account = () => {
         </div>
 
         <div className="space-y-2">
-          <label className="block text-md font-medium text-[var(--txt-dim)]">
+          <label htmlFor="password" className="block text-md font-medium text-[var(--txt-dim)]">
             Password
           </label>
           <input
+            id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

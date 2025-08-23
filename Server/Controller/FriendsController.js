@@ -182,8 +182,12 @@ export const getUserStats = async (req, res) => {
     const userId = req.params.userId;
     const user = await User.findById(userId)
       .select(
-        "sessionCount totalStudyHours stats ProfilePicture FirstName LastName Bio"
+        "sessionCount totalStudyHours stats ProfilePicture FirstName LastName Bio friends"
       )
+      .populate({
+        path: "friends",
+        select: "FirstName LastName ProfilePicture",
+      })
       .lean();
 
     if (!user) {
@@ -206,6 +210,7 @@ export const getUserStats = async (req, res) => {
         totalHours: user.totalStudyHours || 0,
         streak: user.stats?.streak || 0,
         lastActive: user.stats?.lastActive || null,
+        friends: user.friends || [],
       },
     });
   } catch (err) {

@@ -345,3 +345,74 @@ export const uploadProfilePicture = async (req, res) => {
     });
   }
 };
+
+export const giveKudos = async (req, res) => {
+  try {
+    const giverId = req.user.id;
+    const { receiverId } = req.body; 
+
+    if (giverId === receiverId) {
+      return res
+        .status(400)
+        .json({ message: "You cannot give kudos to yourself." });
+    }
+
+    const giver = await User.findById(giverId);
+    const receiver = await User.findById(receiverId);
+
+    if (!receiver) {
+      return res.status(404).json({ message: "Receiver not found." });
+    }
+
+    if (giver.kudosGiven.includes(receiverId)) {
+      return res
+        .status(400)
+        .json({ message: "You have already given kudos to this user." });
+    }
+
+    giver.kudosGiven.push(receiverId);
+    receiver.kudosReceived = (receiver.kudosReceived || 0) + 1;
+
+    await giver.save();
+    await receiver.save();
+
+    res
+      .status(200)
+      .json({
+        message: "Kudos given successfully!",
+        receiverKudos: receiver.kudosReceived,
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+//NEW: Get user stats (for streaks, rank, etc.)
+ 
+export const getUserStats = async (req, res) => {
+  try {
+    const userId = req.query.id || req.user?._id;
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const user = await User.findById(userId).select("streaks rank level");
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const totalUsersCount = await User.countDocuments();
+
+    res.json({
+      rank: user.rank || 0,
+      totalUsers: totalUsersCount,
+      currentStreak: user.streaks?.current || 0,
+      maxStreak: user.streaks?.max || 0,
+      level: user.level || { name: "Beginner", progress: 0, hoursToNextLevel: 2 },
+    });
+  } catch (error) {
+    console.error("Error fetching user stats:", error);
+    res.status(500).json({ error: "Failed to fetch user stats" });
+  }
+};
