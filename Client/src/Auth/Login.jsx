@@ -6,8 +6,6 @@ import { Eye, EyeOff } from "lucide-react";
 import { toast } from "react-toastify";
 
 const backendUrl = import.meta.env.VITE_API_URL;
-console.log(backendUrl)
-console.log("hii")
 
 function Login() {
   const navigate = useNavigate();

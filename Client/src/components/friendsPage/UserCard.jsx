@@ -1,4 +1,5 @@
 import { UserPlus } from "lucide-react";
+import { useState } from "react";
 
 function UserCard({
   user,
@@ -9,8 +10,10 @@ function UserCard({
   onRejectRequest,
   onRemoveFriend,
 }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
-    <div className="bg-[var(--bg-ter)] py-8 px-4 rounded-xl shadow-md relative">
+    <div className="bg-[var(--bg-ter)] py-8 px-4 rounded-xl shadow-md">
       {/* {console.log(user)} */}
       <div className="flex flex-col  items-center justify-center">
         <img
@@ -18,20 +21,16 @@ function UserCard({
           alt="Profile"
           className="w-18 aspect-square border rounded-full"
         />
-        <div className="flex flex-col items-center justify-center gap-2 mt-2">
+        <div className="flex flex-col items-center justify-center px-2 gap-2 mt-2">
           <h4 className="text-2xl font-semibold">{`${user.FirstName} ${user.LastName || ""}`}</h4>
-          <p className="text-sm text-gray-500">{user.Bio}</p>
+          <p className={`text-sm text-gray-500 ${isExpanded? "":"line-clamp-3"}`}>{user.Bio}</p>
 
           <div className="mt-2">
-            {user.OtherDetails?.interests ? (
+            {user.OtherDetails?.interests && (
               <span className="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded-full inline-block">
                 {user.OtherDetails.interests  }
               </span>
-            ) : (
-              <span className="text-xs text-gray-400 bg-gray-200 px-2 py-1 rounded-full inline-block">
-                No interests available
-              </span>
-            )}
+            ) }
           </div>
         </div>
       </div>

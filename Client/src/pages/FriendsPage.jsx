@@ -5,7 +5,6 @@ import TabNavigation from "../components/friendsPage/TabNavigation";
 import MainContent from "../components/friendsPage/MainContent";
 import NotLogedInPage from "@/components/NotLogedInPage";
 import { jwtDecode } from "jwt-decode";
-import Sidebar from "@/components/Sidebar";
 
 const backendUrl = import.meta.env.VITE_API_URL;
 
