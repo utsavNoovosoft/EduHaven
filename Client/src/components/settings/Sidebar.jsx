@@ -10,6 +10,7 @@ import {
 import { useState } from "react";
 import ConfirmLogoutModal from "../ConfirmLogoutModal";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Sidebar = ({ activeTab, onTabChange, user }) => {
   const navigate = useNavigate();
@@ -25,19 +26,22 @@ const Sidebar = ({ activeTab, onTabChange, user }) => {
       <aside className="w-60 xl:w-72 h-screen bg-sec shadow-md relative">
         <h1 className="px-8 py-4 mt-6 text-xl font-bold pb-0">Settings</h1>
         <nav className="p-2 xl:p-4 space-y-0">
-          <button
+          <Button
+            variant="secondary"
             onClick={() => onTabChange("basic-info")}
             className={getTabButtonClass("basic-info")}
           >
             <CircleUser size={24} /> Basic Info
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="secondary"
             onClick={() => onTabChange("Edu-&-skills")}
             className={getTabButtonClass("Edu-&-skills")}
           >
             <GraduationCap size={24} /> Education & skills
-          </button>
-          <button
+          </Button>
+          <Button 
+            variant="secondary"
             onClick={() => onTabChange("account")}
             className={getTabButtonClass("account")}
           >
@@ -58,32 +62,36 @@ const Sidebar = ({ activeTab, onTabChange, user }) => {
               <circle cx="12" cy="11" r="4" />
             </svg>{" "}
             Account
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="secondary"
             onClick={() => onTabChange("friends")}
             className={getTabButtonClass("friends")}
           >
             <Users size={24} /> Friends
-          </button>
+          </Button>
           <div>
             <div className="border-t border-gray-400/30 my-2 "></div>
           </div>
-          <button
+          <Button
+            variant="secondary"
             onClick={() => onTabChange("themes")}
             className={getTabButtonClass("themes")}
           >
             <Palette size={24} /> Themes
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="secondary"
             onClick={() => onTabChange("time-language")}
             className={getTabButtonClass("time-language")}
           >
             <Settings2 size={24} /> Time / language
-          </button>
+          </Button>
         </nav>
         <div className="absolute bottom-4 w-full px-4">
           {user ? (
-            <button
+            <Button
+              variant="danger"
               onClick={() => {
                 setShowLogoutModal(true);
               }}
@@ -91,15 +99,16 @@ const Sidebar = ({ activeTab, onTabChange, user }) => {
             >
               <LogOut size={16} />
               Logout
-            </button>
+            </Button>
           ) : (
-            <button
+            <Button
+              variant="primary"
               onClick={() => navigate("/authenticate")}
               className="m-auto flex items-center justify-center px-5 py-2 text-green-400 transition-colors hover:bg-green-500 hover:text-white rounded-lg gap-2 border border-green-500 "
             >
               <LogIn size={16} />
               Login
-            </button>
+            </Button>
           )}
         </div>
       </aside>

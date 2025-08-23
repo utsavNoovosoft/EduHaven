@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
 import { Shield, Bomb, Pause, Play, RefreshCw, ArrowLeft } from "lucide-react";
 
 import wordList from "./wordList";
@@ -357,33 +358,37 @@ const SpaceType = () => {
           <p className="text-gray-400 text-xs">Press ENTER for bomb</p>
         </div>
         <div className="flex gap-4">
-          <button
+          <Button
+            variant="secondary"
             onClick={() => setShowInfo(!showInfo)}
             className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 px-3 py-2 rounded-lg transition-colors"
             title="Keyboard shortcuts"
           >
             <span className="text-white font-bold text-sm">i</span>
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="secondary"
             onClick={useShield}
             disabled={shields === 0}
             className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 px-3 py-2 rounded-lg transition-colors"
           >
             <Shield size={20} className="text-blue-400" /> {shields}
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="danger"
             onClick={useBomb}
             disabled={bombs === 0}
             className="flex items-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 px-3 py-2 rounded-lg transition-colors"
           >
             <Bomb size={20} className="text-red-400" /> {bombs}
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="secondary"
             onClick={() => setIsPaused(!isPaused)}
             className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 px-3 py-2 rounded-lg transition-colors"
           >
             {isPaused ? <Play size={20} /> : <Pause size={20} />}
-          </button>
+          </Button>
         </div>
       </div>
       {/* Info Panel */}
@@ -601,18 +606,20 @@ const SpaceType = () => {
               </p>
             </div>
             <div className="flex gap-4 justify-center">
-              <button
+              <Button
+                variant="primary"
                 onClick={resetGame}
                 className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 px-8 py-4 rounded-lg transition-colors text-lg font-bold"
               >
                 <RefreshCw size={24} /> Play Again
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="secondary"
                 onClick={() => window.location.reload()}
                 className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 px-8 py-4 rounded-lg transition-colors text-lg font-bold"
               >
                 <ArrowLeft size={24} /> Exit
-              </button>
+              </Button>
             </div>
           </div>
         </div>

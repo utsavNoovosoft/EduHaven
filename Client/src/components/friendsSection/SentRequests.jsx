@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowLeft, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 function SentRequests({ onBack }) {
@@ -25,9 +26,9 @@ function SentRequests({ onBack }) {
   return (
     <section className="bg-sec rounded-3xl p-4">
       <div className="flex items-center mb-4">
-        <button onClick={onBack} className="mr-2">
+        <Button onClick={onBack} variant="secondary" className="mr-2">
           <ArrowLeft className="w-5 h-5 txt" />
-        </button>
+        </Button>
         <h3 className="text-xl font-semibold txt">Sent Requests</h3>
       </div>
       {sentRequests.length === 0 ? (

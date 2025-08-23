@@ -1,4 +1,5 @@
 import React, { useRef,useEffect, useState } from 'react';
+import { Button } from "@/components/ui/button";
 
 function NotesSection() {
   const [highlightMode, setHighlightMode] = useState(false);
@@ -63,18 +64,20 @@ function NotesSection() {
 
       {/* Buttons */}
       <div className="flex gap-4 flex-wrap mb-6">
-        <button
+        <Button
+          variant="secondary"
           onClick={handleBold}
           className="px-4 py-2 rounded-md bg-amber-800 text-amber-50 hover:bg-amber-900 transition-shadow shadow-sm"
           title="Bold selected text"
         >
           Bold
-        </button>
+        </Button>
 
        {/* Highlight colors */}
        <div className="flex items-center space-x-2">
   {['yellow', 'red', 'pink', 'limegreen'].map((color) => (
-    <button
+    <Button
+      variant="secondary"
       key={color}
       onClick={() => {
         const selection = window.getSelection();
@@ -89,20 +92,22 @@ function NotesSection() {
 </div>
 
 
-        <button
+        <Button
+          variant="primary"
           onClick={() => fileInputRef.current?.click()}
           className="px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700 transition-shadow shadow-sm"
           title="Insert Image"
         >
           Insert Image
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="danger"
           onClick={clearNotes}
           className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 transition-shadow shadow-sm"
           title="Clear all notes"
         >
           Clear Notes
-        </button>
+        </Button>
       </div>
 
       {/* Editable area */}
@@ -162,7 +167,7 @@ export default function NoteNest() {
         <h2 className="text-2xl font-bold mb-5 text-cyan-400 tracking-wide">NoteNest</h2>
         <nav className="flex gap-3 flex-wrap mb-6">
 {['calculator', 'graph', 'unitconverter', 'MindMap', 'flashcard', 'tasktracker', 'canvas'].map((tool) => (
-            <button key={tool} onClick={() => setActiveTool(tool)}  className={`px-4 py-2 rounded-lg font-semibold tracking-wide transition 
+            <Button variant="secondary" key={tool} onClick={() => setActiveTool(tool)}  className={`px-4 py-2 rounded-lg font-semibold tracking-wide transition 
             ${
                   activeTool === tool
                     ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/70'
@@ -184,7 +189,7 @@ export default function NoteNest() {
                       : tool === 'canvas'
                       ? 'Drawing Canvas'
                       : ''}
-                </button>
+                </Button>
               ))}
              </nav>
 
@@ -327,7 +332,8 @@ function ScientificCalculator() {
           };
 
           return (
-            <button
+            <Button
+              variant="danger"
               key={idx}
               onClick={handleClick}
               className={className + " py-3"}
@@ -335,7 +341,7 @@ function ScientificCalculator() {
               type="button"
             >
               {btn}
-            </button>
+            </Button>
           );
         })}
       </div>
@@ -564,9 +570,9 @@ const GraphPlotter = () => {
                 ))}
           </select>
         </div>
-        <button onClick={() => { const temp = inputUnit; setInputUnit(outputUnit); setOutputUnit(temp); }} className="px-3 py-2 rounded bg-cyan-600 text-white hover:bg-cyan-700 transition">
+        <Button variant="secondary" onClick={() => { const temp = inputUnit; setInputUnit(outputUnit); setOutputUnit(temp); }} className="px-3 py-2 rounded bg-cyan-600 text-white hover:bg-cyan-700 transition">
           ⇄
-        </button>
+        </Button>
         <div className="flex-1">
           <label className="block mb-1 font-semibold text-cyan-300">To</label>
           <select value={outputUnit} onChange={(e) => setOutputUnit(e.target.value)} className="w-full p-2 rounded bg-slate-800 border border-cyan-600 text-white">
@@ -585,7 +591,7 @@ const GraphPlotter = () => {
         </div>
       </div>
       <input type="number" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder={`Enter value in ${inputUnit}`} className="w-full p-2 rounded bg-slate-800 border border-cyan-600 text-white"/>
-      <button onClick={() => { setInputValue(""); setResult("");}} className="w-full py-2 rounded bg-red-600 text-white hover:bg-red-700 transition"> Clear</button>
+      <Button variant="danger" onClick={() => { setInputValue(""); setResult("");}} className="w-full py-2 rounded bg-red-600 text-white hover:bg-red-700 transition"> Clear</Button>
       <div className="text-lg font-semibold text-cyan-400 text-center">
         {result !== "" && (
           <>
@@ -685,13 +691,13 @@ function MindMap() {
   return (
     <div className=" mx-auto relative" style={{ height: 1000 }}>
       <div className="absolute top-2 left-2 z-20 flex gap-2 bg-[#1e293b] rounded border border-cyan-600 p-2 shadow-lg " style={{ userSelect: "none" }}>
-        <button onClick={(e) => { e.stopPropagation(); addChildNode();}} className="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 rounded transition disabled:opacity-50 disabled:cursor-not-allowed" disabled={!selectedNodeId}>
+        <Button variant="primary" onClick={(e) => { e.stopPropagation(); addChildNode();}} className="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 rounded transition disabled:opacity-50 disabled:cursor-not-allowed" disabled={!selectedNodeId}>
           + Add Node
-        </button>
+        </Button>
 
-        <button onClick={(e) => {  e.stopPropagation(); deleteNode(); }} className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded transition disabled:opacity-50 disabled:cursor-not-allowed" disabled={!selectedNodeId}>
+        <Button variant="danger" onClick={(e) => {  e.stopPropagation(); deleteNode(); }} className="px-4 py-2 bg-red-500 hover:bg-red-600 rounded transition disabled:opacity-50 disabled:cursor-not-allowed" disabled={!selectedNodeId}>
           &times; Delete Node
-        </button>
+        </Button>
       </div>
 
       <div  ref={containerRef} className="bg-[#1e293b] rounded border border-cyan-600 text-black select-none overflow-auto bg-amber-50" style={{ height: "100%", position: "relative", userSelect: draggingNode ? "none" : "auto" }}
@@ -851,14 +857,15 @@ function FlashcardMaker() {
             key={id}
             className="bg-amber-50 border border-black rounded-md shadow-lg p-5 h-[320px] cursor-default flex flex-col relative"
           >
-            <button
+            <Button
+              variant="danger"
               onClick={() => deleteFlashcard(id)}
               className="absolute top-2 right-2 text-black hover:text-red-600 font-bold text-xl focus:outline-none"
               title="Delete flashcard"
               type="button"
             >
               ×
-            </button>
+            </Button>
             <p className="font-semibold text-lg mb-4">{question}</p>
             <hr className="border-black opacity-20 mb-4" />
             <p className="text-base leading-relaxed">{answer}</p>
@@ -870,14 +877,15 @@ function FlashcardMaker() {
             key={id}
             className="bg-amber-50 border border-black rounded-md shadow-lg p-5 h-[320px] cursor-default relative"
           >
-            <button
+            <Button
+              variant="danger"
               onClick={() => deleteNote(id)}
               className="absolute top-2 right-2 text-black hover:text-red-600 font-bold text-xl focus:outline-none"
               title="Delete note"
               type="button"
             >
               ×
-            </button>
+            </Button>
             <p className="whitespace-pre-wrap text-base leading-relaxed">{note}</p>
           </div>
         ))}
@@ -892,7 +900,8 @@ function FlashcardMaker() {
         className="border-t border-black p-6 bg-gray-100 flex flex-col space-y-9"
       >
         <div className="flex justify-center space-x-6 -mb-1">
-          <button
+          <Button
+            variant="secondary"
             type="button"
             onClick={() => setMode('qa')}
             className={`px-6 py-2 rounded-md font-semibold transition ${
@@ -902,8 +911,9 @@ function FlashcardMaker() {
             }`}
           >
             Add Q/A Flashcard
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="secondary"
             type="button"
             onClick={() => setMode('note')}
             className={`px-6 py-2 rounded-md font-semibold transition ${
@@ -913,7 +923,7 @@ function FlashcardMaker() {
             }`}
           >
             Add Note
-          </button>
+          </Button>
         </div>
 
         {mode === 'qa' ? (
@@ -950,12 +960,13 @@ function FlashcardMaker() {
           />
         )}
 
-        <button
+        <Button
+          variant="primary"
           type="submit"
           className="w-full py-3 bg-black text-white rounded font-semibold hover:bg-gray-900 transition"
         >
           Add {mode === 'qa' ? 'Flashcard' : 'Note'}
-        </button>
+        </Button>
       </form>
     </div>
   );
@@ -1070,12 +1081,13 @@ function DrawingCanvas() {
           value={thickness}
           onChange={(e) => setThickness(e.target.value)}
         />
-        <button
+        <Button
+          variant="danger"
           onClick={clearCanvas}
           className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
         >
           Clear
-        </button>
+        </Button>
       </div>
 
       <canvas
@@ -1198,32 +1210,35 @@ function TaskAssignmentTracker() {
 
           </div>
         </div>
-        <button
+        <Button
+          variant="primary"
           onClick={addTask}
           className="self-start px-6 py-2 bg-cyan-600 text-white font-semibold rounded-md hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-400 transition"
           type="button"
         >
           Add Task / Assignment
-        </button>
+        </Button>
       </section>
       {tasks.length > 0 && (
         <section className="flex gap-3 justify-end">
-          <button
+          <Button
+            variant="secondary"
             onClick={sortTasksByDueDate}
             className="px-4 py-1 text-sm font-medium rounded-md border border-gray-400 dark:border-gray-600 hover:bg-cyan-600 hover:text-white transition"
             title="Sort by Due Date"
             type="button"
           >
             Sort by Due Date
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="secondary"
             onClick={sortTasksByPriority}
             className="px-4 py-1 text-sm font-medium rounded-md border border-gray-400 dark:border-gray-600 hover:bg-cyan-600 hover:text-white transition"
             title="Sort by Priority"
             type="button"
           >
             Sort by Priority
-          </button>
+          </Button>
         </section>
       )}
       {tasks.length === 0 ? (
@@ -1251,7 +1266,8 @@ function TaskAssignmentTracker() {
               >
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-lg font-semibold truncate">{title}</h3>
-                  <button
+                  <Button
+                    variant="danger"
                     onClick={() => deleteTask(id)}
                     className="text-red-500 hover:text-red-700 text-xl font-bold leading-none focus:outline-none"
                     aria-label="Delete task"
@@ -1259,7 +1275,7 @@ function TaskAssignmentTracker() {
                     title="Delete task"
                   >
                     &times;
-                  </button>
+                  </Button>
                 </div>
 
                 {description && (

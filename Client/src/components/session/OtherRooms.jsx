@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import RoomCard from "./RoomCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
+import { Button } from "@/components/ui/button";
 const CATEGORIES = [
   "All",
   "study-room",
@@ -96,13 +96,14 @@ export default function OtherRoom({ otherRooms, isLoading = false }) {
       {/* Category toggle horizontal scroll */}
       <div className="relative mb-3 2xl:mb-6">
         <div className="absolute left-0 top-0 h-full w-20 z-10 bg-[linear-gradient(to_right,var(--bg-primary)_0%,var(--bg-primary)_50%,transparent_90%)]">
-          <button
+          <Button
+            variant="secondary"
             onClick={() => scroll("left")}
             className="mr-auto hover:bg-[var(--bg-sec)] txt px-3 py-1 rounded-full transition-colors"
             disabled={isLoading}
           >
             <ChevronLeft size={29} />
-          </button>
+          </Button>
         </div>
 
         <div
@@ -110,7 +111,8 @@ export default function OtherRoom({ otherRooms, isLoading = false }) {
           className="flex overflow-x-auto no-scrollbar space-x-2 px-16"
         >
           {CATEGORIES.map((cat) => (
-            <button
+            <Button
+              variant="primary"
               key={cat}
               onClick={() => !isLoading && setSelectedCategory(cat)}
               className={`whitespace-nowrap px-4 py-1.5 rounded-full border text-sm transition ${
@@ -121,18 +123,19 @@ export default function OtherRoom({ otherRooms, isLoading = false }) {
               disabled={isLoading}
             >
               {cat}
-            </button>
+            </Button>
           ))}
         </div>
 
         <div className="absolute right-0 top-0 h-full w-24 z-10 bg-gradient-to-l from-[var(--bg-primary)] to-transparent flex items-end justify-center">
-          <button
+          <Button
+            variant="secondary"
             onClick={() => scroll("right")}
             className="ml-auto hover:bg-[var(--bg-sec)] txt px-3 py-1 rounded-full transition-colors"
             disabled={isLoading}
           >
             <ChevronRight size={29} />
-          </button>
+          </Button>
         </div>
       </div>
 

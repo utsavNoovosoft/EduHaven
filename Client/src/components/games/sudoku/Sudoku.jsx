@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import Board from "./components/Board";
 import {
   generatePuzzle,
@@ -169,24 +170,26 @@ export default function Sudoku() {
 
         {/* ✅ How to Play button below Timer */}
         <div className="mb-4">
-          <button
+          <Button
+            variant="secondary"
             onClick={() => setShowHowToPlay(true)}
             className="px-3 py-2 text-slate-300 bg-slate-800 rounded-lg cursor-pointer transition-all duration-200 text-sm sm:text-base font-medium hover:bg-slate-700 shadow-sm"
           >
             How to Play
-          </button>
+          </Button>
         </div>
 
         {/* ✅ How to Play Modal */}
         {showHowToPlay && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
             <div className="bg-slate-900 rounded-xl shadow-lg p-8 max-w-md w-full relative">
-              <button
+              <Button
+                variant="secondary"
                 className="absolute top-2 right-2 px-2 py-1 text-slate-400 bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-600"
                 onClick={() => setShowHowToPlay(false)}
               >
                 Close
-              </button>
+              </Button>
               <h2 className="text-xl font-bold mb-2 text-emerald-300">How to Play Sudoku</h2>
               <ul className="list-disc pl-5 space-y-2 text-base text-slate-200">
                 <li>Fill the board so that each row, column, and 3x3 grid has numbers 1–9.</li>
@@ -225,31 +228,35 @@ export default function Sudoku() {
 
         {/* Action Buttons */}
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <button
+          <Button
+            variant="secondary"
             className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-slate-100 hover:bg-slate-700"
             onClick={() => handleNewPuzzle(difficulty)}
           >
             New Puzzle
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="primary"
             className="rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-500"
             onClick={handleHint}
             disabled={hintsLeft <= 0}
           >
             Hint
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="secondary"
             className="rounded-xl bg-amber-600 px-4 py-2 text-white hover:bg-amber-500"
             onClick={handleValidate}
           >
             Validate
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="primary"
             className="rounded-xl bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-500"
             onClick={handleCheckSolution}
           >
             Check Solution
-          </button>
+          </Button>
           {status === "complete" && (
             <span className="ml-2 rounded-lg bg-emerald-700/40 px-3 py-1 text-emerald-300">
               Solved! 🎉

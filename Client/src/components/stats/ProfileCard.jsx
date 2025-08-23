@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import {
   User,
   MessageCircle,
@@ -203,12 +204,13 @@ const ProfileCard = ({isCurrentUser = false}) => {
                                title={profilelink}
                               className="flex-1 bg-transparent text-sm text-white outline-none truncate"
                           />
-                      <button
+                      <Button
+                        variant="secondary"
                         className="ml-2 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-medium text-white transition"
                           onClick={copylink}
                        >
                           Copy
-                       </button>
+                       </Button>
                    </div>
                )}
              </div>
@@ -265,12 +267,13 @@ const ProfileCard = ({isCurrentUser = false}) => {
                     <span className="text-sm text-gray-400 bg-gray-900 px-3 py-1 rounded-full">
                       {friendsCount} friends
                     </span>
-                    <button
+                    <Button
+                      variant="secondary"
                       onClick={() => setShowPopup(false)}
                       className="text-white hover:text-indigo-200 transition-colors p-1"
                     >
                       <X className="w-5 h-5" />
-                    </button>
+                    </Button>
                   </div>
                 </div>
 
@@ -326,19 +329,19 @@ const ProfileCard = ({isCurrentUser = false}) => {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center gap-4 my-4">
-          <button className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
+          <Button variant="secondary" className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
             <ThumbsUp className="w-5 h-5" />
             <span>Kudos</span>
-          </button>
-          <button className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
+          </Button>
+          <Button variant="secondary" className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
             <MessageCircle className="w-5 h-5" />
             <span>Chat</span>
-          </button>
+          </Button>
           {!isCurrentUser && (
-            <button className="bg-purple-600 hover:bg-purple-700 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
+            <Button variant="primary" className="bg-purple-600 hover:bg-purple-700 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
               <UserPlus className="w-5 h-5" />
               <span>Add friend</span>
-            </button>
+            </Button>
           )}
         </div>
       </div>

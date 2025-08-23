@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "react-toastify";
+import { Button } from "@/components/ui/button";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 function SignUp() {
@@ -93,14 +94,15 @@ function SignUp() {
         </h2>
       </div>
 
-      <button
+      <Button
+      variant="secondary"
         onClick={handleGoogleLogin}
         className="flex items-center justify-center gap-2 border border-gray-400 rounded-xl text-black dark:text-white font-semibold p-2 text-lg w-full"
       >
         <img src="/GoogleIcon.svg" alt="Google sign-in" className="size-6" />
 
         <p>Continue with google</p>
-      </button>
+      </Button>
       {/* or */}
       <div className="flex items-center my-6">
         <div className="flex-grow h-px bg-gray-300"></div>
@@ -218,13 +220,14 @@ function SignUp() {
               })}
               className="block w-full rounded-lg bg-transparent border border-gray-400 px-3 py-2 text-gray-900 dark:text-gray-300 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm"
             />
-            <button
+            <Button
               type="button"
+              variant="secondary"
               onClick={() => setShowPassword((prev) => !prev)}
               className="absolute inset-y-0 right-2 flex items-center text-gray-500 hover:text-indigo-600"
             >
               {showPassword ? <Eye size={19} /> : <EyeOff size={19} />}
-            </button>
+            </Button>
 
             {errors.Password && (
               <p className="text-red-500 text-sm mt-1">
@@ -235,8 +238,9 @@ function SignUp() {
         </div>
 
         <div>
-          <button
+          <Button
             type="submit"
+            variant="primary"
             disabled={isSubmitting}
             className={`w-full rounded-md py-2 px-4 text-white font-semibold ${
               isSubmitting
@@ -245,7 +249,7 @@ function SignUp() {
             }`}
           >
             {isSubmitting ? "Submitting..." : "Create account"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

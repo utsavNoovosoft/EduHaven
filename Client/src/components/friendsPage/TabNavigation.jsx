@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+
 function TabNavigation({ selectedTab, onTabClick }) {
     const tabs = [
       { id: "suggested", label: "Suggested" },
@@ -11,9 +13,10 @@ function TabNavigation({ selectedTab, onTabClick }) {
         <h3 className="text-xl font-semibold mb-4 text-[var(--txt)]">Friends</h3>
         <div className="space-y-2">
           {tabs.map((tab) => (
-            <button
+            <Button
               key={tab.id}
               onClick={() => onTabClick(tab.id)}
+              variant={selectedTab === tab.id ? "primary" : "secondary"}
               className={`w-full text-left px-4 py-2 rounded-lg ${
                 selectedTab === tab.id
                   ? "bg-[var(--btn)] text-white"
@@ -21,7 +24,7 @@ function TabNavigation({ selectedTab, onTabClick }) {
               }`}
             >
               {tab.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>

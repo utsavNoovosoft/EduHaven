@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "react-toastify";
+import { Button } from "@/components/ui/button";
 
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -84,14 +85,15 @@ function Login() {
           Sign in to your account
         </p>
       </div>
-      <button
+      <Button
+      variant="secondary"
         onClick={handleGoogleLogin}
         className="flex items-center justify-center  gap-2 border border-gray-400 rounded-xl text-black dark:text-white font-semibold p-2 text-lg w-full"
       >
         <img src="/GoogleIcon.svg" alt="Google sign-in" className="size-6" />
 
         <p>Continue with google</p>
-      </button>
+      </Button>
 
       {/* or  */}
       <div className="flex items-center my-6">
@@ -182,8 +184,9 @@ function Login() {
         </div>
 
         <div>
-          <button
+          <Button
             type="submit"
+            variant="primary"
             disabled={isSubmitting}
             className={`w-full rounded-md py-2 px-4 text-white font-semibold ${
               isSubmitting
@@ -192,7 +195,7 @@ function Login() {
             }`}
           >
             {isSubmitting ? "Submitting..." : "Log In"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

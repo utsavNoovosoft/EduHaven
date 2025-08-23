@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import UpdateButton from "./UpdateButton";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 const Account = () => {
@@ -72,14 +73,15 @@ const Account = () => {
         </div>
       </form>
 
-      <div className="mt-8 border-t border-gray-400/40 pt-6">
-        <button
-          type="button"
-          onClick={handleRequestDeletion}
-          className="px-6 py-3 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700 transition-all shadow-md"
-        >Request Account Deletion
-        </button>
-      </div>
+        <div className="mt-8 border-t border-gray-400/40 pt-6">
+          <Button
+            variant="danger"
+            type="button"
+            onClick={handleRequestDeletion}
+            className="px-6 py-3 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700 transition-all shadow-md"
+          >Request Account Deletion
+          </Button>
+        </div>
     </div>
   );
 };

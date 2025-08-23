@@ -2,6 +2,7 @@ import axios from "axios";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 const getAuthHeader = () => {
@@ -109,7 +110,8 @@ const Friends = () => {
                   </h4>
                 </Link>
               </div>
-              <button
+              <Button
+                variant="danger"
                 onClick={() => removeFriend(friend._id)}
                 disabled={friend.isRemoved}
                 className={`transition-colors duration-300 txt px-3 py-1 rounded ${
@@ -117,7 +119,7 @@ const Friends = () => {
                 }`}
               >
                 {friend.isRemoved ? "Friend Removed" : "Remove"}
-              </button>
+              </Button>
             </li>
           ))}
         </ul>
