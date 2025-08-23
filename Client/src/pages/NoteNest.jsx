@@ -109,7 +109,9 @@ function NotesSection() {
               }}
               className="w-8 h-8 rounded border"
               style={{ backgroundColor: color }}
-              title={`Highlight ${color.charAt(0).toUpperCase() + color.slice(1)}`}
+              title={`Highlight ${
+                color.charAt(0).toUpperCase() + color.slice(1)
+              }`}
             />
           ))}
         </div>
@@ -591,6 +593,7 @@ const GraphPlotter = () => {
                   </option>
                 ))}
           </select>
+
         </div>
         <Button variant="secondary" onClick={() => { const temp = inputUnit; setInputUnit(outputUnit); setOutputUnit(temp); }} className="px-3 py-2 rounded bg-cyan-600 text-white hover:bg-cyan-700 transition">
           ⇄
@@ -786,7 +789,11 @@ function MindMap() {
               position: "absolute",
             }}
             className={`bg-[#142337]/90 border border-red-400 rounded p-2 cursor-move flex flex-col items-center gap-2 box-border
-              ${selectedNodeId === id ? "ring-4 ring-cyan-400 ring-opacity-75 shadow-lg" : ""}
+              ${
+                selectedNodeId === id
+                  ? "ring-4 ring-cyan-400 ring-opacity-75 shadow-lg"
+                  : ""
+              }
             `}
           >
             <div
@@ -1178,6 +1185,7 @@ function DrawingCanvas() {
   );
 }
 
+
 // --- Task & Assignment Tracker ---
 function TaskAssignmentTracker() {
   const [tasks, setTasks] = React.useState(() => {
@@ -1407,3 +1415,4 @@ function TaskAssignmentTracker() {
     </div>
   );
 }
+

@@ -1,5 +1,7 @@
 import { UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+
 
 function UserCard({
   user,
@@ -10,29 +12,27 @@ function UserCard({
   onRejectRequest,
   onRemoveFriend,
 }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
-    <div className="bg-[var(--bg-ter)] p-4 rounded-xl shadow-md">
+    <div className="bg-[var(--bg-ter)] py-8 px-4 rounded-xl shadow-md">
       {/* {console.log(user)} */}
-      <div className="flex items-center">
+      <div className="flex flex-col  items-center justify-center">
         <img
           src={user.ProfilePicture}
           alt="Profile"
-          className="w-14 h-14 rounded-full"
+          className="w-18 aspect-square border rounded-full"
         />
-        <div className="ml-4 flex-1">
-          <h4 className="text-lg font-semibold">{`${user.FirstName} ${user.LastName || ""}`}</h4>
-          <p className="text-sm text-gray-500">{user.Bio}</p>
+        <div className="flex flex-col items-center justify-center px-2 gap-2 mt-2">
+          <h4 className="text-2xl font-semibold">{`${user.FirstName} ${user.LastName || ""}`}</h4>
+          <p className={`text-sm text-gray-500 ${isExpanded? "":"line-clamp-3"}`}>{user.Bio}</p>
 
           <div className="mt-2">
-            {user.OtherDetails?.interests ? (
+            {user.OtherDetails?.interests && (
               <span className="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded-full inline-block">
                 {user.OtherDetails.interests  }
               </span>
-            ) : (
-              <span className="text-xs text-gray-400 bg-gray-200 px-2 py-1 rounded-full inline-block">
-                No interests available
-              </span>
-            )}
+            ) }
           </div>
         </div>
       </div>

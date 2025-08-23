@@ -9,7 +9,7 @@ function TabNavigation({ selectedTab, onTabClick }) {
     ];
   
     return (
-      <div className="w-1/4 p-4 rounded-xl mr-6 bg-[var(--bg-sec)]">
+      <div className="w-60 p-4 h-screen mr-6 bg-[var(--bg-sec)]">
         <h3 className="text-xl font-semibold mb-4 text-[var(--txt)]">Friends</h3>
         <div className="space-y-2">
           {tabs.map((tab) => (
@@ -20,7 +20,7 @@ function TabNavigation({ selectedTab, onTabClick }) {
               className={`w-full text-left px-4 py-2 rounded-lg ${
                 selectedTab === tab.id
                   ? "bg-[var(--btn)] text-white"
-                  : "hover:bg-[var(--bg-ter)]"
+                  : "hover:bg-[var(--bg-ter)] duration-300"
               }`}
             >
               {tab.label}
