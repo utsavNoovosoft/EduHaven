@@ -11,7 +11,7 @@ import {
   Earth,
   DraftingCompass,
   Puzzle,
-  X
+  X,
 } from "lucide-react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -19,7 +19,7 @@ import { Link, useParams } from "react-router-dom";
 import { set } from "date-fns";
 const backendUrl = import.meta.env.VITE_API_URL;
 
-const ProfileCard = ({isCurrentUser = false}) => {
+const ProfileCard = ({ isCurrentUser = false }) => {
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
     return { headers: { Authorization: `Bearer ${token}` } };
@@ -27,7 +27,6 @@ const ProfileCard = ({isCurrentUser = false}) => {
 
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [friendsCount, setFriendsCount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [friendsList, setFriendsList] = useState([]);
   const { userId } = useParams();
@@ -36,49 +35,69 @@ const ProfileCard = ({isCurrentUser = false}) => {
   const [hasGivenKudos, setHasGivenKudos] = useState(false);
 
   // user part for share functionality
-   const profilelink = user?._id ? `${window.location.origin}/user/${user._id}` : "" ;
+  const profilelink = user?._id
+    ? `${window.location.origin}/user/${user._id}`
+    : "";
 
   //Logic part for share functionality
   const togglelink = () => setShowLink((prev) => !prev);
 
-   const copylink =()=>{
-     if(!profilelink) return;
-     navigator.clipboard.writeText(profilelink)
+  const copylink = () => {
+    if (!profilelink) return;
+    navigator.clipboard
+      .writeText(profilelink)
       .then(() => {
         toast.success("Copied ");
         setShowLink(false);
       })
-     .catch(()=> toast.error("Not Copied "));
+      .catch(() => toast.error("Not Copied "));
   };
 
   const popupRef = useRef(null);
 
   useEffect(() => {
-      const fetchFriendsCount = async() => {
+    // Fetch friends list + count for either current user or the profile user
+    const fetchFriendsForUser = async () => {
       try {
-          const response = await axios.get(`${backendUrl}/friends/count`, getAuthHeader());
-        setFriendsCount(response.data.count);
-        console.log("Friends count is:", response.data.count);
+        if (isCurrentUser) {
+          // Current (logged-in) user — keep using protected endpoints
+          try {
+            const listRes = await axios.get(`${backendUrl}/friends`, getAuthHeader());
+
+            const friends = listRes.data || [];
+            setFriendsList(friends);
+          } catch (err) {
+            console.error("Error fetching current user's friends:", err);
+            setFriendsList([]);
+          }
+
+          return;
+        }
+
+        try {
+          const listRes = await axios.get(
+            `${backendUrl}/friends/${userId}/stats`,
+            getAuthHeader()
+          );
+          setFriendsList(listRes.data.stats.friends || []);
+
+          // console.log(listRes.data);
+        } catch (err) {
+          toast.error("Error fetching profile user's friends");
+          setFriendsList([]);
+          console.error(err);
+        }
       } catch (error) {
-        console.error("Error fetching friends count:", error);
+        console.error("Error fetching friends for profile:", error);
+        setFriendsList([]);
       }
     };
 
-    const fetchFriendsList = async () => {
-      try {
-        const response = await axios.get(
-          `${backendUrl}/friends`,
-          getAuthHeader()
-        );
-        setFriendsList(response.data);
-      } catch (error) {
-        console.error("Error fetching friends list:", error);
-      }
-    };
-
-    fetchFriendsCount();
-    fetchFriendsList();
-  }, []);
+    // only fetch when we have userId or we are current user
+    if (isCurrentUser || userId) {
+      fetchFriendsForUser();
+    }
+  }, [isCurrentUser, userId]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -102,7 +121,7 @@ const ProfileCard = ({isCurrentUser = false}) => {
         }
         setUser(response.data);
         setKudosCount(response.data.kudosReceived || 0);
-        setHasGivenKudos(response.data.hasGivenKudos || false); 
+        setHasGivenKudos(response.data.hasGivenKudos || false);
       } catch (error) {
         console.error("Error fetching user profile:", error);
       } finally {
@@ -129,10 +148,12 @@ const ProfileCard = ({isCurrentUser = false}) => {
 
   if (isLoading || !user) {
     return (
-      <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 w-full h-fit relative overflow-hidden">
+      <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-indigo-500/50 to-purple-500/5 shadow-2xl pt-6 w-full h-fit relative">
         {/* Skeleton nav */}
         <div className="flex justify-end gap-6 px-4">
-          {isCurrentUser && <div className="w-6 h-6 rounded-full bg-gray-400/30"></div>}
+          {isCurrentUser && (
+            <div className="w-6 h-6 rounded-full bg-gray-400/30"></div>
+          )}
           <div className="w-6 h-6 rounded-full bg-gray-400/30"></div>
         </div>
 
@@ -217,7 +238,6 @@ const ProfileCard = ({isCurrentUser = false}) => {
           </Link>
         )}
 
-
         {user?._id && (
           <div className="relative inline-block">
             <Share2
@@ -226,7 +246,7 @@ const ProfileCard = ({isCurrentUser = false}) => {
             />
 
             {showLink && (
-                  <div className="absolute top-full mt-2 right-0 flex items-center bg-[#1f2937] rounded-lg px-3 py-2 shadow-md border border-gray-700 w-64 z-20" >
+              <div className="absolute top-full mt-2 right-0 flex items-center bg-[#1f2937] rounded-lg px-3 py-2 shadow-md border border-gray-700 w-64 z-20">
                 <input
                   type="text"
                   value={profilelink}
@@ -244,7 +264,6 @@ const ProfileCard = ({isCurrentUser = false}) => {
             )}
           </div>
         )}
-
       </div>
 
       <div className="mx-4">
@@ -275,7 +294,7 @@ const ProfileCard = ({isCurrentUser = false}) => {
             ref={popupRef}
           >
             <span className="block text-2xl font-bold text-[var(--text-primary)]">
-              {friendsCount}
+              {friendsList.length}
             </span>
             <span className="text-sm text-[var(--text-secondary)]">
               Friends
@@ -291,10 +310,12 @@ const ProfileCard = ({isCurrentUser = false}) => {
               >
                 {/* Header */}
                 <div className="bg-gray-800 border-b border-gray-600 p-4 flex items-center justify-between flex-shrink-0">
-                  <h2 className="text-2xl font-bold text-white-100">Friends List</h2>
+                  <h2 className="text-2xl font-bold text-white-100">
+                    Friends List
+                  </h2>
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-gray-400 bg-gray-900 px-3 py-1 rounded-full">
-                      {friendsCount} friends
+                      {friendsList.length} friends
                     </span>
                     <button
                       onClick={() => setShowPopup(false)}
