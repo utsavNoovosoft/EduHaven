@@ -9,7 +9,11 @@ import Note from "../Model/NoteModel.js";
 import TimerSession from "../Model/StudySession.js";
 import SessionRoom from "../Model/SessionModel.js";
 import Task from "../Model/ToDoModel.js";
-import { checkAndAwardRookieBadge, checkAllBadges, BADGES } from "../utils/badgeSystem.js";
+import {
+  checkAndAwardRookieBadge,
+  checkAllBadges,
+  BADGES,
+} from "../utils/badgeSystem.js";
 
 // Configure Cloudinary
 cloudinary.config({
@@ -62,7 +66,6 @@ export const signup = async (req, res) => {
     );
 
     await sendMail(Email, FirstName, otp);
-
 
     const token = generateAuthToken(user);
 
@@ -134,12 +137,15 @@ export const verifyUser = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    console.log('updateProfile called');
-    console.log('req.user:', req.user ? { id: req.user._id, name: req.user.FirstName } : 'No user');
-    console.log('Request body:', req.body);
-    
+    console.log("updateProfile called");
+    console.log(
+      "req.user:",
+      req.user ? { id: req.user._id, name: req.user.FirstName } : "No user"
+    );
+    console.log("Request body:", req.body);
+
     if (!req.user) {
-      console.log('No user in request - auth middleware failed');
+      console.log("No user in request - auth middleware failed");
       return res.status(401).json({ error: "Unauthorized" });
     }
 
@@ -200,10 +206,10 @@ export const updateProfile = async (req, res) => {
 
     // Check and award Rookie badge if profile is complete
     try {
-      console.log('Profile updated, checking for Rookie badge...');
+      console.log("Profile updated, checking for Rookie badge...");
       const badgeResult = await checkAndAwardRookieBadge(userId);
-      console.log('Badge check result:', badgeResult);
-      
+      console.log("Badge check result:", badgeResult);
+
       if (badgeResult.success) {
         console.log(`Rookie badge awarded to user ${userId}`);
         // Re-fetch user to include the new badge
@@ -377,15 +383,56 @@ export const getUserBadges = async (req, res) => {
     }
 
     const userId = req.user._id;
-    console.log('Getting badges for user:', userId);
-    
+    console.log("Getting badges for user:", userId);
+
     const user = await User.findById(userId).select("badges");
-    
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    console.log("Current user badges:", user.badges);
+
+    // Check for any newly earned badges
+    try {
+      console.log("Checking for new badges...");
+      const newBadges = await checkAllBadges(userId);
+      console.log("New badges found:", newBadges);
+
+      if (newBadges.length > 0) {
+        // Re-fetch user to get updated badges
+        const updatedUser = await User.findById(userId).select("badges");
+        console.log("Updated user badges after awarding:", updatedUser.badges);
+
+        return res.status(200).json({
+          badges: updatedUser.badges || [],
+          newBadges: newBadges,
+          availableBadges: Object.values(BADGES),
+        });
+      }
+    } catch (badgeError) {
+      console.error("Error checking badges:", badgeError);
+      // Continue with existing badges if check fails
+    }
+
+    return res.status(200).json({
+      badges: user.badges || [],
+      newBadges: [],
+      availableBadges: Object.values(BADGES),
+    });
+  } catch (error) {
+    console.error("Get badges error:", error);
+    return res.status(500).json({
+      error: "Failed to get badges",
+      details: error.message,
+    });
+  }
+};
 
 export const giveKudos = async (req, res) => {
   try {
     const giverId = req.user.id;
-    const { receiverId } = req.body; 
+    const { receiverId } = req.body;
 
     if (giverId === receiverId) {
       return res
@@ -412,12 +459,10 @@ export const giveKudos = async (req, res) => {
     await giver.save();
     await receiver.save();
 
-    res
-      .status(200)
-      .json({
-        message: "Kudos given successfully!",
-        receiverKudos: receiver.kudosReceived,
-      });
+    res.status(200).json({
+      message: "Kudos given successfully!",
+      receiverKudos: receiver.kudosReceived,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -425,7 +470,7 @@ export const giveKudos = async (req, res) => {
 };
 
 //NEW: Get user stats (for streaks, rank, etc.)
- 
+
 export const getUserStats = async (req, res) => {
   try {
     const userId = req.query.id || req.user?._id;
@@ -433,60 +478,49 @@ export const getUserStats = async (req, res) => {
       return res.status(400).json({ error: "User ID is required" });
     }
 
-    const user = await User.findById(userId).select("streaks rank level");
-
+    const user = await User.findById(userId).select(
+      "streaks rank level badges"
+    );
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    console.log('Current user badges:', user.badges);
+    // Count total users for rank context
+    const totalUsersCount = await User.countDocuments();
 
-    // Check for any newly earned badges
+    let newBadges = [];
     try {
-      console.log('Checking for new badges...');
-      const newBadges = await checkAllBadges(userId);
-      console.log('New badges found:', newBadges);
-      
+      console.log("Checking for new badges...");
+      newBadges = await checkAllBadges(userId);
+
       if (newBadges.length > 0) {
-        // Re-fetch user to get updated badges
+        // Refresh badges if new ones were awarded
         const updatedUser = await User.findById(userId).select("badges");
-        console.log('Updated user badges after awarding:', updatedUser.badges);
-        
-        return res.status(200).json({
-          badges: updatedUser.badges || [],
-          newBadges: newBadges,
-          availableBadges: Object.values(BADGES)
-        });
+        user.badges = updatedUser.badges;
       }
     } catch (badgeError) {
       console.error("Error checking badges:", badgeError);
-      // Continue with existing badges if check fails
     }
 
     return res.status(200).json({
-      badges: user.badges || [],
-      newBadges: [],
-      availableBadges: Object.values(BADGES)
-    });
-  } catch (error) {
-    console.error("Get badges error:", error);
-    return res.status(500).json({
-      error: "Failed to get badges",
-      details: error.message
-    });
-
-    const totalUsersCount = await User.countDocuments();
-
-    res.json({
       rank: user.rank || 0,
       totalUsers: totalUsersCount,
       currentStreak: user.streaks?.current || 0,
       maxStreak: user.streaks?.max || 0,
-      level: user.level || { name: "Beginner", progress: 0, hoursToNextLevel: 2 },
+      level: user.level || {
+        name: "Beginner",
+        progress: 0,
+        hoursToNextLevel: 2,
+      },
+      badges: user.badges || [],
+      newBadges,
+      availableBadges: Object.values(BADGES),
     });
   } catch (error) {
     console.error("Error fetching user stats:", error);
-    res.status(500).json({ error: "Failed to fetch user stats" });
-
+    return res.status(500).json({
+      error: "Failed to fetch user stats",
+      details: error.message,
+    });
   }
 };
