@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 import TabNavigation from "../components/friendsPage/TabNavigation";
 import MainContent from "../components/friendsPage/MainContent";
@@ -23,7 +23,11 @@ function FriendsPage() {
 
   const sendRequest = async (friendId) => {
     try {
-      await axios.post(`${backendUrl}/friends/request/${friendId}`, null, getAuthHeader());
+      await axiosInstance.post(
+        `${backendUrl}/friends/request/${friendId}`,
+        null,
+        getAuthHeader()
+      );
       setSuggestedFriends((prev) =>
         prev.map((u) => (u._id === friendId ? { ...u, requestSent: true } : u))
       );
@@ -35,7 +39,10 @@ function FriendsPage() {
 
   const cancelRequest = async (friendId) => {
     try {
-      await axios.delete(`${backendUrl}/friends/sent-requests/${friendId}`, getAuthHeader());
+      await axiosInstance.delete(
+        `${backendUrl}/friends/sent-requests/${friendId}`,
+        getAuthHeader()
+      );
       setSentRequests((prev) => prev.filter((r) => r._id !== friendId));
       toast.info("Friend request canceled.");
     } catch (error) {
@@ -45,7 +52,10 @@ function FriendsPage() {
 
   const rejectRequest = async (friendId) => {
     try {
-      await axios.delete(`${backendUrl}/friends/reject/${friendId}`, getAuthHeader());
+      await axiosInstance.delete(
+        `${backendUrl}/friends/reject/${friendId}`,
+        getAuthHeader()
+      );
       setFriendRequests((prev) => prev.filter((r) => r._id !== friendId));
       toast.error("Friend request rejected.");
     } catch (error) {
@@ -55,7 +65,11 @@ function FriendsPage() {
 
   const acceptRequest = async (friendId) => {
     try {
-      await axios.post(`${backendUrl}/friends/accept/${friendId}`, null, getAuthHeader());
+      await axiosInstance.post(
+        `${backendUrl}/friends/accept/${friendId}`,
+        null,
+        getAuthHeader()
+      );
       const acceptedUser = friendRequests.find((u) => u._id === friendId);
       setFriendRequests((prev) => prev.filter((r) => r._id !== friendId));
       setAllFriends((prev) => [...prev, acceptedUser]);
@@ -67,7 +81,10 @@ function FriendsPage() {
 
   const removeFriend = async (friendId) => {
     try {
-      await axios.delete(`${backendUrl}/friends/${friendId}`, getAuthHeader());
+      await axiosInstance.delete(
+        `${backendUrl}/friends/${friendId}`,
+        getAuthHeader()
+      );
       setAllFriends((prev) => prev.filter((f) => f._id !== friendId));
       toast.success("Friend removed!");
     } catch (error) {
@@ -95,7 +112,7 @@ function FriendsPage() {
         break;
     }
 
-    axios
+    axiosInstance
       .get(`${backendUrl}${endpoint}`, getAuthHeader())
       .then((res) => {
         switch (tab) {
@@ -140,7 +157,6 @@ function FriendsPage() {
         return [];
     }
   };
-
 
   const token = localStorage.getItem("token");
   let decodedUser = null;

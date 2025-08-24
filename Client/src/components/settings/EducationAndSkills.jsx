@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
@@ -170,7 +170,7 @@ function EducationAndSkills() {
         ...profileData,
       };
 
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         `${backendUrl}/user/profile`,
         updateData,
         {
@@ -337,15 +337,15 @@ function EducationAndSkills() {
                 value={newSkill}
                 onChange={(e) => setNewSkill(e.target.value)}
                 onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault(); // Prevent form submit
-                  addSkill();
-                }
-              }}
-              placeholder="Add a skill"
-              className="flex-1 px-4 py-2 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all"
-              disabled={isLoading}
-            />
+                  if (e.key === "Enter") {
+                    e.preventDefault(); // Prevent form submit
+                    addSkill();
+                  }
+                }}
+                placeholder="Add a skill"
+                className="flex-1 px-4 py-2 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all"
+                disabled={isLoading}
+              />
               <button
                 type="button"
                 onClick={addSkill}
@@ -405,11 +405,11 @@ function EducationAndSkills() {
                 value={newInterest}
                 onChange={(e) => setNewInterest(e.target.value)}
                 onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault(); // Prevent form submit
-                  addInterest();
-                }
-              }}
+                  if (e.key === "Enter") {
+                    e.preventDefault(); // Prevent form submit
+                    addInterest();
+                  }
+                }}
                 placeholder="Add an interest"
                 className="flex-1 px-4 py-2 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all"
                 disabled={isLoading}

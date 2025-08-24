@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Clock4, Flame, BarChart2 } from "lucide-react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 
 // Variants for dropdown buttons (using custom variable for hover bg)
 const dropdownButtonVariants = {
@@ -42,7 +42,7 @@ function StatsSummary() {
     try {
       setError(null);
 
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `${backendUrl}/user-stats`,
         getAuthHeader()
       );

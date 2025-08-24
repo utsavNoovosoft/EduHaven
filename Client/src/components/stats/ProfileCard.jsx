@@ -13,7 +13,7 @@ import {
   Puzzle,
   X,
 } from "lucide-react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { jwtDecode } from "jwt-decode";
 import { Link, useParams } from "react-router-dom";
 import { set } from "date-fns";
@@ -62,7 +62,10 @@ const ProfileCard = ({ isCurrentUser = false }) => {
         if (isCurrentUser) {
           // Current (logged-in) user — keep using protected endpoints
           try {
-            const listRes = await axios.get(`${backendUrl}/friends`, getAuthHeader());
+            const listRes = await axiosInstance.get(
+              `${backendUrl}/friends`,
+              getAuthHeader()
+            );
 
             const friends = listRes.data || [];
             setFriendsList(friends);
@@ -75,7 +78,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
         }
 
         try {
-          const listRes = await axios.get(
+          const listRes = await axiosInstance.get(
             `${backendUrl}/friends/${userId}/stats`,
             getAuthHeader()
           );
@@ -108,7 +111,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
           if (!token) return;
 
           const decoded = jwtDecode(token);
-          response = await axios.get(
+          response = await axiosInstance.get(
             `${backendUrl}/user/details?id=${decoded.id}`,
             {
               headers: {
@@ -117,7 +120,9 @@ const ProfileCard = ({ isCurrentUser = false }) => {
             }
           );
         } else {
-          response = await axios.get(`${backendUrl}/user/details?id=${userId}`);
+          response = await axiosInstance.get(
+            `${backendUrl}/user/details?id=${userId}`
+          );
         }
         setUser(response.data);
         setKudosCount(response.data.kudosReceived || 0);
@@ -213,7 +218,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
     }
 
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${backendUrl}/kudos`,
         { receiverId: user._id },
         getAuthHeader()

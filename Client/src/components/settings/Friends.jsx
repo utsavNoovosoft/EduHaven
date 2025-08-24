@@ -1,13 +1,8 @@
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const backendUrl = import.meta.env.VITE_API_URL;
-
-const getAuthHeader = () => {
-  const token = localStorage.getItem("token");
-  return { headers: { Authorization: `Bearer ${token}` } };
-};
 
 const Friends = () => {
   const [friends, setFriends] = useState([]);
@@ -20,10 +15,7 @@ const Friends = () => {
   const fetchFriends = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        `${backendUrl}/friends`,
-        getAuthHeader()
-      );
+      const response = await axiosInstance.get(`${backendUrl}/friends`);
       // Add an `isRemoved` property to each friend (initially false)
       const friendsWithFlag = response.data.map((friend) => ({
         ...friend,
@@ -40,7 +32,7 @@ const Friends = () => {
 
   const removeFriend = async (friendId) => {
     try {
-      await axios.delete(`${backendUrl}/friends/${friendId}`, getAuthHeader());
+      await axiosInstance.delete(`${backendUrl}/friends/${friendId}`);
       setFriends(
         friends.map((friend) =>
           friend._id === friendId ? { ...friend, isRemoved: true } : friend
