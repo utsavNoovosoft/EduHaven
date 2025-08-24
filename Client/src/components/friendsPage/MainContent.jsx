@@ -46,7 +46,7 @@ function MainContent({
     );
 
   return (
-    <div className="w-3/4 bg-[var(--bg-sec)] p-6 rounded-xl shadow-md">
+    <div className="flex-1 bg-[var(--bg-sec)] p-6 overflow-y-auto shadow-md">
       <h2 className="text-2xl font-semibold mb-4 text-[var(--txt)]">{getTitle()}</h2>
       <div className="space-y-4">
         {loading ? (

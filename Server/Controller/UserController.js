@@ -9,6 +9,11 @@ import Note from "../Model/NoteModel.js";
 import TimerSession from "../Model/StudySession.js";
 import SessionRoom from "../Model/SessionModel.js";
 import Task from "../Model/ToDoModel.js";
+import {
+  checkAndAwardRookieBadge,
+  checkAllBadges,
+  BADGES,
+} from "../utils/badgeSystem.js";
 
 // Configure Cloudinary
 cloudinary.config({
@@ -59,6 +64,7 @@ export const signup = async (req, res) => {
         expiresIn: "1d",
       }
     );
+
     await sendMail(Email, FirstName, otp);
 
     const token = generateAuthToken(user);
@@ -131,7 +137,15 @@ export const verifyUser = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
+    console.log("updateProfile called");
+    console.log(
+      "req.user:",
+      req.user ? { id: req.user._id, name: req.user.FirstName } : "No user"
+    );
+    console.log("Request body:", req.body);
+
     if (!req.user) {
+      console.log("No user in request - auth middleware failed");
       return res.status(401).json({ error: "Unauthorized" });
     }
 
@@ -188,6 +202,23 @@ export const updateProfile = async (req, res) => {
 
     if (!updatedUser) {
       return res.status(404).json({ error: "User not found" });
+    }
+
+    // Check and award Rookie badge if profile is complete
+    try {
+      console.log("Profile updated, checking for Rookie badge...");
+      const badgeResult = await checkAndAwardRookieBadge(userId);
+      console.log("Badge check result:", badgeResult);
+
+      if (badgeResult.success) {
+        console.log(`Rookie badge awarded to user ${userId}`);
+        // Re-fetch user to include the new badge
+        const userWithBadge = await User.findById(userId).select("-Password");
+        return res.status(200).json(userWithBadge);
+      }
+    } catch (badgeError) {
+      console.error("Error checking Rookie badge:", badgeError);
+      // Continue even if badge check fails
     }
 
     return res.status(200).json(updatedUser);
@@ -381,6 +412,60 @@ export const uploadProfilePicture = async (req, res) => {
   }
 };
 
+// Get user badges
+export const getUserBadges = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const userId = req.user._id;
+    console.log("Getting badges for user:", userId);
+
+    const user = await User.findById(userId).select("badges");
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    console.log("Current user badges:", user.badges);
+
+    // Check for any newly earned badges
+    try {
+      console.log("Checking for new badges...");
+      const newBadges = await checkAllBadges(userId);
+      console.log("New badges found:", newBadges);
+
+      if (newBadges.length > 0) {
+        // Re-fetch user to get updated badges
+        const updatedUser = await User.findById(userId).select("badges");
+        console.log("Updated user badges after awarding:", updatedUser.badges);
+
+        return res.status(200).json({
+          badges: updatedUser.badges || [],
+          newBadges: newBadges,
+          availableBadges: Object.values(BADGES),
+        });
+      }
+    } catch (badgeError) {
+      console.error("Error checking badges:", badgeError);
+      // Continue with existing badges if check fails
+    }
+
+    return res.status(200).json({
+      badges: user.badges || [],
+      newBadges: [],
+      availableBadges: Object.values(BADGES),
+    });
+  } catch (error) {
+    console.error("Get badges error:", error);
+    return res.status(500).json({
+      error: "Failed to get badges",
+      details: error.message,
+    });
+  }
+};
+
 export const giveKudos = async (req, res) => {
   try {
     const giverId = req.user.id;
@@ -430,14 +515,31 @@ export const getUserStats = async (req, res) => {
       return res.status(400).json({ error: "User ID is required" });
     }
 
-    const user = await User.findById(userId).select("streaks rank level");
+    const user = await User.findById(userId).select(
+      "streaks rank level badges"
+    );
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
+    // Count total users for rank context
     const totalUsersCount = await User.countDocuments();
 
-    res.json({
+    let newBadges = [];
+    try {
+      console.log("Checking for new badges...");
+      newBadges = await checkAllBadges(userId);
+
+      if (newBadges.length > 0) {
+        // Refresh badges if new ones were awarded
+        const updatedUser = await User.findById(userId).select("badges");
+        user.badges = updatedUser.badges;
+      }
+    } catch (badgeError) {
+      console.error("Error checking badges:", badgeError);
+    }
+
+    return res.status(200).json({
       rank: user.rank || 0,
       totalUsers: totalUsersCount,
       currentStreak: user.streaks?.current || 0,
@@ -447,9 +549,15 @@ export const getUserStats = async (req, res) => {
         progress: 0,
         hoursToNextLevel: 2,
       },
+      badges: user.badges || [],
+      newBadges,
+      availableBadges: Object.values(BADGES),
     });
   } catch (error) {
     console.error("Error fetching user stats:", error);
-    res.status(500).json({ error: "Failed to fetch user stats" });
+    return res.status(500).json({
+      error: "Failed to fetch user stats",
+      details: error.message,
+    });
   }
 };
