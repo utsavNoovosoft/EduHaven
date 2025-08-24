@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { User } from "lucide-react";
 import axios from "axios";
+import { User } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -55,10 +55,7 @@ const Friends = () => {
   const LoadingSkeleton = () => (
     <div className="space-y-2 min-w-[600px] rounded-2xl overflow-hidden">
       {[...Array(3)].map((_, index) => (
-        <div
-          key={index}
-          className="p-4 rounded-md flex justify-between bg-sec"
-        >
+        <div key={index} className="p-4 rounded-md flex justify-between bg-sec">
           <div className="flex items-center gap-4">
             <div className="w-9 h-9 bg-ter rounded-full animate-pulse"></div>
             <div className="h-5 bg-ter rounded w-32 animate-pulse"></div>
@@ -77,7 +74,7 @@ const Friends = () => {
           Find friends
         </Link>
       </div>
-      
+
       {loading ? (
         <LoadingSkeleton />
       ) : friends.length === 0 ? (
@@ -90,22 +87,27 @@ const Friends = () => {
               className="p-4 rounded-md flex justify-between bg-sec"
             >
               <div className="flex items-center gap-4">
-                {friend.ProfilePicture ? (
-                  <img
-                    src={friend.ProfilePicture}
-                    className="w-9 h-9 rounded-full"
-                    alt="profile"
-                  />
-                ) : (
-                  <div className="p-2 bg-ter rounded-full">
-                    <User className="w-7 h-7" />
-                  </div>
-                )}
-                <h4 className="text-lg font-medium line-clamp-1 txt">
-                  {friend.FirstName
-                    ? `${friend.FirstName} ${friend.LastName || ""}`
-                    : "old-user"}
-                </h4>
+                <Link
+                  to={`/user/${friend._id}`}
+                  className="flex items-center gap-4 hover:underline"
+                >
+                  {friend.ProfilePicture ? (
+                    <img
+                      src={friend.ProfilePicture}
+                      className="w-9 h-9 rounded-full"
+                      alt="profile"
+                    />
+                  ) : (
+                    <div className="p-2 bg-ter rounded-full">
+                      <User className="w-7 h-7" />
+                    </div>
+                  )}
+                  <h4 className="text-lg font-medium line-clamp-1 txt">
+                    {friend.FirstName
+                      ? `${friend.FirstName} ${friend.LastName || ""}`
+                      : "old-user"}
+                  </h4>
+                </Link>
               </div>
               <button
                 onClick={() => removeFriend(friend._id)}
