@@ -4,6 +4,7 @@ import {
   startOfWeek, endOfWeek,
   startOfMonth, endOfMonth 
 } from 'date-fns';
+import { checkAndAwardKickstarterBadge } from "../utils/badgeSystem.js";
 
 export const getAllTodos = async (req, res) => {
   try {
@@ -261,6 +262,20 @@ export const updateTodo = async (req, res) => {
     if (!updatedTask) {
       return res.status(404).json({ success: false, error: "Task not found" });
     }
+
+    // Check and award Kickstarter badge if task was completed
+    if (updateFields.completed === true || updateFields.status === 'closed') {
+      try {
+        const badgeResult = await checkAndAwardKickstarterBadge(updatedTask.user);
+        if (badgeResult.success) {
+          console.log(`Kickstarter badge awarded to user ${updatedTask.user}`);
+        }
+      } catch (badgeError) {
+        console.error("Error checking Kickstarter badge:", badgeError);
+        // Continue even if badge check fails
+      }
+    }
+
     res.status(200).json({ success: true, data: updatedTask });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });

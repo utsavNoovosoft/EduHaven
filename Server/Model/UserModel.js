@@ -54,6 +54,15 @@ const UserSchema = new mongoose.Schema(
         ref: "SessionRoom",
       },
     ],
+      badges: [
+        {
+          id: { type: String, required: true },
+          name: { type: String, required: true },
+          description: { type: String },
+          icon: { type: String },
+          earnedAt: { type: Date, default: Date.now },
+        }
+      ],
   },
   {
     timestamps: true,
