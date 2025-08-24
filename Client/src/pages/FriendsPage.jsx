@@ -156,7 +156,7 @@ function FriendsPage() {
     return <NotLogedInPage />;
   }
   return (
-    <div className="flex">
+    <div className="flex h-screen overflow-hidden">
       <TabNavigation selectedTab={selectedTab} onTabClick={setSelectedTab} />
       <MainContent
         selectedTab={selectedTab}

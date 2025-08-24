@@ -1,5 +1,6 @@
 import { UserPlus } from "lucide-react";
 import { useState } from "react";
+import DefaultProfilePic from "../../../public/profilePic.avif"
 
 function UserCard({
   user,
@@ -14,12 +15,12 @@ function UserCard({
 
   return (
     <div className="bg-[var(--bg-ter)] py-8 px-4 rounded-xl shadow-md">
-      {/* {console.log(user)} */}
-      <div className="flex flex-col  items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
         <img
-          src={user.ProfilePicture}
+          src={ user.ProfilePicture || DefaultProfilePic}
+           onError={(e) => (e.target.src = DefaultProfilePic)} 
           alt="Profile"
-          className="w-18 aspect-square border rounded-full"
+          className="w-24 object-cover aspect-square border rounded-full"
         />
         <div className="flex flex-col items-center justify-center px-2 gap-2 mt-2">
           <h4 className="text-2xl font-semibold">{`${user.FirstName} ${user.LastName || ""}`}</h4>
