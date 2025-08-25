@@ -8,6 +8,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -184,9 +185,12 @@ const Leaderboard = () => {
                   <div className="flex justify-start min-w-9">
                     {getBadge(index)}
                   </div>
-                  <div className="text-center font-semibold">
+                  <Link
+                    to={isCurrentUser ? "/stats" : `/user/${user.userId}`}
+                    className="text-center font-semibold"
+                  >
                     {user.username}
-                  </div>
+                  </Link>
                 </div>
 
                 <div
