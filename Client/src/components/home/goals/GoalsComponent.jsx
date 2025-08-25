@@ -5,12 +5,10 @@ import {
   Trash,
   Check,
   X,
-  ChevronDown,
   ChevronRight,
   Calendar,
   Repeat,
   Clock,
-  RefreshCw,
 } from "lucide-react";
 import Setgoals from "./SetGoals.jsx";
 import DeadlinePickerModal from "./DeadlinePickerModal.jsx";
@@ -382,11 +380,12 @@ const GoalsComponent = () => {
         className="flex items-center justify-between w-full px-2"
       >
         <div className="flex items-center gap-1">
-          {collapsedSections[sectionKey] ? (
-            <ChevronRight size={20} />
-          ) : (
-            <ChevronDown size={20} />
-          )}
+          <ChevronRight
+            size={20}
+            className={`${
+              collapsedSections[sectionKey] ? "" : "rotate-90"
+            } transition duration-300`}
+          />
           <h3 className="font-medium text-sm">{title}</h3>
           <span className="txt-dim text-sm">({items.length})</span>
         </div>
