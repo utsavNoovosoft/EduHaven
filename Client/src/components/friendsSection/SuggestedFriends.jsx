@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "@/utils/axios";
 import { User, UserPlus, MoreVertical } from "lucide-react";
-import { Button } from "@/components/ui/button";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 function SuggestedFriends({ onViewSentRequests }) {
@@ -75,13 +74,12 @@ function SuggestedFriends({ onViewSentRequests }) {
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold txt">Suggested Friends</h3>
         <div className="relative" ref={dropdrownRef}>
-          <Button onClick={() => setShowDropdown(!showDropdown)}>
+          <button onClick={() => setShowDropdown(!showDropdown)}>
             <MoreVertical className="w-5 h-5 txt" />
-          </Button>
+          </button>
           {showDropdown && (
             <div className="absolute right-0 mt-2 w-40 bg-ter rounded-md shadow-lg z-10">
-              <Button
-                variant="secondary"
+              <button
                 onClick={() => {
                   setShowDropdown(false);
                   onViewSentRequests();
@@ -90,7 +88,7 @@ function SuggestedFriends({ onViewSentRequests }) {
                 style={{ borderColor: "var(--txt-dim)" }}
               >
                 Show Sent Requests
-              </Button>
+              </button>
             </div>
           )}
         </div>
@@ -128,31 +126,28 @@ function SuggestedFriends({ onViewSentRequests }) {
                 </div>
               </div>
               <div className="absolute top-[8%] right-0 bg-sec p-1.5 px-2 transition-all opacity-0 group-hover:opacity-100 flex gap-2">
-                <Button
-                  variant="secondary"
+                <button
                   onClick={() => handleViewProfile(user._id)}
                   className="bg-ter text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
                 >
                   <User className="w-4 h-4" />
                   Profile
-                </Button>
+                </button>
                 {user.requestSent ? (
-                  <Button
-                    variant="secondary"
+                  <button
                     disabled
                     className="border border-gray-500/50 text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition bg-sec txt"
                   >
                     Request Sent
-                  </Button>
+                  </button>
                 ) : (
-                  <Button
-                    variant="primary"
+                  <button
                     onClick={() => sendRequest(user._id)}
                     className="bg-ter text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
                   >
                     <UserPlus className="w-4 h-4" />
                     Add
-                  </Button>
+                  </button>
                 )}
               </div>
             </div>
@@ -161,12 +156,12 @@ function SuggestedFriends({ onViewSentRequests }) {
       {/* Find More Users Link */}
       {suggestedFriends.length > 15 && (
         <div className="mt-4 text-center">
-          <Button
+          <button
             onClick={() => navigate("/friends")}
             className="text-sm text-blue-500 hover:underline"
           >
             Find More Users
-          </Button>
+          </button>
         </div>
       )}
     </section>

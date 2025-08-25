@@ -1,6 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import axios from "axios";
 import axiosInstance from "@/utils/axios";
 import {
   ChevronLeft,
@@ -265,36 +263,33 @@ function NotesComponent() {
       <div className="flex justify-between px-3">
         <div className="flex gap-4 items-center">
           <h3 className="text-2xl font-semibold">Notes</h3>
-          <Button
-            variant="secondary"
+          <button
             className="p-1.5 rounded-full hover:bg-ter"
             onClick={addNewPage}
           >
             <Plus />
-          </Button>
+          </button>
         </div>
         <div className="flex space-x-2 items-center">
           <span className="opacity-90 text-lg">
             {notes.length > 0 ? `${currentPage + 1}/${notes.length}` : "1/1"}
           </span>
-          <Button
-            variant="secondary"
+          <button
             onClick={goToPreviousPage}
             className={`p-1.5 rounded-full hover:bg-ter ${
               currentPage === 0 ? "txt-dim" : ""
             }`}
           >
             <ChevronLeft />
-          </Button>
-          <Button
-            variant="secondary"
+          </button>
+          <button
             onClick={goToNextPage}
             className={`p-1.5 rounded-full hover:bg-ter ${
               currentPage === notes.length - 1 ? "txt-dim" : ""
             }`}
           >
             <ChevronRight />
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -316,7 +311,7 @@ function NotesComponent() {
         </div>
 
         {!isSynced && (
-          <Button  variant="danger" className="text-black text-lg hover:bg-yellow-300 rounded-full mx-3 py-0.5 px-4 bg-yellow-400 flex items-center gap-2 transition-transform transform opacity-100">
+          <button className="text-black text-lg hover:bg-yellow-300 rounded-full mx-3 py-0.5 px-4 bg-yellow-400 flex items-center gap-2 transition-transform transform opacity-100">
             sync
             <div
               className="h-4"
@@ -327,13 +322,13 @@ function NotesComponent() {
             >
               <RefreshCcwDot className="h-4" />
             </div>
-          </Button>
+          </button>
         )}
         {notes[currentPage]?.content !== "" &&
           notes[currentPage]?.title !== "" && (
-            <Button  variant="secondary" onClick={() => handleDeleteNote(notes[currentPage]?._id)}>
+            <button onClick={() => handleDeleteNote(notes[currentPage]?._id)}>
               <Trash className="h-5 txt-dim hover:text-red-500" />
-            </Button>
+            </button>
           )}
       </div>
 

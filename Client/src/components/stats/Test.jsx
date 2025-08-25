@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 function App() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -105,7 +104,7 @@ function App() {
         <br />
         <br />
 
-        <Button variant="primary" type="submit">Log Session</Button>
+        <button type="submit">Log Session</button>
       </form>
 
       <br />
@@ -125,7 +124,7 @@ function App() {
       <br />
       <br />
 
-      <Button variant="secondary" onClick={handleGetStats}>Get Stats</Button>
+      <button onClick={handleGetStats}>Get Stats</button>
 
       {stats && (
         <div>

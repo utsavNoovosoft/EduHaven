@@ -1,6 +1,5 @@
 import { Github, Play, Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 
 function CTASection() {
   const navigate = useNavigate();
@@ -18,15 +17,14 @@ function CTASection() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button
-              variant="primary"
+            <button
               onClick={() => navigate("/authenticate")}
               className="flex items-center space-x-3 px-8 py-4 rounded-lg text-white font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               style={{ backgroundColor: "var(--btn)" }}
             >
               <Play size={20} />
               <span>Get Started for Free</span>
-            </Button>
+            </button>
 
             <a
               href="https://github.com/Eduhaven/eduhaven"

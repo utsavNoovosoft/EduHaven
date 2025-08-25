@@ -2,7 +2,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Login from "./Login";
 import SignUp from "./SignUp";
-import { Button } from "@/components/ui/button";
 import bgImg from "../assets/LoginBackground.jpg";
 
 const formVariants = {
@@ -118,15 +117,14 @@ export default function Auth() {
             whileTap={{ scale: 0.98 }}
             className="mt-6 text-center"
           >
-            <Button
-            variant="secondary"
+            <button
               className="text-blue-600 dark:text-blue-400 font-medium hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200 px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
               onClick={() => setIsSignup((prev) => !prev)}
             >
               {isSignup
                 ? "Already have an account? Sign in"
                 : "Don't have an account? Sign up"}
-            </Button>
+            </button>
           </motion.div>
         </div>
       </motion.div>

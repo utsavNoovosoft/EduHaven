@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
 
 export default function Cell({ r, c, value, fixed, selected, sameRow, sameCol, sameBox, onClick }) {
   const base = "sudoku-cell";
@@ -12,8 +11,8 @@ export default function Cell({ r, c, value, fixed, selected, sameRow, sameCol, s
   ].join(" ");
 
   return (
-    <Button  variant="secondary" aria-label={`cell-${r}-${c}`} className={classes} onClick={onClick}>
+    <button aria-label={`cell-${r}-${c}`} className={classes} onClick={onClick}>
       {value !== 0 ? value : ""}
-    </Button>
+    </button>
   );
 }

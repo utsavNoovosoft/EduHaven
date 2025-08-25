@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Clock, Globe, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const themes = [
   {
@@ -188,8 +187,7 @@ const themes = [
 // Theme preview component
 const ThemePreview = ({ theme, isSelected, onClick }) => {
   return (
-    <Button
-      variant="secondary"
+    <button
       onClick={onClick}
       className={`
         relative group w-full border-2 rounded-xl overflow-hidden transition-all duration-100 transform
@@ -274,7 +272,7 @@ const ThemePreview = ({ theme, isSelected, onClick }) => {
 
       {/* Hover overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-5 transition-all duration-200 pointer-events-none"></div>
-    </Button>
+    </button>
   );
 };
 

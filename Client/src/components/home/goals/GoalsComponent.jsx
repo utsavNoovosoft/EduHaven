@@ -13,7 +13,6 @@ import {
 import Setgoals from "./SetGoals.jsx";
 import DeadlinePickerModal from "./DeadlinePickerModal.jsx";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 const GoalsComponent = () => {
@@ -309,20 +308,18 @@ const GoalsComponent = () => {
 
       {editingId === todo._id ? (
         <div className="flex gap-4">
-          <Button
-            variant="primary"
+          <button
             onClick={handleSave}
             className="text-green-500 hover:text-green-400 transition-colors"
           >
             <Check />
-          </Button>
-          <Button
-            variant="secondary"
+          </button>
+          <button
             onClick={handleCancel}
             className="txt-dim hover:txt transition-colors"
           >
             <X />
-          </Button>
+          </button>
         </div>
       ) : (
         <div className="flex items-center space-x-2">
@@ -331,8 +328,7 @@ const GoalsComponent = () => {
           </span>
           <div className="hidden group-hover:flex gap-2">
             {/* Repeat Toggle */}
-            <Button
-              variant="secondary"
+            <button
               onClick={() => handleToggleRepeat(todo._id)}
               className={`p-1 rounded ${
                 todo.repeatEnabled
@@ -342,21 +338,19 @@ const GoalsComponent = () => {
               title={todo.repeatEnabled ? "Disable repeat" : "Enable repeat"}
             >
               <Repeat className="h-4 w-4" />
-            </Button>
+            </button>
 
             {/* Calendar Icon - deadline setting */}
-            <Button
-              variant="secondary"
+            <button
               onClick={() => openDeadlineModal(todo)}
               className="txt-dim hover:text-purple-500 transition-colors p-1"
               title="Set deadline"
             >
               <Calendar className="h-4 w-4" />
-            </Button>
+            </button>
 
             {/* Edit */}
-            <Button
-              variant="secondary"
+            <button
               onClick={() => {
                 setEditingId(todo._id);
                 setEditedTitle(todo.title);
@@ -364,16 +358,15 @@ const GoalsComponent = () => {
               className="txt-dim hover:text-blue-500 transition-colors p-1"
             >
               <Pencil className="h-4 w-4" />
-            </Button>
+            </button>
 
             {/* Delete */}
-            <Button
-              variant="danger"
+            <button
               onClick={() => handleDelete(todo._id)}
               className="txt-dim hover:text-red-500 transition-colors p-1"
             >
               <Trash className="h-4 w-4" />
-            </Button>
+            </button>
           </div>
         </div>
       )}
@@ -382,8 +375,7 @@ const GoalsComponent = () => {
 
   const renderSection = (title, items, sectionKey) => (
     <div className="mb-2.5">
-      <Button
-        variant="secondary"
+      <button
         onClick={() => toggleSection(sectionKey)}
         className="flex items-center justify-between w-full px-2"
       >
@@ -397,7 +389,7 @@ const GoalsComponent = () => {
           <h3 className="font-medium text-sm">{title}</h3>
           <span className="txt-dim text-sm">({items.length})</span>
         </div>
-      </Button>
+      </button>
 
       {!collapsedSections[sectionKey] && (
         <motion.div

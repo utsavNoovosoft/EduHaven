@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
+
 const ConfirmLogoutModal = ({ onConfirm, onCancel }) => {
   return (
     <AnimatePresence>
@@ -25,18 +25,18 @@ const ConfirmLogoutModal = ({ onConfirm, onCancel }) => {
             Are you sure you want to logout?
           </p>
           <div className="flex justify-evenly gap-4">
-            <Button variant="danger" 
+            <button
               onClick={onConfirm}
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition duration-200 w-32"
             >
               Yes, Logout
-            </Button>
-            <Button variant="secondary"
+            </button>
+            <button
               onClick={onCancel}
               className="bg-ter text-[var(--txt)] px-4 py-2 rounded-lg hover:bg-primary font-medium transition duration-200 w-32"
             >
               Cancel
-            </Button>
+            </button>
           </div>
         </motion.div>
       </motion.div>

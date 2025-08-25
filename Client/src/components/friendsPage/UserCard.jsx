@@ -1,9 +1,7 @@
 import { UserPlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import DefaultProfilePic from "../../../public/profilePic.avif";
 import { Link } from "react-router-dom";
-
 
 function UserCard({
   user,
@@ -54,53 +52,48 @@ function UserCard({
 
       <div className="mt-3">
         {selectedTab === "suggested" && !user.requestSent && (
-          <Button
+          <button
             onClick={() => onSendRequest(user._id)}
-            variant="primary"
             className="w-full bg-[var(--btn)] text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition text-white hover:bg-[var(--btn-hover)] txt"
           >
             <UserPlus className="w-5 h-5" />
             Add Friend
-          </Button>
+          </button>
         )}
 
         {selectedTab === "friendRequests" && (
           <div className="flex gap-2">
-            <Button
+            <button
               onClick={() => onAcceptRequest(user._id)}
-              variant="primary"
               className="w-1/2 bg-[var(--btn)] text-white text-sm px-3 py-1.5 rounded-lg transition hover:bg-[var(--btn-hover)] txt"
             >
               Accept
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={() => onRejectRequest(user._id)}
-              variant="danger"
               className="w-1/2 bg-[var(--btn)] text-sm text-white px-3 py-1.5 rounded-lg transition hover:bg-[var(--btn-hover)] txt"
             >
               Reject
-            </Button>
+            </button>
           </div>
         )}
 
         {selectedTab === "sentRequests" && (
-          <Button
+          <button
             onClick={() => onCancelRequest(user._id)}
-            variant="secondary"
             className="w-full bg-[var(--btn)] text-sm text-white px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
           >
             Cancel Request
-          </Button>
+          </button>
         )}
 
         {selectedTab === "allFriends" && (
-          <Button
+          <button
             onClick={() => onRemoveFriend(user._id)}
-            variant="danger"
             className="w-full bg-[var(--btn)] text-sm text-white px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
           >
             Remove Friend
-          </Button>
+          </button>
         )}
       </div>
     </div>

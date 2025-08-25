@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import UseSocketContext from "@/context/SocketContext";
 import useSessionRoom from "@/hooks/useSessionRoom";
-import { Button } from "@/components/ui/button";
 
 function Controls({
   roomId,
@@ -79,8 +78,7 @@ function Controls({
 
       {/*Controls */}
       <div className="flex items-center gap-2 w-[32%] justify-center ">
-        <Button
-          variant="secondary"
+        <button
           onClick={toggleAudio}
           className={`p-3 rounded-full ${
             isAudioEnabled
@@ -93,10 +91,9 @@ function Controls({
           ) : (
             <MicOff size={24} strokeWidth={1.8} />
           )}
-        </Button>
+        </button>
 
-        <Button
-          variant="secondary"
+        <button
           onClick={toggleVideo}
           className={`p-3 rounded-full ${
             isVideoEnabled
@@ -109,10 +106,9 @@ function Controls({
           ) : (
             <VideoOff size={24} />
           )}
-        </Button>
+        </button>
 
-        <Button
-          variant="secondary"
+        <button
           onClick={isScreenSharing ? stopScreenShare : startScreenShare}
           className={`p-3 px-5 rounded-full ${
             isScreenSharing
@@ -121,20 +117,18 @@ function Controls({
           }`}
         >
           <MonitorUp size={26} strokeWidth={1.4} />
-        </Button>
+        </button>
 
-        <Button
-          variant="danger"
+        <button
           onClick={handleLeaveRoom}
           className="p-3 px-6 rounded-full bg-[#DC362E] hover:bg-red-500 text-white hover:opacity-80"
         >
           <Phone size={24} strokeWidth={1.4} className="rotate-[135deg]" />
-        </Button>
+        </button>
       </div>
 
       <div className="flex items-center  w-[32%] justify-end">
-        <Button
-          variant="secondary"
+        <button
           onClick={() => {
             setShowChat(false);
             setShowInfo(!showInfo);
@@ -150,9 +144,8 @@ function Controls({
             }`}
           />
           {participants.length}
-        </Button>
-        <Button
-          variant="secondary"
+        </button>
+        <button
           onClick={() => {
             setShowInfo(false);
             setShowChat(!showChat);
@@ -165,7 +158,7 @@ function Controls({
               showChat ? "fill-[#A8C7FA] text-[#A8C7FA]" : "Show Chat"
             }`}
           />
-        </Button>
+        </button>
       </div>
     </div>
   );

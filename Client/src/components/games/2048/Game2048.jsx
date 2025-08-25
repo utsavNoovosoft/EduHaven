@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import styles from './Game2048.module.css';
 
 const Game2048 = () => {
@@ -187,14 +186,13 @@ function handleKeyDown(e) {
         left: '80px'
       }}>
       {/* Back Button - Left */}
-      <Button
-        variant="secondary"
+      <button
         onClick={() => window.history.back()}
         className="flex items-center gap-2 px-3 py-2 text-[var(--txt-dim)] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm"
       >
         <ArrowLeft size={20} />
         <span className="hidden sm:inline">Back</span>
-      </Button>
+      </button>
 
       {/* Title */}
       <h1 className="text-4xl sm:text-5xl font-bold txt tracking-wide drop-shadow-sm">
@@ -202,13 +200,12 @@ function handleKeyDown(e) {
       </h1>
 
       {/* How to Play - Right */}
-      <Button
-        variant="secondary"
+      <button
         onClick={() => setShowHowToPlay(true)}
         className="px-3 py-2 text-[var(--txt-dim)] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-sm sm:text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm whitespace-nowrap"
       >
         How to Play
-      </Button>
+      </button>
     </nav>
 
     {/* Game content */}
@@ -217,13 +214,12 @@ function handleKeyDown(e) {
       {showHowToPlay && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
           <div className="bg-[var(--bg-primary)] rounded-xl shadow-lg p-8 max-w-md w-full relative">
-            <Button
-              variant="secondary"
+            <button
               className="absolute top-2 right-2 px-2 py-1 text-[var(--txt-dim)] bg-sec rounded-lg cursor-pointer hover:bg-ter"
               onClick={() => setShowHowToPlay(false)}
             >
               Close
-            </Button>
+            </button>
             <h2 className="text-xl font-bold mb-2">How to Play 2048</h2>
             <ul className="list-disc pl-5 space-y-2 text-base">
               <li>Use your arrow keys to move the tiles.</li>
@@ -277,9 +273,9 @@ function handleKeyDown(e) {
 
       {/* New Game button at bottom */}
       <div style={{ marginTop: "1rem", textAlign: "center", background: "var(--bg-ter)", padding: "1rem", borderRadius: "8px" }}>
-        <Button variant="primary" onClick={resetGame} className={styles.newGameButton}>
+        <button onClick={resetGame} className={styles.newGameButton}>
           New Game
-        </Button>
+        </button>
       </div>
 
       {/* Game Over Overlay */}
@@ -289,7 +285,7 @@ function handleKeyDown(e) {
             <h2>Game Over!</h2>
             <p>Final Score: {score}</p>
             <p>High Score: {highScore}</p>
-            <Button variant="primary" onClick={resetGame}>Try Again</Button>
+            <button onClick={resetGame}>Try Again</button>
           </div>
         </div>
       )}
