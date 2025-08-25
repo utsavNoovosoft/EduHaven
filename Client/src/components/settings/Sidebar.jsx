@@ -1,24 +1,60 @@
 import {
-  Users,
-  LogOut,
   CircleUser,
+  CircleUserRound,
   GraduationCap,
-  Settings2,
-  Palette,
   LogIn,
+  LogOut,
+  Palette,
+  Settings2,
+  Users,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ConfirmLogoutModal from "../ConfirmLogoutModal";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
-const Sidebar = ({ activeTab, onTabChange, user }) => {
+const Sidebar = ({ user }) => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const tabs = [
+    { key: "basicInfo", label: "Basic Info", icon: <CircleUser size={24} /> },
+    {
+      key: "educationSkills",
+      label: "Education & Skills",
+      icon: <GraduationCap size={24} />,
+    },
+    { key: "account", label: "Account", icon: <CircleUserRound size={24} /> },
+    { key: "friends", label: "Friends", icon: <Users size={24} /> },
+    { divider: true },
+    { key: "themes", label: "Themes", icon: <Palette size={24} /> },
+    {
+      key: "timeLanguage",
+      label: "Time / Language",
+      icon: <Settings2 size={24} />,
+    },
+  ];
+
+  const defaultTab = "basicInfo";
+  const urlTab = searchParams.get("tab");
+  const isValidTab = tabs.some((tab) => tab.key === urlTab);
+  const activeTab = isValidTab ? urlTab : defaultTab;
+
+  useEffect(() => {
+    if (!isValidTab) {
+      setSearchParams({ tab: defaultTab });
+    }
+  }, [isValidTab, setSearchParams]);
+
+  const handleTabChange = (tab) => {
+    setSearchParams({ tab });
+  };
 
   const getTabButtonClass = (tab) =>
     `flex items-center gap-1.5 p-3 rounded-lg text-md w-full text-nowrap ${
-      activeTab === tab ? "bg-[var(--btn)] text-white" : " hover:bg-ter"
+      activeTab === tab ? "bg-[var(--btn)] text-white" : "hover:bg-ter"
     }`;
 
   return (
@@ -87,7 +123,26 @@ const Sidebar = ({ activeTab, onTabChange, user }) => {
           >
             <Settings2 size={24} /> Time / language
           </Button>
+
+          {tabs.map((tab, idx) =>
+            tab.divider ? (
+              <div
+                key={`divider-${idx}`}
+                className="border-t border-gray-400/30 !my-2"
+              />
+            ) : (
+              <button
+                key={tab.key}
+                onClick={() => handleTabChange(tab.key)}
+                className={getTabButtonClass(tab.key)}
+              >
+                {tab.icon} {tab.label}
+              </button>
+            )
+          )}
+
         </nav>
+
         <div className="absolute bottom-4 w-full px-4">
           {user ? (
             <Button
@@ -95,6 +150,9 @@ const Sidebar = ({ activeTab, onTabChange, user }) => {
               onClick={() => {
                 setShowLogoutModal(true);
               }}
+
+            <Button
+              onClick={() => setShowLogoutModal(true)}
               className="m-auto flex items-center justify-center px-4 py-2 text-red-400 transition-colors hover:bg-red-500 hover:text-white rounded gap-2"
             >
               <LogOut size={16} />
@@ -104,7 +162,7 @@ const Sidebar = ({ activeTab, onTabChange, user }) => {
             <Button
               variant="primary"
               onClick={() => navigate("/authenticate")}
-              className="m-auto flex items-center justify-center px-5 py-2 text-green-400 transition-colors hover:bg-green-500 hover:text-white rounded-lg gap-2 border border-green-500 "
+              className="m-auto flex items-center justify-center px-5 py-2 text-green-400 transition-colors hover:bg-green-500 hover:text-white rounded-lg gap-2 border border-green-500"
             >
               <LogIn size={16} />
               Login
@@ -112,11 +170,12 @@ const Sidebar = ({ activeTab, onTabChange, user }) => {
           )}
         </div>
       </aside>
+
       {showLogoutModal && (
         <ConfirmLogoutModal
           onConfirm={() => {
             setShowLogoutModal(false);
-            window.location.href = "/signout";
+            navigate("/signout");
           }}
           onCancel={() => setShowLogoutModal(false)}
         />

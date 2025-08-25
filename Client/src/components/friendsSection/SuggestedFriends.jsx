@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "@/utils/axios";
 import { User, UserPlus, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -102,23 +102,28 @@ function SuggestedFriends({ onViewSentRequests }) {
           .map((user) => (
             <div key={user._id} className=" relative group py-1 bg-slate-400">
               <div className="flex items-center">
-                {user.ProfilePicture ? (
-                  <img
-                    src={user.ProfilePicture}
-                    className="w-11 h-11 rounded-full"
-                    alt="Profile"
-                  />
-                ) : (
-                  <div className="p-2 bg-ter rounded-full">
-                    <User className="w-7 h-7" />
-                  </div>
-                )}
+                <Link to={`/user/${user._id}`}>
+                  {user.ProfilePicture ? (
+                    <img
+                      src={user.ProfilePicture}
+                      className="w-11 h-11 rounded-full transition hover:brightness-90 cursor-pointer"
+                      alt="Profile"
+                    />
+                  ) : (
+                    <div className="p-2 bg-ter rounded-full transition hover:brightness-90 cursor-pointer">
+                      <User className="w-7 h-7" />
+                    </div>
+                  )}
+                </Link>
                 <div className="ml-4 flex-1 overflow-hidden">
-                  <h4 className="text-lg font-medium line-clamp-1 txt">
+                  <Link
+                    to={`/user/${user._id}`}
+                    className="text-lg font-medium line-clamp-1 txt hover:underline"
+                  >
                     {user.FirstName
                       ? `${user.FirstName} ${user.LastName || ""}`
                       : "old-user"}
-                  </h4>
+                  </Link>
                   <p className="text-sm txt-dim line-clamp-1">{user.Bio}</p>
                 </div>
               </div>
