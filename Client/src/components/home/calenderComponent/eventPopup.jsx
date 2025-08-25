@@ -3,7 +3,6 @@ import axiosInstance from "@/utils/axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { toast } from "react-toastify";
-import { Button } from "@/components/ui/button";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 const EventPopup = ({ date, onClose, refreshEvents }) => {
@@ -152,13 +151,12 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
               </h2>
               <p className="text-sm txt-dim">{date}</p>
             </div>
-            <Button
-              variant="secondary"
+            <button
               onClick={onClose}
               className="txt-dim hover:txt transition mb-auto"
             >
               <X size={24} />
-            </Button>
+            </button>
           </div>
           <div className="mb-4">
             <input
@@ -179,21 +177,19 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
           </div>
           <div className="flex space-x-3">
             {event && (
-              <Button
-                variant="secondary"
+              <button
                 onClick={handleDelete}
                 className="flex-1 rounded-lg bg-ter py-2 text-center txt font-semibold shadow hover:bg-red-700 transition"
               >
                 Delete
-              </Button>
+              </button>
             )}
-            <Button
-              variant="primary"
+            <button
               onClick={handleCreateOrUpdate}
               className="btn flex-1 m-auto w-min rounded-lg py-2 text-center text-white font-semibold shadow transition"
             >
               {event ? "Update" : "Create"}
-            </Button>
+            </button>
           </div>
         </motion.div>
       </motion.div>

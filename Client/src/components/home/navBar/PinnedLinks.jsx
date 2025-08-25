@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { ExternalLink, Plus, X, MoreVertical } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
 
 // Helper to get domain from a URL
 function getDomain(url) {
@@ -222,15 +221,14 @@ function PinnedLinks() {
 
   return (
     <div className="relative z-50">
-      <Button
-        variant="secondary"
+      <button
         ref={buttonRef}
         className="flex gap-3 font-bold text-lg items-center txt"
         onClick={() => setShowDropdown(!showDropdown)}
       >
         <ExternalLink />
         Links
-      </Button>
+      </button>
 
       {/* Dropdown of existing pinned links + add button */}
       <AnimatePresence mode="wait">
@@ -459,8 +457,7 @@ function PinnedLinks() {
                 <h2 className="text-xl font-bold txt">
                   {editItemId ? "Edit link" : "Create a link"}
                 </h2>
-                <Button
-                  variant="secondary"
+                <button
                   onClick={() => {
                     setShowModal(false);
                     setEditItemId(null);
@@ -471,7 +468,7 @@ function PinnedLinks() {
                   className="p-1 hover:bg-ter rounded"
                 >
                   <X className="w-5 h-5 txt" />
-                </Button>
+                </button>
               </div>
 
               {/* Title */}
@@ -522,25 +519,23 @@ function PinnedLinks() {
               ))}
 
               {/* "Add another tab" button */}
-              <Button
-                variant="secondary"
+              <button
                 type="button"
                 onClick={handleAddAnotherLink}
                 className="text-sm flex font-medium items-center gap-1 mt-2 txt hover:opacity-80 transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 Add another tab
-              </Button>
+              </button>
 
               {/* Save (Add/Edit) button */}
               <div className="flex justify-end mt-6">
-                <Button
-                  variant="primary"
+                <button
                   onClick={handleSaveLink}
                   className="px-4 py-2 rounded txt btn hover:bg-ter/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current transition-colors"
                 >
                   {editItemId ? "Save" : "Add"}
-                </Button>
+                </button>
               </div>
             </motion.div>
           </motion.div>
@@ -559,20 +554,18 @@ function PinnedLinks() {
               Your browser is blocking the links from opening. Please disable
               the popup blocker for this site and try again.
             </p>
-            <Button
-              variant="primary"
+            <button
               onClick={handleRetryOpenLinks}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               I've enabled popups
-            </Button>
-            <Button
-              variant="secondary"
+            </button>
+            <button
               onClick={() => setShowPopupBlockerModal(false)}
               className="mt-4 block w-full text-center text-sm text-gray-400 hover:text-gray-200"
             >
               Cancel
-            </Button>
+            </button>
           </div>
         </div>
       )}

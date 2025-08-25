@@ -9,7 +9,6 @@ import gameBackground from "./assets/gameBackground.jpg";
 import teddyMole from "./assets/Mole.png";
 import evilPlant from "./assets/Plant.png";
 import burrowHole from "./assets/BurrowHole.png";
-import { Button } from "@/components/ui/button";
 
 
 const NUM_HOLES = 9;
@@ -185,13 +184,12 @@ const endGame = useCallback(() => {
             <h2 className="text-4xl font-bold text-white mb-4">GAME OVER!</h2>
             <h4 className="text-xl text-white mb-6">Final Score: {score}</h4>
             <div className="flex justify-center gap-6">
-              <Button
-                variant="primary"
+              <button
                 onClick={() => window.location.reload()}
                 className={`${btnClass} bg-green-500 flex items-center gap-2 justify-center`}
               >
                 <RefreshCw size={20} /> Play Again
-              </Button>
+              </button>
               <Link to="/games" className={`${btnClass} bg-red-500 flex items-center gap-2 justify-center`}>
                 <ArrowLeft size={20} /> Exit
               </Link>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import $ from "jquery";
-import { Button } from "@/components/ui/button";
 import styles from "./snake.module.css";
 import { ArrowLeft } from "lucide-react";
 
@@ -501,14 +500,13 @@ const SnakeGame = () => {
         className="bg-[var(--bg-sec)] shadow-lg border-b border-[rgba(var(--shadow-rgb),0.08)] px-6 sm:px-7 py-1 flex items-center justify-between fixed top-0 z-20"
         style={{ width: "94%", left: "80px" }}
       >
-        <Button
-          variant="secondary"
+        <button
           onClick={() => window.history.back()}
           className="flex items-center gap-2 px-3 py-2 text-[txtDim] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm"
         >
           <ArrowLeft size={20} />
           <span className="hidden sm:inline">Back</span>
-        </Button>
+        </button>
 
         <div className={styles.hiScore}>High Score: {hiScore}</div>
         {/* REMOVED UNNECESSARY WRAPPER DIVS AND CORRECTED className USAGE */}

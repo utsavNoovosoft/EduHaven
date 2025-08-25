@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Activity,
   MoreHorizontal,
@@ -118,13 +117,12 @@ export default function RoomCard({ room, onDelete, showCategory, loading }) {
             </span>
           )}
         </div>
-        <Button
-          variant="secondary"
+        <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="txt hover:txt-dim"
         >
           <MoreHorizontal className="w-6 h-6" />
-        </Button>
+        </button>
       </div>
 
       {menuOpen && (
@@ -133,34 +131,30 @@ export default function RoomCard({ room, onDelete, showCategory, loading }) {
           className="absolute right-4 top-12 bg-ter rounded-xl shadow-md z-10 p-1"
         >
           {!isPinned ? (
-            <Button
-              variant="secondary"
+            <button
               onClick={handlePin}
               className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
             >
               <Pin size={20} /> Pin to home
-            </Button>
+            </button>
           ) : (
-            <Button
-              variant="secondary"
+            <button
               onClick={handleUnpin}
               className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
             >
               <PinOff size={20} /> Unpin from home
-            </Button>
+            </button>
           )}
-          <Button
-            variant="secondary"
+          <button
             onClick={handleCopyLink}
             className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
           >
             <Link size={20}/>
             Copy Link
-          </Button>
+          </button>
 
           {onDelete && (
-            <Button
-              variant="secondary"
+            <button
               onClick={() => {
                 onDelete(room);
                 setMenuOpen(false);
@@ -168,7 +162,7 @@ export default function RoomCard({ room, onDelete, showCategory, loading }) {
               className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
             >
               <Trash size={20} /> Delete
-            </Button>
+            </button>
           )}
         </div>
       )}
@@ -181,14 +175,13 @@ export default function RoomCard({ room, onDelete, showCategory, loading }) {
 
       {room.description && <p className="txt-dim mb-4">{room.description}</p>}
 
-      <Button
-        variant="primary"
+      <button
         onClick={handleJoin}
         className="w-full btn px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
       >
         <Activity className="w-5 h-5" />
         Join
-      </Button>
+      </button>
     </div>
   );
 }

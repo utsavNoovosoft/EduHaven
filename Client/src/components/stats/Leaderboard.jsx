@@ -112,8 +112,7 @@ const Leaderboard = () => {
           {/* Friends Only Toggle */}
           <div className="flex items-center gap-2">
             <span className="text-sm">Friends Only</span>
-            <Button
-              variant="secondary"
+            <button
               onClick={handleFriendsOnlyToggle}
               className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
                 friendsOnly ? "bg-[var(--btn)]" : "bg-[var(--bg-ter)]"
@@ -126,12 +125,12 @@ const Leaderboard = () => {
                     : "translate-x-0 bg-gray-400"
                 }`}
               />
-            </Button>
+            </button>
           </div>
           {/* Timeframe Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="secondary" className="text-sm">
+              <Button className="text-sm">
                 {view.charAt(0).toUpperCase() + view.slice(1)}{" "}
                 <ChevronDown className="w-4 h-4" />
               </Button>

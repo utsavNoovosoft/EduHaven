@@ -2,7 +2,6 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import StudyTimer from "./StudyTimer";
 import BreakTimer from "./BreakTimer";
-import { Button } from "@/components/ui/button";
 
 function TimerComponent() {
   const [isBreakMode, setIsBreakMode] = useState(false);
@@ -27,15 +26,14 @@ function TimerComponent() {
       <div className="relative z-10">
         <nav className="flex mb-4 absolute items-center gap-6">
           <div className="relative">
-            <Button
-              variant="secondary"
+            <button
               onClick={() => setIsBreakMode(false)}
               className={`text-xl transition-colors duration-300 pb-1 ${
                 !isBreakMode ? "font-semibold text-white" : "text-gray-300"
               }`}
             >
               Focus
-            </Button>
+            </button>
             {!isBreakMode && (
               <motion.div
                 layoutId="underline"
@@ -44,15 +42,14 @@ function TimerComponent() {
             )}
           </div>
           <div className="relative">
-            <Button
-              variant="secondary"
+            <button
               onClick={() => setIsBreakMode(true)}
               className={`text-xl transition-colors duration-300 pb-1 ${
                 isBreakMode ? "font-semibold text-white" : "text-gray-300"
               }`}
             >
               Take a Break
-            </Button>
+            </button>
             {isBreakMode && (
               <motion.div
                 layoutId="underline"

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
 import Board from "./components/Board";
 import {
   generatePuzzle,
@@ -176,38 +175,6 @@ export default function Sudoku() {
           </div>
         </div>
 
-
-        {/* ✅ How to Play button below Timer */}
-        <div className="mb-4">
-          <Button
-            variant="secondary"
-            onClick={() => setShowHowToPlay(true)}
-            className="px-3 py-2 text-slate-300 bg-slate-800 rounded-lg cursor-pointer transition-all duration-200 text-sm sm:text-base font-medium hover:bg-slate-700 shadow-sm"
-          >
-            How to Play
-          </Button>
-        </div>
-
-        {/* ✅ How to Play Modal */}
-        {showHowToPlay && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-            <div className="bg-slate-900 rounded-xl shadow-lg p-8 max-w-md w-full relative">
-              <Button
-                variant="secondary"
-                className="absolute top-2 right-2 px-2 py-1 text-slate-400 bg-slate-700 rounded-lg cursor-pointer hover:bg-slate-600"
-                onClick={() => setShowHowToPlay(false)}
-              >
-                Close
-              </Button>
-              <h2 className="text-xl font-bold mb-2 text-emerald-300">How to Play Sudoku</h2>
-              <ul className="list-disc pl-5 space-y-2 text-base text-slate-200">
-                <li>Fill the board so that each row, column, and 3x3 grid has numbers 1–9.</li>
-                <li>Each number can appear only once in a row, column, or grid.</li>
-                <li>Use logic, not guessing, to solve the puzzle.</li>
-                <li>Hints will reveal a correct number if you’re stuck.</li>
-                <li>The game ends when the board is correctly filled.</li>
-              </ul>
-
         <div className={styles.controlsBar}>
           <div className={styles.gameStats}>
             <span>⏱ {formatTime(seconds)}</span>
@@ -222,7 +189,6 @@ export default function Sudoku() {
                   {DIFFICULTY_PRESETS[lvl].label}
                 </button>
               ))}
-
             </div>
           </div>
           <button onClick={() => setShowHowToPlay(true)} className={styles.howToPlayBtn}>How to Play</button>
@@ -238,53 +204,6 @@ export default function Sudoku() {
           <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleValidate}>Validate</button>
           <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleCheckSolution}>Check Solution</button>
 
-
-        {/* Action Buttons */}
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <Button
-            variant="secondary"
-            className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-slate-100 hover:bg-slate-700"
-            onClick={() => handleNewPuzzle(difficulty)}
-          >
-            New Puzzle
-          </Button>
-          <Button
-            variant="primary"
-            className="rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-500"
-            onClick={handleHint}
-            disabled={hintsLeft <= 0}
-          >
-            Hint
-          </Button>
-          <Button
-            variant="secondary"
-            className="rounded-xl bg-amber-600 px-4 py-2 text-white hover:bg-amber-500"
-            onClick={handleValidate}
-          >
-            Validate
-          </Button>
-          <Button
-            variant="primary"
-            className="rounded-xl bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-500"
-            onClick={handleCheckSolution}
-          >
-            Check Solution
-          </Button>
-          {status === "complete" && (
-            <span className="ml-2 rounded-lg bg-emerald-700/40 px-3 py-1 text-emerald-300">
-              Solved! 🎉
-            </span>
-          )}
-          {status === "conflict" && (
-            <span className="ml-2 rounded-lg bg-rose-700/30 px-3 py-1 text-rose-300">
-              Conflicts found
-            </span>
-          )}
-          {status === "correct" && (
-            <span className="ml-2 rounded-lg bg-indigo-700/30 px-3 py-1 text-indigo-200">
-              Looks good so far
-            </span>
-          )}
           {status === "complete" && <span className={`${styles.statusMessage} ${styles.statusComplete}`}>Solved! 🎉</span>}
           {status === "conflict" && <span className={`${styles.statusMessage} ${styles.statusConflict}`}>Conflicts found</span>}
           {status === "correct" && <span className={`${styles.statusMessage} ${styles.statusCorrect}`}>Looks good so far</span>}
