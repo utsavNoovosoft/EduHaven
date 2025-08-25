@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "@/utils/axios";
-import { User, UserPlus, MoreVertical } from "lucide-react";
+import { User, MoreVertical, Plus } from "lucide-react";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 function SuggestedFriends({ onViewSentRequests }) {
@@ -49,10 +49,6 @@ function SuggestedFriends({ onViewSentRequests }) {
     }
   };
 
-  const handleViewProfile = (userId) => {
-    navigate(`/user/${userId}`);
-  };
-
   useEffect(() => {
     axiosInstance
       .get(`${backendUrl}/friends/friend-suggestions`, getAuthHeader())
@@ -98,41 +94,31 @@ function SuggestedFriends({ onViewSentRequests }) {
           .slice()
           .reverse()
           .map((user) => (
-            <div key={user._id} className=" relative group py-1 bg-slate-400">
+            <div key={user._id} className=" relative group py-1">
               <div className="flex items-center">
-                <Link to={`/user/${user._id}`}>
+                <Link to={`/user/${user._id}`} className="flex items-center hover:brightness-110">
                   {user.ProfilePicture ? (
                     <img
                       src={user.ProfilePicture}
-                      className="w-11 h-11 rounded-full transition hover:brightness-90 cursor-pointer"
+                      className="w-11 h-11 rounded-full transition cursor-pointer"
                       alt="Profile"
                     />
                   ) : (
-                    <div className="p-2 bg-ter rounded-full transition hover:brightness-90 cursor-pointer">
+                    <div className="p-2 bg-ter rounded-full transition cursor-pointer">
                       <User className="w-7 h-7" />
                     </div>
                   )}
+                  <div className="ml-4 flex-1 overflow-hidden">
+                    <div className="text-lg font-medium line-clamp-1 txt">
+                      {user.FirstName
+                        ? `${user.FirstName} ${user.LastName || ""}`
+                        : "old-user"}
+                    </div>
+                    <p className="text-sm txt-dim line-clamp-1">{user.Bio}</p>
+                  </div>
                 </Link>
-                <div className="ml-4 flex-1 overflow-hidden">
-                  <Link
-                    to={`/user/${user._id}`}
-                    className="text-lg font-medium line-clamp-1 txt hover:underline"
-                  >
-                    {user.FirstName
-                      ? `${user.FirstName} ${user.LastName || ""}`
-                      : "old-user"}
-                  </Link>
-                  <p className="text-sm txt-dim line-clamp-1">{user.Bio}</p>
-                </div>
               </div>
-              <div className="absolute top-[8%] right-0 bg-sec p-1.5 px-2 transition-all opacity-0 group-hover:opacity-100 flex gap-2">
-                <button
-                  onClick={() => handleViewProfile(user._id)}
-                  className="bg-ter text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
-                >
-                  <User className="w-4 h-4" />
-                  Profile
-                </button>
+              <div className="absolute top-[8%] right-0 bg-sec p-1.5 px-2 transition-all opacity-0 group-hover:opacity-100 flex gap-1">
                 {user.requestSent ? (
                   <button
                     disabled
@@ -143,10 +129,10 @@ function SuggestedFriends({ onViewSentRequests }) {
                 ) : (
                   <button
                     onClick={() => sendRequest(user._id)}
-                    className="bg-ter text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
+                    className="bg-ter text-sm 2xl:text-base px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
                   >
-                    <UserPlus className="w-4 h-4" />
-                    Add
+                    <Plus className="w-4 h-4" />
+                    Friend
                   </button>
                 )}
               </div>
