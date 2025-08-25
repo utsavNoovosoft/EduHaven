@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 const UserProfileContext = createContext({
@@ -14,7 +14,7 @@ export const UserProfileProvider = ({ children }) => {
 
   const fetchUserDetails = async (userId) => {
     try {
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `${backendUrl}/user/details?id=${userId}`
       );
       const userData = response.data;
@@ -60,15 +60,21 @@ export const fetchUserStats = async (userId) => {
     }
 
     // Make authenticated request
-    const response = await axios.get(`${backendUrl}/friends/${userId}/stats`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axiosInstance.get(
+      `${backendUrl}/friends/${userId}/stats`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     return response.data;
   } catch (error) {
-    console.error("Error fetching user stats:", error.response?.data || error.message);
+    console.error(
+      "Error fetching user stats:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };

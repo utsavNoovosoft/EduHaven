@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -10,11 +10,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const backendUrl = import.meta.env.VITE_API_URL;
-
-const getAuthHeader = () => {
-  const token = localStorage.getItem("token");
-  return { headers: { Authorization: `Bearer ${token}` } };
-};
 
 const Leaderboard = () => {
   const [view, setView] = useState("weekly");
@@ -38,9 +33,8 @@ const Leaderboard = () => {
     const fetchLeaderboard = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(
-          `${backendUrl}/leaderboard?period=${view}&friendsOnly=${friendsOnly}`,
-          getAuthHeader()
+        const res = await axiosInstance.get(
+          `${backendUrl}/leaderboard?period=${view}&friendsOnly=${friendsOnly}`
         );
         setTimeout(() => {
           setLeaderboard(res.data);

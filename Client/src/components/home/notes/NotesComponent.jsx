@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import {
   ChevronLeft,
   ChevronRight,
@@ -42,7 +42,10 @@ function NotesComponent() {
 
   const fetchNotes = async () => {
     try {
-      const response = await axios.get(`${backendUrl}/note`, getAuthHeader());
+      const response = await axiosInstance.get(
+        `${backendUrl}/note`,
+        getAuthHeader()
+      );
       if (response.data.success) {
         if (!response.data.data || response.data.data.length === 0) {
           addNewPage(); // adding new is necessary cause we get err in posting data to db.
@@ -96,7 +99,7 @@ function NotesComponent() {
     }
 
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${backendUrl}/note`,
         {
           title: title,
@@ -119,7 +122,7 @@ function NotesComponent() {
 
   const handleDeleteNote = async (id) => {
     try {
-      const response = await axios.delete(
+      const response = await axiosInstance.delete(
         `${backendUrl}/note/${id}`,
         getAuthHeader()
       );
@@ -171,7 +174,7 @@ function NotesComponent() {
       contentTimeoutRef.current = setTimeout(async () => {
         try {
           if (noteId) {
-            await axios.put(
+            await axiosInstance.put(
               `${backendUrl}/note/${noteId}`,
               { content: contentToSave },
               getAuthHeader()
@@ -223,7 +226,7 @@ function NotesComponent() {
       titleTimeoutRef.current = setTimeout(async () => {
         try {
           if (noteId) {
-            await axios.put(
+            await axiosInstance.put(
               `${backendUrl}/note/${noteId}`,
               { title: titleToSave },
               getAuthHeader()

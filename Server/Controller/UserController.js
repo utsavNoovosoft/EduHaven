@@ -287,25 +287,62 @@ export const login = async (req, res) => {
       httpOnly: true,
     });
 
-    return res
-      .status(200)
-      .json({ message: "User Login Successfully", token, user });
+    // refresh token expires in 7 days
+    const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+    });
+    res.cookie("refreshToken", refreshToken, {
+      expires: new Date(Date.now() + 86400000 * 7),
+      httpOnly: true,
+    });
+
+    return res.status(200).json({
+      message: "User Login Successfully",
+      token,
+      refreshToken,
+      user,
+    });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: error.message });
   }
 };
 
 export const logout = async (req, res) => {
   try {
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
+    res.clearCookie("token");
+    res.clearCookie("refreshToken");
 
     return res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
     return res.status(500).json({ error: "Logout failed" });
+  }
+};
+
+export const refreshAccessToken = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized request",
+      });
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    const newToken = generateAuthToken(user);
+    return res.status(200).json({ success: true, token: newToken });
+  } catch (error) {
+    console.error("Error refreshing access token:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 };
 
