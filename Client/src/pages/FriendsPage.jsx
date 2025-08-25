@@ -5,16 +5,28 @@ import TabNavigation from "../components/friendsPage/TabNavigation";
 import MainContent from "../components/friendsPage/MainContent";
 import NotLogedInPage from "@/components/NotLogedInPage";
 import { jwtDecode } from "jwt-decode";
+import { useSearchParams } from "react-router-dom";
 
 const backendUrl = import.meta.env.VITE_API_URL;
 
 function FriendsPage() {
-  const [selectedTab, setSelectedTab] = useState("suggested");
   const [suggestedFriends, setSuggestedFriends] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [sentRequests, setSentRequests] = useState([]);
   const [allFriends, setAllFriends] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const tabs = ["suggested", "friendRequests", "sentRequests", "allFriends"];
+  const activeTab = tabs.includes(searchParams.get("tab"))
+    ? searchParams.get("tab")
+    : "suggested";
+
+  useEffect(() => {
+    if (!searchParams.get("tab")) {
+      setSearchParams({ tab: "suggested" });
+    }
+  }, [searchParams, setSearchParams]);
 
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
@@ -140,11 +152,11 @@ function FriendsPage() {
   };
 
   useEffect(() => {
-    fetchData(selectedTab);
-  }, [selectedTab]);
+    fetchData(activeTab);
+  }, [activeTab]);
 
   const getDataForTab = () => {
-    switch (selectedTab) {
+    switch (activeTab) {
       case "suggested":
         return suggestedFriends;
       case "friendRequests":
@@ -168,14 +180,19 @@ function FriendsPage() {
   } catch (error) {
     console.error("Invalid token", error);
   }
+
   if (!decodedUser) {
     return <NotLogedInPage />;
   }
+
   return (
     <div className="flex h-screen overflow-hidden">
-      <TabNavigation selectedTab={selectedTab} onTabClick={setSelectedTab} />
+      <TabNavigation
+        activeTab={activeTab}
+        onTabChange={(tab) => setSearchParams({ tab })}
+      />
       <MainContent
-        selectedTab={selectedTab}
+        selectedTab={activeTab}
         loading={loading}
         users={getDataForTab()}
         onSendRequest={sendRequest}
