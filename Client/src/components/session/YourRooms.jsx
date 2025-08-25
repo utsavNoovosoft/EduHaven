@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { PlusCircle } from "lucide-react";
-import axios from "axios";
-import { motion, AnimatePresence } from "framer-motion"; 
+import axiosInstance from "@/utils/axios";
+import { motion, AnimatePresence } from "framer-motion";
 import RoomCard from "./RoomCard";
 import CreateRoomModal from "./CreateRoomModal";
 import { Button } from "@/components/ui/button";
@@ -21,10 +21,10 @@ export default function YourRooms({ myRooms }) {
 
   const handleCreate = async (data) => {
     try {
-      const res = await axios.post(`${backendUrl}/session-room`, data, {
+      const res = await axiosInstance.post(`${backendUrl}/session-room`, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setSessions((s) => [...s, res.data]); 
+      setSessions((s) => [...s, res.data]);
     } catch (err) {
       console.error("Create room failed:", err);
     }
@@ -37,9 +37,12 @@ export default function YourRooms({ myRooms }) {
 
   const confirmDelete = async () => {
     try {
-      await axios.delete(`${backendUrl}/session-room/${roomToDelete._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axiosInstance.delete(
+        `${backendUrl}/session-room/${roomToDelete._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setSessions((s) => s.filter((r) => r._id !== roomToDelete._id));
     } catch (err) {
       console.error("Delete room failed:", err);

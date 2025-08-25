@@ -9,7 +9,7 @@ function TabNavigation({ selectedTab, onTabClick }) {
     ];
   
     return (
-      <div className="w-60 p-4 h-screen mr-6 bg-[var(--bg-sec)]">
+      <div className="w-60 overflow-hidden hidden sm:flex flex-col p-4 h-screen mr-6 bg-[var(--bg-sec)]">
         <h3 className="text-xl font-semibold mb-4 text-[var(--txt)]">Friends</h3>
         <div className="space-y-2">
           {tabs.map((tab) => (

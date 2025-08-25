@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
@@ -117,7 +117,7 @@ export default function BasicInfo() {
     formData.append("profilePicture", profilePic);
 
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${backendUrl}/user/upload-profile-picture`,
         formData,
         {
@@ -166,7 +166,7 @@ export default function BasicInfo() {
         ProfilePicture: profilePictureUrl,
       };
 
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         `${backendUrl}/user/profile`,
         updateData,
         {

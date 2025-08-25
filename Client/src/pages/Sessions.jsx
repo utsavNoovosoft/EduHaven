@@ -6,7 +6,7 @@ import SuggestedFriends from "../components/friendsSection/SuggestedFriends.jsx"
 import SentRequests from "../components/friendsSection/SentRequests.jsx";
 import YourRooms from "@/components/session/YourRooms.jsx";
 import NotLogedInPage from "@/components/NotLogedInPage.jsx";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 
 function Session() {
   const [view, setView] = useState("suggested");
@@ -19,7 +19,7 @@ function Session() {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const { data } = await axios.get(`${backendUrl}/session-room`, {
+        const { data } = await axiosInstance.get(`${backendUrl}/session-room`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setMyRooms(data.myRooms);

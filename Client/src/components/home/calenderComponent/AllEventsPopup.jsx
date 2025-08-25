@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { Edit, Trash2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -39,7 +39,7 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
     }
 
     try {
-      await axios.put(
+      await axiosInstance.put(
         `${backendUrl}/events/${editingEvent}`,
         {
           title: editTitle,
@@ -62,7 +62,7 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
 
   const handleDelete = async (eventId) => {
     try {
-      await axios.delete(`${backendUrl}/events/${eventId}`, {
+      await axiosInstance.delete(`${backendUrl}/events/${eventId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
@@ -82,10 +82,10 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
 
   const convertTo12HourFormat = (timeString)=>{
 
-    const [hourString, minutes] = timeString.split(":"); 
-    
+    const [hourString, minutes] = timeString.split(":");
+
     let hour = parseInt(hourString) ;; 
-    
+
     const ampm = hour >=12 ? "PM" : "AM" ; 
     if(hour === 0 ){
       hour = 12 ;  //12 AM 
@@ -122,7 +122,7 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
             </Button>
           </div>
 
-          <div 
+          <div
             ref={eventsContainerRef}
             className="max-h-[60vh] overflow-y-auto space-y-3"
           >
@@ -132,15 +132,15 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
                 
                 const eventTime =  convertTo12HourFormat(event.time);
                 const eventDate = new Date(event.date);
-                
+
                 const isToday = eventDate.toDateString() === new Date().toDateString();
-                
+
                 return (
                   <div
                     key={event._id}
                     data-date={event.date.split('T')[0]}
                     className={`p-3 rounded-lg border ${
-                      isToday 
+                      isToday
                         ? 'border-purple-500 bg-purple-500/10' 
                         : 'border-[var(--bg-ter)]'
                     }`}

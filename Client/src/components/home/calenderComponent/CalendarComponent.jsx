@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { parseISO } from "date-fns";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import EventPopup from "./eventPopup";
 import AllEventsPopup from "./AllEventsPopup";
@@ -57,18 +57,18 @@ function Calendar() {
         return;
       }
 
-      const response = await axios.get(`${backendUrl}/events`, {
+      const response = await axiosInstance.get(`${backendUrl}/events`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      
+
       if (response.data.success) {
         setEvents(response.data.data);
 
         // Process upcoming events
         const today = new Date();
-        
+
         const futureEvents = response.data.data.filter(
           (event) => new Date(event.date) >= today
         );
@@ -90,7 +90,6 @@ function Calendar() {
   };
 
   useEffect(() => {
-    
     const eventsMap = events.reduce((acc, event) => {
       const formattedDateKey = format(parseISO(event.date), "yyyy-MM-dd");
       if (!acc[formattedDateKey]) {
@@ -176,22 +175,20 @@ function Calendar() {
     setCardPosition({ top, left });
   };
 
-  const convertTo12HourFormat = (timeString)=>{
+  const convertTo12HourFormat = (timeString) => {
+    const [hourString, minutes] = timeString.split(":");
 
-    const [hourString, minutes] = timeString.split(":"); 
-    
-    let hour = parseInt(hourString) ;; 
-    
-    const ampm = hour >=12 ? "PM" : "AM" ; 
-    if(hour === 0 ){
-      hour = 12 ;  //12 AM 
-    }else if (hour > 12){
-      hour = hour -  12  ; 
+    let hour = parseInt(hourString);
+
+    const ampm = hour >= 12 ? "PM" : "AM";
+    if (hour === 0) {
+      hour = 12; //12 AM
+    } else if (hour > 12) {
+      hour = hour - 12;
     }
 
-    return `${hour}:${minutes} ${ampm}` ; 
-
-  }
+    return `${hour}:${minutes} ${ampm}`;
+  };
   return (
     <>
       <div className="bg-sec pt-6 w-[25%] min-w-fit rounded-3xl shadow flex flex-col max-h-[750px] relative calendar-container">
@@ -343,9 +340,7 @@ function Calendar() {
                       <div className="text-sm txt-dim">
                         {eventDate.toLocaleDateString()}
                       </div>
-                      <div className="text-xs txt-dim">
-                        {eventTime}
-                      </div>
+                      <div className="text-xs txt-dim">{eventTime}</div>
                     </div>
                     <span className="block mt-1">{event.title}</span>
                   </motion.li>

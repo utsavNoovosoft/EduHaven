@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import {
   Pencil,
   Trash,
@@ -41,15 +41,16 @@ const GoalsComponent = () => {
 
   const fetchTodos = async () => {
     try {
-      const { data } = await axios.get(`${backendUrl}/todo`, getAuthHeader());
+      const { data } = await axiosInstance.get(
+        `${backendUrl}/todo`,
+        getAuthHeader()
+      );
       console.log("Fetched todos:", data.data);
       setTodos(data.data); // ✅ Will now be the actual Task documents
     } catch (error) {
       console.error("Error fetching todos:", error.message);
     }
   };
-
-
 
   // Organize todos into sections
   const organizeTodos = () => {
@@ -73,7 +74,7 @@ const GoalsComponent = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${backendUrl}/todo/${id}`, getAuthHeader());
+      await axiosInstance.delete(`${backendUrl}/todo/${id}`, getAuthHeader());
       setTodos(todos.filter((todo) => todo._id !== id));
     } catch (error) {
       console.error("Error deleting todo:", error.message);
@@ -89,7 +90,11 @@ const GoalsComponent = () => {
         status: !todo.completed ? "closed" : "open",
       };
 
-      await axios.put(`${backendUrl}/todo/${id}`, updatedTodo, getAuthHeader());
+      await axiosInstance.put(
+        `${backendUrl}/todo/${id}`,
+        updatedTodo,
+        getAuthHeader()
+      );
       setTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)));
     } catch (error) {
       console.error("Error toggling todo:", error.message);
@@ -101,7 +106,11 @@ const GoalsComponent = () => {
       const todo = todos.find((t) => t._id === id);
       const updatedTodo = { ...todo, repeatEnabled: !todo.repeatEnabled };
 
-      await axios.put(`${backendUrl}/todo/${id}`, updatedTodo, getAuthHeader());
+      await axiosInstance.put(
+        `${backendUrl}/todo/${id}`,
+        updatedTodo,
+        getAuthHeader()
+      );
       setTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)));
     } catch (error) {
       console.error("Error toggling repeat:", error.message);
@@ -117,7 +126,7 @@ const GoalsComponent = () => {
       const todo = todos.find((t) => t._id === editingId);
       const updatedTodo = { ...todo, title: editedTitle };
 
-      await axios.put(
+      await axiosInstance.put(
         `${backendUrl}/todo/${editingId}`,
         updatedTodo,
         getAuthHeader()
@@ -160,7 +169,7 @@ const GoalsComponent = () => {
       const updatedTodo = {
         deadline: deadline ? deadline.toISOString() : null,
       };
-      await axios.put(
+      await axiosInstance.put(
         `${backendUrl}/todo/${deadlineModal.todoId}`,
         updatedTodo,
         getAuthHeader()
@@ -279,8 +288,9 @@ const GoalsComponent = () => {
       ) : (
         <div className="flex-grow">
           <span
-            className={`text-lg ${todo.completed ? "line-through txt-dim" : "txt-dim"
-              }`}
+            className={`text-lg ${
+              todo.completed ? "line-through txt-dim" : "txt-dim"
+            }`}
           >
             {todo.title}
           </span>
@@ -322,10 +332,11 @@ const GoalsComponent = () => {
             <Button
               variant="secondary"
               onClick={() => handleToggleRepeat(todo._id)}
-              className={`p-1 rounded ${todo.repeatEnabled
-                ? "text-blue-500 bg-blue-100/10"
-                : "txt-dim hover:text-blue-500"
-                } transition-colors`}
+              className={`p-1 rounded ${
+                todo.repeatEnabled
+                  ? "text-blue-500 bg-blue-100/10"
+                  : "txt-dim hover:text-blue-500"
+              } transition-colors`}
               title={todo.repeatEnabled ? "Disable repeat" : "Enable repeat"}
             >
               <Repeat className="h-4 w-4" />
@@ -421,7 +432,6 @@ const GoalsComponent = () => {
             <span className="txt-dim">●</span>
             <span>{closedCount} Closed</span>
           </div>
-
         </div>
       </div>
 

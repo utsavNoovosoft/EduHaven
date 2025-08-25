@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { toast } from "react-toastify";
@@ -14,29 +14,29 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
 
   // Get authentication token from localStorage
   const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     return {
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     };
   };
 
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const token = localStorage.getItem('token');
-        
+        const token = localStorage.getItem("token");
+
         if (!token) {
-          console.error('No authentication token found');
+          console.error("No authentication token found");
           return;
         }
 
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           `${backendUrl}/events/by-date?date=${date}`,
           {
-            headers: getAuthHeaders()
+            headers: getAuthHeaders(),
           }
         );
-       
+
         const eventData = response.data.data[0]; // Assuming one event per date
         if (eventData) {
           setId(eventData._id);
@@ -58,7 +58,7 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
           console.error("Error fetching event:", error);
           // Handle unauthorized access
           if (error.response?.status === 401) {
-            console.error('Unauthorized: Please log in again');
+            console.error("Unauthorized: Please log in again");
           }
         }
       }
@@ -74,45 +74,49 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      
+      const token = localStorage.getItem("token");
+
       if (!token) {
-        console.error('No authentication token found');
+        console.error("No authentication token found");
         return;
       }
-     
+
       const eventData = { title, time, date };
       const headers = getAuthHeaders();
 
       if (id) {
-        await axios.put(`${backendUrl}/events/${id}`, eventData, { headers });
+        await axiosInstance.put(`${backendUrl}/events/${id}`, eventData, {
+          headers,
+        });
       } else {
-        await axios.post(`${backendUrl}/events`, eventData, { headers });
+        await axiosInstance.post(`${backendUrl}/events`, eventData, {
+          headers,
+        });
       }
-      
+
       refreshEvents();
       onClose();
     } catch (error) {
       console.error("Error saving event:", error);
       // Handle unauthorized access
       if (error.response?.status === 401) {
-        console.error('Unauthorized: Please log in again');
+        console.error("Unauthorized: Please log in again");
       }
     }
   };
 
   const handleDelete = async () => {
     try {
-      const token = localStorage.getItem('token');
-      
+      const token = localStorage.getItem("token");
+
       if (!token) {
-        console.error('No authentication token found');
+        console.error("No authentication token found");
         return;
       }
 
       if (id) {
-        await axios.delete(`${backendUrl}/events/${id}`, {
-          headers: getAuthHeaders()
+        await axiosInstance.delete(`${backendUrl}/events/${id}`, {
+          headers: getAuthHeaders(),
         });
         refreshEvents();
         onClose();
@@ -121,11 +125,11 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
       console.error("Error deleting event:", error);
       // Handle unauthorized access
       if (error.response?.status === 401) {
-        console.error('Unauthorized: Please log in again');
+        console.error("Unauthorized: Please log in again");
       }
     }
   };
-  
+
   return (
     <AnimatePresence>
       <motion.div

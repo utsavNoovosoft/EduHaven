@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { ArrowLeft, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 const backendUrl = import.meta.env.VITE_API_URL;
@@ -13,7 +13,7 @@ function SentRequests({ onBack }) {
   };
 
   useEffect(() => {
-    axios
+    axiosInstance
       .get(`${backendUrl}/friends/sent-requests`, getAuthHeader())
       .then((response) => {
         setSentRequests(response.data);

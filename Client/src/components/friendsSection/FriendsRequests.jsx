@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ function FriendRequests() {
   };
 
   useEffect(() => {
-    axios
+    axiosInstance
       .get(`${backendUrl}/friends/requests`, getAuthHeader())
       .then((res) => {
         setRequests(res.data);
@@ -22,7 +22,7 @@ function FriendRequests() {
   }, []);
 
   const handleAccept = (friendId) => {
-    axios
+    axiosInstance
       .post(`${backendUrl}/friends/accept/${friendId}`, null, getAuthHeader())
       .then((res) => {
         console.log(res.data);
@@ -32,7 +32,7 @@ function FriendRequests() {
   };
 
   const handleReject = (friendId) => {
-    axios
+    axiosInstance
       .post(`${backendUrl}/friends/reject/${friendId}`, null, getAuthHeader())
       .then((res) => {
         console.log(res.data);

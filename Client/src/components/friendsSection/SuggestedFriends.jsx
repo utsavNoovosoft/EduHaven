@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { User, UserPlus, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 const backendUrl = import.meta.env.VITE_API_URL;
@@ -13,7 +13,10 @@ function SuggestedFriends({ onViewSentRequests }) {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdrownRef.current && !dropdrownRef.current.contains(event.target)) {
+      if (
+        dropdrownRef.current &&
+        !dropdrownRef.current.contains(event.target)
+      ) {
         setShowDropdown(false);
       }
     };
@@ -22,7 +25,7 @@ function SuggestedFriends({ onViewSentRequests }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showDropdown]); 
+  }, [showDropdown]);
 
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
@@ -31,7 +34,7 @@ function SuggestedFriends({ onViewSentRequests }) {
 
   const sendRequest = async (friendId) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${backendUrl}/friends/request/${friendId}`,
         null,
         getAuthHeader()
@@ -52,7 +55,7 @@ function SuggestedFriends({ onViewSentRequests }) {
   };
 
   useEffect(() => {
-    axios
+    axiosInstance
       .get(`${backendUrl}/friends/friend-suggestions`, getAuthHeader())
       .then((response) => {
         setSuggestedFriends(response.data);
@@ -94,7 +97,7 @@ function SuggestedFriends({ onViewSentRequests }) {
       </div>
       <div className="space-y-2">
         {limitedFriends
-          .slice() 
+          .slice()
           .reverse()
           .map((user) => (
             <div key={user._id} className=" relative group py-1 bg-slate-400">
