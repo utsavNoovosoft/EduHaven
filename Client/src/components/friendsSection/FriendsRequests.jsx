@@ -1,6 +1,7 @@
 import axiosInstance from "@/utils/axios";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 function FriendRequests() {
@@ -49,23 +50,28 @@ function FriendRequests() {
         {friendRequests.map((user) => (
           <div key={user.id} className="!mt-7">
             <div className="flex items-center">
-              {user.ProfilePicture ? (
-                <img
-                  src={user.ProfilePicture}
-                  className="w-12 h-12 rounded-full"
-                  alt="Profile"
-                />
-              ) : (
-                <div className="p-2.5 bg-ter rounded-full">
-                  <User className="w-7 h-7" />
-                </div>
-              )}
+              <Link to={`/user/${user._id}`}>
+                {user.ProfilePicture ? (
+                  <img
+                    src={user.ProfilePicture}
+                    className="w-12 h-12 rounded-full transition hover:brightness-75 cursor-pointer"
+                    alt="Profile"
+                  />
+                ) : (
+                  <div className="p-2.5 bg-ter rounded-full">
+                    <User className="w-7 h-7" />
+                  </div>
+                )}
+              </Link>
               <div className="ml-4">
-                <h4 className="text-lg font-medium line-clamp-1 txt">
+                <Link
+                  to={`/user/${user._id}`}
+                  className="text-lg font-medium line-clamp-1 txt hover:underline"
+                >
                   {user.FirstName
                     ? `${user.FirstName} ${user.LastName || ""}`
                     : "old-user"}
-                </h4>
+                </Link>
                 <p className="text-sm txt-dim line-clamp-1">{user.Bio}</p>
               </div>
             </div>
