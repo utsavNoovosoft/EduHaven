@@ -1,4 +1,13 @@
+
+import { Button } from "@/components/ui/button"
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+
+function TabNavigation() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
 function TabNavigation({ activeTab, onTabChange }) {
+
   const tabs = [
     { id: "suggested", label: "Suggested" },
     { id: "friendRequests", label: "Friend Requests" },
@@ -23,6 +32,7 @@ function TabNavigation({ activeTab, onTabChange }) {
             {tab.label}
           </button>
         ))}
+
       </div>
     </div>
   );

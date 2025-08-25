@@ -5,7 +5,7 @@ const tieSound = new Audio("/sounds/tie.mp3");
 
 import { useState, useEffect } from "react";
 import { Volume2, VolumeX, RotateCcw, ArrowLeft } from "lucide-react";
-
+import { Button } from "@/components/ui/button";
 // Game logic functions
 const calculateWinner = (squares) => {
   const lines = [
@@ -324,12 +324,13 @@ const handleMove = (i) => {
       <nav className="px-8 pt-4">
         <div className="mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button
+            <Button
+              variant="secondary"
               onClick={() => window.history.back()}
               className="flex items-center gap-2 px-4 py-1 text-[var(--txt-dim)] bg-sec rounded-lg cursor-pointer transition-all duration-200 text-sm font-medium hover:bg-ter "
             >
               <ArrowLeft size={24} />
-            </button>
+            </Button>
             <h1 className="text-2xl font-semibold txt">Tic Tac Toe</h1>
           </div>
 
@@ -337,7 +338,8 @@ const handleMove = (i) => {
             {/* Game Mode Toggle */}
             <div className="flex items-center gap-3">
               <div className="flex bg-[var(--bg-sec)] rounded-[var(--radius)] p-0.5 border border-[rgba(var(--shadow-rgb),0.1)]">
-                <button
+                <Button
+                  variant={gameMode === "computer" ? "primary" : "secondary"}
                   onClick={() => handleModeChange("computer")}
                   className={`px-4 py-2 rounded-[calc(var(--radius)-0.125rem)] border-none cursor-pointer transition-all duration-200 text-sm font-medium ${
                     gameMode === "computer"
@@ -346,8 +348,9 @@ const handleMove = (i) => {
                   }`}
                 >
                   Computer
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant={gameMode === "human" ? "primary" : "secondary"}
                   onClick={() => handleModeChange("human")}
                   className={`px-4 py-2 rounded-[calc(var(--radius)-0.125rem)] cursor-pointer transition-all duration-200 text-sm font-medium ${
                     gameMode === "human"
@@ -356,7 +359,7 @@ const handleMove = (i) => {
                   }`}
                 >
                   Human
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -373,7 +376,8 @@ const handleMove = (i) => {
               </span>
               <div className="flex bg-[var(--bg-sec)] rounded-[var(--radius)] p-0.5 border border-[rgba(var(--shadow-rgb),0.1)]">
                 {["easy", "medium", "hard"].map((diff) => (
-                  <button
+                  <Button
+                    variant={gameMode === "diff" ? "primary" : "secondary"}
                     key={diff}
                     onClick={() => handleDifficultyChange(diff)}
                     className={`px-4 py-2 rounded-[calc(var(--radius)-0.125rem)] border-none cursor-pointer  transition-all duration-200 text-sm font-medium capitalize ${
@@ -383,18 +387,19 @@ const handleMove = (i) => {
                     }`}
                   >
                     {diff.charAt(0).toUpperCase() + diff.slice(1)}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
           </div>
           {/* Sound Toggle */}
-          <button
+          <Button
+            variant="secondary"
             onClick={() => setIsSoundEnabled(!isSoundEnabled)}
             className="p-2 rounded-[var(--radius)] border border-[var(--bg-ter)] bg-transparent text-[var(--txt-dim)] cursor-pointer transition-all duration-200 hover:text-[var(--txt)] hover:bg-[var(--bg-ter)] hover:border-[rgba(var(--shadow-rgb),0.2)] ml-28"
           >
             {isSoundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
-          </button>
+          </Button>
         </div>
       </nav>
 
@@ -410,15 +415,17 @@ const handleMove = (i) => {
             <Board squares={squares} onClick={handleMove} winningLine={line} />
             {/* Game Controls */}
             <div className="flex gap-4 opacity-0 animate-[fadeInUp_0.6s_ease_0.3s_forwards]">
-              <button
+              <Button
+                variant="primary"
                 className="flex items-center gap-2 px-6 py-3 bg-[var(--btn)] text-white border-none rounded-[var(--radius)] cursor-pointer transition-all duration-200 font-medium text-sm hover:bg-[var(--btn-hover)] hover:-translate-y-0.5"
                 onClick={resetGame}
               >
                 <RotateCcw size={16} />
                 New Game
-              </button>
+              </Button>
 
-              <button
+              <Button
+                variant="secondary"
                 className="px-6 py-3 bg-[var(--bg-sec)] text-[var(--txt)] border border-[rgba(var(--shadow-rgb),0.1)] rounded-[var(--radius)] cursor-pointer transition-all duration-200 font-medium text-sm hover:bg-[var(--bg-ter)] hover:border-[rgba(var(--shadow-rgb),0.2)] hover:-translate-y-0.5"
                 onClick={() => {
                   resetGame();
@@ -426,7 +433,7 @@ const handleMove = (i) => {
                 }}
               >
                 Reset Scores
-              </button>
+              </Button>
             </div>
           </div>
           {/* Score Board */}

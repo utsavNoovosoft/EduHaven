@@ -1,6 +1,7 @@
 import axiosInstance from "@/utils/axios";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -76,14 +77,16 @@ function FriendRequests() {
               </div>
             </div>
             <div className="m-4 flex space-x-3">
-              <button
+              <Button
                 onClick={() => handleReject(user._id)}
+                variant="danger"
                 className="flex-1 border border-gray-500/50 hover:bg-red-500 text-red-400 hover:text-white text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition"
               >
                 Decline
-              </button>
+              </Button>
               <button
                 onClick={() => handleAccept(user._id)}
+                variant="primary"
                 className="flex-1 btn hover:bg-purple-600 hover:text-white text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition"
               >
                 Accept

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Cropper from "react-easy-crop";
 import { Dialog } from "@headlessui/react";
 import { getCroppedWebpFile } from "@/utils/imageUtils";
+import { Button } from "@/components/ui/button";
 
 export const CropModal = ({ isOpen, onClose, imageSrc, onCropDone }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -43,18 +44,20 @@ export const CropModal = ({ isOpen, onClose, imageSrc, onCropDone }) => {
               />
             </div>
             <div className="flex justify-end mt-4 gap-2">
-              <button
+              <Button 
+                variant="secondary"
                 onClick={onClose}
                 className="px-4 py-2 bg-gray-300 rounded"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
                 onClick={handleSave}
                 className="px-4 py-2 bg-blue-600 text-white rounded"
               >
                 Save
-              </button>
+              </Button>
             </div>
           </div>
         </div>

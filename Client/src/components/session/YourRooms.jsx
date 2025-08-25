@@ -4,6 +4,7 @@ import axiosInstance from "@/utils/axios";
 import { motion, AnimatePresence } from "framer-motion";
 import RoomCard from "./RoomCard";
 import CreateRoomModal from "./CreateRoomModal";
+import { Button } from "@/components/ui/button";
 
 export default function YourRooms({ myRooms }) {
   const [sessions, setSessions] = useState(myRooms);
@@ -70,13 +71,14 @@ export default function YourRooms({ myRooms }) {
           />
         ))}
 
-        <button
+        <Button
+          variant="secondary"
           onClick={() => setIsModalOpen(true)}
           className="flex flex-col items-center justify-center gap-4 bg-sec px-6 py-2.5 rounded-3xl transition-all aspect-square h-full w-fit border-8 border-[var(--bg-sec)] hover:border-[var(--btn-hover)]"
         >
           <PlusCircle className="size-14" strokeWidth={1} />
           <h3 className="font-semibold">Create Room</h3>
-        </button>
+        </Button>
       </div>
 
       <CreateRoomModal
@@ -107,18 +109,20 @@ export default function YourRooms({ myRooms }) {
                 This action is permanent and cannot be undone.
               </p>
               <div className="flex justify-evenly gap-4">
-                <button
+                <Button
+                  variant="danger"
                   onClick={confirmDelete}
                   className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition w-32"
                 >
                   Yes, Delete
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="secondary"
                   onClick={cancelDelete}
                   className="bg-ter text-[var(--txt)] px-4 py-2 rounded-lg hover:bg-primary font-medium transition w-32"
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             </motion.div>
           </motion.div>

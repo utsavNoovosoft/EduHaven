@@ -238,6 +238,7 @@ const StudyStats = ({ stats: streakStats = {} }) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
+                variant="secondary"
                 className="flex items-center gap-1 hover:bg-gray-700 mt-4 md:mt-0"
                 onClick={() => setIsOpen(!isOpen)}
               >

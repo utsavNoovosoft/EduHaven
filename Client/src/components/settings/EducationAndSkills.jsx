@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
 import { Plus, X, Trash2 } from "lucide-react";
 import UpdateButton from "./UpdateButton";
+import { Button } from "@/components/ui/button";
 const backendUrl = import.meta.env.VITE_API_URL;
 
 function EducationAndSkills() {
@@ -219,14 +220,15 @@ function EducationAndSkills() {
                   disabled={isLoading}
                 />
                 {profileData.University && (
-                  <button
+                  <Button
+                    variant="danger"
                     type="button"
                     onClick={() => handleClearField("University")}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--txt-dim)] hover:text-red-500 transition-colors"
                     disabled={isLoading}
                   >
                     <Trash2 className="w-4 h-4" />
-                  </button>
+                  </Button>
                 )}
               </div>
             </div>
@@ -247,14 +249,15 @@ function EducationAndSkills() {
                   disabled={isLoading}
                 />
                 {profileData.FieldOfStudy && (
-                  <button
+                  <Button
+                    variant="danger"
                     type="button"
                     onClick={() => handleClearField("FieldOfStudy")}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--txt-dim)] hover:text-red-500 transition-colors"
                     disabled={isLoading}
                   >
                     <Trash2 className="w-4 h-4" />
-                  </button>
+                  </Button>
                 )}
               </div>
             </div>
@@ -277,14 +280,15 @@ function EducationAndSkills() {
                   disabled={isLoading}
                 />
                 {profileData.GraduationYear && (
-                  <button
+                  <Button
+                    variant="danger"
                     type="button"
                     onClick={() => handleClearField("GraduationYear")}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--txt-dim)] hover:text-red-500 transition-colors"
                     disabled={isLoading}
                   >
                     <Trash2 className="w-4 h-4" />
-                  </button>
+                  </Button>
                 )}
               </div>
             </div>
@@ -299,7 +303,8 @@ function EducationAndSkills() {
                 Skills
               </label>
               {profileData.OtherDetails.skills && (
-                <button
+                <Button
+                  variant="danger"
                   type="button"
                   onClick={() => handleClearOtherDetails("skills")}
                   className="text-[var(--txt-dim)] hover:text-red-500 transition-colors flex items-center gap-1 text-sm"
@@ -307,7 +312,7 @@ function EducationAndSkills() {
                 >
                   <Trash2 className="w-4 h-4" />
                   Clear all
-                </button>
+                </Button>
               )}
             </div>
 
@@ -318,14 +323,15 @@ function EducationAndSkills() {
                   className="flex items-center gap-2 bg-[var(--bg-sec)] px-3 py-2 rounded-lg"
                 >
                   <span className="text-[var(--txt)] text-sm">{skill}</span>
-                  <button
+                  <Button
+                    variant="danger"
                     type="button"
                     onClick={() => removeSkill(skill)}
                     className="text-[var(--txt-dim)] hover:text-red-500 transition-colors"
                     disabled={isLoading}
                   >
                     <X className="w-4 h-4" />
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
@@ -336,6 +342,13 @@ function EducationAndSkills() {
                 type="text"
                 value={newSkill}
                 onChange={(e) => setNewSkill(e.target.value)}
+
+                placeholder="Add a skill"
+                className="flex-1 px-4 py-2 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all"
+                disabled={isLoading}
+              />
+              <Button
+                variant="primary"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault(); // Prevent form submit
@@ -354,7 +367,7 @@ function EducationAndSkills() {
               >
                 <Plus className="w-4 h-4" />
                 Add
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -367,7 +380,8 @@ function EducationAndSkills() {
                 Interests
               </label>
               {profileData.OtherDetails.interests && (
-                <button
+                <Button
+                  variant="danger"
                   type="button"
                   onClick={() => handleClearOtherDetails("interests")}
                   className="text-[var(--txt-dim)] hover:text-red-500 transition-colors flex items-center gap-1 text-sm"
@@ -375,7 +389,7 @@ function EducationAndSkills() {
                 >
                   <Trash2 className="w-4 h-4" />
                   Clear all
-                </button>
+                </Button>
               )}
             </div>
 
@@ -386,14 +400,15 @@ function EducationAndSkills() {
                   className="flex items-center gap-2 bg-[var(--bg-sec)] px-3 py-2 rounded-lg"
                 >
                   <span className="text-[var(--txt)] text-sm">{interest}</span>
-                  <button
+                  <Button
+                    variant="danger"
                     type="button"
                     onClick={() => removeInterest(interest)}
                     className="text-[var(--txt-dim)] hover:text-red-500 transition-colors"
                     disabled={isLoading}
                   >
                     <X className="w-4 h-4" />
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
@@ -414,7 +429,8 @@ function EducationAndSkills() {
                 className="flex-1 px-4 py-2 bg-[var(--bg-sec)] border border-transparent rounded-lg text-[var(--txt)] placeholder-[var(--txt-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--btn)] focus:border-transparent transition-all"
                 disabled={isLoading}
               />
-              <button
+              <Button
+                variant="primary"
                 type="button"
                 onClick={addInterest}
                 className="px-4 py-2 bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white rounded-lg transition-colors flex items-center gap-2"
@@ -422,7 +438,7 @@ function EducationAndSkills() {
               >
                 <Plus className="w-4 h-4" />
                 Add
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -435,7 +451,8 @@ function EducationAndSkills() {
                 Additional Notes
               </label>
               {profileData.OtherDetails.additionalNotes && (
-                <button
+                <Button
+                  variant="danger"
                   type="button"
                   onClick={() => handleClearOtherDetails("additionalNotes")}
                   className="text-[var(--txt-dim)] hover:text-red-500 transition-colors flex items-center gap-1 text-sm"
@@ -443,7 +460,7 @@ function EducationAndSkills() {
                 >
                   <Trash2 className="w-4 h-4" />
                   Clear
-                </button>
+                </Button>
               )}
             </div>
             <div className="relative">

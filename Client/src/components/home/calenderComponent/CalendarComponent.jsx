@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 const backendUrl = import.meta.env.VITE_API_URL;
 import { format } from "date-fns";
 import CalendarDayTooltip from "./CalendarDayTooltip";
+import { Button } from "@/components/ui/button";
 
 function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -214,18 +215,20 @@ function Calendar() {
               {currentDate.getFullYear()}
             </h2>
             <div className="flex gap-3">
-              <button
+              <Button
+                variant="secondary"
                 onClick={handlePrevMonth}
                 className="p-1.5 rounded-full hover:bg-ter"
               >
                 <ChevronLeft />
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="secondary"
                 onClick={handleNextMonth}
                 className="p-1.5 rounded-full hover:bg-ter"
               >
                 <ChevronRight />
-              </button>
+              </Button>
             </div>
           </div>
           <div className="grid grid-cols-7 gap-[0.4rem]">
@@ -299,13 +302,14 @@ function Calendar() {
         <div className="p-6 rounded-3xl bg-ter flex-1 mt-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold txt">Upcoming Events:</h3>
-            <button
+            <Button
+              variant="primary"
               onClick={() => setShowAllEvents(true)}
               className="text-sm txt-dim hover:txt transition-colors flex items-center gap-1"
             >
               See all
               <ChevronRight className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
           {upcomingEvents.length > 0 ? (
             <motion.ul

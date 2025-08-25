@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import {
   User,
   MessageCircle,
@@ -261,6 +262,34 @@ useEffect(() => {
         )}
 
         {user?._id && (
+
+             <div className="relative inline-block">
+                <Share2
+                     className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
+                     onClick={togglelink}
+                />
+
+               {showLink && (
+                  <div className="absolute top-full mt-2 right-0 flex items-center bg-[#1f2937] rounded-lg px-3 py-2 shadow-md border border-gray-700 w-64 z-20" >
+                          <input
+                               type="text"
+                              value={profilelink}
+                               readOnly
+                               title={profilelink}
+                              className="flex-1 bg-transparent text-sm text-white outline-none truncate"
+                          />
+                      <Button
+                        variant="secondary"
+                        className="ml-2 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-medium text-white transition"
+                          onClick={copylink}
+                       >
+                          Copy
+                       </Button>
+                   </div>
+               )}
+             </div>
+           )}
+
           <div className="relative inline-block">
             <Share2
               className="h-6 w-6 text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
@@ -339,12 +368,13 @@ useEffect(() => {
                     <span className="text-sm text-gray-400 bg-gray-900 px-3 py-1 rounded-full">
                       {friendsList.length} friends
                     </span>
-                    <button
+                    <Button
+                      variant="secondary"
                       onClick={() => setShowPopup(false)}
                       className="text-white hover:text-indigo-200 transition-colors p-1"
                     >
                       <X className="w-5 h-5" />
-                    </button>
+                    </Button>
                   </div>
                 </div>
 
@@ -399,6 +429,24 @@ useEffect(() => {
         </div>
 
         {/* Action Buttons */}
+
+        <div className="flex flex-wrap justify-center gap-4 my-4">
+          <Button variant="secondary" className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
+            <ThumbsUp className="w-5 h-5" />
+            <span>Kudos</span>
+          </Button>
+          <Button variant="secondary" className="bg-white/20 hover:bg-white/30 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1">
+            <MessageCircle className="w-5 h-5" />
+            <span>Chat</span>
+          </Button>
+          {!isCurrentUser && (
+            <Button variant="primary" className="bg-purple-600 hover:bg-purple-700 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
+              <UserPlus className="w-5 h-5" />
+              <span>Add friend</span>
+            </Button>
+          )}
+        </div>
+
         {!isCurrentUser && (
           <div className="flex flex-wrap justify-center gap-4 my-4">
             <button

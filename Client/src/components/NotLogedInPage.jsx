@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+
 function NotLogedInPage() {
 
   return (
@@ -10,12 +12,13 @@ function NotLogedInPage() {
           To access your profile, make friends, join session rooms, view your
           stats and more, please log in to your account.
         </p>
-        <button
+        <Button
+          variant="primary"
           onClick={() => (window.location.href = "/authenticate")}
           className="px-5 py-2.5 btn text-white rounded-lg hover:btn-hover mt-6 transition-colors"
         >
           Login to Eduhaven
-        </button>
+        </Button>
       </div>
     </div>
   );

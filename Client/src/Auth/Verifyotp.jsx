@@ -132,12 +132,13 @@ const OtpInput = () => {
     >
       <div className="relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-md p-8 rounded-3xl shadow-2xl max-w-md w-full transition-colors">
         {/* Back Button */}
-        <button
+        <Button
           onClick={handleGoBack}
+          variant="secondary"
           className="absolute top-6 left-6 p-2 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 transition-colors shadow-lg"
         >
           <ArrowLeft className="w-5 h-5 text-gray-700 dark:text-gray-200" />
-        </button>
+        </Button>
 
         {/* Icon */}
         <div className="text-center mb-6">
@@ -186,6 +187,7 @@ const OtpInput = () => {
         {/* Verify Button */}
         <Button
           onClick={handleVerifyOtp}
+          variant="primary"
           disabled={isVerifying || otp.join("").length !== 6}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed mb-4"
         >

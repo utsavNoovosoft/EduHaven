@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Clock4, Flame, BarChart2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import axios from "axios";
 import axiosInstance from "@/utils/axios";
 
 // Variants for dropdown buttons (using custom variable for hover bg)
@@ -126,12 +128,13 @@ function StatsSummary() {
       >
         <div className="flex flex-col items-center justify-center h-full gap-2">
           <p className="text-red-400 text-sm">{error}</p>
-          <button
+          <Button
+            variant="primary"
             onClick={handleRefresh}
             className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 transition-colors"
           >
             Retry
-          </button>
+          </Button>
         </div>
       </motion.div>
     );
