@@ -186,7 +186,7 @@ const Leaderboard = () => {
                     {getBadge(index)}
                   </div>
                   <Link
-                    to={isCurrentUser ? "/stats" : `/profile/${user.userId}`}
+                    to={isCurrentUser ? "/stats" : `/user/${user.userId}`}
                     className="text-center font-semibold"
                   >
                     {user.username}
