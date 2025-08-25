@@ -288,6 +288,10 @@ const StudyStats = ({ stats: streakStats = {} }) => {
               }}
               itemStyle={{ color: "var(--txt)" }}
               labelStyle={{ color: "var(--btn)" }}
+              formatter={(value, name) => {
+                const num = Number(value);
+                return [Number.isInteger(num) ? num : num.toFixed(2), name];
+              }}
             />
             <Area
               type="monotone"
