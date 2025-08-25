@@ -8,19 +8,18 @@ import {
   Settings2,
   Users,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import ConfirmLogoutModal from "../ConfirmLogoutModal";
 
-const Sidebar = ({ user }) => {
+const Sidebar = ({ user, activeTab, setActiveTab }) => {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const tabs = [
-    { key: "basicInfo", label: "Basic Info", icon: <CircleUser size={24} /> },
+    { key: "basic-info", label: "Basic Info", icon: <CircleUser size={24} /> },
     {
-      key: "educationSkills",
+      key: "edu-skills",
       label: "Education & Skills",
       icon: <GraduationCap size={24} />,
     },
@@ -29,26 +28,11 @@ const Sidebar = ({ user }) => {
     { divider: true },
     { key: "themes", label: "Themes", icon: <Palette size={24} /> },
     {
-      key: "timeLanguage",
+      key: "time-language",
       label: "Time / Language",
       icon: <Settings2 size={24} />,
     },
   ];
-
-  const defaultTab = "basicInfo";
-  const urlTab = searchParams.get("tab");
-  const isValidTab = tabs.some((tab) => tab.key === urlTab);
-  const activeTab = isValidTab ? urlTab : defaultTab;
-
-  useEffect(() => {
-    if (!isValidTab) {
-      setSearchParams({ tab: defaultTab });
-    }
-  }, [isValidTab, setSearchParams]);
-
-  const handleTabChange = (tab) => {
-    setSearchParams({ tab });
-  };
 
   const getTabButtonClass = (tab) =>
     `flex items-center gap-1.5 p-3 rounded-lg text-md w-full text-nowrap ${
@@ -69,7 +53,7 @@ const Sidebar = ({ user }) => {
             ) : (
               <button
                 key={tab.key}
-                onClick={() => handleTabChange(tab.key)}
+                onClick={() => setActiveTab(tab.key)}
                 className={getTabButtonClass(tab.key)}
               >
                 {tab.icon} {tab.label}
