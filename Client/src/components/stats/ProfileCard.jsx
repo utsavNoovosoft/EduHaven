@@ -52,6 +52,23 @@ const ProfileCard = ({ isCurrentUser = false }) => {
       })
       .catch(() => toast.error("Not Copied "));
   };
+  const shareRef = useRef(null);
+
+useEffect(() => {
+  if (showLink) {
+    const handleClickOutside = (event) => {
+      if (shareRef.current && !shareRef.current.contains(event.target)) {
+        setShowLink(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }
+}, [showLink]);
+
 
   const popupRef = useRef(null);
 
@@ -246,7 +263,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
             />
 
             {showLink && (
-              <div className="absolute top-full mt-2 right-0 flex items-center bg-[#1f2937] rounded-lg px-3 py-2 shadow-md border border-gray-700 w-64 z-20">
+              <div  ref={shareRef} className="absolute top-full mt-2 right-0 flex items-center bg-[#1f2937] rounded-lg px-3 py-2 shadow-md border border-gray-700 w-64 z-20">
                 <input
                   type="text"
                   value={profilelink}
