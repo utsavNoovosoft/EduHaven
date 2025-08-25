@@ -8,6 +8,7 @@ import {
   uploadProfilePicture,
   verifyUser,
   deleteAccount,
+  getUserBadges,
   giveKudos,
   refreshAccessToken,
 } from "../Controller/UserController.js";
@@ -69,6 +70,7 @@ router.post("/auth/refresh", refreshAccessToken);
 
 router.post("/kudos", authMiddleware, giveKudos);
 router.get("/user/details", getUserDetails);
+router.get("/user/badges", authMiddleware, getUserBadges);
 router.delete("/user/delete", authMiddleware, deleteAccount);
 router.put("/user/profile", authMiddleware, updateProfile);
 router.post(
