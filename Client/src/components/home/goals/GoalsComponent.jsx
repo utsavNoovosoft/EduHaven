@@ -38,10 +38,6 @@ const GoalsComponent = () => {
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
   const fetchTodos = async () => {
     try {
       const { data } = await axiosInstance.get(
@@ -399,7 +395,13 @@ const GoalsComponent = () => {
           animate="show"
           className="mt-2"
         >
-          {items.length !== 0 && items.map(renderTodoItem)}
+          {items.length === 0 ? (
+            <div className="txt-dim text-center py-4">
+              No {title.toLowerCase()} available
+            </div>
+          ) : (
+            items.map(renderTodoItem)
+          )}
         </motion.div>
       )}
     </div>
@@ -433,26 +435,29 @@ const GoalsComponent = () => {
 
       {/* Tasks List Section */}
       <div className="w-full max-h-[17.5rem] overflow-y-auto pt-2 px-2">
-        {renderSection(
-          "Daily Habit",
-          dailyHabits,
-          "dailyHabits",
-          <Repeat className="h-4 w-4 text-blue-500" />
-        )}
+        {dailyHabits.length !== 0 &&
+          renderSection(
+            "Daily Habit",
+            dailyHabits,
+            "dailyHabits",
+            <Repeat className="h-4 w-4 text-blue-500" />
+          )}
 
-        {renderSection(
-          "Tasks",
-          otherGoals,
-          "otherGoals",
-          <Clock className="h-4 w-4 text-purple-500" />
-        )}
+        {otherGoals.length !== 0 &&
+          renderSection(
+            "Tasks",
+            otherGoals,
+            "otherGoals",
+            <Clock className="h-4 w-4 text-purple-500" />
+          )}
 
-        {renderSection(
-          "Completed",
-          closedGoals,
-          "closedGoals",
-          <Check className="h-4 w-4 text-green-500" />
-        )}
+        {closedGoals.length !== 0 &&
+          renderSection(
+            "Completed",
+            closedGoals,
+            "closedGoals",
+            <Check className="h-4 w-4 text-green-500" />
+          )}
       </div>
 
       <DeadlinePickerModal
