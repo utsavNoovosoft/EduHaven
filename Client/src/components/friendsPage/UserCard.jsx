@@ -1,6 +1,7 @@
 import { UserPlus } from "lucide-react";
 import { useState } from "react";
-import DefaultProfilePic from "../../../public/profilePic.avif"
+import DefaultProfilePic from "../../../public/profilePic.avif";
+import { Link } from "react-router-dom";
 
 function UserCard({
   user,
@@ -16,15 +17,28 @@ function UserCard({
   return (
     <div className="bg-[var(--bg-ter)] py-8 px-4 rounded-xl shadow-md">
       <div className="flex flex-col items-center justify-center">
-        <img
-          src={ user.ProfilePicture || DefaultProfilePic}
-           onError={(e) => (e.target.src = DefaultProfilePic)} 
-          alt="Profile"
-          className="w-24 object-cover aspect-square border rounded-full"
-        />
+        <Link to={`/user/${user._id}`}>
+          <img
+            src={user.ProfilePicture || DefaultProfilePic}
+            onError={(e) => (e.target.src = DefaultProfilePic)}
+            alt="Profile"
+            className="w-24 object-cover aspect-square border rounded-full transition hover:brightness-75 cursor-pointer"
+          />
+        </Link>
         <div className="flex flex-col items-center justify-center px-2 gap-2 mt-2">
-          <h4 className="text-2xl font-semibold">{`${user.FirstName} ${user.LastName || ""}`}</h4>
-          <p className={`text-sm text-gray-500 ${isExpanded? "":"line-clamp-3"}`}>{user.Bio}</p>
+          <Link
+            to={`/user/${user._id}`}
+            className="text-2xl font-semibold hover:underline"
+          >
+            {`${user.FirstName} ${user.LastName || ""}`}
+          </Link>
+          <p
+            className={`text-sm text-gray-500 ${
+              isExpanded ? "" : "line-clamp-3"
+            }`}
+          >
+            {user.Bio}
+          </p>
 
           <div className="mt-2">
             {user.OtherDetails?.interests && (
