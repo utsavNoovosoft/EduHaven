@@ -1,6 +1,7 @@
 import { UserPlus } from "lucide-react";
 import { useState } from "react";
-import DefaultProfilePic from "../../assets/profilePic.avif"
+import DefaultProfilePic from "../../../public/profilePic.avif";
+import { Link } from "react-router-dom";
 
 function UserCard({
   user,
@@ -14,29 +15,40 @@ function UserCard({
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="bg-[var(--bg-ter)] py-8 px-4 rounded-xl shadow-md">
-      <div className="flex flex-col items-center justify-center">
+    <div className="bg-sec p-6 rounded-3xl flex-1 basis-[250px] max-w-sm">
+      <Link
+        to={`/user/${user._id}`}
+        className="flex flex-col items-center justify-center hover:brightness-90 transition"
+      >
         <img
-          src={ user.ProfilePicture || DefaultProfilePic}
-           onError={(e) => (e.target.src = DefaultProfilePic)} 
+          src={user.ProfilePicture || DefaultProfilePic}
+          onError={(e) => (e.target.src = DefaultProfilePic)}
           alt="Profile"
-          className="w-24 object-cover aspect-square border rounded-full"
+          className="w-24 object-cover aspect-square rounded-full cursor-pointer"
         />
         <div className="flex flex-col items-center justify-center px-2 gap-2 mt-2">
-          <h4 className="text-2xl font-semibold">{`${user.FirstName} ${user.LastName || ""}`}</h4>
-          <p className={`text-sm text-gray-500 ${isExpanded? "":"line-clamp-3"}`}>{user.Bio}</p>
+          <div className="text-2xl">
+            {`${user.FirstName} ${user.LastName || ""}`}
+          </div>
+          <p
+            className={`text-sm text-gray-500 ${
+              isExpanded ? "" : "line-clamp-3"
+            }`}
+          >
+            {user.Bio}
+          </p>
 
           <div className="mt-2">
             {user.OtherDetails?.interests && (
               <span className="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded-full inline-block">
-                {user.OtherDetails.interests  }
+                {user.OtherDetails.interests}
               </span>
-            ) }
+            )}
           </div>
         </div>
-      </div>
+      </Link>
 
-      <div className="mt-3">
+      <div>
         {selectedTab === "suggested" && !user.requestSent && (
           <button
             onClick={() => onSendRequest(user._id)}

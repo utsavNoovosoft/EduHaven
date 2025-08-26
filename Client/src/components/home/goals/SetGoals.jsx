@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import Calendar from "react-calendar";
 import { Plus } from "lucide-react";
 import "react-calendar/dist/Calendar.css";
@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import styles from "./SetGoals.module.css";
 
-const Setgoals = ({ onGoalCreated}) => {
+const Setgoals = ({ onGoalCreated }) => {
   const [title, setTitle] = useState("");
   const [deadline, setDeadline] = useState(null);
   const [time, setTime] = useState("21:00");
@@ -20,12 +20,6 @@ const Setgoals = ({ onGoalCreated}) => {
     const format = localStorage.getItem("clock-format");
     setIs24(format === "24-hour");
   }, []);
-
-  const getAuthHeader = () => {
-    const token = localStorage.getItem("token");
-    return { headers: { Authorization: `Bearer ${token}` } };
-  };
-  const backendUrl = import.meta.env.VITE_API_URL;
 
   const handleCreate = async () => {
     if (!title.trim()) {
@@ -48,11 +42,7 @@ const Setgoals = ({ onGoalCreated}) => {
         timePreference: time,
       };
 
-      const { data } = await axios.post(
-        `${backendUrl}/todo`,
-        taskData,
-        getAuthHeader()
-      );
+      const { data } = await axiosInstance.post(`/todo`, taskData);
 
       setTitle("");
       setDeadline(null);
@@ -92,19 +82,19 @@ const Setgoals = ({ onGoalCreated}) => {
           autoFocus
           className="w-full bg-transparent border-b border-txt-dim txt-dim py-2 px-2 focus:outline-none"
         />
-          {title.trim() !== "" && (
-            <motion.button
-              whileTap={{ scale: 0.95, transition: { duration: 0.1 } }}
-              whileHover={{ scale: 1.05 }}
-              animate={{ scale: 1, transition: { duration: 0 } }}
-              onClick={handleCreate}
-              className={`add-goal-btn ml-2 font-bold shadow focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all ${styles["add-goal-btn"]}`}
-              aria-label="Add Goal"
-              type="button"
-            >
-              Add
-            </motion.button>
-          )}
+        {title.trim() !== "" && (
+          <motion.button
+            whileTap={{ scale: 0.95, transition: { duration: 0.1 } }}
+            whileHover={{ scale: 1.05 }}
+            animate={{ scale: 1, transition: { duration: 0 } }}
+            onClick={handleCreate}
+            className={`add-goal-btn ml-2 font-bold shadow focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all ${styles["add-goal-btn"]}`}
+            aria-label="Add Goal"
+            type="button"
+          >
+            Add
+          </motion.button>
+        )}
       </div>
 
       {title.trim() !== "" && (

@@ -1,9 +1,8 @@
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { Edit, Trash2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-const backendUrl = import.meta.env.VITE_API_URL;
 
 const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
   const [editingEvent, setEditingEvent] = useState(null);
@@ -16,10 +15,10 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
     if (eventsContainerRef.current) {
       const today = new Date();
       const todayElement = eventsContainerRef.current.querySelector(
-        `[data-date="${today.toISOString().split('T')[0]}"]`
+        `[data-date="${today.toISOString().split("T")[0]}"]`
       );
       if (todayElement) {
-        todayElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        todayElement.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
   }, [events]);
@@ -28,7 +27,7 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
     setEditingEvent(event._id);
     setEditTitle(event.title);
     setEditTime(event.time);
-    setEditDate(event.date.split('T')[0]);
+    setEditDate(event.date.split("T")[0]);
   };
 
   const handleSave = async () => {
@@ -38,19 +37,13 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
     }
 
     try {
-      await axios.put(
-        `${backendUrl}/events/${editingEvent}`,
+      await axiosInstance.put(
+        `/events/${editingEvent}`,
         {
           title: editTitle,
           time: editTime,
           date: editDate,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
       );
       setEditingEvent(null);
       refreshEvents();
@@ -61,12 +54,7 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
 
   const handleDelete = async (eventId) => {
     try {
-      await axios.delete(`${backendUrl}/events/${eventId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      });
+      await axiosInstance.delete(`/events/${eventId}`);
       refreshEvents();
     } catch (error) {
       console.error("Error deleting event:", error);
@@ -77,24 +65,24 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
     setEditingEvent(null);
   };
 
-  const sortedEvents = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const sortedEvents = [...events].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
 
-  const convertTo12HourFormat = (timeString)=>{
+  const convertTo12HourFormat = (timeString) => {
+    const [hourString, minutes] = timeString.split(":");
 
-    const [hourString, minutes] = timeString.split(":"); 
-    
-    let hour = parseInt(hourString) ;; 
-    
-    const ampm = hour >=12 ? "PM" : "AM" ; 
-    if(hour === 0 ){
-      hour = 12 ;  //12 AM 
-    }else if (hour > 12){
-      hour = hour -  12  ; 
+    let hour = parseInt(hourString);
+
+    const ampm = hour >= 12 ? "PM" : "AM";
+    if (hour === 0) {
+      hour = 12; //12 AM
+    } else if (hour > 12) {
+      hour = hour - 12;
     }
 
-    return `${hour}:${minutes} ${ampm}` ; 
-
-  }
+    return `${hour}:${minutes} ${ampm}`;
+  };
   return (
     <AnimatePresence>
       <motion.div
@@ -112,35 +100,31 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
         >
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold txt">All Events</h2>
-            <button
-              onClick={onClose}
-              className="txt-dim hover:txt transition"
-            >
+            <button onClick={onClose} className="txt-dim hover:txt transition">
               <X size={24} />
             </button>
           </div>
 
-          <div 
+          <div
             ref={eventsContainerRef}
             className="max-h-[60vh] overflow-y-auto space-y-3"
           >
             {sortedEvents.length > 0 ? (
               sortedEvents.map((event) => {
-
-                
-                const eventTime =  convertTo12HourFormat(event.time);
+                const eventTime = convertTo12HourFormat(event.time);
                 const eventDate = new Date(event.date);
-                
-                const isToday = eventDate.toDateString() === new Date().toDateString();
-                
+
+                const isToday =
+                  eventDate.toDateString() === new Date().toDateString();
+
                 return (
                   <div
                     key={event._id}
-                    data-date={event.date.split('T')[0]}
+                    data-date={event.date.split("T")[0]}
                     className={`p-3 rounded-lg border ${
-                      isToday 
-                        ? 'border-purple-500 bg-purple-500/10' 
-                        : 'border-[var(--bg-ter)]'
+                      isToday
+                        ? "border-purple-500 bg-purple-500/10"
+                        : "border-[var(--bg-ter)]"
                     }`}
                   >
                     {editingEvent === event._id ? (
@@ -197,7 +181,9 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
                           <div className="text-sm txt-dim mb-1">
                             {eventTime}
                           </div>
-                          <span className="block txt font-medium">{event.title}</span>
+                          <span className="block txt font-medium">
+                            {event.title}
+                          </span>
                         </div>
                         <div className="flex gap-1">
                           <button

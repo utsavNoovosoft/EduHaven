@@ -4,6 +4,7 @@ import {
   startOfWeek, endOfWeek,
   startOfMonth, endOfMonth 
 } from 'date-fns';
+import { checkAndAwardKickstarterBadge } from "../utils/badgeSystem.js";
 
 export const getAllTodos = async (req, res) => {
   try {
@@ -96,6 +97,105 @@ export const getTodoById = async (req, res) => {
   }
 };
 
+export const getTodoByUserId = async (req, res) => {
+   try {
+     if (!req.user || !req.user.id) {
+       return res
+         .status(401)
+         .json({ success: false, error: "Unauthorized. User ID missing." });
+     }
+
+     const view = req.query.view || "all";
+     const now = new Date();
+     let startDate, endDate;
+
+     if (view === "daily") {
+       startDate = startOfDay(now);
+       endDate = endOfDay(now);
+     } else if (view === "weekly") {
+       startDate = startOfWeek(now, { weekStartsOn: 1 });
+       endDate = endOfWeek(now, { weekStartsOn: 1 });
+     } else if (view === "monthly") {
+       startDate = startOfMonth(now);
+       endDate = endOfMonth(now);
+     }
+
+     const query = { user: req.id };
+     if (view !== "all") {
+       query.createdAt = { $gte: startDate, $lte: endDate };
+     }
+
+     const tasks = await Task.find(query).sort({ createdAt: -1 });
+
+     // ===== Group for chart =====
+     const grouped = {};
+     tasks.forEach((task) => {
+       const createdAt = new Date(task.createdAt);
+       let key;
+
+       if (view === "daily") {
+         key = createdAt.toLocaleDateString("en-US", { weekday: "short" });
+       } else if (view === "weekly") {
+         key = `Week ${Math.ceil(createdAt.getDate() / 7)}`;
+       } else if (view === "monthly") {
+         key = createdAt.toLocaleDateString("en-US", { month: "short" });
+       }
+
+       if (!grouped[key])
+         grouped[key] = { name: key, completed: 0, pending: 0 };
+       if (task.completed) grouped[key].completed += 1;
+       else grouped[key].pending += 1;
+     });
+
+     const finalData = [];
+     if (view === "daily") {
+       const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+       days.forEach((day) => {
+         finalData.push(
+           grouped[day] || { name: day, completed: 0, pending: 0 }
+         );
+       });
+     } else if (view === "weekly") {
+       for (let i = 1; i <= 4; i++) {
+         const label = `Week ${i}`;
+         finalData.push(
+           grouped[label] || { name: label, completed: 0, pending: 0 }
+         );
+       }
+     } else if (view === "monthly") {
+       const months = [
+         "Jan",
+         "Feb",
+         "Mar",
+         "Apr",
+         "May",
+         "Jun",
+         "Jul",
+         "Aug",
+         "Sep",
+         "Oct",
+         "Nov",
+         "Dec",
+       ];
+       months.forEach((month) => {
+         finalData.push(
+           grouped[month] || { name: month, completed: 0, pending: 0 }
+         );
+       });
+     }
+
+     res.status(200).json({
+       success: true,
+       chartData: finalData,
+       total: tasks.length,
+       completed: tasks.filter((t) => t.completed).length,
+     });
+   } catch (error) {
+     console.error("Error in getAllTodos:", error);
+     res.status(500).json({ success: false, error: error.message });
+   }
+};
+
 export const createTodo = async (req, res) => {
   try {
     const { title, dueDate, deadline, repeatEnabled, repeatType, reminderTime, timePreference } = req.body;
@@ -162,6 +262,20 @@ export const updateTodo = async (req, res) => {
     if (!updatedTask) {
       return res.status(404).json({ success: false, error: "Task not found" });
     }
+
+    // Check and award Kickstarter badge if task was completed
+    if (updateFields.completed === true || updateFields.status === 'closed') {
+      try {
+        const badgeResult = await checkAndAwardKickstarterBadge(updatedTask.user);
+        if (badgeResult.success) {
+          console.log(`Kickstarter badge awarded to user ${updatedTask.user}`);
+        }
+      } catch (badgeError) {
+        console.error("Error checking Kickstarter badge:", badgeError);
+        // Continue even if badge check fails
+      }
+    }
+
     res.status(200).json({ success: true, data: updatedTask });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
