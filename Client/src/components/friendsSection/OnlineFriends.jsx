@@ -11,6 +11,13 @@ function OnlineFriends() {
 
   const rows = [visibleUsers.slice(0, 4), visibleUsers.slice(4, 8)];
 
+  const truncate = (str) => {
+    if (str.length > 12) {
+      return str.slice(0, 10) + '...';
+    }
+    return str;
+  }
+
   return (
     <section>
       {onlineUsers.length > 0 && (
@@ -26,7 +33,7 @@ function OnlineFriends() {
                   return (
                     <div
                       key={user.id}
-                      className="flex flex-col items-center mb-3 "
+                      className="flex flex-col items-center mb-3 w-20 overflow-hidden "
                     >
                       <div className="bg-sec rounded-full overflow-hidden size-14 flex items-center justify-center">
                         {showExtra ? (
@@ -39,7 +46,7 @@ function OnlineFriends() {
                       </div>
                       {!showExtra && (
                         <h4 className="mt-2 text-sm font-medium text-center txt line-clamp-1">
-                          {user.name.split(" ")[0]}
+                          {truncate(user.name.split(" ")[0])}
                         </h4>
                       )}
                     </div>
