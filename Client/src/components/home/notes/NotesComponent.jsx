@@ -7,7 +7,6 @@ import {
   Plus,
   RefreshCcwDot,
 } from "lucide-react";
-const backendUrl = import.meta.env.VITE_API_URL;
 
 function NotesComponent() {
   const [notes, setNotes] = useState([]);
@@ -23,11 +22,6 @@ function NotesComponent() {
   const [scrollHeight, setScrollHeight] = useState(0);
   const textAreaRef = useRef(null);
 
-  const getAuthHeader = () => {
-    const token = localStorage.getItem("token");
-    return { headers: { Authorization: `Bearer ${token}` } };
-  };
-
   useEffect(() => {
     fetchNotes();
 
@@ -42,10 +36,7 @@ function NotesComponent() {
 
   const fetchNotes = async () => {
     try {
-      const response = await axiosInstance.get(
-        `${backendUrl}/note`,
-        getAuthHeader()
-      );
+      const response = await axiosInstance.get(`/note`);
       if (response.data.success) {
         if (!response.data.data || response.data.data.length === 0) {
           addNewPage(); // adding new is necessary cause we get err in posting data to db.
@@ -99,14 +90,11 @@ function NotesComponent() {
     }
 
     try {
-      const response = await axiosInstance.post(
-        `${backendUrl}/note`,
+      const response = await axiosInstance.post(`/note`,
         {
           title: title,
           content: content,
-        },
-        getAuthHeader()
-      );
+        });
 
       if (response.data.success) {
         fetchNotes();
@@ -122,10 +110,7 @@ function NotesComponent() {
 
   const handleDeleteNote = async (id) => {
     try {
-      const response = await axiosInstance.delete(
-        `${backendUrl}/note/${id}`,
-        getAuthHeader()
-      );
+      const response = await axiosInstance.delete(`/note/${id}`);
       if (response.data.success) {
         fetchNotes();
       }
@@ -174,11 +159,7 @@ function NotesComponent() {
       contentTimeoutRef.current = setTimeout(async () => {
         try {
           if (noteId) {
-            await axiosInstance.put(
-              `${backendUrl}/note/${noteId}`,
-              { content: contentToSave },
-              getAuthHeader()
-            );
+            await axiosInstance.put(`/note/${noteId}`,{ content: contentToSave });
           }
           handleSync(notes[noteIndex].title, updatedText); // sets synced = true
         } catch (err) {
@@ -226,11 +207,7 @@ function NotesComponent() {
       titleTimeoutRef.current = setTimeout(async () => {
         try {
           if (noteId) {
-            await axiosInstance.put(
-              `${backendUrl}/note/${noteId}`,
-              { title: titleToSave },
-              getAuthHeader()
-            );
+            await axiosInstance.put(`/note/${noteId}`,{ title: titleToSave });
           }
           handleSync(updatedTitle, notes[noteIndex].content); // sets synced = true after delay
         } catch (err) {

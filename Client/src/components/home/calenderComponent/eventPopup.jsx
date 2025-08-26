@@ -3,7 +3,6 @@ import axiosInstance from "@/utils/axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { toast } from "react-toastify";
-const backendUrl = import.meta.env.VITE_API_URL;
 
 const EventPopup = ({ date, onClose, refreshEvents }) => {
   const [event, setEvent] = useState(null);
@@ -11,30 +10,10 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
   const [time, setTime] = useState("08:00");
   const [id, setId] = useState("");
 
-  // Get authentication token from localStorage
-  const getAuthHeaders = () => {
-    const token = localStorage.getItem("token");
-    return {
-      Authorization: `Bearer ${token}`,
-    };
-  };
-
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          console.error("No authentication token found");
-          return;
-        }
-
-        const response = await axiosInstance.get(
-          `${backendUrl}/events/by-date?date=${date}`,
-          {
-            headers: getAuthHeaders(),
-          }
-        );
+        const response = await axiosInstance.get(`/events/by-date?date=${date}`);
 
         const eventData = response.data.data[0]; // Assuming one event per date
         if (eventData) {
@@ -73,24 +52,12 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
     }
 
     try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
-
       const eventData = { title, time, date };
-      const headers = getAuthHeaders();
 
       if (id) {
-        await axiosInstance.put(`${backendUrl}/events/${id}`, eventData, {
-          headers,
-        });
+        await axiosInstance.put(`/events/${id}`, eventData);
       } else {
-        await axiosInstance.post(`${backendUrl}/events`, eventData, {
-          headers,
-        });
+        await axiosInstance.post(`/events`, eventData);
       }
 
       refreshEvents();
@@ -106,17 +73,8 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
 
   const handleDelete = async () => {
     try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
-
       if (id) {
-        await axiosInstance.delete(`${backendUrl}/events/${id}`, {
-          headers: getAuthHeaders(),
-        });
+        await axiosInstance.delete(`/events/${id}`);
         refreshEvents();
         onClose();
       }

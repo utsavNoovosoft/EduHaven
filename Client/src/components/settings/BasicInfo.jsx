@@ -8,8 +8,6 @@ import UpdateButton from "./UpdateButton";
 import { CropModal } from "../CropModal";
 import { getCroppedWebpFile } from "@/utils/imageUtils";
 
-const backendUrl = import.meta.env.VITE_API_URL;
-
 export default function BasicInfo() {
   const { user, setUser, fetchUserDetails } = useUserProfile();
   const [profileData, setProfileData] = useState({
@@ -116,16 +114,7 @@ export default function BasicInfo() {
     formData.append("profilePicture", profilePic);
 
     try {
-      const response = await axiosInstance.post(
-        `${backendUrl}/user/upload-profile-picture`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const response = await axiosInstance.post(`/user/upload-profile-picture`, formData);
 
       return response.data.profilePictureUrl;
     } catch (error) {
@@ -165,16 +154,7 @@ export default function BasicInfo() {
         ProfilePicture: profilePictureUrl,
       };
 
-      const response = await axiosInstance.put(
-        `${backendUrl}/user/profile`,
-        updateData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axiosInstance.put(`/user/profile`, updateData);
 
       toast.success("Profile updated successfully");
       setProfileData(response.data);
@@ -259,7 +239,10 @@ export default function BasicInfo() {
         {/* Personal Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-6 py-2">
           <div className="space-y-2">
-            <label htmlFor="first-name" className="block text-md font-medium text-[var(--txt-dim)]">
+            <label
+              htmlFor="first-name"
+              className="block text-md font-medium text-[var(--txt-dim)]"
+            >
               First Name *
             </label>
             <input
@@ -276,7 +259,10 @@ export default function BasicInfo() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="last-name" className="block text-md font-medium text-[var(--txt-dim)]">
+            <label
+              htmlFor="last-name"
+              className="block text-md font-medium text-[var(--txt-dim)]"
+            >
               Last Name *
             </label>
             <input
@@ -295,7 +281,10 @@ export default function BasicInfo() {
 
         {/* Bio Section */}
         <div className="space-y-2 p-6 py-2">
-          <label htmlFor="bio" className="block text-md font-medium text-[var(--txt-dim)]">
+          <label
+            htmlFor="bio"
+            className="block text-md font-medium text-[var(--txt-dim)]"
+          >
             Bio
           </label>
           <div className="relative">
@@ -329,7 +318,10 @@ export default function BasicInfo() {
         {/* Location & Demographics */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 py-2">
           <div className="space-y-2">
-            <label htmlFor="country" className="block text-md font-medium text-[var(--txt-dim)]">
+            <label
+              htmlFor="country"
+              className="block text-md font-medium text-[var(--txt-dim)]"
+            >
               Country
             </label>
             <div className="relative">
@@ -357,7 +349,10 @@ export default function BasicInfo() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="gender" className="block text-md font-medium text-[var(--txt-dim)]">
+            <label
+              htmlFor="gender"
+              className="block text-md font-medium text-[var(--txt-dim)]"
+            >
               Gender
             </label>
             <div className="relative">

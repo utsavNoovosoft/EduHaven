@@ -5,7 +5,6 @@ import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
 import { Plus, X, Trash2 } from "lucide-react";
 import UpdateButton from "./UpdateButton";
-const backendUrl = import.meta.env.VITE_API_URL;
 
 function EducationAndSkills() {
   const { user, setUser, fetchUserDetails } = useUserProfile();
@@ -170,16 +169,7 @@ function EducationAndSkills() {
         ...profileData,
       };
 
-      const response = await axiosInstance.put(
-        `${backendUrl}/user/profile`,
-        updateData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axiosInstance.put(`/user/profile`, updateData);
 
       toast.success("Education & Skills updated successfully");
       setUser(response.data);
@@ -204,7 +194,10 @@ function EducationAndSkills() {
         <div className="">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-6 py-2">
             <div className="space-y-2">
-              <label htmlFor="university" className="block text-md font-medium text-[var(--txt-dim)]">
+              <label
+                htmlFor="university"
+                className="block text-md font-medium text-[var(--txt-dim)]"
+              >
                 University/Institution
               </label>
               <div className="relative">
@@ -232,7 +225,10 @@ function EducationAndSkills() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="field-of-study" className="block text-md font-medium text-[var(--txt-dim)]">
+              <label
+                htmlFor="field-of-study"
+                className="block text-md font-medium text-[var(--txt-dim)]"
+              >
                 Field of Study
               </label>
               <div className="relative">
@@ -260,7 +256,10 @@ function EducationAndSkills() {
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <label htmlFor="graduation" className="block text-md font-medium text-[var(--txt-dim)]">
+              <label
+                htmlFor="graduation"
+                className="block text-md font-medium text-[var(--txt-dim)]"
+              >
                 Graduation Year
               </label>
               <div className="relative">
@@ -295,7 +294,10 @@ function EducationAndSkills() {
         <div className="px-6 py-2">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label htmlFor="skills" className="block text-md font-medium text-[var(--txt-dim)]">
+              <label
+                htmlFor="skills"
+                className="block text-md font-medium text-[var(--txt-dim)]"
+              >
                 Skills
               </label>
               {profileData.OtherDetails.skills && (
@@ -363,7 +365,10 @@ function EducationAndSkills() {
         <div className="px-6 py-2">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label htmlFor="interests" className="block text-md font-medium text-[var(--txt-dim)]">
+              <label
+                htmlFor="interests"
+                className="block text-md font-medium text-[var(--txt-dim)]"
+              >
                 Interests
               </label>
               {profileData.OtherDetails.interests && (
@@ -431,7 +436,10 @@ function EducationAndSkills() {
         <div className="px-6 py-2">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label htmlFor="notes" className="block text-md font-medium text-[var(--txt-dim)]">
+              <label
+                htmlFor="notes"
+                className="block text-md font-medium text-[var(--txt-dim)]"
+              >
                 Additional Notes
               </label>
               {profileData.OtherDetails.additionalNotes && (

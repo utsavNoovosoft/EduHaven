@@ -2,19 +2,13 @@ import axiosInstance from "@/utils/axios";
 import { User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-const backendUrl = import.meta.env.VITE_API_URL;
 
 function FriendRequests() {
   const [friendRequests, setRequests] = useState([]);
 
-  const getAuthHeader = () => {
-    const token = localStorage.getItem("token");
-    return { headers: { Authorization: `Bearer ${token}` } };
-  };
-
   useEffect(() => {
     axiosInstance
-      .get(`${backendUrl}/friends/requests`, getAuthHeader())
+      .get("/friends/requests")
       .then((res) => {
         setRequests(res.data);
       })
@@ -23,7 +17,7 @@ function FriendRequests() {
 
   const handleAccept = (friendId) => {
     axiosInstance
-      .post(`${backendUrl}/friends/accept/${friendId}`, null, getAuthHeader())
+      .post(`/friends/accept/${friendId}`, null)
       .then((res) => {
         console.log(res.data);
         setRequests((prev) => prev.filter((user) => user._id !== friendId));
@@ -33,7 +27,7 @@ function FriendRequests() {
 
   const handleReject = (friendId) => {
     axiosInstance
-      .post(`${backendUrl}/friends/reject/${friendId}`, null, getAuthHeader())
+      .post(`/friends/reject/${friendId}`, null)
       .then((res) => {
         console.log(res.data);
         setRequests((prev) => prev.filter((user) => user._id !== friendId));

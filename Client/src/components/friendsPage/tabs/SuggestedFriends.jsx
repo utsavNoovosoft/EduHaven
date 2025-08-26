@@ -3,13 +3,6 @@ import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 import UserCard from "../UserCard";
 
-const backendUrl = import.meta.env.VITE_API_URL;
-
-const getAuthHeader = () => {
-  const token = localStorage.getItem("token");
-  return { headers: { Authorization: `Bearer ${token}` } };
-};
-
 export default function SuggestedFriends() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -17,10 +10,7 @@ export default function SuggestedFriends() {
   const fetchSuggestions = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get(
-        `${backendUrl}/friends/friend-suggestions`,
-        getAuthHeader()
-      );
+      const res = await axiosInstance.get("/friends/friend-suggestions");
       setUsers(res.data || []);
     } catch (err) {
       console.error("Fetch suggestions error:", err);
@@ -32,11 +22,7 @@ export default function SuggestedFriends() {
 
   const sendRequest = async (friendId) => {
     try {
-      await axiosInstance.post(
-        `${backendUrl}/friends/request/${friendId}`,
-        null,
-        getAuthHeader()
-      );
+      await axiosInstance.post(`/friends/request/${friendId}`, null);
       // mark locally
       setUsers((prev) =>
         prev.map((u) => (u._id === friendId ? { ...u, requestSent: true } : u))
@@ -52,9 +38,11 @@ export default function SuggestedFriends() {
     fetchSuggestions();
   }, []);
 
-  if (loading) return <div className="text-center text-gray-500">Loading...</div>;
+  if (loading)
+    return <div className="text-center text-gray-500">Loading...</div>;
 
-  if (!users.length) return <div className="text-center text-gray-500">No suggestions</div>;
+  if (!users.length)
+    return <div className="text-center text-gray-500">No suggestions</div>;
 
   return (
     <div className="flex flex-wrap gap-3 2xl:gap-4">

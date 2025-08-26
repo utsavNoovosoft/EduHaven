@@ -13,7 +13,6 @@ import {
 import Setgoals from "./SetGoals.jsx";
 import DeadlinePickerModal from "./DeadlinePickerModal.jsx";
 import { motion } from "framer-motion";
-const backendUrl = import.meta.env.VITE_API_URL;
 
 const GoalsComponent = () => {
   const [todos, setTodos] = useState([]);
@@ -31,21 +30,13 @@ const GoalsComponent = () => {
     currentDeadline: null,
   });
 
-  const getAuthHeader = () => {
-    const token = localStorage.getItem("token");
-    return { headers: { Authorization: `Bearer ${token}` } };
-  };
-
   useEffect(() => {
     fetchTodos();
   }, []);
 
   const fetchTodos = async () => {
     try {
-      const { data } = await axiosInstance.get(
-        `${backendUrl}/todo`,
-        getAuthHeader()
-      );
+      const { data } = await axiosInstance.get(`/todo`);
       console.log("Fetched todos:", data.data);
       setTodos(data.data); // ✅ Will now be the actual Task documents
     } catch (error) {
@@ -75,7 +66,7 @@ const GoalsComponent = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`${backendUrl}/todo/${id}`, getAuthHeader());
+      await axiosInstance.delete(`/todo/${id}`);
       setTodos(todos.filter((todo) => todo._id !== id));
     } catch (error) {
       console.error("Error deleting todo:", error.message);
@@ -91,11 +82,7 @@ const GoalsComponent = () => {
         status: !todo.completed ? "closed" : "open",
       };
 
-      await axiosInstance.put(
-        `${backendUrl}/todo/${id}`,
-        updatedTodo,
-        getAuthHeader()
-      );
+      await axiosInstance.put(`/todo/${id}`, updatedTodo);
       setTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)));
     } catch (error) {
       console.error("Error toggling todo:", error.message);
@@ -107,11 +94,7 @@ const GoalsComponent = () => {
       const todo = todos.find((t) => t._id === id);
       const updatedTodo = { ...todo, repeatEnabled: !todo.repeatEnabled };
 
-      await axiosInstance.put(
-        `${backendUrl}/todo/${id}`,
-        updatedTodo,
-        getAuthHeader()
-      );
+      await axiosInstance.put(`/todo/${id}`, updatedTodo);
       setTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)));
     } catch (error) {
       console.error("Error toggling repeat:", error.message);
@@ -127,11 +110,7 @@ const GoalsComponent = () => {
       const todo = todos.find((t) => t._id === editingId);
       const updatedTodo = { ...todo, title: editedTitle };
 
-      await axiosInstance.put(
-        `${backendUrl}/todo/${editingId}`,
-        updatedTodo,
-        getAuthHeader()
-      );
+      await axiosInstance.put(`/todo/${editingId}`, updatedTodo);
       setTodos(
         todos.map((todo) => (todo._id === editingId ? updatedTodo : todo))
       );
@@ -170,11 +149,7 @@ const GoalsComponent = () => {
       const updatedTodo = {
         deadline: deadline ? deadline.toISOString() : null,
       };
-      await axiosInstance.put(
-        `${backendUrl}/todo/${deadlineModal.todoId}`,
-        updatedTodo,
-        getAuthHeader()
-      );
+      await axiosInstance.put(`/todo/${deadlineModal.todoId}`, updatedTodo);
 
       setTodos(
         todos.map((todo) =>

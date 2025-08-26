@@ -13,15 +13,12 @@ function Session() {
   const token = localStorage.getItem("token");
   const [myRooms, setMyRooms] = useState([]);
   const [otherRooms, setOtherRooms] = useState([]);
-  const backendUrl = import.meta.env.VITE_API_URL;
   if (!token) return <NotLogedInPage />;
 
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const { data } = await axiosInstance.get(`${backendUrl}/session-room`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const { data } = await axiosInstance.get("/session-room");
         setMyRooms(data.myRooms);
         setOtherRooms(data.otherRooms);
       } catch (err) {
@@ -30,7 +27,7 @@ function Session() {
     };
 
     fetchRooms();
-  }, [backendUrl, token]);
+  }, [token]);
 
   return (
     <div className="h-[100vh] w-[calc(100vw-70px)] pb-0 flex ">

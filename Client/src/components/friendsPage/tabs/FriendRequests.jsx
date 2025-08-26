@@ -3,12 +3,6 @@ import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 import UserCard from "../UserCard";
 
-const backendUrl = import.meta.env.VITE_API_URL;
-const getAuthHeader = () => {
-  const token = localStorage.getItem("token");
-  return { headers: { Authorization: `Bearer ${token}` } };
-};
-
 export default function FriendRequests() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -16,10 +10,7 @@ export default function FriendRequests() {
   const fetchRequests = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get(
-        `${backendUrl}/friends/requests`,
-        getAuthHeader()
-      );
+      const res = await axiosInstance.get("/friends/requests");
       setRequests(res.data || []);
     } catch (err) {
       console.error(err);
@@ -31,11 +22,7 @@ export default function FriendRequests() {
 
   const acceptRequest = async (friendId) => {
     try {
-      await axiosInstance.post(
-        `${backendUrl}/friends/accept/${friendId}`,
-        null,
-        getAuthHeader()
-      );
+      await axiosInstance.post(`/friends/accept/${friendId}`, null);
       setRequests((prev) => prev.filter((r) => r._id !== friendId));
       toast.success("Friend request accepted!");
     } catch (err) {
@@ -46,10 +33,7 @@ export default function FriendRequests() {
 
   const rejectRequest = async (friendId) => {
     try {
-      await axiosInstance.delete(
-        `${backendUrl}/friends/reject/${friendId}`,
-        getAuthHeader()
-      );
+      await axiosInstance.delete(`/friends/reject/${friendId}`);
       setRequests((prev) => prev.filter((r) => r._id !== friendId));
       toast.info("Friend request rejected.");
     } catch (err) {
@@ -62,8 +46,10 @@ export default function FriendRequests() {
     fetchRequests();
   }, []);
 
-  if (loading) return <div className="text-center text-gray-500">Loading...</div>;
-  if (!requests.length) return <div className="text-center text-gray-500">No requests</div>;
+  if (loading)
+    return <div className="text-center text-gray-500">Loading...</div>;
+  if (!requests.length)
+    return <div className="text-center text-gray-500">No requests</div>;
 
   return (
     <div className="flex flex-wrap gap-3 2xl:gap-4">

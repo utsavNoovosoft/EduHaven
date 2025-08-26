@@ -2,19 +2,13 @@ import { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axios";
 import { ArrowLeft, User } from "lucide-react";
 import { Link } from "react-router-dom";
-const backendUrl = import.meta.env.VITE_API_URL;
 
 function SentRequests({ onBack }) {
   const [sentRequests, setSentRequests] = useState([]);
 
-  const getAuthHeader = () => {
-    const token = localStorage.getItem("token");
-    return { headers: { Authorization: `Bearer ${token}` } };
-  };
-
   useEffect(() => {
     axiosInstance
-      .get(`${backendUrl}/friends/sent-requests`, getAuthHeader())
+      .get("/friends/sent-requests")
       .then((response) => {
         setSentRequests(response.data);
       })

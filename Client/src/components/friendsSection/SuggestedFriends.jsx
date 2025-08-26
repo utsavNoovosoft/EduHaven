@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "@/utils/axios";
 import { User, MoreVertical, Plus } from "lucide-react";
-const backendUrl = import.meta.env.VITE_API_URL;
 
 function SuggestedFriends({ onViewSentRequests }) {
   const navigate = useNavigate();
@@ -26,18 +25,10 @@ function SuggestedFriends({ onViewSentRequests }) {
     };
   }, [showDropdown]);
 
-  const getAuthHeader = () => {
-    const token = localStorage.getItem("token");
-    return { headers: { Authorization: `Bearer ${token}` } };
-  };
 
   const sendRequest = async (friendId) => {
     try {
-      const response = await axiosInstance.post(
-        `${backendUrl}/friends/request/${friendId}`,
-        null,
-        getAuthHeader()
-      );
+      const response = await axiosInstance.post(`/friends/request/${friendId}`, null);
       console.log("Response:", response.data.message);
       setSuggestedFriends((prevUsers) =>
         prevUsers.map((user) =>
@@ -51,7 +42,7 @@ function SuggestedFriends({ onViewSentRequests }) {
 
   useEffect(() => {
     axiosInstance
-      .get(`${backendUrl}/friends/friend-suggestions`, getAuthHeader())
+      .get(`/friends/friend-suggestions`)
       .then((response) => {
         setSuggestedFriends(response.data);
       })
