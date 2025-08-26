@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Award, Info } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { 
   checkBadgeAchievements, 
   getAllBadges, 
@@ -72,31 +71,8 @@ const Badges = () => {
       // Save current badges to storage first (this will add timestamps for new badges)
       saveBadgesToStorage(userId, currentBadges);
       
-      // Only show notifications if this is NOT the initial load
-      if (!isInitialLoad) {
-        // Check for newly earned badges with timestamp validation
-        const newBadges = getNewlyEarnedBadges(previousBadges, currentBadges, userId);
-        
-        // Show notifications for genuinely new badges
-        newBadges.forEach(badge => {
-          toast.success(`🏆 Badge Earned: ${badge.name}!`, {
-            position: "top-right",
-            autoClose: 8000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            style: {
-              background: "var(--bg-sec)",
-              color: "var(--txt)",
-              border: "1px solid var(--accent)",
-            },
-            progressStyle: {
-              background: "var(--accent)",
-            },
-          });
-        });
-      }
+      // Note: Badge notifications have been removed
+      // Badges are still tracked and saved, just no toast notifications
       
       setEarnedBadges(currentBadges);
       

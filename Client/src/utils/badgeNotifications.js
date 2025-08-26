@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import { 
   checkBadgeAchievements, 
   saveBadgesToStorage, 
@@ -6,7 +5,7 @@ import {
   getNewlyEarnedBadges 
 } from './badgeSystem';
 
-// Global badge checker that can be called from anywhere
+// Global badge checker that can be called from anywhere (notifications removed)
 export const triggerBadgeCheck = (user, goals = [], userId = null) => {
   if (!user || !userId) return;
   
@@ -16,25 +15,8 @@ export const triggerBadgeCheck = (user, goals = [], userId = null) => {
   // Check for newly earned badges
   const newBadges = getNewlyEarnedBadges(previousBadges, currentBadges);
   
-  // Show notifications for new badges
-  newBadges.forEach(badge => {
-    toast.success(`🏆 Badge Earned: ${badge.name}!`, {
-      position: "top-right",
-      autoClose: 8000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      style: {
-        background: "var(--bg-sec)",
-        color: "var(--txt)",
-        border: "1px solid var(--accent)",
-      },
-      progressStyle: {
-        background: "var(--accent)",
-      },
-    });
-  });
+  // Note: Badge notifications have been removed
+  // Badges are still tracked and saved, just no toast notifications
   
   // Save current badges to storage
   saveBadgesToStorage(userId, currentBadges);
