@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
+const backendUrl = import.meta.env.VITE_API_URL;
+
 
 const Signout = () => {
   const navigate = useNavigate();
