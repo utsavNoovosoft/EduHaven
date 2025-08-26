@@ -16,6 +16,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import axiosInstance from "@/utils/axios";
 
 // ──────────────────────────────────────────────────────────────
 // Helper functions for date formatting
@@ -163,94 +164,38 @@ const computeSummary = (data) => {
 // Main Component
 // ──────────────────────────────────────────────────────────────
 
-const StudyStats = () => {
+const StudyStats = ({ stats: streakStats = {} }) => {
   const [view, setView] = useState("daily");
   const [isOpen, setIsOpen] = useState(false);
-  const [stats, setStats] = useState([]);
-  const backendUrl = import.meta.env.VITE_API_URL;
+  const [chartStats, setChartStats] = useState([]);
 
   useEffect(() => {
     const handleGetStats = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          `${backendUrl}/timerstats?period=${view}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const result = await response.json();
+        const response = await axiosInstance.get(`/timerstats?period=${view}`);
+        const result = await response.data;
         let timeline = [];
 
-        if (view === "hourly") {
-          timeline = generateHourlyTimeline();
-          result.periodData.forEach((item) => {
-            const found = timeline.find((entry) => entry.value === item._id);
-            if (found) {
-              found.totalHours = item.totalHours || 0;
-              found.studyRoomHours = item.studyRoomHours || 0;
-            }
-          });
-          setStats(
-            timeline.map((entry) => ({
-              name: entry.label,
-              totalHours: entry.totalHours,
-              studyRoomHours: entry.studyRoomHours,
-            }))
-          );
-        } else if (view === "daily") {
-          timeline = generateDailyTimeline();
-          result.periodData.forEach((item) => {
-            const found = timeline.find((entry) => entry.value === item._id);
-            if (found) {
-              found.totalHours = item.totalHours || 0;
-              found.studyRoomHours = item.studyRoomHours || 0;
-            }
-          });
-          setStats(
-            timeline.map((entry) => ({
-              name: entry.label,
-              totalHours: entry.totalHours,
-              studyRoomHours: entry.studyRoomHours,
-            }))
-          );
-        } else if (view === "weekly") {
-          timeline = generateWeeklyTimeline();
-          result.periodData.forEach((item) => {
-            const found = timeline.find((entry) => entry.value === item._id);
-            if (found) {
-              found.totalHours = item.totalHours || 0;
-              found.studyRoomHours = item.studyRoomHours || 0;
-            }
-          });
-          setStats(
-            timeline.map((entry) => ({
-              name: entry.label,
-              totalHours: entry.totalHours,
-              studyRoomHours: entry.studyRoomHours,
-            }))
-          );
-        } else if (view === "monthly") {
-          timeline = generateMonthlyTimeline();
-          result.periodData.forEach((item) => {
-            const found = timeline.find((entry) => entry.value === item._id);
-            if (found) {
-              found.totalHours = item.totalHours || 0;
-              found.studyRoomHours = item.studyRoomHours || 0;
-            }
-          });
-          setStats(
-            timeline.map((entry) => ({
-              name: entry.label,
-              totalHours: entry.totalHours,
-              studyRoomHours: entry.studyRoomHours,
-            }))
-          );
-        }
+        if (view === "hourly") timeline = generateHourlyTimeline();
+        if (view === "daily") timeline = generateDailyTimeline();
+        if (view === "weekly") timeline = generateWeeklyTimeline();
+        if (view === "monthly") timeline = generateMonthlyTimeline();
+
+        result.periodData.forEach((item) => {
+          const found = timeline.find((entry) => entry.value === item._id);
+          if (found) {
+            found.totalHours = item.totalHours || 0;
+            found.studyRoomHours = item.studyRoomHours || 0;
+          }
+        });
+
+        setChartStats(
+          timeline.map((entry) => ({
+            name: entry.label,
+            totalHours: entry.totalHours,
+            studyRoomHours: entry.studyRoomHours,
+          }))
+        );
       } catch (error) {
         console.error("Error fetching stats:", error);
       }
@@ -259,7 +204,7 @@ const StudyStats = () => {
     handleGetStats();
   }, [view]);
 
-  const summary = computeSummary(stats);
+  const summary = computeSummary(chartStats);
 
   const handleDropdownClick = (viewType) => {
     setView(viewType);
@@ -312,7 +257,7 @@ const StudyStats = () => {
         </div>
         <ResponsiveContainer width="100%" height={300}>
           <ComposedChart
-            data={stats}
+            data={chartStats}
             margin={{ top: 20, right: 30, left: 0, bottom: 10 }}
           >
             <defs>
@@ -333,6 +278,10 @@ const StudyStats = () => {
               }}
               itemStyle={{ color: "var(--txt)" }}
               labelStyle={{ color: "var(--btn)" }}
+              formatter={(value, name) => {
+                const num = Number(value);
+                return [Number.isInteger(num) ? num : num.toFixed(2), name];
+              }}
             />
             <Area
               type="monotone"
@@ -360,11 +309,13 @@ const StudyStats = () => {
         <div className="text-4xl mb-8 font-bold text-blue-500">Null</div>
         Current Streak:
         <div className="text-4xl mb-8 font-bold text-yellow-500">
-          32 <span className="text-lg font-normal">days</span>
+          {streakStats.currentStreak ?? 0}{" "}
+          <span className="text-lg font-normal">days</span>
         </div>
         Max Streak:
         <div className="text-4xl mb-8 font-bold text-green-500">
-          50 <span className="text-lg font-normal">days</span>
+          {streakStats.maxStreak ?? 0}{" "}
+          <span className="text-lg font-normal">days</span>
         </div>
       </div>
     </div>

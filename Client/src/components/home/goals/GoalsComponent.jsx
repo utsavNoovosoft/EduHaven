@@ -1,21 +1,19 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import {
   Pencil,
   Trash,
   Check,
   X,
-  ChevronDown,
   ChevronRight,
   Calendar,
   Repeat,
   Clock,
-  RefreshCw,
 } from "lucide-react";
 import Setgoals from "./SetGoals.jsx";
 import DeadlinePickerModal from "./DeadlinePickerModal.jsx";
 import { motion } from "framer-motion";
-const backendUrl = import.meta.env.VITE_API_URL;
+import { toast } from "react-toastify";
 
 const GoalsComponent = () => {
   const [todos, setTodos] = useState([]);
@@ -33,22 +31,19 @@ const GoalsComponent = () => {
     currentDeadline: null,
   });
 
-  const getAuthHeader = () => {
-    const token = localStorage.getItem("token");
-    return { headers: { Authorization: `Bearer ${token}` } };
-  };
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   const fetchTodos = async () => {
     try {
-      const { data } = await axios.get(`${backendUrl}/todo`, getAuthHeader());
+      const { data } = await axiosInstance.get(`/todo`);
       console.log("Fetched todos:", data.data);
       setTodos(data.data); // ✅ Will now be the actual Task documents
     } catch (error) {
       console.error("Error fetching todos:", error.message);
     }
   };
-
-
 
   // Organize todos into sections
   const organizeTodos = () => {
@@ -71,63 +66,88 @@ const GoalsComponent = () => {
   };
 
   const handleDelete = async (id) => {
+    const previousTodos = [...todos];
+    setTodos((prev) => prev.filter((todo) => todo._id !== id)); 
+
     try {
-      await axios.delete(`${backendUrl}/todo/${id}`, getAuthHeader());
-      setTodos(todos.filter((todo) => todo._id !== id));
+      await axiosInstance.delete(`/todo/${id}`);
     } catch (error) {
       console.error("Error deleting todo:", error.message);
+      setTodos(previousTodos); 
     }
   };
 
   const handleToggle = async (id) => {
+    const previousTodos = [...todos];
+
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo._id === id
+          ? {
+              ...todo,
+              completed: !todo.completed,
+              status: todo.completed ? "open" : "closed",
+            }
+          : todo
+      )
+    );
+
     try {
-      const todo = todos.find((t) => t._id === id);
+      const todo = previousTodos.find((t) => t._id === id);
       const updatedTodo = {
         ...todo,
         completed: !todo.completed,
         status: !todo.completed ? "closed" : "open",
       };
-
-      await axios.put(`${backendUrl}/todo/${id}`, updatedTodo, getAuthHeader());
-      setTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)));
+      await axiosInstance.put(`/todo/${id}`, updatedTodo);
     } catch (error) {
       console.error("Error toggling todo:", error.message);
+      setTodos(previousTodos);
     }
   };
 
   const handleToggleRepeat = async (id) => {
-    try {
-      const todo = todos.find((t) => t._id === id);
-      const updatedTodo = { ...todo, repeatEnabled: !todo.repeatEnabled };
+    const previousTodos = [...todos];
 
-      await axios.put(`${backendUrl}/todo/${id}`, updatedTodo, getAuthHeader());
-      setTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)));
+    // Optimistic update
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo._id === id ? { ...todo, repeatEnabled: !todo.repeatEnabled } : todo
+      )
+    );
+
+    try {
+      const todo = previousTodos.find((t) => t._id === id);
+      const updatedTodo = { ...todo, repeatEnabled: !todo.repeatEnabled };
+      await axiosInstance.put(`/todo/${id}`, updatedTodo);
     } catch (error) {
       console.error("Error toggling repeat:", error.message);
+      setTodos(previousTodos);
     }
   };
 
   const handleSave = async () => {
     if (!editedTitle.trim()) {
-      alert("Title cannot be empty!");
+      toast.warning("Title cannot be empty!");
       return;
     }
-    try {
-      const todo = todos.find((t) => t._id === editingId);
-      const updatedTodo = { ...todo, title: editedTitle };
+    const previousTodos = [...todos];
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo._id === editingId ? { ...todo, title: editedTitle } : todo
+      )
+    );
+    setEditingId(null);
+    setEditedTitle("");
 
-      await axios.put(
-        `${backendUrl}/todo/${editingId}`,
-        updatedTodo,
-        getAuthHeader()
-      );
-      setTodos(
-        todos.map((todo) => (todo._id === editingId ? updatedTodo : todo))
-      );
-      setEditingId(null);
-      setEditedTitle("");
+    try {
+      await axiosInstance.put(`/todo/${editingId}`, {
+        ...previousTodos.find((t) => t._id === editingId),
+        title: editedTitle,
+      });
     } catch (error) {
       console.error("Error updating todo:", error.message);
+      setTodos(previousTodos);
     }
   };
 
@@ -159,11 +179,7 @@ const GoalsComponent = () => {
       const updatedTodo = {
         deadline: deadline ? deadline.toISOString() : null,
       };
-      await axios.put(
-        `${backendUrl}/todo/${deadlineModal.todoId}`,
-        updatedTodo,
-        getAuthHeader()
-      );
+      await axiosInstance.put(`/todo/${deadlineModal.todoId}`, updatedTodo);
 
       setTodos(
         todos.map((todo) =>
@@ -278,8 +294,9 @@ const GoalsComponent = () => {
       ) : (
         <div className="flex-grow">
           <span
-            className={`text-lg ${todo.completed ? "line-through txt-dim" : "txt-dim"
-              }`}
+            className={`text-lg ${
+              todo.completed ? "line-through txt-dim" : "txt-dim"
+            }`}
           >
             {todo.title}
           </span>
@@ -318,10 +335,11 @@ const GoalsComponent = () => {
             {/* Repeat Toggle */}
             <button
               onClick={() => handleToggleRepeat(todo._id)}
-              className={`p-1 rounded ${todo.repeatEnabled
-                ? "text-blue-500 bg-blue-100/10"
-                : "txt-dim hover:text-blue-500"
-                } transition-colors`}
+              className={`p-1 rounded ${
+                todo.repeatEnabled
+                  ? "text-blue-500 bg-blue-100/10"
+                  : "txt-dim hover:text-blue-500"
+              } transition-colors`}
               title={todo.repeatEnabled ? "Disable repeat" : "Enable repeat"}
             >
               <Repeat className="h-4 w-4" />
@@ -367,11 +385,12 @@ const GoalsComponent = () => {
         className="flex items-center justify-between w-full px-2"
       >
         <div className="flex items-center gap-1">
-          {collapsedSections[sectionKey] ? (
-            <ChevronRight size={20} />
-          ) : (
-            <ChevronDown size={20} />
-          )}
+          <ChevronRight
+            size={20}
+            className={`${
+              collapsedSections[sectionKey] ? "" : "rotate-90"
+            } transition duration-300`}
+          />
           <h3 className="font-medium text-sm">{title}</h3>
           <span className="txt-dim text-sm">({items.length})</span>
         </div>
@@ -384,13 +403,7 @@ const GoalsComponent = () => {
           animate="show"
           className="mt-2"
         >
-          {items.length === 0 ? (
-            <div className="txt-dim text-center py-4">
-              No {title.toLowerCase()} available
-            </div>
-          ) : (
-            items.map(renderTodoItem)
-          )}
+          {items.length !== 0 && items.map(renderTodoItem)}
         </motion.div>
       )}
     </div>
@@ -413,7 +426,6 @@ const GoalsComponent = () => {
             <span className="txt-dim">●</span>
             <span>{closedCount} Closed</span>
           </div>
-
         </div>
       </div>
 
@@ -425,29 +437,26 @@ const GoalsComponent = () => {
 
       {/* Tasks List Section */}
       <div className="w-full max-h-[17.5rem] overflow-y-auto pt-2 px-2">
-        {dailyHabits.length !== 0 &&
-          renderSection(
-            "Daily Habit",
-            dailyHabits,
-            "dailyHabits",
-            <Repeat className="h-4 w-4 text-blue-500" />
-          )}
+        {renderSection(
+          "Daily Habit",
+          dailyHabits,
+          "dailyHabits",
+          <Repeat className="h-4 w-4 text-blue-500" />
+        )}
 
-        {otherGoals.length !== 0 &&
-          renderSection(
-            "Tasks",
-            otherGoals,
-            "otherGoals",
-            <Clock className="h-4 w-4 text-purple-500" />
-          )}
+        {renderSection(
+          "Tasks",
+          otherGoals,
+          "otherGoals",
+          <Clock className="h-4 w-4 text-purple-500" />
+        )}
 
-        {closedGoals.length !== 0 &&
-          renderSection(
-            "Completed",
-            closedGoals,
-            "closedGoals",
-            <Check className="h-4 w-4 text-green-500" />
-          )}
+        {renderSection(
+          "Completed",
+          closedGoals,
+          "closedGoals",
+          <Check className="h-4 w-4 text-green-500" />
+        )}
       </div>
 
       <DeadlinePickerModal

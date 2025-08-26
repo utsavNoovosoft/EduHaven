@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import { useUserProfile } from "../../contexts/UserProfileContext";
@@ -7,8 +7,6 @@ import { Camera, User, Trash2 } from "lucide-react";
 import UpdateButton from "./UpdateButton";
 import { CropModal } from "../CropModal";
 import { getCroppedWebpFile } from "@/utils/imageUtils";
-
-const backendUrl = import.meta.env.VITE_API_URL;
 
 export default function BasicInfo() {
   const { user, setUser, fetchUserDetails } = useUserProfile();
@@ -116,16 +114,7 @@ export default function BasicInfo() {
     formData.append("profilePicture", profilePic);
 
     try {
-      const response = await axios.post(
-        `${backendUrl}/user/upload-profile-picture`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const response = await axiosInstance.post(`/user/upload-profile-picture`, formData);
 
       return response.data.profilePictureUrl;
     } catch (error) {
@@ -165,16 +154,7 @@ export default function BasicInfo() {
         ProfilePicture: profilePictureUrl,
       };
 
-      const response = await axios.put(
-        `${backendUrl}/user/profile`,
-        updateData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axiosInstance.put(`/user/profile`, updateData);
 
       toast.success("Profile updated successfully");
       setProfileData(response.data);
@@ -259,10 +239,14 @@ export default function BasicInfo() {
         {/* Personal Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-6 py-2">
           <div className="space-y-2">
-            <label className="block text-md font-medium text-[var(--txt-dim)]">
+            <label
+              htmlFor="first-name"
+              className="block text-md font-medium text-[var(--txt-dim)]"
+            >
               First Name *
             </label>
             <input
+              id="first-name"
               type="text"
               name="FirstName"
               value={profileData.FirstName}
@@ -275,10 +259,14 @@ export default function BasicInfo() {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-md font-medium text-[var(--txt-dim)]">
+            <label
+              htmlFor="last-name"
+              className="block text-md font-medium text-[var(--txt-dim)]"
+            >
               Last Name *
             </label>
             <input
+              id="last-name"
               type="text"
               name="LastName"
               value={profileData.LastName}
@@ -293,11 +281,15 @@ export default function BasicInfo() {
 
         {/* Bio Section */}
         <div className="space-y-2 p-6 py-2">
-          <label className="block text-md font-medium text-[var(--txt-dim)]">
+          <label
+            htmlFor="bio"
+            className="block text-md font-medium text-[var(--txt-dim)]"
+          >
             Bio
           </label>
           <div className="relative">
             <textarea
+              id="bio"
               name="Bio"
               value={profileData.Bio}
               onChange={handleInputChange}
@@ -326,11 +318,15 @@ export default function BasicInfo() {
         {/* Location & Demographics */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 py-2">
           <div className="space-y-2">
-            <label className="block text-md font-medium text-[var(--txt-dim)]">
+            <label
+              htmlFor="country"
+              className="block text-md font-medium text-[var(--txt-dim)]"
+            >
               Country
             </label>
             <div className="relative">
               <input
+                id="country"
                 type="text"
                 name="Country"
                 value={profileData.Country}
@@ -353,11 +349,15 @@ export default function BasicInfo() {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-md font-medium text-[var(--txt-dim)]">
+            <label
+              htmlFor="gender"
+              className="block text-md font-medium text-[var(--txt-dim)]"
+            >
               Gender
             </label>
             <div className="relative">
               <select
+                id="gender"
                 name="Gender"
                 value={profileData.Gender}
                 onChange={handleInputChange}
@@ -372,16 +372,6 @@ export default function BasicInfo() {
                 <option value="Other">Other</option>
                 <option value="Prefer not to say">Prefer not to say</option>
               </select>
-              {profileData.Gender && (
-                <button
-                  type="button"
-                  onClick={() => handleClearField("Gender")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--txt-dim)] hover:text-red-500 transition-colors"
-                  disabled={isProfileUpdateLoading}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              )}
             </div>
           </div>
         </div>
