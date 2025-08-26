@@ -47,7 +47,6 @@ const Stats = ({ isCurrentUser = false }) => {
           });
         } else {
           const res = await fetchUserStats(userId);
-          console.log(res)
           setUserStats({
             name: `${res.userInfo?.firstName ?? ""} ${res.userInfo?.lastName ?? ""}`.trim(),
             bio: res.userInfo?.bio ?? "",
