@@ -349,7 +349,6 @@ export const refreshAccessToken = async (req, res) => {
 export const getUserDetails = async (req, res) => {
   try {
     const userId = req.query.id;
-
     if (!userId || userId === "undefined") {
       return res
         .status(400)
@@ -362,7 +361,6 @@ export const getUserDetails = async (req, res) => {
       console.log("User not found");
       return res.status(404).json({ error: "User not found" });
     }
-
     return res.status(200).json(user);
   } catch (error) {
     console.error("Error fetching user details:", error);
@@ -549,6 +547,7 @@ export const getUserStats = async (req, res) => {
         progress: 0,
         hoursToNextLevel: 2,
       },
+
       badges: user.badges || [],
       newBadges,
       availableBadges: Object.values(BADGES),

@@ -35,7 +35,33 @@ function FriendRequests() {
       .catch((err) => console.error(err.response.data));
   };
 
-  if (friendRequests.length === 0) return null;
+  const showSkeletons = friendRequests.length === 0;
+
+ if (showSkeletons) {
+    return (
+      <div className="bg-[var(--bg-secondary)] border border-gray-700/30 p-4 space-y-4 rounded-3xl shadow animate-pulse">
+        <div className="bg-gray-500/20 h-6 rounded-md"></div>
+        <div className="space-y-4 pt-4">
+          <div className="flex justify-start items-center space-x-2 my-2">
+            {/* avtar */}
+            <div className="h-14 aspect-square bg-gray-500/20 rounded-full"></div>
+            {/* name + bio  */}
+            <div className="flex flex-col flex-1 justify-center items-start space-y-2">
+              <div className="h-5 w-8/12 bg-gray-500/20 rounded-md"></div>
+              <div className="h-3 w-full bg-gray-500/20 rounded-md"></div>
+            </div>
+          </div>
+          {/* buttons */}
+          <div className="flex items-center px-2 justify-between">
+            <div className="w-[40%] h-8 bg-gray-500/20 rounded-md"></div>
+            <div className="w-[40%] h-8 bg-gray-500/20 rounded-md"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+
 
   return (
     <section className="bg-sec rounded-3xl p-3 2xl:p-4">

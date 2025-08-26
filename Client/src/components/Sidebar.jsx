@@ -117,6 +117,7 @@ function Sidebar() {
           />
           
         </div>
+
         <hr className="border-sec my-5 mx-4" />
         <SidebarLink
           to="/project-details"
