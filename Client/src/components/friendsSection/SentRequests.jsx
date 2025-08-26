@@ -19,16 +19,19 @@ function SentRequests({ onBack }) {
 
   const showSkeletons = sentRequests.length === 0;
 
-  if (showSkeletons) {
+     if (showSkeletons) {
     return (
-      <div className="bg-[var(--bg-secondary)] border border-gray-700/30 p-6 rounded-3xl shadow flex flex-col justify-center animate-pulse">
-        <div className="w-full mb-4 h-5 bg-gray-500/20 rounded-md"></div>
+      <div className="bg-[var(--bg-secondary)] border border-gray-700/30 p-4 rounded-3xl shadow flex flex-col justify-center animate-pulse">
+        <div className="w-full mb-4 h-8 bg-gray-500/20 rounded-md"></div>
         {Array(4)
           .fill()
           .map((_, i) => (
             <div className="flex justify-between items-center space-x-2 my-2">
               <div className="w-10 aspect-square bg-gray-500/20 rounded-full"></div>
-              <div className="h-10 flex-1 bg-gray-500/20 rounded-md"></div>
+              <div className="flex-1 flex flex-col justify-center *:items-start space-y-2">
+              <div className=" bg-gray-500/20 w-full h-4 rounded-md"></div>
+              <div className=" bg-gray-500/20 w-8/12 h-2 rounded-md"></div>
+              </div>
             </div>
           ))}
       </div>
