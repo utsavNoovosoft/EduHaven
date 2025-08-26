@@ -17,14 +17,8 @@ import axiosInstance from "@/utils/axios";
 import { jwtDecode } from "jwt-decode";
 import { Link, useParams } from "react-router-dom";
 import { set } from "date-fns";
-const backendUrl = import.meta.env.VITE_API_URL;
 
 const ProfileCard = ({ isCurrentUser = false }) => {
-  const getAuthHeader = () => {
-    const token = localStorage.getItem("token");
-    return { headers: { Authorization: `Bearer ${token}` } };
-  };
-
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
@@ -54,21 +48,20 @@ const ProfileCard = ({ isCurrentUser = false }) => {
   };
   const shareRef = useRef(null);
 
-useEffect(() => {
-  if (showLink) {
-    const handleClickOutside = (event) => {
-      if (shareRef.current && !shareRef.current.contains(event.target)) {
-        setShowLink(false);
-      }
-    };
+  useEffect(() => {
+    if (showLink) {
+      const handleClickOutside = (event) => {
+        if (shareRef.current && !shareRef.current.contains(event.target)) {
+          setShowLink(false);
+        }
+      };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }
-}, [showLink]);
-
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [showLink]);
 
   const popupRef = useRef(null);
 
@@ -79,10 +72,7 @@ useEffect(() => {
         if (isCurrentUser) {
           // Current (logged-in) user — keep using protected endpoints
           try {
-            const listRes = await axiosInstance.get(
-              `${backendUrl}/friends`,
-              getAuthHeader()
-            );
+            const listRes = await axiosInstance.get("/friends");
 
             const friends = listRes.data || [];
             setFriendsList(friends);
@@ -95,10 +85,7 @@ useEffect(() => {
         }
 
         try {
-          const listRes = await axiosInstance.get(
-            `${backendUrl}/friends/${userId}/stats`,
-            getAuthHeader()
-          );
+          const listRes = await axiosInstance.get(`/friends/${userId}/stats`);
           setFriendsList(listRes.data.stats.friends || []);
 
           // console.log(listRes.data);
@@ -123,23 +110,12 @@ useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         let response;
+        let token = localStorage.getItem("token")
         if (isCurrentUser) {
-          const token = localStorage.getItem("token");
-          if (!token) return;
-
           const decoded = jwtDecode(token);
-          response = await axiosInstance.get(
-            `${backendUrl}/user/details?id=${decoded.id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          response = await axiosInstance.get(`/user/details?id=${decoded.id}`);
         } else {
-          response = await axiosInstance.get(
-            `${backendUrl}/user/details?id=${userId}`
-          );
+          response = await axiosInstance.get(`/user/details?id=${userId}`);
         }
         setUser(response.data);
         setKudosCount(response.data.kudosReceived || 0);
@@ -236,9 +212,8 @@ useEffect(() => {
 
     try {
       const response = await axiosInstance.post(
-        `${backendUrl}/kudos`,
+        "/kudos",
         { receiverId: user._id },
-        getAuthHeader()
       );
 
       toast.success("🎉 Kudos given successfully!");
@@ -268,7 +243,10 @@ useEffect(() => {
             />
 
             {showLink && (
-              <div  ref={shareRef} className="absolute top-full mt-2 right-0 flex items-center bg-[#1f2937] rounded-lg px-3 py-2 shadow-md border border-gray-700 w-64 z-20">
+              <div
+                ref={shareRef}
+                className="absolute top-full mt-2 right-0 flex items-center bg-[#1f2937] rounded-lg px-3 py-2 shadow-md border border-gray-700 w-64 z-20"
+              >
                 <input
                   type="text"
                   value={profilelink}

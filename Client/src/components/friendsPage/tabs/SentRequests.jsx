@@ -3,12 +3,6 @@ import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 import UserCard from "../UserCard";
 
-const backendUrl = import.meta.env.VITE_API_URL;
-const getAuthHeader = () => {
-  const token = localStorage.getItem("token");
-  return { headers: { Authorization: `Bearer ${token}` } };
-};
-
 export default function SentRequests() {
   const [sent, setSent] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -16,10 +10,7 @@ export default function SentRequests() {
   const fetchSent = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get(
-        `${backendUrl}/friends/sent-requests`,
-        getAuthHeader()
-      );
+      const res = await axiosInstance.get(`/friends/sent-requests`);
       setSent(res.data || []);
     } catch (err) {
       console.error(err);
@@ -31,10 +22,7 @@ export default function SentRequests() {
 
   const cancelRequest = async (friendId) => {
     try {
-      await axiosInstance.delete(
-        `${backendUrl}/friends/sent-requests/${friendId}`,
-        getAuthHeader()
-      );
+      await axiosInstance.delete(`/friends/sent-requests/${friendId}`);
       setSent((prev) => prev.filter((r) => r._id !== friendId));
       toast.info("Friend request canceled.");
     } catch (err) {

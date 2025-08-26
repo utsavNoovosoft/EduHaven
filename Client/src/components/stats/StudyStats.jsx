@@ -16,6 +16,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import axiosInstance from "@/utils/axios";
 
 // ──────────────────────────────────────────────────────────────
 // Helper functions for date formatting
@@ -167,23 +168,12 @@ const StudyStats = ({ stats: streakStats = {} }) => {
   const [view, setView] = useState("daily");
   const [isOpen, setIsOpen] = useState(false);
   const [chartStats, setChartStats] = useState([]);
-  const backendUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const handleGetStats = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          `${backendUrl}/timerstats?period=${view}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const result = await response.json();
+        const response = await axiosInstance.get(`/timerstats?period=${view}`);
+        const result = await response.data;
         let timeline = [];
 
         if (view === "hourly") timeline = generateHourlyTimeline();

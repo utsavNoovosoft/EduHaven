@@ -22,27 +22,16 @@ const Delete = () => {
 
     try {
       setIsLoading(true);
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/user/delete`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axiosInstance.delete("/user/delete");
 
-      let data = {};
-      try {
-        data = await res.json();
-      } catch {
-        data = {};
-      }
+      let data = res.data;
 
-      if (!res.ok) throw new Error(data.error || "Failed to delete account");
+      if (res.status !== 200)
+        throw new Error(data.error || "Failed to delete account");
 
       toast.success(data.message || "Account deleted successfully");
       localStorage.removeItem("token");
-
+      localStorage.removeItem("refreshToken");
       setTimeout(() => {
         navigate("/");
       }, 1500);

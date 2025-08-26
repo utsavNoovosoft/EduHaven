@@ -5,7 +5,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import EventPopup from "./eventPopup";
 import AllEventsPopup from "./AllEventsPopup";
 import { motion } from "framer-motion";
-const backendUrl = import.meta.env.VITE_API_URL;
 import { format } from "date-fns";
 import CalendarDayTooltip from "./CalendarDayTooltip";
 
@@ -48,19 +47,7 @@ function Calendar() {
 
   const fetchEvents = async () => {
     try {
-      // Get authentication token from localStorage
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        console.error("No authentication token found");
-        return;
-      }
-
-      const response = await axiosInstance.get(`${backendUrl}/events`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axiosInstance.get(`/events`);
 
       if (response.data.success) {
         setEvents(response.data.data);

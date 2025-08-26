@@ -18,13 +18,6 @@ import {
 import axiosInstance from "@/utils/axios";
 import { useParams } from "react-router-dom";
 
-const backendUrl = import.meta.env.VITE_API_URL;
-
-const getAuthHeader = () => {
-  const token = localStorage.getItem("token");
-  return { headers: { Authorization: `Bearer ${token}` } };
-};
-
 const Goals = ({ isCurrentUser = false }) => {
   const { userId } = useParams();
 
@@ -42,15 +35,9 @@ const Goals = ({ isCurrentUser = false }) => {
       try {
         let response;
         if (isCurrentUser) {
-          response = await axiosInstance.get(
-            `${backendUrl}/todo?view=${view}`,
-            getAuthHeader()
-          );
+          response = await axiosInstance.get(`/todo?view=${view}`);
         } else {
-          response = await axiosInstance.get(
-            `${backendUrl}/todo/user/${userId}?view=${view}`,
-            getAuthHeader()
-          );
+          response = await axiosInstance.get(`/todo/user/${userId}?view=${view}`);
         }
 
         // console.log(response.data);

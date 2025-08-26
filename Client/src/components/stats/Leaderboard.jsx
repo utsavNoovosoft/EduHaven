@@ -10,8 +10,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 
-const backendUrl = import.meta.env.VITE_API_URL;
-
 const Leaderboard = () => {
   const [view, setView] = useState("weekly");
   const [friendsOnly, setFriendsOnly] = useState(false);
@@ -35,7 +33,7 @@ const Leaderboard = () => {
       setLoading(true);
       try {
         const res = await axiosInstance.get(
-          `${backendUrl}/leaderboard?period=${view}&friendsOnly=${friendsOnly}`
+          `/leaderboard?period=${view}&friendsOnly=${friendsOnly}`
         );
         setTimeout(() => {
           setLeaderboard(res.data);

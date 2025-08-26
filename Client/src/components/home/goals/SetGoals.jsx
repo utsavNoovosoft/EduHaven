@@ -21,12 +21,6 @@ const Setgoals = ({ onGoalCreated }) => {
     setIs24(format === "24-hour");
   }, []);
 
-  const getAuthHeader = () => {
-    const token = localStorage.getItem("token");
-    return { headers: { Authorization: `Bearer ${token}` } };
-  };
-  const backendUrl = import.meta.env.VITE_API_URL;
-
   const handleCreate = async () => {
     if (!title.trim()) {
       toast.warning("Title is required!");
@@ -48,11 +42,7 @@ const Setgoals = ({ onGoalCreated }) => {
         timePreference: time,
       };
 
-      const { data } = await axiosInstance.post(
-        `${backendUrl}/todo`,
-        taskData,
-        getAuthHeader()
-      );
+      const { data } = await axiosInstance.post(`/todo`, taskData);
 
       setTitle("");
       setDeadline(null);
