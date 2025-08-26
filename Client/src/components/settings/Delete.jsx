@@ -22,17 +22,16 @@ const Delete = () => {
 
     try {
       setIsLoading(true);
-            const res = await axiosInstance.delete("/user/delete");
+      const res = await axiosInstance.delete("/user/delete");
 
-            let data = res.data;
+      let data = res.data;
 
-            if (res.status !== 200)
-              throw new Error(data.error || "Failed to delete account");
+      if (res.status !== 200)
+        throw new Error(data.error || "Failed to delete account");
 
       toast.success(data.message || "Account deleted successfully");
       localStorage.removeItem("token");
-            localStorage.removeItem("refreshToken");
-
+      localStorage.removeItem("refreshToken");
       setTimeout(() => {
         navigate("/");
       }, 1500);
