@@ -13,6 +13,7 @@ import {
 import Setgoals from "./SetGoals.jsx";
 import DeadlinePickerModal from "./DeadlinePickerModal.jsx";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 
 const GoalsComponent = () => {
   const [todos, setTodos] = useState([]);
@@ -65,59 +66,88 @@ const GoalsComponent = () => {
   };
 
   const handleDelete = async (id) => {
+    const previousTodos = [...todos];
+    setTodos((prev) => prev.filter((todo) => todo._id !== id)); 
+
     try {
       await axiosInstance.delete(`/todo/${id}`);
-      setTodos(todos.filter((todo) => todo._id !== id));
     } catch (error) {
       console.error("Error deleting todo:", error.message);
+      setTodos(previousTodos); 
     }
   };
 
   const handleToggle = async (id) => {
+    const previousTodos = [...todos];
+
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo._id === id
+          ? {
+              ...todo,
+              completed: !todo.completed,
+              status: todo.completed ? "open" : "closed",
+            }
+          : todo
+      )
+    );
+
     try {
-      const todo = todos.find((t) => t._id === id);
+      const todo = previousTodos.find((t) => t._id === id);
       const updatedTodo = {
         ...todo,
         completed: !todo.completed,
         status: !todo.completed ? "closed" : "open",
       };
-
       await axiosInstance.put(`/todo/${id}`, updatedTodo);
-      setTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)));
     } catch (error) {
       console.error("Error toggling todo:", error.message);
+      setTodos(previousTodos);
     }
   };
 
   const handleToggleRepeat = async (id) => {
-    try {
-      const todo = todos.find((t) => t._id === id);
-      const updatedTodo = { ...todo, repeatEnabled: !todo.repeatEnabled };
+    const previousTodos = [...todos];
 
+    // Optimistic update
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo._id === id ? { ...todo, repeatEnabled: !todo.repeatEnabled } : todo
+      )
+    );
+
+    try {
+      const todo = previousTodos.find((t) => t._id === id);
+      const updatedTodo = { ...todo, repeatEnabled: !todo.repeatEnabled };
       await axiosInstance.put(`/todo/${id}`, updatedTodo);
-      setTodos(todos.map((todo) => (todo._id === id ? updatedTodo : todo)));
     } catch (error) {
       console.error("Error toggling repeat:", error.message);
+      setTodos(previousTodos);
     }
   };
 
   const handleSave = async () => {
     if (!editedTitle.trim()) {
-      alert("Title cannot be empty!");
+      toast.warning("Title cannot be empty!");
       return;
     }
-    try {
-      const todo = todos.find((t) => t._id === editingId);
-      const updatedTodo = { ...todo, title: editedTitle };
+    const previousTodos = [...todos];
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo._id === editingId ? { ...todo, title: editedTitle } : todo
+      )
+    );
+    setEditingId(null);
+    setEditedTitle("");
 
-      await axiosInstance.put(`/todo/${editingId}`, updatedTodo);
-      setTodos(
-        todos.map((todo) => (todo._id === editingId ? updatedTodo : todo))
-      );
-      setEditingId(null);
-      setEditedTitle("");
+    try {
+      await axiosInstance.put(`/todo/${editingId}`, {
+        ...previousTodos.find((t) => t._id === editingId),
+        title: editedTitle,
+      });
     } catch (error) {
       console.error("Error updating todo:", error.message);
+      setTodos(previousTodos);
     }
   };
 
