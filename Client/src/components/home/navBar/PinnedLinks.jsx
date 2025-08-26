@@ -231,209 +231,209 @@ function PinnedLinks() {
       </button>
 
       {/* Dropdown of existing pinned links + add button */}
-      <AnimatePresence mode="wait">
-        {showDropdown && (
+      {/* <AnimatePresence mode="wait"> */}
+      {showDropdown && (
+        <motion.div
+          initial={{
+            opacity: 0,
+            height: 0,
+            scale: 0.95,
+            y: -8,
+          }}
+          animate={{
+            opacity: 1,
+            height: "auto",
+            scale: 1,
+            y: 0,
+          }}
+          exit={{
+            opacity: 0,
+            height: 0,
+            scale: 0.95,
+            y: -8,
+          }}
+          transition={{
+            duration: 0.15,
+            ease: [0.25, 0.1, 0.25, 1],
+            // height: { duration: 0.35 },
+            // opacity: { duration: 0.25 },
+            // scale: { duration: 0.3 },
+            // y: { duration: 0.3 },
+          }}
+          ref={dropdownRef}
+          className="absolute top-full left-0 mt-2 bg-sec shadow-lg rounded-lg p-2 z-10 min-w-[17rem] overflow-hidden backdrop-blur-sm border border-opacity-20 border-gray-300"
+          style={{
+            boxShadow:
+              "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+          }}
+        >
           <motion.div
-            initial={{
-              opacity: 0,
-              height: 0,
-              scale: 0.95,
-              y: -10,
-            }}
-            animate={{
-              opacity: 1,
-              height: "auto",
-              scale: 1,
-              y: 0,
-            }}
-            exit={{
-              opacity: 0,
-              height: 0,
-              scale: 0.95,
-              y: -10,
-            }}
-            transition={{
-              duration: 0.4,
-              ease: [0.4, 0.0, 0.2, 1],
-              height: { duration: 0.35 },
-              opacity: { duration: 0.25 },
-              scale: { duration: 0.3 },
-              y: { duration: 0.3 },
-            }}
-            ref={dropdownRef}
-            className="absolute top-full left-0 mt-2 bg-sec shadow-lg rounded-lg p-2 z-10 min-w-[17rem] overflow-hidden backdrop-blur-sm border border-opacity-20 border-gray-300"
-            style={{
-              boxShadow:
-                "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1, duration: 0.3 }}
           >
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.1, duration: 0.3 }}
-            >
-              {pinnedLinks.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{
-                    opacity: 0,
-                    x: -20,
-                    filter: "blur(4px)",
-                  }}
-                  animate={{
-                    opacity: 1,
-                    x: 0,
-                    filter: "blur(0px)",
-                  }}
-                  transition={{
-                    delay: 0.1 + index * 0.05,
-                    duration: 0.4,
-                    ease: [0.25, 0.46, 0.45, 0.94],
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                  className="flex items-center justify-between px-4 py-2 txt hover:bg-ter rounded-md transition-colors duration-200"
-                >
-                  <motion.div
-                    className="flex items-center gap-2 cursor-pointer flex-1"
-                    onClick={() => openWorkspace(item.links)}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <motion.div
-                      className="flex items-center gap-1"
-                      initial={{ scale: 0.8 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.15 + index * 0.05, duration: 0.3 }}
-                    >
-                      {item.links.map((link, idx) => (
-                        <motion.img
-                          key={idx}
-                          src={getFaviconUrl(link)}
-                          alt="icon"
-                          className="w-4 h-4 rounded-sm"
-                          initial={{ opacity: 0, rotate: -180 }}
-                          animate={{ opacity: 1, rotate: 0 }}
-                          transition={{
-                            delay: 0.2 + index * 0.05 + idx * 0.02,
-                            duration: 0.4,
-                          }}
-                          onError={(e) => {
-                            e.target.style.display = "none";
-                          }}
-                        />
-                      ))}
-                    </motion.div>
-                    <motion.span
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.2 + index * 0.05, duration: 0.3 }}
-                    >
-                      {item.title}
-                    </motion.span>
-                  </motion.div>
-
-                  <div className="relative">
-                    <motion.button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setOpenMenuId(openMenuId === item.id ? null : item.id);
-                      }}
-                      className="p-1 hover:bg-ter rounded transition-colors duration-200"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <MoreVertical className="w-4 h-4" />
-                    </motion.button>
-
-                    <AnimatePresence>
-                      {openMenuId === item.id && (
-                        <motion.div
-                          initial={{
-                            opacity: 0,
-                            scale: 0.9,
-                            y: -5,
-                          }}
-                          animate={{
-                            opacity: 1,
-                            scale: 1,
-                            y: 0,
-                          }}
-                          exit={{
-                            opacity: 0,
-                            scale: 0.9,
-                            y: -5,
-                          }}
-                          transition={{
-                            duration: 0.2,
-                            ease: [0.25, 0.46, 0.45, 0.94],
-                          }}
-                          className="absolute right-0 mt-1 bg-ter shadow-lg rounded-md p-1 z-10 min-w-[5rem] border border-opacity-10 border-gray-400"
-                        >
-                          <motion.button
-                            onClick={() => handleEditLink(item.id)}
-                            className="block w-full text-left px-2 py-1 hover:bg-sec txt rounded-sm transition-colors duration-150"
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                          >
-                            Edit
-                          </motion.button>
-                          <motion.button
-                            onClick={() => handleDeleteLink(item.id)}
-                            className="block w-full text-left px-2 py-1 hover:bg-sec txt rounded-sm transition-colors duration-150"
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                          >
-                            Delete
-                          </motion.button>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </motion.div>
-              ))}
-
-              <motion.button
-                onClick={handleAddNew}
-                className="block w-full px-4 py-2 txt hover:bg-ter rounded-md mt-2 flex items-center gap-2 transition-colors duration-200 border-t border-opacity-20 border-gray-300 pt-3"
+            {pinnedLinks.map((item, index) => (
+              <motion.div
+                key={item.id}
                 initial={{
                   opacity: 0,
-                  y: 10,
+                  x: -20,
+                  filter: "blur(4px)",
                 }}
                 animate={{
                   opacity: 1,
-                  y: 0,
+                  x: 0,
+                  filter: "blur(0px)",
                 }}
                 transition={{
-                  delay: 0.3 + pinnedLinks.length * 0.05,
-                  duration: 0.4,
+                  delay: index * 0.05,
+                  duration: 0.2,
+                  ease: [0.15, 0.05, 0.15, 1],
                 }}
                 whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                className="flex items-center justify-between px-4 py-2 txt hover:bg-ter rounded-md transition-colors duration-200"
               >
                 <motion.div
-                  initial={{ rotate: -90, scale: 0.8 }}
-                  animate={{ rotate: 0, scale: 1 }}
-                  transition={{
-                    delay: 0.4 + pinnedLinks.length * 0.05,
-                    duration: 0.3,
-                  }}
+                  className="flex items-center gap-2 cursor-pointer flex-1"
+                  onClick={() => openWorkspace(item.links)}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <Plus className="w-4 h-4" />
+                  <motion.div
+                    className="flex items-center gap-1"
+                    initial={{ scale: 0.8 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: index * 0.05, duration: 0.2 }}
+                  >
+                    {item.links.map((link, idx) => (
+                      <motion.img
+                        key={idx}
+                        src={getFaviconUrl(link)}
+                        alt="icon"
+                        className="w-4 h-4 rounded-sm"
+                        initial={{ opacity: 0, rotate: -90 }}
+                        animate={{ opacity: 1, rotate: 0 }}
+                        transition={{
+                          delay: index * 0.05 + idx * 0.02,
+                          duration: 0.4,
+                        }}
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                        }}
+                      />
+                    ))}
+                  </motion.div>
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: index * 0.05, duration: 0.3 }}
+                  >
+                    {item.title}
+                  </motion.span>
                 </motion.div>
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{
-                    delay: 0.45 + pinnedLinks.length * 0.05,
-                    duration: 0.3,
-                  }}
-                >
-                  Add Link
-                </motion.span>
-              </motion.button>
-            </motion.div>
+
+                <div className="relative">
+                  <motion.button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenMenuId(openMenuId === item.id ? null : item.id);
+                    }}
+                    className="p-1 hover:bg-ter rounded transition-colors duration-200"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <MoreVertical className="w-4 h-4" />
+                  </motion.button>
+
+                  <AnimatePresence>
+                    {openMenuId === item.id && (
+                      <motion.div
+                        initial={{
+                          opacity: 0,
+                          scale: 0.9,
+                          y: -5,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          scale: 1,
+                          y: 0,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          scale: 0.9,
+                          y: -5,
+                        }}
+                        transition={{
+                          duration: 0.2,
+                          ease: [0.25, 0.46, 0.45, 0.94],
+                        }}
+                        className="absolute right-0 mt-1 bg-ter shadow-lg rounded-md p-1 z-10 min-w-[5rem] border border-opacity-10 border-gray-400"
+                      >
+                        <motion.button
+                          onClick={() => handleEditLink(item.id)}
+                          className="block w-full text-left px-2 py-1 hover:bg-sec txt rounded-sm transition-colors duration-150"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          Edit
+                        </motion.button>
+                        <motion.button
+                          onClick={() => handleDeleteLink(item.id)}
+                          className="block w-full text-left px-2 py-1 hover:bg-sec txt rounded-sm transition-colors duration-150"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          Delete
+                        </motion.button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            ))}
+
+            <motion.button
+              onClick={handleAddNew}
+              className="block w-full px-4 py-2 txt hover:bg-ter rounded-md mt-2 flex items-center gap-2 transition-colors duration-200 border-t border-opacity-20 border-gray-300 pt-3"
+              initial={{
+                opacity: 0,
+                y: 10,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: pinnedLinks.length * 0.05,
+                duration: 0.2,
+              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <motion.div
+                initial={{ rotate: -90, scale: 0.8 }}
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{
+                  delay: 0.45 + pinnedLinks.length * 0.05,
+                  duration: 0.2,
+                }}
+              >
+                <Plus className="w-4 h-4" />
+              </motion.div>
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{
+                  delay: 0.2 + pinnedLinks.length * 0.05,
+                  duration: 0.2,
+                }}
+              >
+                Add Link
+              </motion.span>
+            </motion.button>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </motion.div>
+      )}
+      {/* </AnimatePresence> */}
 
       {/* Modal for adding/editing a workspace */}
       {showModal && (
