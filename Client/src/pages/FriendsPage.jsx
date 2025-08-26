@@ -15,7 +15,7 @@ function FriendsPage() {
 
   useEffect(() => {
     if (!searchParams.get("tab")) {
-      setSearchParams({ tab: "suggested" });
+      setSearchParams({ tab: "suggested" }, { replace: true });
     }
   }, [searchParams, setSearchParams]);
 
@@ -33,7 +33,7 @@ function FriendsPage() {
     <div className="flex h-screen overflow-hidden">
       <TabNavigation
         activeTab={activeTab}
-        onTabChange={(tab) => setSearchParams({ tab })}
+        onTabChange={(tab) => setSearchParams({ tab }, { replace: true })}
       />
       <MainContent selectedTab={activeTab} />
     </div>

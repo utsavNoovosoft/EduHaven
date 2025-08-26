@@ -42,7 +42,7 @@ const Settings = () => {
 
   useEffect(() => {
     if (!searchParams.get("tab")) {
-      setSearchParams({ tab: "basic-info" });
+      setSearchParams({ tab: "basic-info" } , { replace: true });
     }
   }, [searchParams, setSearchParams]);
 
@@ -74,7 +74,7 @@ const Settings = () => {
     <div className="flex w-[calc(100vw-70px)] overflow-hidden m-auto">
       <Sidebar
         activeTab={activeTab}
-        setActiveTab={(tab) => setSearchParams({ tab })}
+        setActiveTab={(tab) => setSearchParams({ tab }, { replace: true })}
         user={user}
       />
       <main className="p-6 py-10 bg-primary w-full h-screen overflow-y-auto">
