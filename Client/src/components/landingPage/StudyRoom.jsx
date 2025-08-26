@@ -3,11 +3,7 @@ import { MessageCircle, Video } from "lucide-react";
 function StudyRoom() {
   return (
     <div className="max-w-3xl xl:max-w-7xl mx-auto mb-28 md:flex gap-4 xl:gap-24 items-center justify-center">
-      <div className="flex-1 md:max-w-[600px] w-[85%] relative rounded-3xl overflow-hidden shadow-2xl group w-full md:ms-0 ms-[32px] md:mb-0 mb-[50px]"
-      style={{
-            animation: "floatMobile 3s ease-in-out infinite",
-          }}
-          >
+      <div className="flex-1 md:max-w-[600px] w-[85%] relative rounded-3xl overflow-hidden shadow-2xl group md:ms-0 ms-[32px] md:mb-0 mb-[50px]">
         <div
           className="aspect-video relative bg-cover bg-center"
           style={{
@@ -25,7 +21,7 @@ function StudyRoom() {
           <div className="absolute top-[12%] right-8 bg-white rounded-lg xl:rounded-2xl p-1.5 xl:p-3 shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300">
             <div className="flex items-center space-x-2">
               <MessageCircle size={16} style={{ color: "var(--btn)" }} />
-              <span className="text-xs" style={{ color: "var(--txt)" }}>
+              <span className="text-xs" style={{ color: "black" }}>
                 Need help with calculus?
               </span>
             </div>
@@ -34,22 +30,11 @@ function StudyRoom() {
           <div className="absolute bottom-[12%] left-8 bg-white rounded-lg xl:rounded-2xl p-1.5 xl:p-3 shadow-lg transform -rotate-2 hover:rotate-0 transition-transform duration-300">
             <div className="flex items-center space-x-2">
               <Video size={16} style={{ color: "var(--btn)" }} />
-              <span className="text-xs" style={{ color: "var(--txt)" }}>
+              <span className="text-xs" style={{ color: "black" }}>
                 Let's start a study group!
               </span>
             </div>
           </div>
-          <style jsx>{`
-        @media (min-width: 1280px) {
-          div {
-            animation: none !important;
-          }
-        }
-        @keyframes floatMobile {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-8px); }
-        }
-      `}</style>
         </div>
       </div>
       <h1 className="flex-1 max-w-[400px] text-balance text-xl sm:text-2xl xl:text-3xl font-poppins font-thin leading-[1.5] min-h-[calc(1.5em*4)] text-center xl:text-left">
