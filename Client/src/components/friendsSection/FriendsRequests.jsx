@@ -27,7 +27,7 @@ function FriendRequests() {
 
   const handleReject = (friendId) => {
     axiosInstance
-      .post(`/friends/reject/${friendId}`, null)
+      .delete(`/friends/reject/${friendId}`, null)
       .then((res) => {
         console.log(res.data);
         setRequests((prev) => prev.filter((user) => user._id !== friendId));
