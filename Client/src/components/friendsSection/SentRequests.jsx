@@ -22,6 +22,24 @@ function SentRequests({ onBack }) {
       });
   }, []);
 
+  const showSkeletons = sentRequests.length === 0;
+
+  if (showSkeletons) {
+    return (
+      <div className="bg-[var(--bg-secondary)] border border-gray-700/30 p-6 rounded-3xl shadow flex flex-col justify-center animate-pulse">
+        <div className="w-full mb-4 h-5 bg-gray-500/20 rounded-md"></div>
+        {Array(4)
+          .fill()
+          .map((_, i) => (
+            <div className="flex justify-between items-center space-x-2 my-2">
+              <div className="w-10 aspect-square bg-gray-500/20 rounded-full"></div>
+              <div className="h-10 flex-1 bg-gray-500/20 rounded-md"></div>
+            </div>
+          ))}
+      </div>
+    );
+  }
+
   return (
     <section className="bg-sec rounded-3xl p-4">
       <div className="flex items-center mb-4">

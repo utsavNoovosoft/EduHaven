@@ -12,7 +12,10 @@ function SuggestedFriends({ onViewSentRequests }) {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdrownRef.current && !dropdrownRef.current.contains(event.target)) {
+      if (
+        dropdrownRef.current &&
+        !dropdrownRef.current.contains(event.target)
+      ) {
         setShowDropdown(false);
       }
     };
@@ -21,7 +24,7 @@ function SuggestedFriends({ onViewSentRequests }) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showDropdown]); 
+  }, [showDropdown]);
 
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
@@ -35,7 +38,6 @@ function SuggestedFriends({ onViewSentRequests }) {
         null,
         getAuthHeader()
       );
-      console.log("Response:", response.data.message);
       setSuggestedFriends((prevUsers) =>
         prevUsers.map((user) =>
           user._id === friendId ? { ...user, requestSent: true } : user
@@ -61,10 +63,26 @@ function SuggestedFriends({ onViewSentRequests }) {
       });
   }, []);
 
-  if (suggestedFriends.length === 0) return null;
+  const showSkeletons = suggestedFriends.length === 0;
 
   // Limit to the first 15 results
   const limitedFriends = suggestedFriends.slice(0, 15);
+
+  if (showSkeletons) {
+    return (
+      <div className="bg-[var(--bg-secondary)] border border-gray-700/30 p-6 rounded-3xl shadow flex flex-col justify-center animate-pulse">
+        <div className="w-full mb-4 h-5 bg-gray-500/20 rounded-md"></div>
+        {Array(4)
+          .fill()
+          .map((_, i) => (
+            <div className="flex justify-between items-center space-x-2 my-2">
+              <div className="w-10 aspect-square bg-gray-500/20 rounded-full"></div>
+              <div className="h-10 flex-1 bg-gray-500/20 rounded-md"></div>
+            </div>
+          ))}
+      </div>
+    );
+  }
 
   return (
     <section className="bg-sec rounded-3xl p-4 relative ">
@@ -92,7 +110,7 @@ function SuggestedFriends({ onViewSentRequests }) {
       </div>
       <div className="space-y-2">
         {limitedFriends
-          .slice() 
+          .slice()
           .reverse()
           .map((user) => (
             <div key={user._id} className=" relative group py-1 bg-slate-400">

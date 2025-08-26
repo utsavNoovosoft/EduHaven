@@ -47,7 +47,7 @@ const Stats = ({ isCurrentUser = false }) => {
           });
         } else {
           const res = await fetchUserStats(userId);
-
+          console.log(res)
           setUserStats({
             name: `${res.userInfo?.firstName ?? ""} ${res.userInfo?.lastName ?? ""}`.trim(),
             bio: res.userInfo?.bio ?? "",
@@ -76,7 +76,7 @@ const Stats = ({ isCurrentUser = false }) => {
     fetchStats();
   }, [isCurrentUser, userId, currentUser, fetchUserDetails]);
 
-  if (isCurrentUser && !currentUser) {
+  if (isCurrentUser  && !currentUser) {
     return <NotLogedInPage />;
   }
 

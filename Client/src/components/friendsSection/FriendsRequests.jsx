@@ -40,7 +40,22 @@ function FriendRequests() {
       .catch((err) => console.error(err.response.data));
   };
 
-  if (friendRequests.length === 0) return null;
+  const showSkeletons = friendRequests.length === 0;
+
+  if (showSkeletons) {
+    return (
+      <div className="bg-[var(--bg-secondary)] border border-gray-700/30 p-4 space-y-6 rounded-3xl shadow animate-pulse">
+        <div className="flex justify-between items-center space-x-2 my-2">
+          <div className="w-10 aspect-square bg-gray-500/20 rounded-full"></div>
+          <div className="h-10 flex-1 bg-gray-500/20 rounded-md"></div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="w-[40%] h-8 bg-gray-500/20 rounded-md"></div>
+          <div className="w-[40%] h-8 bg-gray-500/20 rounded-md"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className="bg-sec rounded-3xl p-3 2xl:p-4">

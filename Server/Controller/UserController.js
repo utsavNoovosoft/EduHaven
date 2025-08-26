@@ -281,7 +281,6 @@ export const logout = async (req, res) => {
 export const getUserDetails = async (req, res) => {
   try {
     const userId = req.query.id;
-
     if (!userId || userId === "undefined") {
       return res
         .status(400)
@@ -294,7 +293,7 @@ export const getUserDetails = async (req, res) => {
       console.log("User not found");
       return res.status(404).json({ error: "User not found" });
     }
-
+    console.log("User :", user);
     return res.status(200).json(user);
   } catch (error) {
     console.error("Error fetching user details:", error);
@@ -347,7 +346,7 @@ export const uploadProfilePicture = async (req, res) => {
 export const giveKudos = async (req, res) => {
   try {
     const giverId = req.user.id;
-    const { receiverId } = req.body; 
+    const { receiverId } = req.body;
 
     if (giverId === receiverId) {
       return res
@@ -374,12 +373,10 @@ export const giveKudos = async (req, res) => {
     await giver.save();
     await receiver.save();
 
-    res
-      .status(200)
-      .json({
-        message: "Kudos given successfully!",
-        receiverKudos: receiver.kudosReceived,
-      });
+    res.status(200).json({
+      message: "Kudos given successfully!",
+      receiverKudos: receiver.kudosReceived,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -387,7 +384,7 @@ export const giveKudos = async (req, res) => {
 };
 
 //NEW: Get user stats (for streaks, rank, etc.)
- 
+
 export const getUserStats = async (req, res) => {
   try {
     const userId = req.query.id || req.user?._id;
@@ -407,7 +404,11 @@ export const getUserStats = async (req, res) => {
       totalUsers: totalUsersCount,
       currentStreak: user.streaks?.current || 0,
       maxStreak: user.streaks?.max || 0,
-      level: user.level || { name: "Beginner", progress: 0, hoursToNextLevel: 2 },
+      level: user.level || {
+        name: "Beginner",
+        progress: 0,
+        hoursToNextLevel: 2,
+      },
     });
   } catch (error) {
     console.error("Error fetching user stats:", error);

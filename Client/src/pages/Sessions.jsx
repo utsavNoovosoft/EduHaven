@@ -32,6 +32,9 @@ function Session() {
     fetchRooms();
   }, [backendUrl, token]);
 
+  // const showSkeletons = !isLoading && sessions.length === 0;
+
+
   return (
     <div className="h-[100vh] w-[calc(100vw-70px)] pb-0 flex ">
       <div className="w-[80%] overflow-x-hidden p-3 2xl:p-6 space-y-6">
@@ -39,12 +42,12 @@ function Session() {
         <OtherRoom otherRooms={otherRooms} />
       </div>
       <aside className="w-[20%] overflow-scroll min-w-72 space-y-3 2xl:space-y-6 overflow-x-hidden p-3 2xl:p-6 border-l border-gray-500/20">
-        <OnlineFriends />
-        <FriendRequests />
+        <OnlineFriends  />
+        <FriendRequests/>
         {view === "suggested" ? (
-          <SuggestedFriends onViewSentRequests={() => setView("sent")} />
+          <SuggestedFriends  onViewSentRequests={() => setView("sent")} />
         ) : (
-          <SentRequests onBack={() => setView("suggested")} />
+          <SentRequests  onBack={() => setView("suggested")} />
         )}
       </aside>
     </div>

@@ -1,6 +1,6 @@
 import { UserPlus } from "lucide-react";
 import { useState } from "react";
-import DefaultProfilePic from "../../../public/profilePic.avif"
+import DefaultProfilePic from "../../assets/profilePic.avif"
 
 function UserCard({
   user,
