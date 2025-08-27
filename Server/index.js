@@ -17,6 +17,13 @@ import FriendsRoutes from "./Routes/FriendsRoutes.js";
 import SessionRoutes from "./Routes/SessionRoutes.js";
 
 import { initializeSocket } from "./Socket/socket.js";
+import fetch, { Headers, Request, Response } from 'node-fetch';
+if (!globalThis.fetch) {
+  globalThis.fetch = fetch;
+  globalThis.Headers = Headers;
+  globalThis.Request = Request;
+  globalThis.Response = Response;
+}
 
 const app = express();
 const port = 3000;

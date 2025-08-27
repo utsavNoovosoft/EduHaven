@@ -2,6 +2,7 @@ import { UserPlus } from "lucide-react";
 import { useState } from "react";
 import DefaultProfilePic from "../../assets/profilePic.avif";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function UserCard({
   user,
@@ -100,5 +101,23 @@ function UserCard({
     </div>
   );
 }
+
+// PropTypes validation to fix linting errors
+UserCard.propTypes = {
+  user: PropTypes.shape({
+    _id: PropTypes.string,
+    FirstName: PropTypes.string,
+    LastName: PropTypes.string,
+    ProfilePicture: PropTypes.string,
+    Bio: PropTypes.string,
+    requestSent: PropTypes.bool
+  }).isRequired,
+  selectedTab: PropTypes.string.isRequired,
+  onSendRequest: PropTypes.func,
+  onCancelRequest: PropTypes.func,
+  onAcceptRequest: PropTypes.func,
+  onRejectRequest: PropTypes.func,
+  onRemoveFriend: PropTypes.func
+};
 
 export default UserCard;
