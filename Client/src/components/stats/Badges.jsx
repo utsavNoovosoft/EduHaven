@@ -2,23 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Award, Info } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import { toast } from "react-toastify";
-import {
-  checkBadgeAchievements,
-  getAllBadges,
-  saveBadgesToStorage,
-  loadBadgesFromStorage,
-  getNewlyEarnedBadges,
-} from "@/utils/badgeSystem";
-import { useUserProfile } from "@/contexts/UserProfileContext";
-import BadgeModal from "./BadgeModal";
-import BadgeTooltip from "./BadgeTooltip";
-import axiosInstance from "@/utils/axios";
+import { getAllBadges } from '@/utils/badgeSystem';
+import { useUserProfile } from '@/contexts/UserProfileContext';
+import BadgeModal from './BadgeModal';
+import BadgeTooltip from './BadgeTooltip';
+
+const backendUrl = import.meta.env.VITE_API_URL;
+
 
 const Badges = () => {
   const [earnedBadges, setEarnedBadges] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [goals, setGoals] = useState([]);
   const [userId, setUserId] = useState(null);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const { user, fetchUserDetails } = useUserProfile();
@@ -41,71 +35,41 @@ const Badges = () => {
     }
   }, [user, fetchUserDetails]);
 
-  // Fetch user's goals/todos
-  useEffect(() => {
-    const fetchGoals = async () => {
-      if (!userId) return;
 
-      try {
-        const response = await axiosInstance.get("/todo");
-        setGoals(response.data.data || response.data);
-      } catch (error) {
-        console.error("Error fetching goals:", error);
-        // If API fails, use empty array
-        setGoals([]);
+  // Fetch badges from backend API instead of client-side calculation
+  const fetchBadgesFromServer = async () => {
+    if (!userId) return;
+    
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${backendUrl}/user/badges`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (response.data.badges) {
+        setEarnedBadges(response.data.badges);
+
       }
-    };
+    } catch (error) {
+      console.error("Error fetching badges from server:", error);
+      // Fallback to empty array if server fetch fails
+      setEarnedBadges([]);
+    }
+  };
 
-    fetchGoals();
-  }, [userId]);
-
-  // Check badge achievements whenever user or goals change
   useEffect(() => {
-    if (user && userId) {
-      const previousBadges = loadBadgesFromStorage(userId);
-      const currentBadges = checkBadgeAchievements(user, goals);
 
-      // Save current badges to storage first (this will add timestamps for new badges)
-      saveBadgesToStorage(userId, currentBadges);
-
-      // Only show notifications if this is NOT the initial load
-      if (!isInitialLoad) {
-        // Check for newly earned badges with timestamp validation
-        const newBadges = getNewlyEarnedBadges(
-          previousBadges,
-          currentBadges,
-          userId
-        );
-
-        // Show notifications for genuinely new badges
-        newBadges.forEach((badge) => {
-          toast.success(`🏆 Badge Earned: ${badge.name}!`, {
-            position: "top-right",
-            autoClose: 8000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            style: {
-              background: "var(--bg-sec)",
-              color: "var(--txt)",
-              border: "1px solid var(--accent)",
-            },
-            progressStyle: {
-              background: "var(--accent)",
-            },
-          });
-        });
-      }
-
-      setEarnedBadges(currentBadges);
+    const initializeBadges = async () => {
+      await fetchBadgesFromServer();
 
       // Mark that initial load is complete
       if (isInitialLoad) {
         setIsInitialLoad(false);
       }
-    }
-  }, [user, goals, userId, isInitialLoad]);
+    };
+
+    initializeBadges();
+  }, [userId, isInitialLoad]);
 
   const allBadges = getAllBadges();
   const maxDisplayBadges = 10;
