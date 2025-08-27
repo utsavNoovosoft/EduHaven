@@ -2,6 +2,7 @@ import { UserPlus } from "lucide-react";
 import { useState } from "react";
 import DefaultProfilePic from "../../assets/profilePic.avif";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function UserCard({
   user,
@@ -31,20 +32,12 @@ function UserCard({
             {`${user.FirstName} ${user.LastName || ""}`}
           </div>
           <p
-            className={`text-sm text-gray-500 ${
-              isExpanded ? "" : "line-clamp-3"
+            className={`text-sm text-gray-500 mb-2 text-center h-10 overflow-hidden ${
+              isExpanded ? "" : "line-clamp-2"
             }`}
           >
             {user.Bio}
           </p>
-
-          <div className="mt-2">
-            {user.OtherDetails?.interests && (
-              <span className="text-xs text-gray-600 bg-gray-200 px-2 py-1 rounded-full inline-block">
-                {user.OtherDetails.interests}
-              </span>
-            )}
-          </div>
         </div>
       </Link>
 
@@ -97,5 +90,23 @@ function UserCard({
     </div>
   );
 }
+
+// PropTypes validation to fix linting errors
+UserCard.propTypes = {
+  user: PropTypes.shape({
+    _id: PropTypes.string,
+    FirstName: PropTypes.string,
+    LastName: PropTypes.string,
+    ProfilePicture: PropTypes.string,
+    Bio: PropTypes.string,
+    requestSent: PropTypes.bool
+  }).isRequired,
+  selectedTab: PropTypes.string.isRequired,
+  onSendRequest: PropTypes.func,
+  onCancelRequest: PropTypes.func,
+  onAcceptRequest: PropTypes.func,
+  onRejectRequest: PropTypes.func,
+  onRemoveFriend: PropTypes.func
+};
 
 export default UserCard;
