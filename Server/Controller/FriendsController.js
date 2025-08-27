@@ -24,8 +24,8 @@ export const userList = async (req, res) => {
         { _id: { $nin: currentUser.friendRequests || [] } },
       ],
     })
-    .sort({ createdAt: -1 }) //  newest users first
-    .select("FirstName LastName ProfilePicture Bio OtherDetails");
+      .sort({ createdAt: -1 }) //  newest users first
+      .select("FirstName LastName ProfilePicture Bio OtherDetails");
 
     res.json(users);
   } catch (err) {
@@ -38,8 +38,11 @@ export const sendRequest = async (req, res) => {
   try {
     const userId = req.user._id;
     const { friendId } = req.params;
-    const currentUser = await User.findById(userId);
-    const friendUser = await User.findById(friendId);
+
+    const [currentUser, friendUser] = await Promise.all([
+      User.findById(userId),
+      User.findById(friendId),
+    ]);
 
     if (userId.toString() === friendId) {
       return res
@@ -66,13 +69,14 @@ export const sendRequest = async (req, res) => {
       return res.status(400).json({ message: "Request already sent." });
     }
 
-    await User.findByIdAndUpdate(friendId, {
-      $addToSet: { friendRequests: userId },
-    });
-
-    await User.findByIdAndUpdate(userId, {
-      $addToSet: { sentRequests: friendId },
-    });
+    await Promise.all([
+      User.findByIdAndUpdate(friendId, {
+        $addToSet: { friendRequests: userId },
+      }),
+      User.findByIdAndUpdate(userId, {
+        $addToSet: { sentRequests: friendId },
+      }),
+    ]);
 
     res.json({ message: "Friend request sent." });
   } catch (err) {
