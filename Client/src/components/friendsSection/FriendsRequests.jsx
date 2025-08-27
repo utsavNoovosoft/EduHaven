@@ -5,20 +5,14 @@ import { Link } from "react-router-dom";
 
 function FriendRequests() {
   const [friendRequests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     axiosInstance
       .get("/friends/requests")
       .then((res) => {
         setRequests(res.data);
-        setLoading(false);
       })
-      .catch((err) => {
-        console.error(err.response?.data);
-        setLoading(false);
-      });
+      .catch((err) => console.error(err.response.data));
   }, []);
 
   const handleAccept = (friendId) => {
@@ -38,11 +32,12 @@ function FriendRequests() {
         console.log(res.data);
         setRequests((prev) => prev.filter((user) => user._id !== friendId));
       })
-      .catch((err) => console.error(err.response?.data));
+      .catch((err) => console.error(err.response.data));
   };
 
-  // Only show skeletons when data is loading, not when there are no requests
-  if (loading) {
+  const showSkeletons = friendRequests.length === 0;
+
+ if (showSkeletons) {
     return (
       <div className="bg-[var(--bg-secondary)] border border-gray-700/30 p-4 space-y-4 rounded-3xl shadow animate-pulse">
         <div className="bg-gray-500/20 h-6 rounded-md"></div>
@@ -72,10 +67,7 @@ function FriendRequests() {
     <section className="bg-sec rounded-3xl p-3 2xl:p-4">
       <h3 className="text-xl font-semibold txt">Friend Requests</h3>
       <div className="space-y-4">
-        {friendRequests.length === 0 ? (
-          <p className="text-center py-4 txt-dim">No pending friend requests</p>
-        ) : (
-          friendRequests.map((user) => (
+        {friendRequests.map((user) => (
           <div key={user.id} className="!mt-7">
             <div className="flex items-center">
               <Link to={`/user/${user._id}`}>
@@ -118,7 +110,7 @@ function FriendRequests() {
               </button>
             </div>
           </div>
-        )))}
+        ))}
       </div>
     </section>
   );
