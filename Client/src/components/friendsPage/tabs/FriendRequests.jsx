@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 import UserCard from "../UserCard";
+import SearchBar from "../SearchBar";
 
 export default function FriendRequests() {
   const [requests, setRequests] = useState([]);
+  const [filteredRequests, setFilteredRequests] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
 
   const fetchRequests = async () => {
@@ -42,9 +45,46 @@ export default function FriendRequests() {
     }
   };
 
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    if (!term.trim()) {
+      setFilteredRequests(requests);
+      return;
+    }
+    
+    const filtered = requests.filter(user => {
+      const fullName = `${user.FirstName} ${user.LastName || ''}`.toLowerCase();
+      
+      // Search by name
+      if (fullName.includes(term.toLowerCase())) {
+        return true;
+      }
+      
+      // Search by skills
+      if (user.OtherDetails?.skills && 
+          user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())) {
+        return true;
+      }
+      
+      // Search by interests
+      if (user.OtherDetails?.interests && 
+          user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())) {
+        return true;
+      }
+      
+      return false;
+    });
+    
+    setFilteredRequests(filtered);
+  };
+
   useEffect(() => {
     fetchRequests();
   }, []);
+  
+  useEffect(() => {
+    setFilteredRequests(requests);
+  }, [requests]);
 
   if (loading)
     return <div className="text-center text-gray-500">Loading...</div>;
@@ -52,16 +92,31 @@ export default function FriendRequests() {
     return <div className="text-center text-gray-500">No requests</div>;
 
   return (
-    <div className="flex flex-wrap gap-3 2xl:gap-4">
-      {requests.map((user) => (
-        <UserCard
-          key={user._id}
-          user={user}
-          selectedTab="friendRequests"
-          onAcceptRequest={acceptRequest}
-          onRejectRequest={rejectRequest}
+    <div>
+      {requests.length > 0 && (
+        <SearchBar 
+          onSearch={handleSearch} 
+          placeholder="Search friend requests..."
         />
-      ))}
+      )}
+      
+      <div className="flex flex-wrap gap-3 2xl:gap-4 mt-4">
+        {filteredRequests.map((user) => (
+          <UserCard
+            key={user._id}
+            user={user}
+            selectedTab="friendRequests"
+            onAcceptRequest={acceptRequest}
+            onRejectRequest={rejectRequest}
+          />
+        ))}
+      </div>
+      
+      {filteredRequests.length === 0 && searchTerm && (
+        <div className="text-center text-gray-500 mt-4">
+          No matching friend requests found
+        </div>
+      )}
     </div>
   );
 }
