@@ -14,11 +14,11 @@ function SearchBar({ onSearch, placeholder = "Search friends..." }) {
   return (
     <div className="relative mb-4 w-full max-w-md">
       <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-        <Search className="w-5 h-5 text-gray-400" />
+        <Search className="w-5 h-5 txt-dim" />
       </div>
       <input
         type="text"
-        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+        className="bg-ter border-none txt text-sm rounded-xl focus:ring-[var(--btn)] focus:border-[var(--btn)] block w-full pl-10 p-3"
         placeholder={placeholder}
         value={searchTerm}
         onChange={handleSearch}
@@ -31,7 +31,7 @@ function SearchBar({ onSearch, placeholder = "Search friends..." }) {
             onSearch('');
           }}
         >
-          <span className="text-gray-400 hover:text-gray-600">✕</span>
+          <span className="txt-dim hover:text-[var(--btn)] transition-colors">✕</span>
         </button>
       )}
     </div>
