@@ -21,12 +21,15 @@ import { set } from "date-fns";
 const ProfileCard = ({ isCurrentUser = false }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFriendRequestLoading, setIsFriendRequestLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [friendsList, setFriendsList] = useState([]);
   const { userId } = useParams();
   const [showLink, setShowLink] = useState(false);
   const [kudosCount, setKudosCount] = useState(0);
   const [hasGivenKudos, setHasGivenKudos] = useState(false);
+
+  const [friendRequestStatus, setFriendRequestStatus] = useState("notSent"); // could be only "sent", "notSent" and "friend"
 
   // user part for share functionality
   const profilelink = user?._id
@@ -46,6 +49,46 @@ const ProfileCard = ({ isCurrentUser = false }) => {
       })
       .catch(() => toast.error("Not Copied "));
   };
+
+  const handleFriendRequestAction = () => {
+    if (isFriendRequestLoading) return;
+
+    setIsFriendRequestLoading(true);
+    if (friendRequestStatus === "notSent") {
+      sendRequest(userId);
+      setIsFriendRequestLoading(false);
+    } else if (friendRequestStatus === "sent") {
+      cancelRequest(userId);
+      setIsFriendRequestLoading(false);
+    }
+  };
+
+  const sendRequest = async (friendId) => {
+    try {
+      await axiosInstance.post(`/friends/request/${friendId}`, null);
+      setFriendRequestStatus("sent");
+      toast.success("Friend request sent!");
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        err.response?.data?.message || "Error sending friend request!"
+      );
+    }
+  };
+
+  const cancelRequest = async (friendId) => {
+    try {
+      await axiosInstance.delete(`/friends/sent-requests/${friendId}`);
+      setFriendRequestStatus("notSent");
+      toast.info("Friend request canceled.");
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        err.response?.data?.message || "Error canceling friend request!"
+      );
+    }
+  };
+
   const shareRef = useRef(null);
 
   useEffect(() => {
@@ -110,7 +153,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
     const fetchUserProfile = async () => {
       try {
         let response;
-        let token = localStorage.getItem("token")
+        let token = localStorage.getItem("token");
         if (isCurrentUser) {
           const decoded = jwtDecode(token);
           response = await axiosInstance.get(`/user/details?id=${decoded.id}`);
@@ -211,10 +254,9 @@ const ProfileCard = ({ isCurrentUser = false }) => {
     }
 
     try {
-      const response = await axiosInstance.post(
-        "/kudos",
-        { receiverId: user._id },
-      );
+      const response = await axiosInstance.post("/kudos", {
+        receiverId: user._id,
+      });
 
       toast.success("🎉 Kudos given successfully!");
       setKudosCount((prev) => prev + 1);
@@ -399,9 +441,25 @@ const ProfileCard = ({ isCurrentUser = false }) => {
               <span>Chat</span>
             </button>
 
-            <button className="bg-purple-600 hover:bg-purple-700 transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap">
+            <button
+              className={`${
+                friendRequestStatus === "notSent"
+                  ? "bg-purple-600 hover:bg-purple-700"
+                  : friendRequestStatus === "sent"
+                  ? "bg-purple-500 hover:bg-purple-600"
+                  : "bg-purple-400 hover:bg-purple-500"
+              }  transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap cursor-pointer`}
+              disabled={isFriendRequestLoading}
+              onClick={handleFriendRequestAction}
+            >
               <UserPlus className="w-5 h-5" />
-              <span>Add friend</span>
+              <span>
+                {friendRequestStatus === "sent"
+                  ? "Cancel request"
+                  : friendRequestStatus === "notSent"
+                  ? "Add friend"
+                  : "Already friends"}
+              </span>
             </button>
           </div>
         )}
