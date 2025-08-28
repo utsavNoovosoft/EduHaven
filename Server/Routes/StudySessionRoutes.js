@@ -4,7 +4,7 @@ import {
   getLeaderboard,
   getStudySessionStats,
   getUserStudyStats,
-} from "../Controller/SessionController.js";
+} from "../Controller/StudySessionController.js";
 import authMiddleware from "../Middlewares/authMiddleware.js";
 
 const router = express.Router();

@@ -12,9 +12,9 @@ import TodoRoutes from "./Routes/ToDoRoutes.js";
 import EventRoutes from "./Routes/EventRoutes.js";
 import authRoutes from "./Routes/AuthRoutes.js";
 import NotesRoutes from "./Routes/NotesRoutes.js";
-import TimerSessionRoutes from "./Routes/SessionsRoutes.js";
+import StudySessionRoutes from "./Routes/StudySessionRoutes.js";
 import FriendsRoutes from "./Routes/FriendsRoutes.js";
-import SessionRoutes from "./Routes/SessionRoutes.js";
+import SessionRoomRoutes from "./Routes/SessionRoomRoutes.js";
 
 import { initializeSocket } from "./Socket/socket.js";
 import fetch, { Headers, Request, Response } from "node-fetch";
@@ -53,8 +53,8 @@ app.use("/auth", authRoutes);
 app.use("/todo", TodoRoutes);
 app.use("/note", NotesRoutes);
 app.use("/events", EventRoutes);
-app.use("/study-sessions", TimerSessionRoutes);
-app.use("/session-room", SessionRoutes);
+app.use("/study-sessions", StudySessionRoutes);
+app.use("/session-room", SessionRoomRoutes);
 app.use("/friends", FriendsRoutes);
 app.use("/user", UserRoutes);
 
