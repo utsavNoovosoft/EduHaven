@@ -7,6 +7,7 @@ import { updateStreaks } from "../utils/streakUpdater.js";
 const createStudySession = async (req, res) => {
   try {
     const { startTime, endTime, duration } = req.body;
+    console.log("Timer");
     if (duration > 10) updateStreaks(req.user.id);
     const session = new StudySession({
       user: req.user.id,

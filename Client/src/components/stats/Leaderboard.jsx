@@ -101,7 +101,7 @@ const Leaderboard = () => {
   };
 
   return (
-    <div className="p-6 w-full bg-[var(--bg-sec)] mx-auto shadow-2xl rounded-3xl min-w-96">
+    <div className="p-6 w-full bg-[var(--bg-sec)] mx-auto shadow-md rounded-3xl min-w-96">
       {/* Header */}
       <div className="justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-[var(--txt)]">Leaderboard</h2>

@@ -76,7 +76,7 @@ const Badges = () => {
 
   return (
     <>
-      <div className="bg-[var(--bg-sec)] rounded-3xl shadow-lg p-6 w-full">
+      <div className="bg-[var(--bg-sec)] rounded-3xl shadow-md p-6 w-full">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold text-center flex-1">
             Badges Earned

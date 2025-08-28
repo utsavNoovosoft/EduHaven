@@ -1,6 +1,6 @@
 const MonthlyLevel = () => {
   return (
-    <div className="bg-[var(--bg-sec)] rounded-3xl shadow-lg p-6 flex flex-col items-center w-full">
+    <div className="bg-[var(--bg-sec)] rounded-3xl shadow-md p-6 flex flex-col items-center w-full">
       <h3 className="text-xl font-bold mb-2">Monthly Level</h3>
       <p className="mb-4">
         Level <span className="font-semibold">7</span>

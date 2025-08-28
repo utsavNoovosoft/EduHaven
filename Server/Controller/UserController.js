@@ -127,13 +127,13 @@ const getUserDetails = async (req, res) => {
 
     const token = req.headers.authorization?.split(" ")[1];
     if (!token)
-      return res.status(200).json({ user, relationshipStatus: "Add friends" });
+      return res.status(200).json({ ...user, relationshipStatus: "Add friends" });
 
     let decoded;
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
-      return res.status(200).json({ user, relationshipStatus: "Add friends" });
+      return res.status(200).json({ ...user, relationshipStatus: "Add friends" });
     }
 
     const currUser = await User.findById(decoded.id).select(
@@ -141,7 +141,7 @@ const getUserDetails = async (req, res) => {
     );
 
     if (!currUser) {
-      return res.status(200).json({ user, relationshipStatus: "unknown" });
+      return res.status(200).json({ ...user, relationshipStatus: "unknown" });
     }
 
     // Determine relationship from here
@@ -155,7 +155,7 @@ const getUserDetails = async (req, res) => {
       relationshipStatus = "Accept Request";
     }
 
-    return res.status(200).json({ user, relationshipStatus });
+    return res.status(200).json({ ...user, relationshipStatus });
   } catch (error) {
     console.error("Error fetching user details:", error);
     res.status(500).json({ error: "Failed to fetch user details" });
