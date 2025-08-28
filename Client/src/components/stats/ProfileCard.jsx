@@ -61,7 +61,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
     } else if (friendRequestStatus === "Cancel Request") {
       await cancelRequest(userId);
       setIsFriendRequestLoading(false);
-    } else if (friendRequestStatus === "Accept Request"){
+    } else if (friendRequestStatus === "Accept Request") {
       await acceptRequest(userId);
       setIsFriendRequestLoading(false);
     }
@@ -105,7 +105,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
       );
     }
   };
-  
+
   const shareRef = useRef(null);
 
   useEffect(() => {
@@ -178,7 +178,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
           response = await axiosInstance.get(`/user/details?id=${userId}`);
         }
 
-        console.log(response);
+        // console.log(response);
 
         setUser(response.data);
         setKudosCount(response.data.kudosReceived || 0);
@@ -467,8 +467,8 @@ const ProfileCard = ({ isCurrentUser = false }) => {
                 friendRequestStatus === "Add Friend"
                   ? "bg-purple-600 hover:bg-purple-700"
                   : friendRequestStatus === "Cancel Request"
-                  ? "bg-purple-500 hover:bg-purple-600"
-                  : "bg-purple-400 hover:bg-purple-500"
+                    ? "bg-purple-500 hover:bg-purple-600"
+                    : "bg-purple-400 hover:bg-purple-500"
               }  transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap cursor-pointer`}
               disabled={isFriendRequestLoading}
               onClick={handleFriendRequestAction}

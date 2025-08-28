@@ -167,6 +167,7 @@ const computeSummary = (data) => {
 const StudyStats = ({ stats: streakStats = {} }) => {
   const [view, setView] = useState("daily");
   const [isOpen, setIsOpen] = useState(false);
+  const [rank, setRank] = useState(0);
   const [chartStats, setChartStats] = useState([]);
 
   useEffect(() => {
@@ -203,6 +204,19 @@ const StudyStats = ({ stats: streakStats = {} }) => {
 
     handleGetStats();
   }, [view]);
+
+  useEffect(() => {
+    const handleGetRank = async () => {
+      try {
+        const response = await axiosInstance.get("/user-stats");
+        // console.log("Rank-----", response.data.rank);
+        setRank(response.data.rank);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    handleGetRank();
+  }, []);
 
   const summary = computeSummary(chartStats);
 
@@ -306,7 +320,7 @@ const StudyStats = ({ stats: streakStats = {} }) => {
       </div>
       <div className="text-sm p-6 mt-auto text-left w-fit">
         Rank:
-        <div className="text-4xl mb-8 font-bold text-blue-500">Null</div>
+        <div className="text-4xl mb-8 font-bold text-blue-500">{rank}</div>
         Current Streak:
         <div className="text-4xl mb-8 font-bold text-yellow-500">
           {streakStats.currentStreak ?? 0}{" "}
