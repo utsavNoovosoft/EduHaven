@@ -308,4 +308,5 @@ const initializeSocket = (io) => {
   console.log("Socket.IO initialized successfully");
 };
 
-export { initializeSocket, onlineUsers, userSockets };
+export default initializeSocket;
+export { onlineUsers, userSockets };

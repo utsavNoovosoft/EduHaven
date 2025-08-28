@@ -43,11 +43,12 @@ const useWebRTCConnection = (socket, roomId, userId) => {
     } finally {
       setIsConnecting(false);
     }
-  }, [socket, roomId, userId, isConnecting]);
+  }, [socket, roomId, userId]); // Remove isConnecting from dependencies
 
-  // Get user media
+  // Get user media with graceful fallbacks
   const getUserMedia = useCallback(async (video = true, audio = true) => {
     try {
+      // Try with requested permissions first
       const stream = await navigator.mediaDevices.getUserMedia({
         video: video ? {
           width: { ideal: 1280 },
@@ -67,10 +68,64 @@ const useWebRTCConnection = (socket, roomId, userId) => {
         localVideoRef.current.srcObject = stream;
       }
 
+      console.log('Successfully got user media');
       return stream;
     } catch (error) {
-      console.error('Failed to get user media:', error);
-      throw error;
+      console.warn('Failed to get user media with requested permissions:', error);
+      
+      // Fallback: Try with lower constraints
+      try {
+        const fallbackStream = await navigator.mediaDevices.getUserMedia({
+          video: video ? { width: 640, height: 480 } : false,
+          audio: audio
+        });
+
+        setLocalStream(fallbackStream);
+        
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = fallbackStream;
+        }
+
+        console.log('Successfully got user media with fallback constraints');
+        return fallbackStream;
+      } catch (fallbackError) {
+        console.error('All media access attempts failed:', fallbackError);
+        
+        // Create a dummy stream for testing if permissions are denied
+        if (video) {
+          const canvas = document.createElement('canvas');
+          canvas.width = 640;
+          canvas.height = 480;
+          const ctx = canvas.getContext('2d');
+          
+          // Create a simple animated background
+          const drawFrame = () => {
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fillRect(0, 0, 640, 480);
+            ctx.fillStyle = '#4a9eff';
+            ctx.font = '24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Camera Permission Denied', 320, 220);
+            ctx.fillText('Please allow camera access', 320, 260);
+            ctx.fillText(`Time: ${new Date().toLocaleTimeString()}`, 320, 300);
+          };
+          
+          drawFrame();
+          setInterval(drawFrame, 1000); // Update every second
+          
+          const dummyStream = canvas.captureStream(1);
+          setLocalStream(dummyStream);
+          
+          if (localVideoRef.current) {
+            localVideoRef.current.srcObject = dummyStream;
+          }
+          
+          console.log('Created dummy video stream due to permission denial');
+          return dummyStream;
+        }
+        
+        throw fallbackError;
+      }
     }
   }, []);
 
@@ -271,24 +326,32 @@ const useWebRTCConnection = (socket, roomId, userId) => {
     };
   }, [socket, handleNewConsumer]);
 
-  // Initialize everything
+  // Initialize everything (run only once when socket, roomId, userId are available)
   useEffect(() => {
     const initialize = async () => {
       try {
         await initializeSFU();
-        const stream = await getUserMedia();
         
-        // Small delay to ensure SFU is ready
-        setTimeout(async () => {
-          await startProducing(stream);
-        }, 1000);
+        try {
+          const stream = await getUserMedia();
+          
+          // Small delay to ensure SFU is ready
+          setTimeout(async () => {
+            await startProducing(stream);
+          }, 1000);
+          
+        } catch (mediaError) {
+          console.warn('Could not get user media, continuing without local stream:', mediaError);
+          // Continue even if getUserMedia fails - user can still receive other streams
+        }
         
       } catch (error) {
         console.error('Failed to initialize WebRTC:', error);
+        // Don't throw - let the component continue to work for receiving streams
       }
     };
 
-    if (socket && roomId && userId && !isConnecting) {
+    if (socket && roomId && userId) {
       initialize();
     }
 
@@ -299,7 +362,7 @@ const useWebRTCConnection = (socket, roomId, userId) => {
       }
       sfuService.current.close();
     };
-  }, [socket, roomId, userId, initializeSFU, getUserMedia, startProducing, isConnecting]);
+  }, [socket, roomId, userId]); // Removed problematic dependencies
 
   return {
     localStream,
