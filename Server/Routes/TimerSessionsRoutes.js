@@ -11,6 +11,7 @@ import mongoose from "mongoose";
 router.post("/timer", auth, async (req, res) => {
   try {
     const { startTime, endTime, duration } = req.body;
+    console.log("Timer");
     if (duration > 10) updateStreaks(req.user.id);
     const session = new StudySession({
       user: req.user.id,
@@ -45,124 +46,125 @@ router.get("/timerstats", auth, async (req, res) => {
 router.get("/user-stats", auth, async (req, res) => {
   try {
     const userId = req.user.id;
-    
+
     // Get user's streak information
     const user = await User.findById(userId).select("streaks");
-    
+
     // Calculate total study hours for different time periods
     const now = new Date();
-    
+
     // Today (from midnight)
     const todayStart = new Date(now);
     todayStart.setHours(0, 0, 0, 0);
-    
+
     // This week (from Monday)
     const weekStart = new Date(now);
     const day = now.getDay();
     const diff = now.getDate() - day + (day === 0 ? -6 : 1);
     weekStart.setDate(diff);
     weekStart.setHours(0, 0, 0, 0);
-    
+
     // This month
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    
+
     // All time
     const allTimeStart = new Date(0);
-    
+
     // Aggregate study sessions for different periods
-    const [todayStats, weekStats, monthStats, allTimeStats] = await Promise.all([
-      StudySession.aggregate([
-        {
-          $match: {
-            user: new mongoose.Types.ObjectId(userId),
-            startTime: { $gte: todayStart }
-          }
-        },
-        {
-          $group: {
-            _id: null,
-            totalHours: { $sum: { $divide: ["$duration", 60] } }
-          }
-        }
-      ]),
-      StudySession.aggregate([
-        {
-          $match: {
-            user: new mongoose.Types.ObjectId(userId),
-            startTime: { $gte: weekStart }
-          }
-        },
-        {
-          $group: {
-            _id: null,
-            totalHours: { $sum: { $divide: ["$duration", 60] } }
-          }
-        }
-      ]),
-      StudySession.aggregate([
-        {
-          $match: {
-            user: new mongoose.Types.ObjectId(userId),
-            startTime: { $gte: monthStart }
-          }
-        },
-        {
-          $group: {
-            _id: null,
-            totalHours: { $sum: { $divide: ["$duration", 60] } }
-          }
-        }
-      ]),
-      StudySession.aggregate([
-        {
-          $match: {
-            user: new mongoose.Types.ObjectId(userId),
-            startTime: { $gte: allTimeStart }
-          }
-        },
-        {
-          $group: {
-            _id: null,
-            totalHours: { $sum: { $divide: ["$duration", 60] } }
-          }
-        }
-      ])
-    ]);
-    
+    const [todayStats, weekStats, monthStats, allTimeStats] = await Promise.all(
+      [
+        StudySession.aggregate([
+          {
+            $match: {
+              user: new mongoose.Types.ObjectId(userId),
+              startTime: { $gte: todayStart },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              totalHours: { $sum: { $divide: ["$duration", 60] } },
+            },
+          },
+        ]),
+        StudySession.aggregate([
+          {
+            $match: {
+              user: new mongoose.Types.ObjectId(userId),
+              startTime: { $gte: weekStart },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              totalHours: { $sum: { $divide: ["$duration", 60] } },
+            },
+          },
+        ]),
+        StudySession.aggregate([
+          {
+            $match: {
+              user: new mongoose.Types.ObjectId(userId),
+              startTime: { $gte: monthStart },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              totalHours: { $sum: { $divide: ["$duration", 60] } },
+            },
+          },
+        ]),
+        StudySession.aggregate([
+          {
+            $match: {
+              user: new mongoose.Types.ObjectId(userId),
+              startTime: { $gte: allTimeStart },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              totalHours: { $sum: { $divide: ["$duration", 60] } },
+            },
+          },
+        ]),
+      ]
+    );
+
     // Get user's rank among all users based on total study hours
     const userRank = await StudySession.aggregate([
       {
         $group: {
           _id: "$user",
-          totalHours: { $sum: { $divide: ["$duration", 60] } }
-        }
+          totalHours: { $sum: { $divide: ["$duration", 60] } },
+        },
       },
-      { $sort: { totalHours: -1 } }
+      { $sort: { totalHours: -1 } },
     ]);
-    
-    const currentUserRank = userRank.findIndex(item => 
-      item._id.toString() === userId
-    ) + 1;
-    
+
+    const currentUserRank =
+      userRank.findIndex((item) => item._id.toString() === userId) + 1;
+
     // Calculate remaining time to next level (assuming 2 hours per level)
     const totalHours = allTimeStats[0]?.totalHours || 0;
     const currentLevel = Math.floor(totalHours / 2) + 1;
     const hoursInCurrentLevel = totalHours % 2;
     const hoursToNextLevel = 2 - hoursInCurrentLevel;
-    
+
     // Determine level name based on total hours
     let levelName = "Beginner";
     if (totalHours >= 10) levelName = "Intermediate";
     if (totalHours >= 25) levelName = "Advanced";
     if (totalHours >= 50) levelName = "Expert";
     if (totalHours >= 100) levelName = "Master";
-    
+
     const stats = {
       timePeriods: {
         today: (todayStats[0]?.totalHours || 0).toFixed(1),
         thisWeek: (weekStats[0]?.totalHours || 0).toFixed(1),
         thisMonth: (monthStats[0]?.totalHours || 0).toFixed(1),
-        allTime: (allTimeStats[0]?.totalHours || 0).toFixed(1)
+        allTime: (allTimeStats[0]?.totalHours || 0).toFixed(1),
       },
       rank: currentUserRank,
       totalUsers: userRank.length,
@@ -173,10 +175,10 @@ router.get("/user-stats", auth, async (req, res) => {
         current: currentLevel,
         hoursInCurrentLevel: hoursInCurrentLevel.toFixed(1),
         hoursToNextLevel: hoursToNextLevel.toFixed(1),
-        progress: (hoursInCurrentLevel / 2 * 100).toFixed(1)
-      }
+        progress: ((hoursInCurrentLevel / 2) * 100).toFixed(1),
+      },
     };
-    
+
     res.json(stats);
   } catch (error) {
     console.error("Error fetching user stats:", error);
@@ -222,7 +224,7 @@ router.get("/leaderboard", auth, async (req, res) => {
       matchStage.user = { $in: userIdsToInclude };
     }
 
-    // finding total duration of users and formatting the output 
+    // finding total duration of users and formatting the output
     const leaderboard = await StudySession.aggregate([
       { $match: matchStage },
       {
@@ -256,6 +258,6 @@ router.get("/leaderboard", auth, async (req, res) => {
     console.error("Leaderboard error:", error);
     res.status(500).json({ error: error.message });
   }
-})
+});
 
 export const TimerSessionRoutes = router;
