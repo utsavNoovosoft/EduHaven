@@ -12,7 +12,7 @@ const Signout = () => {
     const handleSignOut = async () => {
       try {
         await axiosInstance.post(
-          `${backendUrl}/logout`,
+          `${backendUrl}/auth/logout`,
           {},
           { withCredentials: true }
         );

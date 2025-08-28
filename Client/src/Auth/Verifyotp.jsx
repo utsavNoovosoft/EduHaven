@@ -59,7 +59,7 @@ const OtpInput = () => {
     try {
       const activationToken = localStorage.getItem("activationToken");
 
-      const response = await fetch(`${backendUrl}/verify`, {
+      const response = await fetch(`${backendUrl}/auth/verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
