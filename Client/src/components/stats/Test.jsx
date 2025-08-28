@@ -13,7 +13,7 @@ function App() {
     const sessionData = { startTime, endTime, duration };
 
     try {
-      const response = await axiosInstance.post("/timer", sessionData);
+      const response = await axiosInstance.post("study-sessions", sessionData);
 
       const result = await response.data;
       console.log("Session logged:", result);
@@ -25,7 +25,9 @@ function App() {
   // Handle GET request to fetch statistics
   const handleGetStats = async () => {
     try {
-      const response = await axiosInstance.get(`/timerstats?period=${period}`);
+      const response = await axiosInstance.get(
+        `/study-sessions/stats?period=${period}`
+      );
 
       const result = await response.data;
       setStats(result);

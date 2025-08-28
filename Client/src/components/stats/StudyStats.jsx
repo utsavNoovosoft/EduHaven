@@ -172,7 +172,9 @@ const StudyStats = ({ stats: streakStats = {} }) => {
   useEffect(() => {
     const handleGetStats = async () => {
       try {
-        const response = await axiosInstance.get(`/timerstats?period=${view}`);
+        const response = await axiosInstance.get(
+          `/study-sessions/stats?period=${view}`
+        );
         const result = await response.data;
         let timeline = [];
 

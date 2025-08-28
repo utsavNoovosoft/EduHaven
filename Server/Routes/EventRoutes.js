@@ -1,14 +1,14 @@
 import express from "express";
 import {
-    getAllEvents,
-    getEventById,
-    createEvent,
-    updateEvent,
-    deleteEvent,
-    getEventByDate
+  getAllEvents,
+  getEventById,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+  getEventByDate,
+  getUserStats,
 } from "../Controller/EventController.js";
 import authMiddleware from "../Middlewares/authMiddleware.js";
-import { getUserStats } from "../Controller/UserController.js";
 
 const router = express.Router();
 

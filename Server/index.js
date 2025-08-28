@@ -12,12 +12,12 @@ import TodoRoutes from "./Routes/ToDoRoutes.js";
 import EventRoutes from "./Routes/EventRoutes.js";
 import authRoutes from "./Routes/AuthRoutes.js";
 import NotesRoutes from "./Routes/NotesRoutes.js";
-import { TimerSessionRoutes } from "./Routes/TimerSessionsRoutes.js";
+import TimerSessionRoutes from "./Routes/SessionsRoutes.js";
 import FriendsRoutes from "./Routes/FriendsRoutes.js";
 import SessionRoutes from "./Routes/SessionRoutes.js";
 
 import { initializeSocket } from "./Socket/socket.js";
-import fetch, { Headers, Request, Response } from 'node-fetch';
+import fetch, { Headers, Request, Response } from "node-fetch";
 if (!globalThis.fetch) {
   globalThis.fetch = fetch;
   globalThis.Headers = Headers;
@@ -53,7 +53,7 @@ app.use("/auth", authRoutes);
 app.use("/todo", TodoRoutes);
 app.use("/note", NotesRoutes);
 app.use("/events", EventRoutes);
-app.use("/", TimerSessionRoutes);
+app.use("/study-sessions", TimerSessionRoutes);
 app.use("/session-room", SessionRoutes);
 app.use("/friends", FriendsRoutes);
 app.use("/user", UserRoutes);
