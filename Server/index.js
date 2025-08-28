@@ -10,7 +10,7 @@ import { Server } from "socket.io";
 import UserRoutes from "./Routes/UserRoutes.js";
 import TodoRoutes from "./Routes/ToDoRoutes.js";
 import EventRoutes from "./Routes/EventRoutes.js";
-import authRoutes from "./Routes/OAuthRoute.js";
+import authRoutes from "./Routes/AuthRoutes.js";
 import NotesRoutes from "./Routes/NotesRoutes.js";
 import { TimerSessionRoutes } from "./Routes/TimerSessionsRoutes.js";
 import FriendsRoutes from "./Routes/FriendsRoutes.js";
@@ -49,7 +49,6 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => res.send("Hello, World!"));
-app.use("/", UserRoutes);
 app.use("/auth", authRoutes);
 app.use("/todo", TodoRoutes);
 app.use("/note", NotesRoutes);
@@ -57,7 +56,7 @@ app.use("/events", EventRoutes);
 app.use("/", TimerSessionRoutes);
 app.use("/session-room", SessionRoutes);
 app.use("/friends", FriendsRoutes);
-app.use("/users", UserRoutes);
+app.use("/user", UserRoutes);
 
 initializeSocket(io);
 
