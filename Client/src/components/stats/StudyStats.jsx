@@ -210,7 +210,7 @@ const StudyStats = ({ stats: streakStats = {} }) => {
   useEffect(() => {
     const handleGetRank = async () => {
       try {
-        const response = await axiosInstance.get("/user-stats");
+        const response = await axiosInstance.get("/study-session/user-stats");
         // console.log("Rank-----", response.data.rank);
         setRank(response.data.rank);
       } catch (error) {
