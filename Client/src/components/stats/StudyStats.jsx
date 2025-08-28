@@ -212,7 +212,7 @@ const StudyStats = ({ stats: streakStats = {} }) => {
   };
 
   return (
-    <div className="flex bg-[var(--bg-ter)] rounded-3xl text-center w-full overflow-hidden">
+    <div className="flex bg-[var(--bg-ter)] shadow-md rounded-3xl text-center w-full overflow-hidden">
       {/* Chart showing Total Study Hours and Study-Room Hours */}
       <div className="flex-1 bg-[var(--bg-sec)] pr-4 rounded-3xl">
         {/* Header with computed summary study stats */}
