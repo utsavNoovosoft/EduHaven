@@ -1,0 +1,80 @@
+/* SessionRoom.css */
+.session-room {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+.session-room.loading {
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-spinner {
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #333;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.session-header {
+  background: #1a1a1a;
+  padding: 1rem;
+  border-bottom: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.session-header h2 {
+  color: white;
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.participant-count {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.session-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.video-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-section {
+  width: 300px;
+  background: #1a1a1a;
+  border-left: 1px solid #333;
+}
+
+@media (max-width: 768px) {
+  .chat-section {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+  }
+}

@@ -1,48 +1,112 @@
-import { useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import useSessionChat from "../hooks/useSessionChat.jsx";
-import Controls from "../components/sessionRooms/Controls.jsx";
-import ChatPannel from "@/components/sessionRooms/ChatPannel.jsx";
-import ShowInfo from "@/components/sessionRooms/InfoPannel.jsx";
-import UseSocketContext from "@/context/SocketContext.jsx";
-import { UseMediaHandlers } from "@/hooks/WebRTC/UseMediaHandlers.jsx";
-import UseConnectToSocketServer from "@/hooks/WebRTC/UseSocketService.jsx";
-import VideoConferenceView from "@/hooks/WebRTC/VideoConferenceView.jsx";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
+import useWebRTCConnection from '../hooks/WebRTC/WebRTCConnection';
+import Controls from '../components/sessionRooms/Controls';
+import VideoGrid from '../components/sessionRooms/VideoGrid';
+import ChatPannel from '@/components/sessionRooms/ChatPannel';
+import ShowInfo from '@/components/sessionRooms/InfoPannel';
+import useSessionChat from '../hooks/useSessionChat';
+import './SessionRoom.css';
 
 function SessionRoom() {
   const { id: roomId } = useParams();
+  const navigate = useNavigate();
+  const [socket, setSocket] = useState(null);
+  const [userId] = useState(() => `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
   const [showChat, setShowChat] = useState(true);
   const [showInfo, setShowInfo] = useState(false);
+  const [participants, setParticipants] = useState([]);
 
-  const { socket } = UseSocketContext();
+  // Initialize socket connection
+  useEffect(() => {
+    const newSocket = io(process.env.REACT_APP_SERVER_URL || 'http://localhost:5000', {
+      transports: ['websocket'],
+      auth: {
+        token: localStorage.getItem('token') // Use existing auth token if available
+      }
+    });
 
-  const socketIdRef = useRef();
-  const videoRef = useRef([]);
-  const [screenAvailable, setScreenAvailable] = useState(false);
-  const [videos, setVideos] = useState([]);
-  const localVideoref = useRef();
+    newSocket.on('connect', () => {
+      console.log('Connected to server');
+      setSocket(newSocket);
+    });
 
+    newSocket.on('disconnect', () => {
+      console.log('Disconnected from server');
+    });
+
+    newSocket.on('error', (error) => {
+      console.error('Socket error:', error);
+      // Handle authentication errors gracefully
+      if (error.message === 'Authentication error') {
+        console.log('Authentication failed, but continuing for demo purposes');
+        setSocket(newSocket);
+      }
+    });
+
+    return () => {
+      newSocket.close();
+    };
+  }, []);
+
+  // WebRTC connection hook
+  const {
+    localStream,
+    remoteStreams,
+    peers,
+    isAudioEnabled,
+    isVideoEnabled,
+    isScreenSharing,
+    isConnecting,
+    toggleAudio,
+    toggleVideo,
+    startScreenShare,
+    stopScreenShare,
+    localVideoRef,
+    remoteVideoRefs,
+  } = useWebRTCConnection(socket, roomId, userId);
+
+  // Chat functionality
   const { messages, typingUsers, sendMessage, startTyping, stopTyping } =
     useSessionChat(socket, roomId);
 
-  const {
-    videoToggle,
-    audioToggle,
-    screen,
-    handleVideo,
-    handleAudio,
-    handleScreen,
-  } = UseMediaHandlers(localVideoref, socketIdRef, socket, setScreenAvailable);
+  // Update participants list
+  useEffect(() => {
+    const participantsList = [
+      {
+        id: userId,
+        name: `You (${userId.slice(-6)})`,
+        isLocal: true,
+        audioEnabled: isAudioEnabled,
+        videoEnabled: isVideoEnabled,
+      },
+      ...peers.map(peerId => ({
+        id: peerId,
+        name: `User ${peerId.slice(-6)}`,
+        isLocal: false,
+        audioEnabled: true, // This should come from peer state in production
+        videoEnabled: true, // This should come from peer state in production
+      }))
+    ];
+    setParticipants(participantsList);
+  }, [userId, peers, isAudioEnabled, isVideoEnabled]);
 
-  UseConnectToSocketServer(socket, socketIdRef, roomId, videoRef, setVideos);
-  if (videos) console.log("the list of videos are:", videos);
+  const leaveRoom = () => {
+    if (socket) {
+      socket.emit('user-leave', { roomId, userId });
+    }
+    navigate('/');
+  };
 
-  if (!socket) {
+  if (!socket || isConnecting) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="txt">Connecting...</p>
+          <p className="text-white">
+            {isConnecting ? 'Connecting to room...' : 'Initializing...'}
+          </p>
         </div>
       </div>
     );
@@ -50,68 +114,33 @@ function SessionRoom() {
 
   return (
     <div className="min-h-screen bg-black flex flex-col overflow-hidden">
+      {/* Header */}
+      <div className="bg-gray-900 px-4 py-2 flex justify-between items-center border-b border-gray-700">
+        <div className="flex items-center space-x-4">
+          <h2 className="text-white font-semibold">Room: {roomId}</h2>
+          <div className="text-gray-400 text-sm">
+            {participants.length} participant{participants.length !== 1 ? 's' : ''}
+          </div>
+        </div>
+        <button
+          onClick={leaveRoom}
+          className="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded text-sm"
+        >
+          Leave Room
+        </button>
+      </div>
+
       <div className="flex-1 flex">
         {/* Video Area */}
         <div className="flex-1 bg-black relative">
-          {/* Local Video */}
-          {/* <div className="absolute top-4 right-4 w-48 h-32 bg-gray-800 rounded-lg overflow-hidden z-10">
-            <video
-              ref={localVideoRef}
-              autoPlay
-              muted
-              playsInline
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute bottom-2 left-2 text-white text-xs bg-black bg-opacity-50 px-2 py-1 rounded">
-              You {isScreenSharing && "(Screen)"}
-            </div>
-          </div> */}
-
-          {/* Remote Videos */}
-          {/* <div className="grid grid-cols-2 gap-4 p-4 h-full">
-            {Array.from(peers.values()).map((peer) => (
-              <div
-                key={peer.userId}
-                className="bg-gray-800 rounded-lg overflow-hidden"
-              >
-                <video
-                  autoPlay
-                  playsInline
-                  className="w-full h-full object-cover"
-                  ref={(el) => {
-                    if (el && peer.stream) {
-                      el.srcObject = peer.stream;
-                    }
-                  }}
-                />
-                <div className="absolute bottom-2 left-2 text-white text-xs bg-black bg-opacity-50 px-2 py-1 rounded">
-                  {peer.userId}
-                </div>
-              </div>
-            ))}
-          </div> */}
-
-          {/* No video message */}
-          {/* {!isVideoEnabled && peers.size === 0 && !isScreenSharing && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center text-white">
-                <Video size={48} className="mx-auto mb-4 opacity-50" />
-                <p className="text-lg">No video active</p>
-                <p className="text-sm opacity-75">
-                  Click the video button to start your camera
-                </p>
-              </div>
-            </div>
-          )} */}
-
-          <video
-            className={"bg-blue-500 h-[200px]"}
-            ref={localVideoref}
-            autoPlay
-            muted
-          ></video>
-
-          <VideoConferenceView videos={videos} />
+          <VideoGrid
+            localStream={localStream}
+            remoteStreams={remoteStreams}
+            localVideoRef={localVideoRef}
+            remoteVideoRefs={remoteVideoRefs}
+            participants={participants}
+            userId={userId}
+          />
         </div>
 
         {showChat && (
@@ -134,14 +163,14 @@ function SessionRoom() {
         showInfo={showInfo}
         setShowChat={setShowChat}
         setShowInfo={setShowInfo}
-        // pass WebRTC stuff:
-        isAudioEnabled={audioToggle}
-        isVideoEnabled={videoToggle}
-        isScreenSharing={screen}
-        toggleAudio={handleAudio}
-        toggleVideo={handleVideo}
-        startScreenShare={handleScreen}
-        stopScreenShare={handleScreen}
+        isAudioEnabled={isAudioEnabled}
+        isVideoEnabled={isVideoEnabled}
+        isScreenSharing={isScreenSharing}
+        toggleAudio={toggleAudio}
+        toggleVideo={toggleVideo}
+        startScreenShare={startScreenShare}
+        stopScreenShare={stopScreenShare}
+        onLeaveRoom={leaveRoom}
       />
     </div>
   );
