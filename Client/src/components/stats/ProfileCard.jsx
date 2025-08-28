@@ -180,9 +180,9 @@ const ProfileCard = ({ isCurrentUser = false }) => {
 
         console.log(response);
 
-        setUser(response.data.user);
-        setKudosCount(response.data.user.kudosReceived || 0);
-        setHasGivenKudos(response.data.user.hasGivenKudos || false);
+        setUser(response.data);
+        setKudosCount(response.data.kudosReceived || 0);
+        setHasGivenKudos(response.data.hasGivenKudos || false);
         setFriendRequestStatus(response.data.relationshipStatus);
       } catch (error) {
         console.error("Error fetching user profile:", error);
