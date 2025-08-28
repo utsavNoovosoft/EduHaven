@@ -124,7 +124,7 @@ function StudyTimer() {
       if (totalMinutes < 1) return false;
 
       try {
-        const res = await axiosInstance.post(`/timer`, {
+        const res = await axiosInstance.post(`study-sessions`, {
           startTime,
           endTime,
           duration: Math.round(totalMinutes),
@@ -181,7 +181,7 @@ function StudyTimer() {
 
     if (totalSeconds >= 60) {
       try {
-        const res = await axiosInstance.post("/timer", {
+        const res = await axiosInstance.post("study-sessions", {
           startTime: startTimeRef.current,
           endTime: new Date().toISOString(),
           duration: Math.round(totalSeconds / 60),

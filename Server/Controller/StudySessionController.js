@@ -1,14 +1,10 @@
-import express from "express";
-import auth from "../Middlewares/authMiddleware.js";
+import mongoose from "mongoose";
 import StudySession from "../Model/StudySession.js";
 import User from "../Model/UserModel.js";
 import calculateStats from "../utils/TimerStatsCalculator.js";
-const router = express.Router();
 import { updateStreaks } from "../utils/streakUpdater.js";
-import mongoose from "mongoose";
 
-// Record new session
-router.post("/timer", auth, async (req, res) => {
+const createStudySession = async (req, res) => {
   try {
     const { startTime, endTime, duration } = req.body;
     console.log("Timer");
@@ -25,10 +21,9 @@ router.post("/timer", auth, async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+};
 
-// Get statistics
-router.get("/timerstats", auth, async (req, res) => {
+const getStudySessionStats = async (req, res) => {
   try {
     const { period } = req.query;
     const validPeriods = ["hourly", "daily", "weekly", "monthly"];
@@ -40,10 +35,9 @@ router.get("/timerstats", auth, async (req, res) => {
   } catch (error) {
     res.status(500).json(error.message);
   }
-});
+};
 
-// Get comprehensive study statistics for current user
-router.get("/user-stats", auth, async (req, res) => {
+const getUserStudyStats = async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -184,10 +178,9 @@ router.get("/user-stats", auth, async (req, res) => {
     console.error("Error fetching user stats:", error);
     res.status(500).json({ error: error.message });
   }
-});
+};
 
-// get the leaderboard for the stats page.
-router.get("/leaderboard", auth, async (req, res) => {
+const getLeaderboard = async (req, res) => {
   try {
     const { period, friendsOnly } = req.query;
 
@@ -258,6 +251,11 @@ router.get("/leaderboard", auth, async (req, res) => {
     console.error("Leaderboard error:", error);
     res.status(500).json({ error: error.message });
   }
-});
+};
 
-export const TimerSessionRoutes = router;
+export {
+  createStudySession,
+  getStudySessionStats,
+  getUserStudyStats,
+  getLeaderboard,
+};

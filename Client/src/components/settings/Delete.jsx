@@ -22,7 +22,7 @@ const Delete = () => {
 
     try {
       setIsLoading(true);
-      const res = await axiosInstance.delete("/user/delete");
+      const res = await axiosInstance.delete("/auth/delete");
 
       let data = res.data;
 

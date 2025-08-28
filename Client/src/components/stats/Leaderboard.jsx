@@ -33,7 +33,7 @@ const Leaderboard = () => {
       setLoading(true);
       try {
         const res = await axiosInstance.get(
-          `/leaderboard?period=${view}&friendsOnly=${friendsOnly}`
+          `/study-sessions/leaderboard?period=${view}&friendsOnly=${friendsOnly}`
         );
         setTimeout(() => {
           setLeaderboard(res.data);

@@ -173,7 +173,9 @@ const StudyStats = ({ stats: streakStats = {} }) => {
   useEffect(() => {
     const handleGetStats = async () => {
       try {
-        const response = await axiosInstance.get(`/timerstats?period=${view}`);
+        const response = await axiosInstance.get(
+          `/study-sessions/stats?period=${view}`
+        );
         const result = await response.data;
         let timeline = [];
 
@@ -208,7 +210,7 @@ const StudyStats = ({ stats: streakStats = {} }) => {
   useEffect(() => {
     const handleGetRank = async () => {
       try {
-        const response = await axiosInstance.get("/user-stats");
+        const response = await axiosInstance.get("/study-sessions/user-stats");
         // console.log("Rank-----", response.data.rank);
         setRank(response.data.rank);
       } catch (error) {

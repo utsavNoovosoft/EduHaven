@@ -1,14 +1,13 @@
 import express from "express";
 import {
-    getAllEvents,
-    getEventById,
-    createEvent,
-    updateEvent,
-    deleteEvent,
-    getEventByDate
+  createEvent,
+  deleteEvent,
+  getAllEvents,
+  getEventByDate,
+  getEventById,
+  updateEvent
 } from "../Controller/EventController.js";
 import authMiddleware from "../Middlewares/authMiddleware.js";
-import { getUserStats } from "../Controller/UserController.js";
 
 const router = express.Router();
 
@@ -17,7 +16,6 @@ router.use(authMiddleware);
 
 router.get("/", getAllEvents);
 router.get("/by-date", getEventByDate);
-router.get("/stats", getUserStats);
 router.get("/:id", getEventById);
 router.post("/", createEvent);
 router.put("/:id", updateEvent);

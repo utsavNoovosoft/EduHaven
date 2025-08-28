@@ -35,7 +35,7 @@ function StatsSummary() {
     try {
       setError(null);
 
-      const response = await axiosInstance.get(`/user-stats`);
+      const response = await axiosInstance.get(`/study-sessions/user-stats`);
       const stats = response.data;
 
       // Update study data with real values
