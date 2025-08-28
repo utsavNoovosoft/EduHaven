@@ -103,7 +103,7 @@ const Stats = ({ isCurrentUser = false }) => {
       <div className="flex flex-col lg:flex-row gap-3 2xl:gap-6 w-full content-center">
         <div className="lg:w-[20%] min-w-72 space-y-3 2xl:space-y-6">
           <ProfileCard isCurrentUser={isCurrentUser} user={userStats} />
-          <div className="h-auto w-full rounded-3xl bg-sec p-5 space-y-4">
+          <div className="h-auto w-full rounded-3xl bg-[var(--bg-sec)] p-5 shadow-md space-y-4">
             <AdCard />
           </div>
         </div>
