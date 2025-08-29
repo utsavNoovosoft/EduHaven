@@ -114,14 +114,9 @@ const verifyUser = async (req, res) => {
     }
 
     if (verify.otp.toString() !== otp.toString()) {
-      // Development bypass: Accept "123456" when email service is not configured
-      if (otp.toString() === "123456" && (!process.env.RESEND_KEY || process.env.RESEND_KEY === "" || process.env.RESEND_KEY === "temp_key_for_demo")) {
-        console.log("Development bypass: Using test OTP 123456");
-      } else {
-        return res.status(400).json({
-          message: "Incorrect OTP",
-        });
-      }
+      return res.status(400).json({
+        message: "Incorrect OTP",
+      });
     }
 
     await User.create({
@@ -227,11 +222,6 @@ const signup = async (req, res) => {
     );
 
     await sendMail(Email, FirstName, otp);
-
-    // Development: Log OTP when email service is not configured
-    if (!process.env.RESEND_KEY || process.env.RESEND_KEY === "" || process.env.RESEND_KEY === "temp_key_for_demo") {
-      console.log(`🔐 Development OTP for ${Email}: ${otp} (or use test OTP: 123456)`);
-    }
 
     const token = generateAuthToken(user);
 

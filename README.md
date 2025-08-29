@@ -24,14 +24,8 @@
 - **To-Do List**: Helps users organize and manage their tasks efficiently.
 - **Note-Making**: Rich-text editor to create, edit, and organize notes.
 - **Real-Time Study Rooms**:
- - **🚀 NEW: SFU-Based Video Calling** - Scalable video calling supporting 3+ participants
- - **Selective Forwarding Unit (SFU)** architecture replaces P2P mesh for better performance
- - **Professional UI** with modern design and responsive layouts
- - **Multi-user Support** - No performance degradation with increased participants
- - Chat and collaborate with friends in real-time
- - Advanced video/audio controls with WebRTC
- - Screen sharing and media management
- - Graceful fallbacks for camera/microphone permissions
+ - Chat and collaborate with friends.
+ - Video/audio controls using WebRTC.
 - **Chatbot**: Provides productivity tips and answers academic questions.
 - **Friends and Social Features**: Add friends, invite them to study rooms, and track their online/offline status.
 - **Analytics**: Visualize progress with charts and insights.
@@ -43,7 +37,6 @@
 - **Backend**: Node.js with Express
 - **Database**: MongoDB
 - **Real-Time Communication**: Socket.IO, WebRTC
-- **🚀 NEW: SFU Implementation**: mediasoup for scalable video calling
 
 ## Installation and Setup
 
@@ -96,20 +89,6 @@
    cd ../Client
    npm run dev
    ```
-
-## 🎥 SFU Video Calling Setup
-
-⚠️ **Demo Configuration Notice**: This implementation includes temporary demo credentials for easy testing. **Production deployment requires replacing demo values** - see setup guides for details.
-
-📚 **Quick Setup**: See [`SETUP_GUIDE.md`](./SETUP_GUIDE.md) for 5-minute setup  
-📖 **Full Documentation**: See [`docs/SFU_IMPLEMENTATION.md`](./docs/SFU_IMPLEMENTATION.md) for complete implementation details
-
-### Key Features:
-- ✅ **Scalable Architecture**: Supports 3+ participants (replaces P2P mesh)
-- ✅ **Professional UI**: Modern design with gradients and animations  
-- ✅ **Real-time Communication**: Socket.IO + WebRTC + mediasoup
-- ✅ **Multi-browser Testing**: Verified with Chrome, Firefox, Edge
-- ✅ **Graceful Fallbacks**: Works even with denied camera permissions
 
 ## Contribution Guidelines
 
