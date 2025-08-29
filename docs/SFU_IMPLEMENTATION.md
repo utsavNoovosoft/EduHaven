@@ -250,6 +250,86 @@ const transportOptions = {
 };
 ```
 
+## ⚠️ **IMPORTANT: Demo/Testing Configuration Notice**
+
+### **🚨 Current State - For Testing/Demo Only**
+
+This implementation includes **temporary demo configurations** to enable immediate testing:
+
+#### **Authentication Bypass (TEMPORARY)**
+```javascript
+// In AuthController.js - REMOVE FOR PRODUCTION
+if (otp.toString() === "123456" && (!process.env.RESEND_KEY || process.env.RESEND_KEY === "" || process.env.RESEND_KEY === "temp_key_for_demo")) {
+  console.log("Development bypass: Using test OTP 123456");
+  // This allows login with OTP: 123456
+}
+```
+
+#### **Demo Environment Variables (TEMPORARY)**
+```env
+# In Server/.env - REPLACE FOR PRODUCTION
+RESEND_KEY="temp_key_for_demo"  # Triggers auth bypass
+JWT_SECRET="your-super-secret-jwt-key-for-eduhaven-2025-dev"  # Demo secret
+Activation_Secret="eduhaven-activation-secret-key-2025-dev"  # Demo secret
+MONGODB_URI="mongodb+srv://farazmirza1023_db_user:..."  # Shared demo DB
+```
+
+### **🔧 Required Changes for Production**
+
+#### **1. Remove Authentication Bypass**
+In `Server/Controller/AuthController.js`, remove or comment out:
+```javascript
+// REMOVE THESE LINES FOR PRODUCTION:
+// Development bypass: Accept "123456" when email service is not configured
+if (otp.toString() === "123456" && (!process.env.RESEND_KEY || process.env.RESEND_KEY === "" || process.env.RESEND_KEY === "temp_key_for_demo")) {
+  console.log("Development bypass: Using test OTP 123456");
+} else {
+  return res.status(400).json({
+    message: "Incorrect OTP",
+  });
+}
+```
+
+#### **2. Configure Production Environment**
+Replace demo values in `Server/.env`:
+```env
+# PRODUCTION CONFIGURATION REQUIRED:
+RESEND_KEY="your_actual_resend_api_key"  # Get from https://resend.com
+JWT_SECRET="your_secure_production_jwt_secret_min_32_chars"
+Activation_Secret="your_secure_production_activation_secret"
+MONGODB_URI="your_production_mongodb_connection_string"
+
+# SFU Configuration (can keep as-is for localhost)
+MEDIASOUP_ANNOUNCED_IP=127.0.0.1  # Change to your server IP for production
+```
+
+#### **3. Setup Email Service**
+```bash
+# Get Resend API key for production email sending
+1. Go to https://resend.com/
+2. Create account and get API key
+3. Replace RESEND_KEY in .env with real key
+4. Remove demo bypass code from AuthController.js
+```
+
+#### **4. Secure Database Setup**
+```bash
+# For production database
+1. Create your own MongoDB cluster at https://mongodb.com/cloud/atlas
+2. Replace MONGODB_URI with your connection string
+3. Ensure proper database security and access controls
+```
+
+### **🎯 Why Demo Configuration Was Included**
+
+The demo configuration allows **immediate testing** of the SFU implementation without requiring reviewers to:
+- Set up MongoDB accounts
+- Configure email services
+- Generate JWT secrets
+- Deal with authentication complexity
+
+**This enables focus on the core SFU functionality during review.**
+
 ## 🧪 Testing Guide
 
 ### Multi-User Testing

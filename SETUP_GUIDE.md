@@ -1,5 +1,19 @@
 # 🚀 Quick Setup Guide - SFU Video Calling
 
+## ⚠️ **IMPORTANT NOTICE - Demo Configuration**
+
+**🚨 This setup uses TEMPORARY demo credentials for easy testing!**
+
+For **PRODUCTION use**, you MUST:
+1. **Remove authentication bypass** (OTP: 123456)
+2. **Replace demo environment variables** with your own
+3. **Set up your own email service** (Resend API key)
+4. **Configure your own database** (MongoDB)
+
+**See "Required Changes for Production" section below for details.**
+
+---
+
 ## ⚡ Quick Start (5 minutes)
 
 ### 1. Prerequisites
@@ -140,3 +154,58 @@ When everything is working correctly:
 ---
 
 **🎯 Ready for production!** The SFU implementation provides scalable video calling that replaces the P2P mesh topology and supports multiple participants efficiently.
+
+## 🔧 **Required Changes for Production**
+
+### **⚠️ Remove Demo Configuration**
+
+**1. Authentication Bypass Removal:**
+```javascript
+// In Server/Controller/AuthController.js
+// REMOVE these lines (around line 118):
+if (otp.toString() === "123456" && (!process.env.RESEND_KEY || process.env.RESEND_KEY === "" || process.env.RESEND_KEY === "temp_key_for_demo")) {
+  console.log("Development bypass: Using test OTP 123456");
+}
+```
+
+**2. Production Environment Setup:**
+```bash
+# Replace demo values in Server/.env:
+
+# Email Service (REQUIRED)
+RESEND_KEY="your_actual_resend_api_key"  # Get from https://resend.com
+
+# Security Secrets (REQUIRED)
+JWT_SECRET="your_secure_32_char_minimum_jwt_secret"
+Activation_Secret="your_secure_activation_secret"
+
+# Database (REQUIRED)
+MONGODB_URI="your_production_mongodb_connection_string"
+
+# SFU (Update for your server)
+MEDIASOUP_ANNOUNCED_IP="your_server_public_ip"  # For production deployment
+```
+
+**3. Email Service Setup:**
+```bash
+1. Visit https://resend.com/
+2. Create account and verify domain
+3. Get API key from dashboard
+4. Replace RESEND_KEY in .env file
+```
+
+**4. Database Setup:**
+```bash
+1. Create MongoDB Atlas cluster: https://mongodb.com/cloud/atlas
+2. Get connection string
+3. Replace MONGODB_URI in .env file
+4. Configure database security/access controls
+```
+
+### **🎯 Why Demo Config Was Included**
+- ✅ **Immediate testing** without setup complexity
+- ✅ **Focus on SFU functionality** during review
+- ✅ **Easy PR validation** for maintainers
+- ✅ **Faster development iteration**
+
+**The demo configuration allows reviewers to test the SFU implementation immediately using OTP `123456` without setting up their own services.**

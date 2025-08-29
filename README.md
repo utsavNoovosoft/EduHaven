@@ -99,7 +99,7 @@
 
 ## 🎥 SFU Video Calling Setup
 
-For the new **SFU-based video calling feature**:
+⚠️ **Demo Configuration Notice**: This implementation includes temporary demo credentials for easy testing. **Production deployment requires replacing demo values** - see setup guides for details.
 
 📚 **Quick Setup**: See [`SETUP_GUIDE.md`](./SETUP_GUIDE.md) for 5-minute setup  
 📖 **Full Documentation**: See [`docs/SFU_IMPLEMENTATION.md`](./docs/SFU_IMPLEMENTATION.md) for complete implementation details
