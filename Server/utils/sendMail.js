@@ -9,20 +9,10 @@ global.Request = Request;
 global.Response = Response;
 
 dotenv.config();
-
-// Initialize Resend only if API key is provided
-let resend = null;
-if (process.env.RESEND_KEY && process.env.RESEND_KEY !== "" && process.env.RESEND_KEY !== "temp_key_for_demo") {
-  resend = new Resend(process.env.RESEND_KEY);
-}
+const resend = new Resend(process.env.RESEND_KEY);
 
 const sendEmail = async (Email, FirstName, otp) => {
   try {
-    if (!resend) {
-      console.log('Resend API key not configured, skipping email send for:', Email);
-      return { success: false, message: 'Email service not configured' };
-    }
-    
     const response = await resend.emails.send({
       from: "Eduahaven <noreply@eduhaven.online>",
       to:Email,
