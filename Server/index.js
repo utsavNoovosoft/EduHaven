@@ -16,7 +16,7 @@ import StudySessionRoutes from "./Routes/StudySessionRoutes.js";
 import FriendsRoutes from "./Routes/FriendsRoutes.js";
 import SessionRoomRoutes from "./Routes/SessionRoomRoutes.js";
 
-import { initializeSocket } from "./Socket/socket.js";
+import initializeSocket from "./Socket/socket.js";
 import fetch, { Headers, Request, Response } from "node-fetch";
 if (!globalThis.fetch) {
   globalThis.fetch = fetch;
@@ -26,7 +26,7 @@ if (!globalThis.fetch) {
 }
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const server = createServer(app);
 
