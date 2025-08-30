@@ -50,33 +50,6 @@ function Login() {
   const password = watch("Password", "");
   const [strength, setStrength] = useState(0);
 
-  const strengthLevels = [
-    { level: "Very Weak", color: "text-red-500" },
-
-    { level: "Weak", color: "text-orange-500" },
-
-    { level: "Medium", color: "text-yellow-500" },
-
-    { level: "Strong", color: "text-green-500" },
-
-    { level: "Very Strong", color: "text-emerald-600" },
-  ];
-
-  const passwordEdgeCases = (pwd) => {
-    let score = 0;
-
-    if (pwd.trim().length >= 6) score++;
-    if (/\d/.test(pwd)) score++;
-    if (/[A-Z]/.test(pwd)) score++;
-    if (/[a-z]/.test(pwd)) score++;
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) score++;
-    return score;
-  };
-
-  {/*useEffect(() => {
-    setStrength(passwordEdgeCases(password));
-  }, [password]);*/}
-
   return (
     <div className="space-y-8 ">
       <div className="text-center ">
@@ -139,13 +112,6 @@ function Login() {
             className="block text-sm font-medium text-gray-900 dark:text-gray-300"
           >
             Password{" "}
-            <span
-              className={`text-sm ml-52 font-semibold ${
-                strengthLevels[strength - 1]?.color
-              }`}
-            >
-              {strengthLevels[strength - 1]?.level}
-            </span>
           </label>
           <div className="mt-3 relative">
             <input
