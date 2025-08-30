@@ -26,7 +26,7 @@ function Login() {
   const onSubmit = async (data) => {
     console.log("Form submitted:", data);
     try {
-      const url = `${backendUrl}/auth/login`;
+      const url = `/auth/login`;
       const response = await axiosInstance.post(url, data);
       console.log(response.data);
       reset();

@@ -7,7 +7,7 @@ import { ArrowLeft, Mail, Send } from "lucide-react";
 import { toast } from "react-toastify";
 import bgImg from "../assets/LoginBackground.jpg";
 
-const backendUrl = import.meta.env.VITE_API_URL;
+// const backendUrl = import.meta.env.VITE_API_URL;
 
 const formVariants = {
   initial: {
@@ -62,7 +62,7 @@ function ForgotPassword() {
 
   const onSubmit = async (data) => {
     try {
-      const url = `${backendUrl}/auth/forgot-password`;
+      const url = `/auth/forgot-password`;
       const response = await axiosInstance.post(url, { Email: data.Email });
 
       const { resetToken } = response.data;

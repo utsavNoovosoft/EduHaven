@@ -7,7 +7,7 @@ import { ArrowLeft, Eye, EyeOff, Shield, CheckCircle, KeyRound } from "lucide-re
 import { toast } from "react-toastify";
 import bgImg from "../assets/LoginBackground.jpg";
 
-const backendUrl = import.meta.env.VITE_API_URL;
+// const backendUrl = import.meta.env.VITE_API_URL;
 
 const formVariants = {
   initial: {
@@ -120,7 +120,7 @@ function ResetPassword() {
         return;
       }
 
-      const url = `${backendUrl}/auth/reset-password`;
+      const url = `/auth/reset-password`;
       const response = await axiosInstance.post(
         url,
         {
