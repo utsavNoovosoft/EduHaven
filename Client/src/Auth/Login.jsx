@@ -73,9 +73,9 @@ function Login() {
     return score;
   };
 
-  useEffect(() => {
+  {/*useEffect(() => {
     setStrength(passwordEdgeCases(password));
-  }, [password]);
+  }, [password]);*/}
 
   return (
     <div className="space-y-8 ">
