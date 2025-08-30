@@ -48,8 +48,6 @@ function Login() {
   };
 
   const password = watch("Password", "");
-  const [strength, setStrength] = useState(0);
-
   return (
     <div className="space-y-8 ">
       <div className="text-center ">
