@@ -213,9 +213,9 @@ const endGame = useCallback(() => {
             <h2 className="text-3xl font-bold text-white mb-4">How to Play</h2>
             <p className="text-white mb-4">
               Whac-A-Mole is a fast-paced reflex game! 🐹 - Tap the{" "}
-              <span className="font-bold">Moles</span> to earn points (+10). -
+              <span className="font-bold">Moles</span> to earn points (+10).{" "}
               Avoid clicking on the{" "}
-              <span className="font-bold text-red-400">Evil Plants</span> —
+              <span className="font-bold text-red-400">Evil Plants</span> {" "}
               hitting one ends the game instantly. - If you miss a Mole, you
               lose 5 points. - The game lasts 30 seconds. Try to beat your High
               Score!
