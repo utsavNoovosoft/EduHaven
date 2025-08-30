@@ -5,11 +5,52 @@ const UserProfileContext = createContext({
   user: null,
   setUser: () => {},
   fetchUserDetails: () => Promise.resolve(null),
+  isProfileComplete: () => false,
+  isBasicInfoComplete: () => Promise.resolve(false),
+  isEduSkillsComplete: () => Promise.resolve(false),
 });
 
 // Provider component
 export const UserProfileProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+
+  const isProfileComplete = () => {
+    if (!user) return false;
+
+    const requiredFields = [
+      "FirstName",
+      "LastName",
+      "Email",
+      "Bio",
+      "Gender",
+      "University",
+      "Country",
+      "FieldOfStudy",
+      "GraduationYear",
+    ];
+
+    return requiredFields.every((field) => {
+      const value = user[field];
+      return value !== null && value !== undefined && value !== "";
+    });
+  };
+
+  const isBasicInfoComplete = () => {
+    if (!user) return false;
+    const basicFields = ["FirstName", "LastName", "Email", "Bio", "Gender"];
+    return basicFields.every((f) => user[f]);
+  };
+
+  const isEduSkillsComplete = () => {
+    if (!user) return false;
+    const eduFields = [
+      "University",
+      "Country",
+      "FieldOfStudy",
+      "GraduationYear",
+    ];
+    return eduFields.every((f) => user[f]);
+  };
 
   const fetchUserDetails = async (userId) => {
     try {
@@ -24,7 +65,16 @@ export const UserProfileProvider = ({ children }) => {
   };
 
   return (
-    <UserProfileContext.Provider value={{ user, setUser, fetchUserDetails }}>
+    <UserProfileContext.Provider
+      value={{
+        user,
+        setUser,
+        fetchUserDetails,
+        isProfileComplete,
+        isBasicInfoComplete,
+        isEduSkillsComplete,
+      }}
+    >
       {children}
     </UserProfileContext.Provider>
   );
