@@ -6,9 +6,12 @@ import GoalsComponent from "@/components/home/goals/GoalsComponent.jsx";
 import NavBar from "@/components/home/navBar/NavBar";
 import PinnedRooms from "@/components/home/PinnedRooms";
 import LandingPage from "./LandingPage";
+import { useUserProfile } from "../contexts/UserProfileContext";
+import { Link } from "react-router-dom";
 
 function StudyRoom() {
   const token = localStorage.getItem("token");
+  const { isProfileComplete } = useUserProfile();
 
   if (!token) {
     return <LandingPage />;
@@ -40,6 +43,28 @@ function StudyRoom() {
           <Calender />
         </div>
         <PinnedRooms />
+        {!isProfileComplete() && (
+          <div
+            className="bg-[var(--bg-ter)] border-2 border-red-500 text-[var(--txt)] px-6 py-5 rounded-2xl shadow-lg mt-6 text-center"
+            style={{ backgroundColor: "rgba(255,0,0,0.08)" }}
+          >
+            <p className="font-bold text-xl text-red-500 mb-2">
+              🚨 Your profile isn’t complete!
+            </p>
+            <p className="text-sm text-[var(--txt-dim)] mb-3">
+              Complete your Basic Info and Education & Skills to earn a badge.
+            </p>
+            <Link
+              to="/settings"
+              className="inline-block px-5 py-2 rounded-xl font-semibold 
+                 bg-gradient-to-r from-red-600 to-pink-600 text-white 
+                 hover:from-red-500 hover:to-pink-500 
+                 transition shadow-[0_0_18px_rgba(255,0,0,0.8)]"
+            >
+              Complete Now →
+            </Link>
+          </div>
+        )}
       </div>
     </>
   );

@@ -9,7 +9,8 @@ import { CropModal } from "../CropModal";
 import { getCroppedWebpFile } from "@/utils/imageUtils";
 
 export default function BasicInfo() {
-  const { user, setUser, fetchUserDetails } = useUserProfile();
+  const { user, setUser, fetchUserDetails, isBasicInfoComplete } =
+    useUserProfile();
   const [profileData, setProfileData] = useState({
     FirstName: "",
     LastName: "",
@@ -114,7 +115,10 @@ export default function BasicInfo() {
     formData.append("profilePicture", profilePic);
 
     try {
-      const response = await axiosInstance.post(`/user/upload-profile-picture`, formData);
+      const response = await axiosInstance.post(
+        `/user/upload-profile-picture`,
+        formData
+      );
 
       return response.data.profilePictureUrl;
     } catch (error) {
@@ -181,6 +185,18 @@ export default function BasicInfo() {
       <h1 className="text-2xl pb-4 font-semibold text-[var(--txt)] mb-2">
         Basic Information
       </h1>
+
+      {!isBasicInfoComplete() && (
+        <div className="mb-4 px-6 py-3 rounded-xl bg-[var(--bg-sec)] border border-yellow-400/50 shadow-lg flex items-center gap-3">
+          <span className="text-yellow-400 text-lg">🏅</span>
+          <p className="text-[var(--txt)] text-sm font-medium">
+            Complete your profile to{" "}
+            <span className="text-[var(--btn)] font-semibold">
+              earn a badge!
+            </span>
+          </p>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Profile Picture Section */}
