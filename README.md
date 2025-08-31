@@ -11,40 +11,86 @@
 
 ## Features
 
-- **User Dashboard**: Tracks tasks completed, study time, and productivity stats.
-- **Calendar & Events**: 
- - **User-Specific Events**: Each user can only view and manage their own calendar events
- - **Event Management**: Create, edit, and delete personal events with date/time
- - **Privacy & Security**: Secure authentication ensures event privacy across users
-- **Enhanced Goals System**: 
- - **Data Persistence**: All goals persist in database across sessions
- - **Smart Organization**: Three collapsible sections (Daily Habits, Other Goals, Closed Goals)
- - **Repeat Functionality**: Daily habits automatically recreate when completed
- - **Deadline Tracking**: Visual indicators for time left, due today, or overdue
-- **To-Do List**: Helps users organize and manage their tasks efficiently.
-- **Note-Making**: Rich-text editor to create, edit, and organize notes.
-- **Real-Time Study Rooms**:
- - Chat and collaborate with friends.
- - Video/audio controls using WebRTC.
-- **Chatbot**: Provides productivity tips and answers academic questions.
-- **Friends and Social Features**: Add friends, invite them to study rooms, and track their online/offline status.
-- **Analytics**: Visualize progress with charts and insights.
-- **Gamification**: Earn badges and track streaks to stay motivated.
+- ### User Dashboard
+ <img width="1919" height="882" alt="image" src="https://github.com/user-attachments/assets/f9b8d325-8dbd-4d31-a07f-08f1cd2d9452" />
+
+  - Track tasks completed, study time, and productivity stats  
+  - Add and manage notes directly from dashboard  
+  - Integrated calendars for event planning  
+  - Quick access to stats and insights  
+
+- ### Calendar & Events
+  <img width="485" height="798" alt="image" src="https://github.com/user-attachments/assets/0f932aee-b3b3-4a29-a3e6-19a1c5804a52" />
+
+  - **User-Specific Events**: Each user can only view and manage their own calendar events  
+  - **Event Management**: Create, edit, and delete personal events with date/time  
+  - **Privacy & Security**: Secure authentication ensures event privacy across users  
+
+- ### Enhanced Goals System
+   <img width="669" height="480" alt="image" src="https://github.com/user-attachments/assets/71a57f9e-b8e6-41a5-8f7c-bbcad530ff25" />
+
+  - **Data Persistence**: All goals persist in database across sessions  
+  - **Smart Organization**: Three collapsible sections (Daily Habits, Other Goals, Closed Goals)  
+  - **Repeat Functionality**: Daily habits automatically recreate when completed  
+  - **Deadline Tracking**: Visual indicators for time left, due today, or overdue  
+
+- ### To-Do List : Helps users organize and manage their tasks efficiently.
+  
+
+-  ### Note-Making: Rich-text editor to create, edit, and organize notes.
+  <img width="1895" height="869" alt="image" src="https://github.com/user-attachments/assets/20a05018-4054-4784-a007-ee4ce4af69eb" />
+
+
+- ### Real-Time Study Rooms
+   <img width="1919" height="879" alt="image" src="https://github.com/user-attachments/assets/5eec7b1b-189a-48f3-abc1-6db75df01deb" />
+
+  - Join or create study rooms for collaboration  
+  - Video/audio controls using WebRTC  
+  - Session tracking and collaboration tools  
+
+- ### Realtime Chat 
+<img width="1919" height="870" alt="image" src="https://github.com/user-attachments/assets/357b6eac-beb5-4369-98a0-2665c967c6e1" />
+
+  - Chat with peers inside study rooms  
+  - Private messaging and group chat support  
+  - Online/offline presence indicators  
+
+- ### Chatbot : Provides productivity tips and answers academic questions.  
+<img width="391" height="860" alt="image" src="https://github.com/user-attachments/assets/0c25c3cb-3146-40f8-a527-ae0253ae7875" />
+
+
+- ### Friends and Social Features
+   <img width="1919" height="865" alt="image" src="https://github.com/user-attachments/assets/5f780027-3b2a-40b3-8d68-89abed4a6128" />
+
+  - Add friends, invite them to study rooms  
+  - Track their online/offline status  
+  - Share study goals and progress  
+
+- ### Analytics: Visualize progress with charts and insights.
+    <img width="1919" height="859" alt="image" src="https://github.com/user-attachments/assets/eef0a2c7-a4ac-4657-a7a9-c17f9cbbb11f" />
+
+
+- ### Gamification
+   <img width="1919" height="863" alt="image" src="https://github.com/user-attachments/assets/a0dc5908-5751-47c5-bc24-e45013a7e9f3" />
+
+  - Earn badges and rewards for task completion  
+  - Track streaks to stay motivated  
+  - Leaderboards for friendly competition  
 
 ## Tech Stack
 
-- **Frontend**: React.js with CSS (or Tailwind CSS)
-- **Backend**: Node.js with Express
-- **Database**: MongoDB
-- **Real-Time Communication**: Socket.IO, WebRTC
+- **Frontend**: React.js with CSS (or Tailwind CSS)  
+- **Backend**: Node.js with Express  
+- **Database**: MongoDB  
+- **Real-Time Communication**: Socket.IO, WebRTC  
 
 ## Installation and Setup
 
 ### Prerequisites
 
-- Node.js
-- MongoDB
-- Git
+- Node.js  
+- MongoDB  
+- Git  
 
 ### Steps to Run Locally
 
@@ -53,7 +99,6 @@
    ```bash
    git clone https://github.com/<your-username>/EduHaven.git
    cd EduHaven
-   ```
 
 2. Install dependencies:
 
