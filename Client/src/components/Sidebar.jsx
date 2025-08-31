@@ -8,7 +8,8 @@ import {
   Edit3,
   BadgeInfo,
   Users, 
-  Wrench
+  Wrench,
+  MessageSquareMore
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -100,6 +101,13 @@ function Sidebar() {
             label="Friends"
             isActive={location.pathname === "/friends"}
             ref={(el) => (linkRefs.current["/friends"] = el)}
+          />
+          <SidebarLink
+            to="/chat"
+            IconComponent={MessageSquareMore}
+            label="Chats"
+            isActive={location.pathname === "/chat"}
+            ref={(el) => (linkRefs.current["/chat"] = el)}
           />
           <SidebarLink
             to="/notenest"
