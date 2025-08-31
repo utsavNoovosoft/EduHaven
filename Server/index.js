@@ -17,8 +17,8 @@ import FriendsRoutes from "./Routes/FriendsRoutes.js";
 import UserRoutes from "./Routes/UserRoutes.js";
 import { initializeSocket } from "./Socket/socket.js";
 
-import notFound from "./middleware/notFound.js";
-import errorHandler from "./middleware/errorHandler.js";
+import notFound from "./Middlewares/notFound.js";
+import errorHandler from "./Middlewares/errorHandler.js";
 
 dotenv.config();
 
