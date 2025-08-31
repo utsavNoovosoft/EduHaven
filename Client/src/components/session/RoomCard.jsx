@@ -8,12 +8,19 @@ import {
   Link,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function RoomCard({ room, onDelete, showCategory, loading }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+
+  const dropdownVariants = {
+    hidden: { opacity: 0, y: -10, scale: 0.95 },
+    visible: { opacity: 1, y: 0, scale: 1 },
+    exit: { opacity: 0, y: -10, scale: 0.95 },
+  };
 
   useEffect(() => {
     if (!room) return;
@@ -125,47 +132,54 @@ export default function RoomCard({ room, onDelete, showCategory, loading }) {
         </button>
       </div>
 
-      {menuOpen && (
-        <div
-          ref={dropdownRef}
-          className="absolute right-4 top-12 bg-ter rounded-xl shadow-md z-10 p-1"
-        >
-          {!isPinned ? (
-            <button
-              onClick={handlePin}
-              className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
-            >
-              <Pin size={20} /> Pin to home
-            </button>
-          ) : (
-            <button
-              onClick={handleUnpin}
-              className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
-            >
-              <PinOff size={20} /> Unpin from home
-            </button>
-          )}
-          <button
-            onClick={handleCopyLink}
-            className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            ref={dropdownRef}
+            key="dropdown"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={dropdownVariants}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="absolute right-4 top-12 bg-ter rounded-xl shadow-md z-10 p-1"
           >
-            <Link size={20}/>
-            Copy Link
-          </button>
-
-          {onDelete && (
+            {!isPinned ? (
+              <button
+                onClick={handlePin}
+                className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
+              >
+                <Pin size={20} /> Pin to home
+              </button>
+            ) : (
+              <button
+                onClick={handleUnpin}
+                className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
+              >
+                <PinOff size={20} /> Unpin from home
+              </button>
+            )}
             <button
-              onClick={() => {
-                onDelete(room);
-                setMenuOpen(false);
-              }}
+              onClick={handleCopyLink}
               className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
             >
-              <Trash size={20} /> Delete
+              <Link size={20} /> Copy Link
             </button>
-          )}
-        </div>
-      )}
+
+            {onDelete && (
+              <button
+                onClick={() => {
+                  onDelete(room);
+                  setMenuOpen(false);
+                }}
+                className="flex items-center w-full text-left px-4 py-2.5 text-md gap-2 txt hover:btn"
+              >
+                <Trash size={20} /> Delete
+              </button>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {showCategory && (
         <p className="txt-dim mb-4 capitalize">
