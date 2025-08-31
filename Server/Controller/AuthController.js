@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 
 import Event from "../Model/EventModel.js";
@@ -147,9 +148,21 @@ const login = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    const isMatch = await bcrypt.compare(Password, user.Password);
-    if (!isMatch) {
-      return res.status(401).json({ error: "Invalid credentials" });
+    if (user.Password.startsWith("$2")) {
+      const match = await bcrypt.compare(Password, user.Password);
+      if (!match) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      user.Password = await argon2.hash(Password, { type: argon2.argon2id });
+
+      await user.save();
+    } else {
+      const match = await argon2.verify(user.Password, Password, {
+        type: argon2.argon2id,
+      });
+      if (!match) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
     }
 
     const token = generateAuthToken(user);
@@ -196,7 +209,7 @@ const signup = async (req, res) => {
     // const imageurl = req.body.imageUrl;
     // console.log(imageurl)
     // Hash the password
-    const haspass = await bcrypt.hash(Password, 12);
+    const haspass = await argon2.hash(Password, { type: argon2.argon2id });
 
     // Create a temporary user object (not saved in the database yet)
     user = {
@@ -320,6 +333,5 @@ export {
   logout,
   refreshAccessToken,
   signup,
-  verifyUser
+  verifyUser,
 };
-
