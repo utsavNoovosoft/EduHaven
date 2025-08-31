@@ -37,18 +37,13 @@ export const UserProfileProvider = ({ children }) => {
 
   const isBasicInfoComplete = () => {
     if (!user) return false;
-    const basicFields = ["FirstName", "LastName", "Email", "Bio", "Gender"];
+    const basicFields = ["FirstName", "LastName", "Country", "Bio", "Gender"];
     return basicFields.every((f) => user[f]);
   };
 
   const isEduSkillsComplete = () => {
     if (!user) return false;
-    const eduFields = [
-      "University",
-      "Country",
-      "FieldOfStudy",
-      "GraduationYear",
-    ];
+    const eduFields = ["University", "FieldOfStudy", "GraduationYear"];
     return eduFields.every((f) => user[f]);
   };
 

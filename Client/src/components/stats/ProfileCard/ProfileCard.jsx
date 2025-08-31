@@ -224,7 +224,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
   if (isLoading || !user) return <ProfileSkeleton />;
 
   return (
-    <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl pt-6 w-full h-fit relative overflow-hidden">
+    <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl py-6 w-full h-fit relative overflow-hidden">
       {/* Header */}
       <ProfileHeader
         isCurrentUser={isCurrentUser}
@@ -303,7 +303,11 @@ const ProfileCard = ({ isCurrentUser = false }) => {
         )}
       </div>
 
-      <ProfileDetails user={user} />
+      {(user.FieldOfStudy ||
+        user.OtherDetails?.skills ||
+        user.OtherDetails?.interests ||
+        user.Country ||
+        user.OtherDetails?.additionalNotes) && <ProfileDetails user={user} />}
     </div>
   );
 };
