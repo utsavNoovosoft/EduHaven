@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Clock4, Flame, BarChart2 } from "lucide-react";
 import axiosInstance from "@/utils/axios";
@@ -30,6 +30,8 @@ function StatsSummary() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const dropdownRef = useRef(null);
 
   const fetchUserStats = async () => {
     try {
@@ -64,6 +66,16 @@ function StatsSummary() {
 
   useEffect(() => {
     fetchUserStats();
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleRefresh = () => {
@@ -136,7 +148,7 @@ function StatsSummary() {
     >
       {/* Header with refresh button */}
       <div className="flex items-center justify-between -mb-3">
-        <div className="relative ml-auto">
+        <div ref={dropdownRef} className="relative ml-auto">
           <motion.button
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center space-x-1 txt-dim hover:txt"
@@ -150,7 +162,6 @@ function StatsSummary() {
               <ChevronDown className="w-4 h-4" />
             </motion.span>
           </motion.button>
-
           <AnimatePresence>
             {isOpen && (
               <motion.div
