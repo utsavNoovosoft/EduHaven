@@ -13,8 +13,8 @@ import authMiddleware from "../Middlewares/authMiddleware.js";
 import {
   updateNoteValidationRules,
   createNoteValidationRules,
-} from "../security/validation";
-import { validate } from "../security/validationMiddleware";
+} from "../security/validation.js";
+import { validate } from "../security/validationMiddleware.js";
 import { sanitizeFields } from "../security/sanitizeMiddleware.js";
 // ------
 
