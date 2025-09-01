@@ -257,7 +257,13 @@ const forgotPassword = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found with this email address" });
     }
+    // check if user logged in with google
 
+    if (user.oauthProvider === "google") {
+      return res.status(403).json({
+        error: "This account uses Google Sign-In and cannot change password.",
+      });
+    }
     // Generate OTP
     const otp = Math.floor(Math.random() * 1000000)
       .toString()
