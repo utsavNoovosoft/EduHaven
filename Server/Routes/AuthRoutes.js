@@ -19,6 +19,15 @@ import { validate } from "../security/validationMiddleware";
 import { sanitizeFields } from "../security/sanitizeMiddleware.js";
 // ------
 
+// Rate limiters
+import {
+  createLoginRateLimiter,
+  createSignupRateLimiter,
+} from "../Middlewares/ratelimit.middleware.js";
+
+const loginRateLimiter = createLoginRateLimiter();
+const signupRateLimiter = createSignupRateLimiter();
+
 const router = express.Router();
 
 // OAuth routes
@@ -32,6 +41,7 @@ router.post(
   signupValidationRules(),
   validate,
   sanitizeFields(["FirstName", "LastName", "Email"]),
+  signupRateLimiter,
   signup
 );
 
@@ -43,6 +53,7 @@ router.post(
   loginValidationRules(),
   validate,
   sanitizeFields(["Email"]),
+  loginRateLimiter,
   login
 );
 
