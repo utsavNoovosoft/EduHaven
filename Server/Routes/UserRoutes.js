@@ -11,8 +11,8 @@ import {
 } from "../Controller/UserController.js";
 
 // these are added -> for security --
-import { updateProfileValidationRules } from "../security/validation";
-import { validate } from "../security/validationMiddleware";
+import { updateProfileValidationRules } from "../security/validation.js";
+import { validate } from "../security/validationMiddleware.js";
 import { sanitizeFields } from "../security/sanitizeMiddleware.js";
 //
 

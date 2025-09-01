@@ -1,4 +1,4 @@
-import { sanitizeInput } from "../security/sanitize";
+import { sanitizeInput } from "../security/sanitize.js";
 
 export const sanitizeFields = (fields) => {
   return (req, res, next) => {

@@ -8,8 +8,8 @@ import {
 import authMiddleware from "../Middlewares/authMiddleware.js";
 
 // these are added -> for security --
-import { createStudySessionValidationRules } from "../security/validation";
-import { validate } from "../security/validationMiddleware";
+import { createStudySessionValidationRules } from "../security/validation.js";
+import { validate } from "../security/validationMiddleware.js";
 import { sanitizeFields } from "../security/sanitizeMiddleware.js";
 // ----
 
