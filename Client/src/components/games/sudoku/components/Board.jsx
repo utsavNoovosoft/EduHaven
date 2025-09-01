@@ -22,8 +22,8 @@ export default function Board({ board, fixed, selected, onSelect }) {
                   Math.floor(selected.c / 3) === Math.floor(c / 3)
                 }
                 onClick={() => onSelect({ r, c })}
-              />)
-            )}
+              />
+            ))}
           </div>
         ))}
       </div>

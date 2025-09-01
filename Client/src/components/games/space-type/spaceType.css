@@ -20,11 +20,20 @@
   }
 
   .laser-beam {
-    background: linear-gradient(90deg, transparent, rgb(255, 107, 107) 40%, red 60%, transparent);
-    filter: blur(.5px);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(255, 107, 107) 40%,
+      red 60%,
+      transparent
+    );
+    filter: blur(0.5px);
     /* transform-origin: center; */
     rotate: -90deg;
-    box-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red;
+    box-shadow:
+      0 0 10px red,
+      0 0 20px red,
+      0 0 30px red;
   }
 
   .particle {

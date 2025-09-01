@@ -290,8 +290,8 @@ const ProfileCard = ({ isCurrentUser = false }) => {
                 friendRequestStatus === "Add Friend"
                   ? "bg-purple-600 hover:bg-purple-700"
                   : friendRequestStatus === "Cancel Request"
-                  ? "bg-purple-500 hover:bg-purple-600"
-                  : "bg-purple-400 hover:bg-purple-500"
+                    ? "bg-purple-500 hover:bg-purple-600"
+                    : "bg-purple-400 hover:bg-purple-500"
               }  transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap cursor-pointer`}
               disabled={isFriendRequestLoading}
               onClick={handleFriendRequestAction}

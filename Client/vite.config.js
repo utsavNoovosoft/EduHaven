@@ -18,8 +18,8 @@ export default defineConfig(({ mode }) => {
         input: path.resolve(__dirname, "index.html"),
         output: {
           manualChunks: {
-            vendor: ['react', 'react-dom'],
-            animations: ['framer-motion'],
+            vendor: ["react", "react-dom"],
+            animations: ["framer-motion"],
           },
         },
       },
@@ -32,12 +32,10 @@ export default defineConfig(({ mode }) => {
     },
     // Performance optimizations
     optimizeDeps: {
-      include: ['react', 'react-dom', 'framer-motion'],
+      include: ["react", "react-dom", "framer-motion"],
     },
   };
 });
-
-
 
 // vite.config.js old
 // import { defineConfig } from "vite";

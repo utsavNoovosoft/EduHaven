@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const taskSchema = new mongoose.Schema({
   title: {
@@ -11,8 +11,8 @@ const taskSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['open', 'closed'],
-    default: 'open',
+    enum: ["open", "closed"],
+    default: "open",
   },
   dueDate: {
     type: Date,
@@ -27,9 +27,9 @@ const taskSchema = new mongoose.Schema({
     default: false,
   },
   repeatType: {
-  type: String,
-  enum: ['never', 'daily', 'weekly', 'monthly', 'yearly'], //
-  default: 'daily',
+    type: String,
+    enum: ["never", "daily", "weekly", "monthly", "yearly"], //
+    default: "daily",
   },
   reminderTime: {
     type: String,
@@ -37,7 +37,7 @@ const taskSchema = new mongoose.Schema({
   },
   timePreference: {
     type: String,
-    default: '21:00',
+    default: "21:00",
   },
   createdAt: {
     type: Date,
@@ -45,48 +45,48 @@ const taskSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
 });
 
 // Middleware to ensure backward compatibility and sync status/completed
-taskSchema.pre('save', function(next) {
+taskSchema.pre("save", function (next) {
   // Sync completed and status
-  if (this.isModified('completed')) {
-    this.status = this.completed ? 'closed' : 'open';
+  if (this.isModified("completed")) {
+    this.status = this.completed ? "closed" : "open";
   }
-  if (this.isModified('status')) {
-    this.completed = this.status === 'closed';
+  if (this.isModified("status")) {
+    this.completed = this.status === "closed";
   }
   next();
 });
 
 // Post-find middleware to handle any existing data that might be missing fields
-taskSchema.post('find', function(docs) {
-  docs.forEach(doc => {
+taskSchema.post("find", function (docs) {
+  docs.forEach((doc) => {
     if (!doc.status) {
-      doc.status = doc.completed ? 'closed' : 'open';
+      doc.status = doc.completed ? "closed" : "open";
     }
     if (doc.repeatEnabled === undefined || doc.repeatEnabled === null) {
       doc.repeatEnabled = false;
     }
     if (!doc.timePreference) {
-      doc.timePreference = '21:00';
+      doc.timePreference = "21:00";
     }
   });
 });
 
-taskSchema.post('findOne', function(doc) {
+taskSchema.post("findOne", function (doc) {
   if (doc) {
     if (!doc.status) {
-      doc.status = doc.completed ? 'closed' : 'open';
+      doc.status = doc.completed ? "closed" : "open";
     }
     if (doc.repeatEnabled === undefined || doc.repeatEnabled === null) {
       doc.repeatEnabled = false;
     }
     if (!doc.timePreference) {
-      doc.timePreference = '21:00';
+      doc.timePreference = "21:00";
     }
   }
 });
@@ -95,5 +95,5 @@ taskSchema.post('findOne', function(doc) {
 taskSchema.index({ user: 1, status: 1 });
 taskSchema.index({ user: 1, repeatEnabled: 1 });
 
-const Task = mongoose.model('Task', taskSchema);
+const Task = mongoose.model("Task", taskSchema);
 export default Task;

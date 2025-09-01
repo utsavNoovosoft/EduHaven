@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Award, Info } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import { getAllBadges } from '@/utils/badgeSystem';
-import { useUserProfile } from '@/contexts/UserProfileContext';
-import BadgeModal from './BadgeModal';
-import BadgeTooltip from './BadgeTooltip';
+import { getAllBadges } from "@/utils/badgeSystem";
+import { useUserProfile } from "@/contexts/UserProfileContext";
+import BadgeModal from "./BadgeModal";
+import BadgeTooltip from "./BadgeTooltip";
 
 const backendUrl = import.meta.env.VITE_API_URL;
-
 
 const Badges = () => {
   const [earnedBadges, setEarnedBadges] = useState([]);
@@ -35,20 +34,18 @@ const Badges = () => {
     }
   }, [user, fetchUserDetails]);
 
-
   // Fetch badges from backend API instead of client-side calculation
   const fetchBadgesFromServer = async () => {
     if (!userId) return;
-    
+
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(`${backendUrl}/user/badges`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
-      
+
       if (response.data.badges) {
         setEarnedBadges(response.data.badges);
-
       }
     } catch (error) {
       console.error("Error fetching badges from server:", error);
@@ -58,7 +55,6 @@ const Badges = () => {
   };
 
   useEffect(() => {
-
     const initializeBadges = async () => {
       await fetchBadgesFromServer();
 

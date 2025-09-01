@@ -242,31 +242,31 @@ function TicTacToe() {
     }
   }, [xIsNext, squares, gameMode, difficulty, winner]);
 
-const handleMove = (i) => {
-  if (squares[i] || winner) return;
+  const handleMove = (i) => {
+    if (squares[i] || winner) return;
 
-  const newSquares = squares.slice();
-  newSquares[i] = xIsNext ? "X" : "O";
-  setSquares(newSquares);
-  setXIsNext(!xIsNext);
+    const newSquares = squares.slice();
+    newSquares[i] = xIsNext ? "X" : "O";
+    setSquares(newSquares);
+    setXIsNext(!xIsNext);
 
-  // 🎵 Play move sound
-  if (isSoundEnabled) moveSound.play();
+    // 🎵 Play move sound
+    if (isSoundEnabled) moveSound.play();
 
-  const result = calculateWinner(newSquares);
-  if (result.winner && result.winner !== "tie") {
-    setScores((prev) => ({
-      ...prev,
-      [result.winner]: prev[result.winner] + 1,
-    }));
+    const result = calculateWinner(newSquares);
+    if (result.winner && result.winner !== "tie") {
+      setScores((prev) => ({
+        ...prev,
+        [result.winner]: prev[result.winner] + 1,
+      }));
 
-    // 🎵 Play win sound
-    if (isSoundEnabled) winSound.play();
-  } else if (result.winner === "tie") {
-    // 🎵 Play tie sound
-    if (isSoundEnabled) tieSound.play();
-  }
-};
+      // 🎵 Play win sound
+      if (isSoundEnabled) winSound.play();
+    } else if (result.winner === "tie") {
+      // 🎵 Play tie sound
+      if (isSoundEnabled) tieSound.play();
+    }
+  };
 
   const renderStatus = () => {
     if (winner === "tie") return "It's a tie!";
@@ -435,17 +435,13 @@ const handleMove = (i) => {
               <div className="text-[var(--txt-disabled)] text-sm font-medium mb-1">
                 {gameMode === "computer" ? "You" : "Player X"}
               </div>
-              <div className="text-4xl font-extralight txt">
-                {scores.X}
-              </div>
+              <div className="text-4xl font-extralight txt">{scores.X}</div>
             </div>
             <div className="transition-transform duration-200">
               <div className="text-[var(--txt-disabled)] text-sm font-medium mb-1">
                 {gameMode === "computer" ? "Computer" : "Player O"}
               </div>
-              <div className="text-4xl font-extralight txt">
-                {scores.O}
-              </div>
+              <div className="text-4xl font-extralight txt">{scores.O}</div>
             </div>
           </div>
         </div>

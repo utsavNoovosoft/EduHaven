@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
-import './LionComponent.css';
+import React, { useEffect, useRef } from "react";
+import * as THREE from "three";
+import "./LionComponent.css";
 
 const LionComponent: React.FC = () => {
   const worldRef = useRef<HTMLDivElement>(null);
@@ -8,19 +8,19 @@ const LionComponent: React.FC = () => {
 
   useEffect(() => {
     let scene: THREE.Scene,
-        camera: THREE.PerspectiveCamera,
-        renderer: THREE.WebGLRenderer,
-        container: HTMLElement | null,
-        floor: THREE.Mesh,
-        lion: any,
-        fan: any,
-        isBlowing = false;
+      camera: THREE.PerspectiveCamera,
+      renderer: THREE.WebGLRenderer,
+      container: HTMLElement | null,
+      floor: THREE.Mesh,
+      lion: any,
+      fan: any,
+      isBlowing = false;
 
     let HEIGHT: number,
-        WIDTH: number,
-        windowHalfX: number,
-        windowHalfY: number,
-        mousePos = { x: 0, y: 0 };
+      WIDTH: number,
+      windowHalfX: number,
+      windowHalfY: number,
+      mousePos = { x: 0, y: 0 };
 
     const clock = new THREE.Clock();
     let time = 0;
@@ -48,15 +48,15 @@ const LionComponent: React.FC = () => {
         this.acc = 0;
         this.redMat = new THREE.MeshLambertMaterial({
           color: 0xad3525,
-          flatShading: true
+          flatShading: true,
         });
         this.greyMat = new THREE.MeshLambertMaterial({
           color: 0x653f4c,
-          flatShading: true
+          flatShading: true,
         });
         this.yellowMat = new THREE.MeshLambertMaterial({
           color: 0xfdd276,
-          flatShading: true
+          flatShading: true,
         });
 
         const coreGeom = new THREE.BoxGeometry(10, 10, 20);
@@ -96,16 +96,18 @@ const LionComponent: React.FC = () => {
         this.tPosX = rule3(xTarget, -200, 200, -250, 250);
         this.tPosY = rule3(yTarget, -200, 200, 250, -250);
 
-        this.threegroup.position.x += (this.tPosX - this.threegroup.position.x) * deltaTime * 4;
-        this.threegroup.position.y += (this.tPosY - this.threegroup.position.y) * deltaTime * 4;
+        this.threegroup.position.x +=
+          (this.tPosX - this.threegroup.position.x) * deltaTime * 4;
+        this.threegroup.position.y +=
+          (this.tPosY - this.threegroup.position.y) * deltaTime * 4;
 
-        this.targetSpeed = (this.isBlowing) ? 15 * deltaTime : 5 * deltaTime;
+        this.targetSpeed = this.isBlowing ? 15 * deltaTime : 5 * deltaTime;
         if (this.isBlowing && this.speed < this.targetSpeed) {
-          this.acc += .01 * deltaTime;
+          this.acc += 0.01 * deltaTime;
           this.speed += this.acc;
         } else if (!this.isBlowing) {
           this.acc = 0;
-          this.speed *= Math.pow(.4, deltaTime);
+          this.speed *= Math.pow(0.4, deltaTime);
         }
         this.propeller.rotation.z += this.speed;
       }
@@ -166,35 +168,35 @@ const LionComponent: React.FC = () => {
         this.maneParts = [];
         this.threegroup = new THREE.Group();
         this.mustaches = [];
-        
+
         // Materials with fixed colors
         this.yellowMat = new THREE.MeshLambertMaterial({
           color: 0xfdd276,
-          flatShading: true
+          flatShading: true,
         });
         this.redMat = new THREE.MeshLambertMaterial({
           color: 0xad3525,
-          flatShading: true
+          flatShading: true,
         });
         this.pinkMat = new THREE.MeshLambertMaterial({
           color: 0xe55d2b,
-          flatShading: true
+          flatShading: true,
         });
         this.whiteMat = new THREE.MeshLambertMaterial({
           color: 0xffffff,
-          flatShading: true
+          flatShading: true,
         });
         this.purpleMat = new THREE.MeshLambertMaterial({
           color: 0x451954,
-          flatShading: true
+          flatShading: true,
         });
         this.greyMat = new THREE.MeshLambertMaterial({
           color: 0x653f4c,
-          flatShading: true
+          flatShading: true,
         });
         this.blackMat = new THREE.MeshLambertMaterial({
           color: 0x302925,
-          flatShading: true
+          flatShading: true,
         });
 
         // Geometries
@@ -220,11 +222,11 @@ const LionComponent: React.FC = () => {
         this.body = new THREE.Mesh(bodyGeom, this.yellowMat);
         this.body.position.z = -60;
         this.body.position.y = -30;
-        
+
         // In modern Three.js, we need to access position attributes differently
-        const positionAttribute = this.body.geometry.getAttribute('position');
+        const positionAttribute = this.body.geometry.getAttribute("position");
         this.bodyVertices = [0, 1, 2, 3, 4, 10];
-        
+
         for (let i = 0; i < this.bodyVertices.length; i++) {
           const index = this.bodyVertices[i];
           if (index < positionAttribute.count) {
@@ -281,7 +283,7 @@ const LionComponent: React.FC = () => {
           this.mustache3,
           this.mustache4,
           this.mustache5,
-          this.mustache6
+          this.mustache6,
         ];
 
         // Spots (Fixed positioning)
@@ -351,7 +353,7 @@ const LionComponent: React.FC = () => {
         this.mouth = new THREE.Mesh(mouthGeom, this.blackMat);
         this.mouth.position.z = 171;
         this.mouth.position.y = -30;
-        this.mouth.scale.set(.5, .5, 1);
+        this.mouth.scale.set(0.5, 0.5, 1);
         this.head.add(this.mouth);
 
         this.smile = new THREE.Mesh(smileGeom, this.greyMat);
@@ -389,14 +391,19 @@ const LionComponent: React.FC = () => {
         for (let j = 0; j < 4; j++) {
           for (let k = 0; k < 4; k++) {
             const manePart = new THREE.Mesh(maneGeom, this.redMat);
-            manePart.position.x = (j * 40) - 60;
-            manePart.position.y = (k * 40) - 60;
+            manePart.position.x = j * 40 - 60;
+            manePart.position.y = k * 40 - 60;
 
             let amp;
             let zOffset;
             const periodOffset = Math.random() * Math.PI * 2;
 
-            if ((j === 0 && k === 0) || (j === 0 && k === 3) || (j === 3 && k === 0) || (j === 3 && k === 3)) {
+            if (
+              (j === 0 && k === 0) ||
+              (j === 0 && k === 3) ||
+              (j === 3 && k === 0) ||
+              (j === 3 && k === 3)
+            ) {
               amp = -10 - Math.floor(Math.random() * 5);
               zOffset = -5;
             } else if (j === 0 || k === 0 || j === 3 || k === 3) {
@@ -413,7 +420,7 @@ const LionComponent: React.FC = () => {
               zOffset,
               periodOffset,
               xInit: manePart.position.x,
-              yInit: manePart.position.y
+              yInit: manePart.position.y,
             });
             this.mane.add(manePart);
           }
@@ -431,13 +438,13 @@ const LionComponent: React.FC = () => {
         this.leftKnee.position.x = 65;
         this.leftKnee.position.z = -20;
         this.leftKnee.position.y = -110;
-        this.leftKnee.rotation.z = -.3;
+        this.leftKnee.rotation.z = -0.3;
 
         this.rightKnee = new THREE.Mesh(kneeGeom, this.yellowMat);
         this.rightKnee.position.x = -65;
         this.rightKnee.position.z = -20;
         this.rightKnee.position.y = -110;
-        this.rightKnee.rotation.z = .3;
+        this.rightKnee.rotation.z = 0.3;
 
         // Feet
         const backLeftFoot = new THREE.Mesh(footGeom, this.yellowMat);
@@ -486,30 +493,43 @@ const LionComponent: React.FC = () => {
         this.head.position.y += (this.tHeadPosY - this.head.position.y) / speed;
         this.head.position.z += (this.tHeadPosZ - this.head.position.z) / speed;
 
-        this.leftEye.scale.y += (this.tEyeScale - this.leftEye.scale.y) / (speed * 2);
+        this.leftEye.scale.y +=
+          (this.tEyeScale - this.leftEye.scale.y) / (speed * 2);
         this.rightEye.scale.y = this.leftEye.scale.y;
 
-        this.leftIris.scale.y += (this.tIrisYScale - this.leftIris.scale.y) / (speed * 2);
+        this.leftIris.scale.y +=
+          (this.tIrisYScale - this.leftIris.scale.y) / (speed * 2);
         this.rightIris.scale.y = this.leftIris.scale.y;
 
-        this.leftIris.scale.z += (this.tIrisZScale - this.leftIris.scale.z) / (speed * 2);
+        this.leftIris.scale.z +=
+          (this.tIrisZScale - this.leftIris.scale.z) / (speed * 2);
         this.rightIris.scale.z = this.leftIris.scale.z;
 
-        this.leftIris.position.y += (this.tIrisPosY - this.leftIris.position.y) / speed;
+        this.leftIris.position.y +=
+          (this.tIrisPosY - this.leftIris.position.y) / speed;
         this.rightIris.position.y = this.leftIris.position.y;
-        this.leftIris.position.z += (this.tLeftIrisPosZ - this.leftIris.position.z) / speed;
-        this.rightIris.position.z += (this.tRightIrisPosZ - this.rightIris.position.z) / speed;
+        this.leftIris.position.z +=
+          (this.tLeftIrisPosZ - this.leftIris.position.z) / speed;
+        this.rightIris.position.z +=
+          (this.tRightIrisPosZ - this.rightIris.position.z) / speed;
 
-        this.rightKnee.rotation.z += (this.tRightKneeRotZ - this.rightKnee.rotation.z) / speed;
-        this.leftKnee.rotation.z += (this.tLeftKneeRotZ - this.leftKnee.rotation.z) / speed;
+        this.rightKnee.rotation.z +=
+          (this.tRightKneeRotZ - this.rightKnee.rotation.z) / speed;
+        this.leftKnee.rotation.z +=
+          (this.tLeftKneeRotZ - this.leftKnee.rotation.z) / speed;
 
         this.lips.position.x += (this.tLipsPosX - this.lips.position.x) / speed;
         this.lips.position.y += (this.tLipsPosY - this.lips.position.y) / speed;
-        this.smile.position.x += (this.tSmilePosX - this.smile.position.x) / speed;
-        this.mouth.position.z += (this.tMouthPosZ - this.mouth.position.z) / speed;
-        this.smile.position.z += (this.tSmilePosZ - this.smile.position.z) / speed;
-        this.smile.position.y += (this.tSmilePosY - this.smile.position.y) / speed;
-        this.smile.rotation.z += (this.tSmileRotZ - this.smile.rotation.z) / speed;
+        this.smile.position.x +=
+          (this.tSmilePosX - this.smile.position.x) / speed;
+        this.mouth.position.z +=
+          (this.tMouthPosZ - this.mouth.position.z) / speed;
+        this.smile.position.z +=
+          (this.tSmilePosZ - this.smile.position.z) / speed;
+        this.smile.position.y +=
+          (this.tSmilePosY - this.smile.position.y) / speed;
+        this.smile.rotation.z +=
+          (this.tSmileRotZ - this.smile.rotation.z) / speed;
       }
 
       look(xTarget: number, yTarget: number) {
@@ -535,8 +555,20 @@ const LionComponent: React.FC = () => {
         this.tSmilePosY = -15;
         this.tSmileRotZ = -Math.PI;
 
-        this.tRightKneeRotZ = rule3(xTarget, -200, 200, .3 - Math.PI / 8, .3 + Math.PI / 8);
-        this.tLeftKneeRotZ = rule3(xTarget, -200, 200, -.3 - Math.PI / 8, -.3 + Math.PI / 8);
+        this.tRightKneeRotZ = rule3(
+          xTarget,
+          -200,
+          200,
+          0.3 - Math.PI / 8,
+          0.3 + Math.PI / 8
+        );
+        this.tLeftKneeRotZ = rule3(
+          xTarget,
+          -200,
+          200,
+          -0.3 - Math.PI / 8,
+          -0.3 + Math.PI / 8
+        );
 
         this.updateBody(10);
 
@@ -553,7 +585,7 @@ const LionComponent: React.FC = () => {
         }
 
         // Update body vertices
-        const positionAttribute = this.body.geometry.getAttribute('position');
+        const positionAttribute = this.body.geometry.getAttribute("position");
         for (let i = 0; i < this.bodyVertices.length; i++) {
           const index = this.bodyVertices[i];
           if (index < positionAttribute.count) {
@@ -586,34 +618,59 @@ const LionComponent: React.FC = () => {
         this.tSmilePosX = rule3(xTarget, -200, 200, -15, 15);
         this.tSmilePosY = rule3(yTarget, -200, 200, -20, -8);
         this.tSmilePosZ = 176;
-        this.tSmileRotZ = rule3(xTarget, -200, 200, -Math.PI - .3, -Math.PI + .3);
+        this.tSmileRotZ = rule3(
+          xTarget,
+          -200,
+          200,
+          -Math.PI - 0.3,
+          -Math.PI + 0.3
+        );
 
-        this.tRightKneeRotZ = rule3(xTarget, -200, 200, .3 + Math.PI / 8, .3 - Math.PI / 8);
-        this.tLeftKneeRotZ = rule3(xTarget, -200, 200, -.3 + Math.PI / 8, -.3 - Math.PI / 8);
+        this.tRightKneeRotZ = rule3(
+          xTarget,
+          -200,
+          200,
+          0.3 + Math.PI / 8,
+          0.3 - Math.PI / 8
+        );
+        this.tLeftKneeRotZ = rule3(
+          xTarget,
+          -200,
+          200,
+          -0.3 + Math.PI / 8,
+          -0.3 - Math.PI / 8
+        );
 
         this.updateBody(10);
 
-        this.mane.rotation.y = -.8 * this.head.rotation.y;
-        this.mane.rotation.x = -.8 * this.head.rotation.x;
+        this.mane.rotation.y = -0.8 * this.head.rotation.y;
+        this.mane.rotation.x = -0.8 * this.head.rotation.x;
 
-        const dt = Math.max(Math.min(20000 / (xTarget * xTarget + yTarget * yTarget), 1), .5);
+        const dt = Math.max(
+          Math.min(20000 / (xTarget * xTarget + yTarget * yTarget), 1),
+          0.5
+        );
         this.windTime += dt * deltaTime * 40;
 
         for (const part of this.maneParts) {
-          part.mesh.position.z = part.zOffset + Math.sin(this.windTime + part.periodOffset) * part.amp * dt * 2;
+          part.mesh.position.z =
+            part.zOffset +
+            Math.sin(this.windTime + part.periodOffset) * part.amp * dt * 2;
         }
 
-        this.leftEar.rotation.x = Math.cos(this.windTime) * Math.PI / 16 * dt;
-        this.rightEar.rotation.x = -Math.cos(this.windTime) * Math.PI / 16 * dt;
+        this.leftEar.rotation.x =
+          ((Math.cos(this.windTime) * Math.PI) / 16) * dt;
+        this.rightEar.rotation.x =
+          ((-Math.cos(this.windTime) * Math.PI) / 16) * dt;
 
         for (let i = 0; i < this.mustaches.length; i++) {
           const m = this.mustaches[i];
-          const amp = (i < 3) ? -Math.PI / 8 : Math.PI / 8;
+          const amp = i < 3 ? -Math.PI / 8 : Math.PI / 8;
           m.rotation.y = amp + Math.cos(this.windTime + i) * dt * amp;
         }
 
         // Update body vertices
-        const positionAttribute = this.body.geometry.getAttribute('position');
+        const positionAttribute = this.body.geometry.getAttribute("position");
         for (let i = 0; i < this.bodyVertices.length; i++) {
           const index = this.bodyVertices[i];
           if (index < positionAttribute.count) {
@@ -637,7 +694,8 @@ const LionComponent: React.FC = () => {
         fieldOfView,
         aspectRatio,
         nearPlane,
-        farPlane );
+        farPlane
+      );
       camera.position.z = 800;
       camera.position.y = 0;
       camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -652,8 +710,12 @@ const LionComponent: React.FC = () => {
     }
 
     function createLights() {
-      const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.8);
-      
+      const hemisphereLight = new THREE.HemisphereLight(
+        0xffffff,
+        0xffffff,
+        0.8
+      );
+
       const shadowLight = new THREE.DirectionalLight(0xffffff, 3);
       shadowLight.position.set(200, 200, 200);
       shadowLight.castShadow = true;
@@ -666,7 +728,7 @@ const LionComponent: React.FC = () => {
       shadowLight.shadow.mapSize.width = 2048;
       shadowLight.shadow.mapSize.height = 2048;
 
-      const backLight = new THREE.DirectionalLight(0xffffff, .4);
+      const backLight = new THREE.DirectionalLight(0xffffff, 0.4);
       backLight.position.set(-100, 200, 50);
       backLight.castShadow = true;
 
@@ -678,7 +740,11 @@ const LionComponent: React.FC = () => {
     function createFloor() {
       floor = new THREE.Mesh(
         new THREE.PlaneGeometry(1000, 500),
-        new THREE.MeshBasicMaterial({ color: 0xebe5e7 ,transparent:true, opacity:0})
+        new THREE.MeshBasicMaterial({
+          color: 0xebe5e7,
+          transparent: true,
+          opacity: 0,
+        })
       );
       floor.rotation.x = -Math.PI / 2;
       floor.position.y = -100;
@@ -697,17 +763,23 @@ const LionComponent: React.FC = () => {
       scene.add(fan.threegroup);
     }
 
-    function rule3(v: number, vmin: number, vmax: number, tmin: number, tmax: number) {
+    function rule3(
+      v: number,
+      vmin: number,
+      vmax: number,
+      tmin: number,
+      tmax: number
+    ) {
       const nv = Math.max(Math.min(v, vmax), vmin);
       const dv = vmax - vmin;
       const pc = (nv - vmin) / dv;
       const dt = tmax - tmin;
-      const tv = tmin + (pc * dt);
+      const tv = tmin + pc * dt;
       return tv;
     }
 
     function handleMouseMove(event: MouseEvent) {
-      mousePos = { x: event.clientX-520, y: event.clientY+150 };
+      mousePos = { x: event.clientX - 520, y: event.clientY + 150 };
     }
 
     function handleMouseDown() {
@@ -751,8 +823,8 @@ const LionComponent: React.FC = () => {
     function loop() {
       deltaTime = clock.getDelta();
       time += deltaTime;
-      const xTarget = (mousePos.x - windowHalfX);
-      const yTarget = (mousePos.y - windowHalfY);
+      const xTarget = mousePos.x - windowHalfX;
+      const yTarget = mousePos.y - windowHalfY;
 
       fan.isBlowing = isBlowing;
       fan.update(xTarget, yTarget, deltaTime);
@@ -773,26 +845,26 @@ const LionComponent: React.FC = () => {
     createFan();
 
     // Add event listeners
-    window.addEventListener('resize', onWindowResize);
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mouseup', handleMouseUp);
-    document.addEventListener('touchstart', handleTouchStart);
-    document.addEventListener('touchend', handleTouchEnd);
-    document.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener("resize", onWindowResize);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("touchstart", handleTouchStart);
+    document.addEventListener("touchend", handleTouchEnd);
+    document.addEventListener("touchmove", handleTouchMove);
 
     // Start animation loop
     loop();
 
     // Cleanup
     return () => {
-      window.removeEventListener('resize', onWindowResize);
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mousedown', handleMouseDown);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('touchstart', handleTouchStart);
-      document.removeEventListener('touchend', handleTouchEnd);
-      document.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener("resize", onWindowResize);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchend", handleTouchEnd);
+      document.removeEventListener("touchmove", handleTouchMove);
       if (worldRef.current) {
         worldRef.current.removeChild(renderer.domElement);
       }
@@ -803,8 +875,11 @@ const LionComponent: React.FC = () => {
     <>
       <div id="world" ref={worldRef}></div>
       <div id="instructions" ref={instructionsRef}>
-        Press and drag to make wind<br/>
-        <span className="lightInstructions">the lion will surely appreciate</span>
+        Press and drag to make wind
+        <br />
+        <span className="lightInstructions">
+          the lion will surely appreciate
+        </span>
       </div>
     </>
   );

@@ -7,7 +7,7 @@ import SearchBar from "../SearchBar";
 export default function FriendRequests() {
   const [requests, setRequests] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
 
   const fetchRequests = async () => {
@@ -51,37 +51,41 @@ export default function FriendRequests() {
       setFilteredRequests(requests);
       return;
     }
-    
-    const filtered = requests.filter(user => {
-      const fullName = `${user.FirstName} ${user.LastName || ''}`.toLowerCase();
-      
+
+    const filtered = requests.filter((user) => {
+      const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
+
       // Search by name
       if (fullName.includes(term.toLowerCase())) {
         return true;
       }
-      
+
       // Search by skills
-      if (user.OtherDetails?.skills && 
-          user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())) {
+      if (
+        user.OtherDetails?.skills &&
+        user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())
+      ) {
         return true;
       }
-      
+
       // Search by interests
-      if (user.OtherDetails?.interests && 
-          user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())) {
+      if (
+        user.OtherDetails?.interests &&
+        user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())
+      ) {
         return true;
       }
-      
+
       return false;
     });
-    
+
     setFilteredRequests(filtered);
   };
 
   useEffect(() => {
     fetchRequests();
   }, []);
-  
+
   useEffect(() => {
     setFilteredRequests(requests);
   }, [requests]);
@@ -94,12 +98,12 @@ export default function FriendRequests() {
   return (
     <div>
       {requests.length > 0 && (
-        <SearchBar 
-          onSearch={handleSearch} 
+        <SearchBar
+          onSearch={handleSearch}
           placeholder="Search friend requests..."
         />
       )}
-      
+
       <div className="flex flex-wrap gap-3 2xl:gap-4 mt-4">
         {filteredRequests.map((user) => (
           <UserCard
@@ -111,7 +115,7 @@ export default function FriendRequests() {
           />
         ))}
       </div>
-      
+
       {filteredRequests.length === 0 && searchTerm && (
         <div className="text-center text-gray-500 mt-4">
           No matching friend requests found

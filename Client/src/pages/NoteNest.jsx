@@ -1,10 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Plus, Edit3, Palette, Image, Map, Trash2, X, ArrowLeft, Save } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Plus,
+  Edit3,
+  Palette,
+  Image,
+  Map,
+  Trash2,
+  X,
+  ArrowLeft,
+  Save,
+} from "lucide-react";
 
 // Main Notes App Component
 export default function NotesApp() {
   const [notes, setNotes] = useState(() => {
-    const savedNotes = localStorage.getItem('notenest-notes');
+    const savedNotes = localStorage.getItem("notenest-notes");
     return savedNotes ? JSON.parse(savedNotes) : [];
   });
   const [selectedNote, setSelectedNote] = useState(null);
@@ -12,43 +22,51 @@ export default function NotesApp() {
 
   // Save to localStorage whenever notes change
   useEffect(() => {
-    localStorage.setItem('notenest-notes', JSON.stringify(notes));
+    localStorage.setItem("notenest-notes", JSON.stringify(notes));
   }, [notes]);
 
   const createNewNote = () => {
     const newNote = {
       id: Date.now().toString(),
-      title: '',
-      content: '',
-      color: '#ffffff',
+      title: "",
+      content: "",
+      color: "#ffffff",
       createdAt: new Date().toISOString(),
       images: [],
       drawings: [],
-      mindMaps: []
+      mindMaps: [],
     };
     setNotes([newNote, ...notes]);
     setSelectedNote(newNote);
   };
 
   const deleteNote = (id) => {
-    setNotes(notes.filter(note => note.id !== id));
+    setNotes(notes.filter((note) => note.id !== id));
     if (selectedNote?.id === id) {
       setSelectedNote(null);
     }
   };
 
   const updateNote = (id, updates) => {
-    setNotes(notes.map(note =>
-      note.id === id ? { ...note, ...updates } : note
-    ));
+    setNotes(
+      notes.map((note) => (note.id === id ? { ...note, ...updates } : note))
+    );
     if (selectedNote?.id === id) {
       setSelectedNote({ ...selectedNote, ...updates });
     }
   };
 
   const colors = [
-    '#ffffff', '#fef3c7', '#fecaca', '#fed7d7', '#e9d5ff',
-    '#ddd6fe', '#bfdbfe', '#a7f3d0', '#fed7aa', '#fde68a'
+    "#ffffff",
+    "#fef3c7",
+    "#fecaca",
+    "#fed7d7",
+    "#e9d5ff",
+    "#ddd6fe",
+    "#bfdbfe",
+    "#a7f3d0",
+    "#fed7aa",
+    "#fde68a",
   ];
 
   const handleTitleChange = (e) => {
@@ -95,17 +113,26 @@ export default function NotesApp() {
 
   // Determine if the note color is light for text contrast
   const isLightColor = (color) => {
-    const hex = color.replace('#', '');
+    const hex = color.replace("#", "");
     const r = parseInt(hex.substr(0, 2), 16);
     const g = parseInt(hex.substr(2, 2), 16);
     const b = parseInt(hex.substr(4, 2), 16);
-    const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
     return brightness > 180;
   };
 
-  const textColorClass = selectedNote && isLightColor(selectedNote.color) ? 'text-gray-900' : 'text-white';
-  const placeholderColorClass = selectedNote && isLightColor(selectedNote.color) ? 'placeholder-gray-500' : 'placeholder-gray-300';
-  const mutedTextColorClass = selectedNote && isLightColor(selectedNote.color) ? 'text-gray-700' : 'text-gray-200';
+  const textColorClass =
+    selectedNote && isLightColor(selectedNote.color)
+      ? "text-gray-900"
+      : "text-white";
+  const placeholderColorClass =
+    selectedNote && isLightColor(selectedNote.color)
+      ? "placeholder-gray-500"
+      : "placeholder-gray-300";
+  const mutedTextColorClass =
+    selectedNote && isLightColor(selectedNote.color)
+      ? "text-gray-700"
+      : "text-gray-200";
 
   const fileInputRef = useRef(null);
 
@@ -135,7 +162,6 @@ export default function NotesApp() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
         {selectedNote ? (
           <div className="max-w-5xl mx-auto">
             {/* Note Content - All Sections Merged */}
@@ -160,7 +186,7 @@ export default function NotesApp() {
                 {showColorPicker && (
                   <div className="absolute top-12 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-600 p-3 z-20">
                     <div className="grid grid-cols-5 gap-2">
-                      {colors.map(color => (
+                      {colors.map((color) => (
                         <button
                           key={color}
                           onClick={() => {
@@ -183,7 +209,11 @@ export default function NotesApp() {
               <div className="p-8 space-y-8">
                 {/* Title Section */}
                 <div>
-                  <h2 className={`text-lg font-semibold mb-3 ${textColorClass}`}>Title</h2>
+                  <h2
+                    className={`text-lg font-semibold mb-3 ${textColorClass}`}
+                  >
+                    Title
+                  </h2>
                   <input
                     type="text"
                     value={selectedNote.title}
@@ -195,7 +225,11 @@ export default function NotesApp() {
 
                 {/* Text Content Section */}
                 <div>
-                  <h2 className={`text-lg font-semibold mb-3 ${textColorClass}`}>Text</h2>
+                  <h2
+                    className={`text-lg font-semibold mb-3 ${textColorClass}`}
+                  >
+                    Text
+                  </h2>
                   <textarea
                     value={selectedNote.content}
                     onChange={handleContentChange}
@@ -207,7 +241,9 @@ export default function NotesApp() {
                 {/* Images Section */}
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className={`text-lg font-semibold ${textColorClass}`}>Images</h2>
+                    <h2 className={`text-lg font-semibold ${textColorClass}`}>
+                      Images
+                    </h2>
                     <button
                       onClick={() => fileInputRef.current?.click()}
                       className="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
@@ -245,9 +281,13 @@ export default function NotesApp() {
                         ))}
                       </div>
                     ) : (
-                      <div className={`text-center py-8 ${mutedTextColorClass}`}>
+                      <div
+                        className={`text-center py-8 ${mutedTextColorClass}`}
+                      >
                         <Image className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                        <p className="text-sm">No images yet. Click "Add Image" to upload.</p>
+                        <p className="text-sm">
+                          No images yet. Click "Add Image" to upload.
+                        </p>
                       </div>
                     )}
                   </div>
@@ -255,7 +295,11 @@ export default function NotesApp() {
 
                 {/* Drawing Section */}
                 <div>
-                  <h2 className={`text-lg font-semibold mb-4 ${textColorClass}`}>Drawing</h2>
+                  <h2
+                    className={`text-lg font-semibold mb-4 ${textColorClass}`}
+                  >
+                    Drawing
+                  </h2>
                   <div className="border-2 border-gray-200/30 rounded-lg p-4">
                     <DrawingCanvas onSave={addDrawing} />
                   </div>
@@ -263,15 +307,17 @@ export default function NotesApp() {
 
                 {/* Mind Map Section */}
                 <div>
-                  <h2 className={`text-lg font-semibold mb-4 ${textColorClass}`}>Mind Map</h2>
+                  <h2
+                    className={`text-lg font-semibold mb-4 ${textColorClass}`}
+                  >
+                    Mind Map
+                  </h2>
                   <div className="border-2 border-gray-200/30 rounded-lg p-4">
                     <MindMapEditor onSave={addMindMap} />
                   </div>
                 </div>
               </div>
             </div>
-
-
           </div>
         ) : (
           <NotesGrid
@@ -288,7 +334,13 @@ export default function NotesApp() {
 }
 
 // Notes Grid Component
-function NotesGrid({ notes, onSelectNote, onDeleteNote, onUpdateNote, colors }) {
+function NotesGrid({
+  notes,
+  onSelectNote,
+  onDeleteNote,
+  onUpdateNote,
+  colors,
+}) {
   return (
     <div>
       {notes.length === 0 ? (
@@ -298,17 +350,25 @@ function NotesGrid({ notes, onSelectNote, onDeleteNote, onUpdateNote, colors }) 
               <Edit3 className="w-10 h-10 text-gray-600 dark:text-gray-400" />
             </div>
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">No notes yet</h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-sm mx-auto">Start organizing your thoughts by creating your first note</p>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+            No notes yet
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-sm mx-auto">
+            Start organizing your thoughts by creating your first note
+          </p>
         </div>
       ) : (
         <>
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Your Notes</h2>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">{notes.length} note{notes.length !== 1 ? 's' : ''}</p>
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+              Your Notes
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              {notes.length} note{notes.length !== 1 ? "s" : ""}
+            </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {notes.map(note => (
+            {notes.map((note) => (
               <NoteCard
                 key={note.id}
                 note={note}
@@ -331,16 +391,20 @@ function NoteCard({ note, onSelect, onDelete, onUpdateColor, colors }) {
 
   // Determine if the note color is dark
   const isLightColor = (color) => {
-    const hex = color.replace('#', '');
+    const hex = color.replace("#", "");
     const r = parseInt(hex.substr(0, 2), 16);
     const g = parseInt(hex.substr(2, 2), 16);
     const b = parseInt(hex.substr(4, 2), 16);
-    const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
     return brightness > 180;
   };
 
-  const textColorClass = isLightColor(note.color) ? 'text-gray-900' : 'text-white';
-  const mutedTextColorClass = isLightColor(note.color) ? 'text-gray-700' : 'text-gray-200';
+  const textColorClass = isLightColor(note.color)
+    ? "text-gray-900"
+    : "text-white";
+  const mutedTextColorClass = isLightColor(note.color)
+    ? "text-gray-700"
+    : "text-gray-200";
 
   return (
     <div
@@ -350,8 +414,10 @@ function NoteCard({ note, onSelect, onDelete, onUpdateColor, colors }) {
     >
       <div className="p-5">
         <div className="flex items-start justify-between mb-3">
-          <h3 className={`font-semibold truncate flex-1 pr-2 ${textColorClass}`}>
-            {note.title || 'Untitled'}
+          <h3
+            className={`font-semibold truncate flex-1 pr-2 ${textColorClass}`}
+          >
+            {note.title || "Untitled"}
           </h3>
           <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <button
@@ -375,12 +441,16 @@ function NoteCard({ note, onSelect, onDelete, onUpdateColor, colors }) {
           </div>
         </div>
 
-        <p className={`text-sm line-clamp-4 mb-4 leading-relaxed ${mutedTextColorClass}`}>
-          {note.content || 'No content yet...'}
+        <p
+          className={`text-sm line-clamp-4 mb-4 leading-relaxed ${mutedTextColorClass}`}
+        >
+          {note.content || "No content yet..."}
         </p>
 
         {/* Content indicators */}
-        {(note.images?.length > 0 || note.drawings?.length > 0 || note.mindMaps?.length > 0) && (
+        {(note.images?.length > 0 ||
+          note.drawings?.length > 0 ||
+          note.mindMaps?.length > 0) && (
           <div className="flex gap-2 flex-wrap">
             {note.images?.length > 0 && (
               <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">
@@ -407,7 +477,7 @@ function NoteCard({ note, onSelect, onDelete, onUpdateColor, colors }) {
         {showColorPicker && (
           <div className="absolute top-14 right-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-600 p-3 z-20">
             <div className="grid grid-cols-5 gap-2">
-              {colors.map(color => (
+              {colors.map((color) => (
                 <button
                   key={color}
                   onClick={(e) => {
@@ -431,8 +501,8 @@ function NoteCard({ note, onSelect, onDelete, onUpdateColor, colors }) {
 function DrawingCanvas({ onSave }) {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [tool, setTool] = useState('pen');
-  const [color, setColor] = useState('#000000');
+  const [tool, setTool] = useState("pen");
+  const [color, setColor] = useState("#000000");
   const [thickness, setThickness] = useState(2);
 
   useEffect(() => {
@@ -440,17 +510,17 @@ function DrawingCanvas({ onSave }) {
     if (!canvas) return;
     canvas.width = 800;
     canvas.height = 400;
-    const ctx = canvas.getContext('2d');
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.fillStyle = 'white';
+    const ctx = canvas.getContext("2d");
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }, []);
 
   const startDrawing = (e) => {
     setIsDrawing(true);
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -463,12 +533,12 @@ function DrawingCanvas({ onSave }) {
     if (!isDrawing) return;
 
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    ctx.strokeStyle = tool === 'eraser' ? 'white' : color;
+    ctx.strokeStyle = tool === "eraser" ? "white" : color;
     ctx.lineWidth = thickness;
     ctx.lineTo(x, y);
     ctx.stroke();
@@ -480,8 +550,8 @@ function DrawingCanvas({ onSave }) {
 
   const clearCanvas = () => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = 'white';
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
 
@@ -491,7 +561,7 @@ function DrawingCanvas({ onSave }) {
     onSave({
       id: Date.now().toString(),
       data: dataURL,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     });
     clearCanvas();
   };
@@ -509,18 +579,22 @@ function DrawingCanvas({ onSave }) {
         </select>
 
         <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-600 dark:text-gray-400">Color:</label>
+          <label className="text-sm text-gray-600 dark:text-gray-400">
+            Color:
+          </label>
           <input
             type="color"
             value={color}
             onChange={(e) => setColor(e.target.value)}
             className="w-8 h-8 rounded border border-gray-300 dark:border-gray-600"
-            disabled={tool === 'eraser'}
+            disabled={tool === "eraser"}
           />
         </div>
 
         <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-600 dark:text-gray-400">Size:</label>
+          <label className="text-sm text-gray-600 dark:text-gray-400">
+            Size:
+          </label>
           <input
             type="range"
             min="1"
@@ -529,7 +603,9 @@ function DrawingCanvas({ onSave }) {
             onChange={(e) => setThickness(e.target.value)}
             className="w-20"
           />
-          <span className="text-sm text-gray-600 dark:text-gray-400 w-8">{thickness}px</span>
+          <span className="text-sm text-gray-600 dark:text-gray-400 w-8">
+            {thickness}px
+          </span>
         </div>
 
         <div className="flex gap-2 ml-auto">
@@ -564,16 +640,16 @@ function DrawingCanvas({ onSave }) {
 // Mind Map Editor Component
 function MindMapEditor({ onSave }) {
   const [nodes, setNodes] = useState([
-    { id: '1', x: 300, y: 150, text: 'Central Idea' }
+    { id: "1", x: 300, y: 150, text: "Central Idea" },
   ]);
   const [edges, setEdges] = useState([]);
-  const [selectedNode, setSelectedNode] = useState('1');
+  const [selectedNode, setSelectedNode] = useState("1");
 
   const addNode = () => {
     if (!selectedNode) return;
 
     const newId = Date.now().toString();
-    const parentNode = nodes.find(n => n.id === selectedNode);
+    const parentNode = nodes.find((n) => n.id === selectedNode);
     const angle = Math.random() * 2 * Math.PI;
     const distance = 100;
 
@@ -581,7 +657,7 @@ function MindMapEditor({ onSave }) {
       id: newId,
       x: Math.max(50, Math.min(parentNode.x + Math.cos(angle) * distance, 550)),
       y: Math.max(30, Math.min(parentNode.y + Math.sin(angle) * distance, 270)),
-      text: 'New Idea'
+      text: "New Idea",
     };
 
     setNodes([...nodes, newNode]);
@@ -589,15 +665,17 @@ function MindMapEditor({ onSave }) {
   };
 
   const deleteNode = () => {
-    if (!selectedNode || selectedNode === '1') return;
+    if (!selectedNode || selectedNode === "1") return;
 
-    setNodes(nodes.filter(n => n.id !== selectedNode));
-    setEdges(edges.filter(e => e.from !== selectedNode && e.to !== selectedNode));
-    setSelectedNode('1');
+    setNodes(nodes.filter((n) => n.id !== selectedNode));
+    setEdges(
+      edges.filter((e) => e.from !== selectedNode && e.to !== selectedNode)
+    );
+    setSelectedNode("1");
   };
 
   const updateNodeText = (id, text) => {
-    setNodes(nodes.map(n => n.id === id ? { ...n, text } : n));
+    setNodes(nodes.map((n) => (n.id === id ? { ...n, text } : n)));
   };
 
   const saveMindMap = () => {
@@ -605,13 +683,13 @@ function MindMapEditor({ onSave }) {
       id: Date.now().toString(),
       nodes,
       edges,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     });
 
     // Reset to initial state
-    setNodes([{ id: '1', x: 300, y: 150, text: 'Central Idea' }]);
+    setNodes([{ id: "1", x: 300, y: 150, text: "Central Idea" }]);
     setEdges([]);
-    setSelectedNode('1');
+    setSelectedNode("1");
   };
 
   return (
@@ -627,7 +705,7 @@ function MindMapEditor({ onSave }) {
 
         <button
           onClick={deleteNode}
-          disabled={!selectedNode || selectedNode === '1'}
+          disabled={!selectedNode || selectedNode === "1"}
           className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
         >
           Delete Node
@@ -644,9 +722,9 @@ function MindMapEditor({ onSave }) {
 
       <div className="relative w-full h-80 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 overflow-hidden shadow-sm">
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
-          {edges.map(edge => {
-            const fromNode = nodes.find(n => n.id === edge.from);
-            const toNode = nodes.find(n => n.id === edge.to);
+          {edges.map((edge) => {
+            const fromNode = nodes.find((n) => n.id === edge.from);
+            const toNode = nodes.find((n) => n.id === edge.to);
             if (!fromNode || !toNode) return null;
 
             return (
@@ -663,16 +741,17 @@ function MindMapEditor({ onSave }) {
           })}
         </svg>
 
-        {nodes.map(node => (
+        {nodes.map((node) => (
           <div
             key={node.id}
-            className={`absolute w-32 h-8 rounded-lg border-2 bg-white dark:bg-gray-800 cursor-pointer flex items-center justify-center text-xs font-medium transition-all hover:shadow-md ${selectedNode === node.id
-              ? 'border-blue-500 shadow-md ring-2 ring-blue-200 dark:ring-blue-400'
-              : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
-              }`}
+            className={`absolute w-32 h-8 rounded-lg border-2 bg-white dark:bg-gray-800 cursor-pointer flex items-center justify-center text-xs font-medium transition-all hover:shadow-md ${
+              selectedNode === node.id
+                ? "border-blue-500 shadow-md ring-2 ring-blue-200 dark:ring-blue-400"
+                : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
+            }`}
             style={{
               left: node.x,
-              top: node.y
+              top: node.y,
             }}
             onClick={() => setSelectedNode(node.id)}
           >

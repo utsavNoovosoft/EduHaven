@@ -13,7 +13,9 @@ const EventPopup = ({ date, onClose, refreshEvents }) => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await axiosInstance.get(`/events/by-date?date=${date}`);
+        const response = await axiosInstance.get(
+          `/events/by-date?date=${date}`
+        );
 
         const eventData = response.data.data[0]; // Assuming one event per date
         if (eventData) {

@@ -67,13 +67,13 @@ const GoalsComponent = () => {
 
   const handleDelete = async (id) => {
     const previousTodos = [...todos];
-    setTodos((prev) => prev.filter((todo) => todo._id !== id)); 
+    setTodos((prev) => prev.filter((todo) => todo._id !== id));
 
     try {
       await axiosInstance.delete(`/todo/${id}`);
     } catch (error) {
       console.error("Error deleting todo:", error.message);
-      setTodos(previousTodos); 
+      setTodos(previousTodos);
     }
   };
 

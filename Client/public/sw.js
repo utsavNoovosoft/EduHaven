@@ -1,73 +1,75 @@
-const CACHE_NAME = 'eduhaven-v1.0.0';
-const STATIC_CACHE = 'eduhaven-static-v1.0.0';
-const DYNAMIC_CACHE = 'eduhaven-dynamic-v1.0.0';
+const CACHE_NAME = "eduhaven-v1.0.0";
+const STATIC_CACHE = "eduhaven-static-v1.0.0";
+const DYNAMIC_CACHE = "eduhaven-dynamic-v1.0.0";
 
 // Assets to cache immediately
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/Logo.svg',
-  '/manifest.json',
-  '/Page1LightScreenshot.png',
-  '/favicon-32x32.png',
-  '/favicon-16x16.png',
-  '/apple-touch-icon.png',
-  '/mstile-150x150.png'
+  "/",
+  "/index.html",
+  "/Logo.svg",
+  "/manifest.json",
+  "/Page1LightScreenshot.png",
+  "/favicon-32x32.png",
+  "/favicon-16x16.png",
+  "/apple-touch-icon.png",
+  "/mstile-150x150.png",
 ];
 
 // Install event - cache static assets
-self.addEventListener('install', (event) => {
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE)
+    caches
+      .open(STATIC_CACHE)
       .then((cache) => {
-        console.log('Caching static assets');
+        console.log("Caching static assets");
         return cache.addAll(STATIC_ASSETS);
       })
       .catch((error) => {
-        console.log('Failed to cache static assets:', error);
+        console.log("Failed to cache static assets:", error);
       })
   );
   self.skipWaiting();
 });
 
 // Activate event - clean up old caches
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys()
+    caches
+      .keys()
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
-              console.log('Deleting old cache:', cacheName);
+              console.log("Deleting old cache:", cacheName);
               return caches.delete(cacheName);
             }
           })
         );
       })
       .then(() => {
-        console.log('Service Worker activated');
+        console.log("Service Worker activated");
         return self.clients.claim();
       })
   );
 });
 
 // Fetch event - serve from cache or network
-self.addEventListener('fetch', (event) => {
+self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
   // Skip non-GET requests
-  if (request.method !== 'GET') {
+  if (request.method !== "GET") {
     return;
   }
 
   // Skip chrome-extension requests
-  if (url.protocol === 'chrome-extension:') {
+  if (url.protocol === "chrome-extension:") {
     return;
   }
 
   // Handle different types of requests
-  if (url.pathname === '/' || url.pathname === '/index.html') {
+  if (url.pathname === "/" || url.pathname === "/index.html") {
     // Homepage - serve from cache first
     event.respondWith(cacheFirst(request, STATIC_CACHE));
   } else if (isStaticAsset(url.pathname)) {
@@ -89,7 +91,7 @@ async function cacheFirst(request, cacheName) {
     if (cachedResponse) {
       return cachedResponse;
     }
-    
+
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
       const cache = await caches.open(cacheName);
@@ -97,8 +99,8 @@ async function cacheFirst(request, cacheName) {
     }
     return networkResponse;
   } catch (error) {
-    console.log('Cache first strategy failed:', error);
-    return new Response('Network error', { status: 503 });
+    console.log("Cache first strategy failed:", error);
+    return new Response("Network error", { status: 503 });
   }
 }
 
@@ -112,29 +114,41 @@ async function networkFirst(request, cacheName) {
     }
     return networkResponse;
   } catch (error) {
-    console.log('Network first strategy failed, trying cache:', error);
+    console.log("Network first strategy failed, trying cache:", error);
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
       return cachedResponse;
     }
-    return new Response('Network error', { status: 503 });
+    return new Response("Network error", { status: 503 });
   }
 }
 
 // Check if request is for a static asset
 function isStaticAsset(pathname) {
-  const staticExtensions = ['.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.woff', '.woff2', '.ttf', '.eot'];
-  return staticExtensions.some(ext => pathname.endsWith(ext));
+  const staticExtensions = [
+    ".js",
+    ".css",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".svg",
+    ".woff",
+    ".woff2",
+    ".ttf",
+    ".eot",
+  ];
+  return staticExtensions.some((ext) => pathname.endsWith(ext));
 }
 
 // Check if request is for an API endpoint
 function isAPIRequest(pathname) {
-  return pathname.startsWith('/api/') || pathname.startsWith('/auth/');
+  return pathname.startsWith("/api/") || pathname.startsWith("/auth/");
 }
 
 // Background sync for offline actions
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'background-sync') {
+self.addEventListener("sync", (event) => {
+  if (event.tag === "background-sync") {
     event.waitUntil(doBackgroundSync());
   }
 });
@@ -142,38 +156,34 @@ self.addEventListener('sync', (event) => {
 async function doBackgroundSync() {
   try {
     // Handle any pending offline actions
-    console.log('Performing background sync');
+    console.log("Performing background sync");
   } catch (error) {
-    console.log('Background sync failed:', error);
+    console.log("Background sync failed:", error);
   }
 }
 
 // Push notification handling
-self.addEventListener('push', (event) => {
+self.addEventListener("push", (event) => {
   if (event.data) {
     const data = event.data.json();
     const options = {
       body: data.body,
-      icon: '/Logo.svg',
-      badge: '/Logo.svg',
+      icon: "/Logo.svg",
+      badge: "/Logo.svg",
       vibrate: [100, 50, 100],
       data: {
         dateOfArrival: Date.now(),
-        primaryKey: 1
-      }
+        primaryKey: 1,
+      },
     };
 
-    event.waitUntil(
-      self.registration.showNotification(data.title, options)
-    );
+    event.waitUntil(self.registration.showNotification(data.title, options));
   }
 });
 
 // Notification click handling
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  
-  event.waitUntil(
-    clients.openWindow('/')
-  );
+
+  event.waitUntil(clients.openWindow("/"));
 });
