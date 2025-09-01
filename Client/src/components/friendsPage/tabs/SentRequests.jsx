@@ -1,47 +1,22 @@
+import { useSentRequests } from "@/queries/friendQueries";
 import { useEffect, useState } from "react";
-import axiosInstance from "@/utils/axios";
-import { toast } from "react-toastify";
-import UserCard from "../UserCard";
 import SearchBar from "../SearchBar";
+import UserCard from "../UserCard";
 
 export default function SentRequests() {
-  const [sent, setSent] = useState([]);
   const [filteredSent, setFilteredSent] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const fetchSent = async () => {
-    setLoading(true);
-    try {
-      const res = await axiosInstance.get(`/friends/sent-requests`);
-      setSent(res.data || []);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to load sent requests");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const cancelRequest = async (friendId) => {
-    try {
-      await axiosInstance.delete(`/friends/sent-requests/${friendId}`);
-      setSent((prev) => prev.filter((r) => r._id !== friendId));
-      toast.info("Friend request canceled.");
-    } catch (err) {
-      console.error(err);
-      toast.error("Error canceling friend request!");
-    }
-  };
+  const { data: sentRequests, isLoading } = useSentRequests();
 
   const handleSearch = (term) => {
     setSearchTerm(term);
     if (!term.trim()) {
-      setFilteredSent(sent);
+      setFilteredSent(sentRequests);
       return;
     }
 
-    const filtered = sent.filter((user) => {
+    const filtered = sentRequests.filter((user) => {
       const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
 
       // Search by name
@@ -72,39 +47,33 @@ export default function SentRequests() {
   };
 
   useEffect(() => {
-    fetchSent();
-  }, []);
+    setFilteredSent(sentRequests);
+  }, [sentRequests]);
 
-  useEffect(() => {
-    setFilteredSent(sent);
-  }, [sent]);
-
-  if (loading)
+  if (isLoading)
     return <div className="text-center text-gray-500">Loading...</div>;
-  if (!sent.length)
+  if (!sentRequests.length)
     return <div className="text-center text-gray-500">No sent requests</div>;
 
   return (
     <div>
-      {sent.length > 0 && (
+      {sentRequests.length > 0 && (
         <SearchBar
           onSearch={handleSearch}
-          placeholder="Search sent requests..."
+          placeholder="Search sentRequests requests..."
         />
       )}
 
       <div className="flex flex-wrap gap-3 2xl:gap-4 mt-4">
-        {filteredSent.map((user) => (
+        {filteredSent?.map((user) => (
           <UserCard
             key={user._id}
             user={user}
-            selectedTab="sentRequests"
-            onCancelRequest={cancelRequest}
           />
         ))}
       </div>
 
-      {filteredSent.length === 0 && searchTerm && (
+      {filteredSent?.length === 0 && searchTerm && (
         <div className="text-center text-gray-500 mt-4">
           No matching sent requests found
         </div>

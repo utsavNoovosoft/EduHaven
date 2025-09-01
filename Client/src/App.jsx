@@ -23,11 +23,14 @@ import "react-toastify/dist/ReactToastify.css";
 import NoteNest from "./pages/NoteNest";
 import Delete from "./components/settings/Delete";
 import Chats from "./pages/Chats";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function App() {
+  const queryClient = new QueryClient();
+
   return (
     <UserProfileProvider>
-      <QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
         <SocketProvider>
           <RouterSelector>
             <Routes>

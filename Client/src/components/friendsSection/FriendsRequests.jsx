@@ -1,43 +1,28 @@
-import axiosInstance from "@/utils/axios";
+import {
+  useAcceptRequest,
+  useFriendRequests,
+  useRejectRequest,
+} from "@/queries/friendQueries";
 import { User } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function FriendRequests() {
-  const [friendRequests, setRequests] = useState([]);
+  const { data: friendRequests = [], isLoading } = useFriendRequests();
 
-  useEffect(() => {
-    axiosInstance
-      .get("/friends/requests")
-      .then((res) => {
-        setRequests(res.data);
-      })
-      .catch((err) => console.error(err.response.data));
-  }, []);
+  const { mutate: acceptRequest } = useAcceptRequest();
+  const { mutate: handleRejectRequest } = useRejectRequest();
 
   const handleAccept = (friendId) => {
-    axiosInstance
-      .post(`/friends/accept/${friendId}`, null)
-      .then((res) => {
-        console.log(res.data);
-        setRequests((prev) => prev.filter((user) => user._id !== friendId));
-      })
-      .catch((err) => console.error(err.response.data));
+    acceptRequest(friendId);
+    friendRequests = (prev) => prev.filter((user) => user._id !== friendId);
   };
 
   const handleReject = (friendId) => {
-    axiosInstance
-      .delete(`/friends/reject/${friendId}`, null)
-      .then((res) => {
-        console.log(res.data);
-        setRequests((prev) => prev.filter((user) => user._id !== friendId));
-      })
-      .catch((err) => console.error(err.response.data));
+    handleRejectRequest(friendId);
+    friendRequests = (prev) => prev.filter((user) => user._id !== friendId);
   };
 
-  const showSkeletons = friendRequests.length === 0;
-
-  if (showSkeletons) {
+  if (isLoading) {
     return (
       <div className="bg-[var(--bg-secondary)] border border-gray-700/30 p-4 space-y-4 rounded-3xl shadow animate-pulse">
         <div className="bg-gray-500/20 h-6 rounded-md"></div>
