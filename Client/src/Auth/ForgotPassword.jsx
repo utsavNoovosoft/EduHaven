@@ -51,7 +51,7 @@ const backgroundVariants = {
 
 function ForgotPassword() {
   const navigate = useNavigate();
-  const [isOtpSent, setIsOtpSent] = useState(false);
+
 
   const {
     register,
@@ -70,8 +70,8 @@ function ForgotPassword() {
       if (resetToken) {
         localStorage.setItem("resetToken", resetToken);
         localStorage.setItem("resetEmail", data.Email);
-        setIsOtpSent(true);
         toast.success("OTP sent to your email successfully!");
+         navigate("/verify-reset-otp");
       }
     } catch (error) {
       console.error("Forgot password failed:", error.response?.data || error.message);
@@ -79,14 +79,6 @@ function ForgotPassword() {
     }
   };
 
-
-  const handleProceedToVerify = () => {
-
-    // Navigate to OTP verification
-
-    navigate("/verify-reset-otp");
-
-  };
   const handleGoBack = () => {
     navigate("/authenticate");
   };
@@ -139,14 +131,10 @@ function ForgotPassword() {
                 Forgot Password?
               </h2>
               <p className="text-gray-600 dark:text-gray-400 text-sm">
-                {isOtpSent 
-                  ? "We've sent an OTP to your email address" 
-                  : "Enter your email address and we'll send you an OTP to reset your password"
-                }
+                 Enter your email address and we'll send you an OTP to reset your password
               </p>
             </div>
-
-            {!isOtpSent ? (
+                       
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div>
                   <label
@@ -196,44 +184,6 @@ function ForgotPassword() {
                   )}
                 </motion.button>
               </form>
-            ) : (
-              <div className="space-y-6">
-                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                  <div className="flex items-center">
-                    <div className="w-8 h-8 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center mr-3">
-                      <Mail className="w-4 h-4 text-green-600 dark:text-green-400" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-medium text-green-800 dark:text-green-200">
-                        OTP Sent Successfully!
-                      </h3>
-                      <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                        Check your email ({getValues("Email")}) for the 6-digit OTP code.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleProceedToVerify}
-                  className="w-full rounded-xl py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold focus:outline-none focus:ring-2 focus:ring-blue-600"
-                >
-                  Continue to Verify OTP
-                </motion.button>
-
-                <div className="text-center">
-                  <button
-                    onClick={() => setIsOtpSent(false)}
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-                  >
-                    Use different email address
-                  </button>
-                </div>
-              </div>
-            )}
-
             <div className="text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Remember your password?{" "}
