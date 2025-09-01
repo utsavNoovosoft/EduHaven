@@ -435,22 +435,3 @@ body {
     @apply bg-black/40 backdrop-blur-sm;
   }
 }
-
-.footer {
-  background: transparent;       /* transparent background */
-  color: var(--text-color);      /* adapts with theme */
-  text-align: center;
-  padding: 1rem 0;
-  font-size: 0.9rem;
-}
-
-.footer-link {
-  color: var(--text-color);      /* theme-aware link color */
-  text-decoration: none;
-  margin-left: 0.3rem;
-}
-
-.footer-link:hover {
-  text-decoration: underline;
-}
-
