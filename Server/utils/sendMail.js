@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 import dotenv from "dotenv";
-import fetch, { Headers, Request, Response } from 'node-fetch';
+import fetch, { Headers, Request, Response } from "node-fetch";
 
 // Set up global fetch objects for Resend
 global.Headers = Headers;

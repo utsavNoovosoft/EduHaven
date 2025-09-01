@@ -7,8 +7,8 @@ import { useUserProfile } from '@/contexts/UserProfileContext';
 import BadgeModal from './BadgeModal';
 import BadgeTooltip from './BadgeTooltip';
 
-const backendUrl = import.meta.env.VITE_API_URL;
 
+const backendUrl = import.meta.env.VITE_API_URL;
 
 const Badges = () => {
   const [earnedBadges, setEarnedBadges] = useState([]);
@@ -35,20 +35,18 @@ const Badges = () => {
     }
   }, [user, fetchUserDetails]);
 
-
   // Fetch badges from backend API instead of client-side calculation
   const fetchBadgesFromServer = async () => {
     if (!userId) return;
-    
+
     try {
       const token = localStorage.getItem("token");
       const response = await axiosInstance.get(`/user/badges`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+
       if (response.data.badges) {
         setEarnedBadges(response.data.badges);
-
       }
     } catch (error) {
       console.error("Error fetching badges from server:", error);
@@ -58,7 +56,6 @@ const Badges = () => {
   };
 
   useEffect(() => {
-
     const initializeBadges = async () => {
       await fetchBadgesFromServer();
 

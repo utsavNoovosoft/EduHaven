@@ -72,16 +72,16 @@ const Calculator = () => {
                 >
                   {tool === "calculator" ? (
                     <div className="flex gap-2 items-center text-sm">
-                      <Equal size={20}/> Calculator
+                      <Equal size={20} /> Calculator
                     </div>
                   ) : tool === "graph" ? (
                     <div className="flex gap-2 items-center text-sm">
-                      <LineChart size={20}/>
+                      <LineChart size={20} />
                       Graph
                     </div>
                   ) : tool === "unitconverter" ? (
                     <div className="flex gap-2 items-center text-sm">
-                      <Sigma size={20}/>
+                      <Sigma size={20} />
                       Converter
                     </div>
                   ) : (

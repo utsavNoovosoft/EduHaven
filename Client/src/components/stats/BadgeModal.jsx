@@ -1,6 +1,6 @@
-import React from 'react';
-import { X, Info } from 'lucide-react';
-import { getAllBadges } from '@/utils/badgeSystem';
+import React from "react";
+import { X, Info } from "lucide-react";
+import { getAllBadges } from "@/utils/badgeSystem";
 
 const BadgeModal = ({ isOpen, onClose }) => {
   const allBadges = getAllBadges();
@@ -27,9 +27,10 @@ const BadgeModal = ({ isOpen, onClose }) => {
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[60vh]">
           <p className="text-[var(--txt-dim)] mb-6">
-            Complete various activities to earn these badges and showcase your achievements!
+            Complete various activities to earn these badges and showcase your
+            achievements!
           </p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {allBadges.map((badge) => (
               <div
@@ -42,17 +43,15 @@ const BadgeModal = ({ isOpen, onClose }) => {
                     alt={badge.name}
                     className="w-12 h-12 object-contain"
                     onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'flex';
+                      e.target.style.display = "none";
+                      e.target.nextSibling.style.display = "flex";
                     }}
                   />
-                  <div 
-                    className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full items-center justify-center text-white font-bold text-lg hidden"
-                  >
+                  <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full items-center justify-center text-white font-bold text-lg hidden">
                     {badge.name.charAt(0)}
                   </div>
                 </div>
-                
+
                 <div className="flex-1">
                   <h3 className="font-semibold text-[var(--txt)] mb-1">
                     {badge.name}

@@ -110,14 +110,14 @@ UserCard.propTypes = {
     LastName: PropTypes.string,
     ProfilePicture: PropTypes.string,
     Bio: PropTypes.string,
-    requestSent: PropTypes.bool
+    requestSent: PropTypes.bool,
   }).isRequired,
   selectedTab: PropTypes.string.isRequired,
   onSendRequest: PropTypes.func,
   onCancelRequest: PropTypes.func,
   onAcceptRequest: PropTypes.func,
   onRejectRequest: PropTypes.func,
-  onRemoveFriend: PropTypes.func
+  onRemoveFriend: PropTypes.func,
 };
 
 export default UserCard;

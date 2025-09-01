@@ -76,9 +76,8 @@ axiosInstance.interceptors.response.use(
         localStorage.setItem("token", token);
 
         // Update the authorization header
-        axiosInstance.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${token}`;
+        axiosInstance.defaults.headers.common["Authorization"] =
+          `Bearer ${token}`;
         originalRequest.headers.Authorization = `Bearer ${token}`;
 
         processQueue(null, token);

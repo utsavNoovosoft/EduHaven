@@ -11,17 +11,26 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ConfirmLogoutModal from "../ConfirmLogoutModal";
+import { useUserProfile } from "@/contexts/UserProfileContext";
 
 const Sidebar = ({ user, activeTab, setActiveTab }) => {
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
+  const { isBasicInfoComplete, isEduSkillsComplete } = useUserProfile();
+
   const tabs = [
-    { key: "basic-info", label: "Basic Info", icon: <CircleUser size={24} /> },
+    {
+      key: "basic-info",
+      label: "Basic Info",
+      icon: <CircleUser size={24} />,
+      incomplete: !isBasicInfoComplete(),
+    },
     {
       key: "edu-skills",
       label: "Education & Skills",
       icon: <GraduationCap size={24} />,
+      incomplete: !isEduSkillsComplete(),
     },
     { key: "account", label: "Account", icon: <CircleUserRound size={24} /> },
     { key: "friends", label: "Friends", icon: <Users size={24} /> },
@@ -33,11 +42,6 @@ const Sidebar = ({ user, activeTab, setActiveTab }) => {
       icon: <Settings2 size={24} />,
     },
   ];
-
-  const getTabButtonClass = (tab) =>
-    `flex items-center gap-1.5 p-3 rounded-lg text-md w-full text-nowrap ${
-      activeTab === tab ? "bg-[var(--btn)] text-white" : "hover:bg-ter"
-    }`;
 
   return (
     <>
@@ -54,9 +58,23 @@ const Sidebar = ({ user, activeTab, setActiveTab }) => {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={getTabButtonClass(tab.key)}
+                className={`group flex items-center justify-between p-3 rounded-lg text-md w-full text-nowrap transition relative
+                  ${
+                    activeTab === tab.key
+                      ? "bg-[var(--btn)] text-white"
+                      : tab.incomplete
+                        ? "bg-red-500/10 text-red-400 hover:bg-red-500/20"
+                        : "hover:bg-ter"
+                  }`}
               >
-                {tab.icon} {tab.label}
+                <span className="flex items-center gap-1.5">
+                  {tab.icon} {tab.label}
+                  {tab.incomplete && (
+                    <span className="ml-2 px-2 py-0.5 text-xs font-bold rounded-full bg-red-500 text-white shadow-md">
+                      !
+                    </span>
+                  )}
+                </span>
               </button>
             )
           )}

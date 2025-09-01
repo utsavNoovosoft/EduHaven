@@ -37,7 +37,7 @@ function FriendRequests() {
 
   const showSkeletons = friendRequests.length === 0;
 
- if (showSkeletons) {
+  if (showSkeletons) {
     return (
       <div className="bg-[var(--bg-secondary)] border border-gray-700/30 p-4 space-y-4 rounded-3xl shadow animate-pulse">
         <div className="bg-gray-500/20 h-6 rounded-md"></div>
@@ -60,8 +60,6 @@ function FriendRequests() {
       </div>
     );
   }
-
-
 
   return (
     <section className="bg-sec rounded-3xl p-3 2xl:p-4">

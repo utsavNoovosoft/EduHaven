@@ -42,7 +42,7 @@ const useSessionChat = (socket, roomId) => {
     if (!socket) return;
 
     socket.on("new_message", (messageData) => {
-      console.log(messageData)
+      console.log(messageData);
       setMessages((prev) => [...prev, messageData]);
     });
 

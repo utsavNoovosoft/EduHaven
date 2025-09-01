@@ -1,5 +1,4 @@
 function NotLogedInPage() {
-
   return (
     <div className="flex flex-col items-center justify-center min-h-[84vh] h-[100%]">
       <div className=" md:w-[450px] w-[300px] flex flex-col items-center">

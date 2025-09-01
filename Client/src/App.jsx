@@ -24,6 +24,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import NoteNest from "./pages/NoteNest";
 import Delete from "./components/settings/Delete";
+import Chats from "./pages/Chats";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
               <Route path="project-details" element={<ProjectInfo />} />
               <Route path="settings/" element={<Settings />} />
               <Route path="friends" element={<FriendsPage />} />
+              <Route path="chat" element={<Chats />} />
               <Route path="*" element={<PageNotFound />} />
             </Route>
 

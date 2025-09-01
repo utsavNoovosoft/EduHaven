@@ -7,13 +7,15 @@ import SearchBar from "../SearchBar";
 export default function SuggestedFriends() {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
 
   const fetchSuggestions = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get("/friends/friend-suggestions");
+      const res = await axiosInstance.get(
+        "/friends/friend-suggestions?all=true"
+      );
       setUsers(res.data || []);
     } catch (err) {
       console.error("Fetch suggestions error:", err);
@@ -46,37 +48,41 @@ export default function SuggestedFriends() {
       setFilteredUsers(users);
       return;
     }
-    
-    const filtered = users.filter(user => {
-      const fullName = `${user.FirstName} ${user.LastName || ''}`.toLowerCase();
-      
+
+    const filtered = users.filter((user) => {
+      const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
+
       // Search by name
       if (fullName.includes(term.toLowerCase())) {
         return true;
       }
-      
+
       // Search by skills
-      if (user.OtherDetails?.skills && 
-          user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())) {
+      if (
+        user.OtherDetails?.skills &&
+        user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())
+      ) {
         return true;
       }
-      
+
       // Search by interests
-      if (user.OtherDetails?.interests && 
-          user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())) {
+      if (
+        user.OtherDetails?.interests &&
+        user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())
+      ) {
         return true;
       }
-      
+
       return false;
     });
-    
+
     setFilteredUsers(filtered);
   };
-  
+
   useEffect(() => {
     fetchSuggestions();
   }, []);
-  
+
   useEffect(() => {
     setFilteredUsers(users);
   }, [users]);
@@ -90,12 +96,12 @@ export default function SuggestedFriends() {
   return (
     <div>
       {users.length > 0 && (
-        <SearchBar 
-          onSearch={handleSearch} 
+        <SearchBar
+          onSearch={handleSearch}
           placeholder="Search by name, skills, or interests..."
         />
       )}
-      
+
       <div className="flex flex-wrap gap-3 2xl:gap-4 mt-4">
         {filteredUsers.map((user) => (
           <UserCard
@@ -106,7 +112,7 @@ export default function SuggestedFriends() {
           />
         ))}
       </div>
-      
+
       {filteredUsers.length === 0 && searchTerm && (
         <div className="text-center text-gray-500 mt-4">
           No matching friends found

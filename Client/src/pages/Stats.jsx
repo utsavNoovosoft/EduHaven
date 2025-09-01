@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useUserProfile, fetchUserStats } from "@/contexts/UserProfileContext";
 import NotLogedInPage from "@/components/NotLogedInPage";
-import ProfileCard from "../components/stats/ProfileCard";
+import ProfileCard from "../components/stats/ProfileCard/ProfileCard";
 import MonthlyLevel from "../components/stats/MonthlyLevel";
 import Badges from "../components/stats/Badges";
 import StudyStats from "../components/stats/StudyStats";
@@ -75,7 +75,7 @@ const Stats = ({ isCurrentUser = false }) => {
     fetchStats();
   }, [isCurrentUser, userId, currentUser, fetchUserDetails]);
 
-  if (isCurrentUser  && !currentUser) {
+  if (isCurrentUser && !currentUser) {
     return <NotLogedInPage />;
   }
 

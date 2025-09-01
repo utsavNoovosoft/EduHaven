@@ -7,8 +7,15 @@ import {
   getUserDetails,
   giveKudos,
   updateProfile,
-  uploadProfilePicture
+  uploadProfilePicture,
 } from "../Controller/UserController.js";
+
+// these are added -> for security --
+import { updateProfileValidationRules } from "../security/validation.js";
+import { validate } from "../security/validationMiddleware.js";
+import { sanitizeFields } from "../security/sanitizeMiddleware.js";
+//
+
 import authMiddleware from "../Middlewares/authMiddleware.js";
 
 const router = express.Router();
@@ -58,7 +65,17 @@ const upload = multer({
 router.post("/kudos", authMiddleware, giveKudos);
 router.get("/details", getUserDetails);
 router.get("/badges", authMiddleware, getUserBadges);
-router.put("/profile", authMiddleware, updateProfile);
+
+// router.put("/profile", authMiddleware, updateProfile);
+router.put(
+  "/profile",
+  authMiddleware,
+  updateProfileValidationRules(),
+  validate,
+  sanitizeFields(["Bio", "OtherDetails"]),
+  updateProfile
+);
+
 router.post(
   "/upload-profile-picture",
   authMiddleware,

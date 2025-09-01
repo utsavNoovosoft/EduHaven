@@ -7,10 +7,24 @@ import {
 } from "../Controller/StudySessionController.js";
 import authMiddleware from "../Middlewares/authMiddleware.js";
 
+// these are added -> for security --
+import { createStudySessionValidationRules } from "../security/validation.js";
+import { validate } from "../security/validationMiddleware.js";
+import { sanitizeFields } from "../security/sanitizeMiddleware.js";
+// ----
+
 const router = express.Router();
 
 // Record new session
-router.post("/", authMiddleware, createStudySession);
+// router.post("/", authMiddleware, createStudySession);
+router.post(
+  "/",
+  createStudySessionValidationRules(),
+  validate,
+  sanitizeFields(["startTime", "endTime", "duration"]),
+  authMiddleware,
+  createStudySession
+);
 
 // Get statistics
 router.get("/stats", authMiddleware, getStudySessionStats);

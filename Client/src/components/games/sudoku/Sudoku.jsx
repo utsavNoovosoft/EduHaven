@@ -36,10 +36,7 @@ export default function Sudoku() {
   useEffect(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     setSeconds(0);
-    timerRef.current = setInterval(
-      () => setSeconds((s) => s + 1),
-      1000
-    );
+    timerRef.current = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => timerRef.current && clearInterval(timerRef.current);
   }, [puzzle]);
 
@@ -49,9 +46,7 @@ export default function Sudoku() {
       if (e.altKey || e.ctrlKey || e.metaKey) return;
       const { r, c } = selected;
 
-      if (
-        ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)
-      ) {
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
         e.preventDefault();
         const dr = e.key === "ArrowUp" ? -1 : e.key === "ArrowDown" ? 1 : 0;
         const dc = e.key === "ArrowLeft" ? -1 : e.key === "ArrowRight" ? 1 : 0;
@@ -156,10 +151,22 @@ export default function Sudoku() {
         <div className={styles.topBar}>
           <div className={styles.navSection}>
             <button
-              onClick={() => window.history.back()} 
-              className={styles.iconButton} aria-label="Back">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              onClick={() => window.history.back()}
+              className={styles.iconButton}
+              aria-label="Back"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 19.5L8.25 12l7.5-7.5"
+                />
               </svg>
             </button>
           </div>
@@ -168,8 +175,18 @@ export default function Sudoku() {
           </div>
           <div className={`${styles.navSection} ${styles.navRight}`}>
             <button className={styles.iconButton} aria-label="Toggle Sound">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"
+                />
               </svg>
             </button>
           </div>
@@ -185,39 +202,100 @@ export default function Sudoku() {
             <span>Difficulty:</span>
             <div className={styles.segmentedControl}>
               {levelOptions.map((lvl) => (
-                <button key={lvl} className={difficulty === lvl ? styles.active : ""} onClick={() => handleNewPuzzle(lvl)}>
+                <button
+                  key={lvl}
+                  className={difficulty === lvl ? styles.active : ""}
+                  onClick={() => handleNewPuzzle(lvl)}
+                >
                   {DIFFICULTY_PRESETS[lvl].label}
                 </button>
               ))}
             </div>
           </div>
-          <button onClick={() => setShowHowToPlay(true)} className={styles.howToPlayBtn}>How to Play</button>
+          <button
+            onClick={() => setShowHowToPlay(true)}
+            className={styles.howToPlayBtn}
+          >
+            How to Play
+          </button>
         </div>
       </nav>
 
       <div className={styles.gameWrapper}>
-        <Board board={board} fixed={fixed} selected={selected} onSelect={setSelected} />
+        <Board
+          board={board}
+          fixed={fixed}
+          selected={selected}
+          onSelect={setSelected}
+        />
 
         <div className={styles.gameActions}>
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={() => handleNewPuzzle(difficulty)}>New Puzzle</button>
-          <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={handleHint} disabled={hintsLeft <= 0}>Hint</button>
-          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleValidate}>Validate</button>
-          <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleCheckSolution}>Check Solution</button>
+          <button
+            className={`${styles.btn} ${styles.btnSecondary}`}
+            onClick={() => handleNewPuzzle(difficulty)}
+          >
+            New Puzzle
+          </button>
+          <button
+            className={`${styles.btn} ${styles.btnSecondary}`}
+            onClick={handleHint}
+            disabled={hintsLeft <= 0}
+          >
+            Hint
+          </button>
+          <button
+            className={`${styles.btn} ${styles.btnPrimary}`}
+            onClick={handleValidate}
+          >
+            Validate
+          </button>
+          <button
+            className={`${styles.btn} ${styles.btnPrimary}`}
+            onClick={handleCheckSolution}
+          >
+            Check Solution
+          </button>
 
-          {status === "complete" && <span className={`${styles.statusMessage} ${styles.statusComplete}`}>Solved! 🎉</span>}
-          {status === "conflict" && <span className={`${styles.statusMessage} ${styles.statusConflict}`}>Conflicts found</span>}
-          {status === "correct" && <span className={`${styles.statusMessage} ${styles.statusCorrect}`}>Looks good so far</span>}
+          {status === "complete" && (
+            <span
+              className={`${styles.statusMessage} ${styles.statusComplete}`}
+            >
+              Solved! 🎉
+            </span>
+          )}
+          {status === "conflict" && (
+            <span
+              className={`${styles.statusMessage} ${styles.statusConflict}`}
+            >
+              Conflicts found
+            </span>
+          )}
+          {status === "correct" && (
+            <span className={`${styles.statusMessage} ${styles.statusCorrect}`}>
+              Looks good so far
+            </span>
+          )}
         </div>
       </div>
 
       {showHowToPlay && (
         <div className={styles.modalBackdrop}>
           <div className={styles.modalContent}>
-            <button className={styles.modalCloseBtn} onClick={() => setShowHowToPlay(false)}>Close</button>
+            <button
+              className={styles.modalCloseBtn}
+              onClick={() => setShowHowToPlay(false)}
+            >
+              Close
+            </button>
             <h2 className={styles.modalTitle}>How to Play Sudoku</h2>
             <ul>
-              <li>Fill the board so that each row, column, and 3x3 grid has numbers 1–9.</li>
-              <li>Each number can appear only once in a row, column, or grid.</li>
+              <li>
+                Fill the board so that each row, column, and 3x3 grid has
+                numbers 1–9.
+              </li>
+              <li>
+                Each number can appear only once in a row, column, or grid.
+              </li>
               <li>Use logic, not guessing, to solve the puzzle.</li>
               <li>Hints will reveal a correct number if you’re stuck.</li>
               <li>The game ends when the board is correctly filled.</li>

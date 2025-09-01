@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 
-
 const Signout = () => {
   const navigate = useNavigate();
 
