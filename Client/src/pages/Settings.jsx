@@ -42,7 +42,7 @@ const Settings = () => {
 
   useEffect(() => {
     if (!searchParams.get("tab")) {
-      setSearchParams({ tab: "basic-info" } , { replace: true });
+      setSearchParams({ tab: "basic-info" }, { replace: true });
     }
   }, [searchParams, setSearchParams]);
 

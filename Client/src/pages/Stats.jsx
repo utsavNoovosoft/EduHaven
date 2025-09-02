@@ -75,7 +75,7 @@ const Stats = ({ isCurrentUser = false }) => {
     fetchStats();
   }, [isCurrentUser, userId, currentUser, fetchUserDetails]);
 
-  if (isCurrentUser  && !currentUser) {
+  if (isCurrentUser && !currentUser) {
     return <NotLogedInPage />;
   }
 

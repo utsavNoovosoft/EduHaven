@@ -3,7 +3,13 @@ import { X, Calendar as CalendarIcon, Clock } from "lucide-react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
-const DeadlinePickerModal = ({ isOpen, onClose, onSave, currentDeadline, todoTitle }) => {
+const DeadlinePickerModal = ({
+  isOpen,
+  onClose,
+  onSave,
+  currentDeadline,
+  todoTitle,
+}) => {
   const [selectedDate, setSelectedDate] = useState(
     currentDeadline ? new Date(currentDeadline) : new Date()
   );
@@ -14,9 +20,9 @@ const DeadlinePickerModal = ({ isOpen, onClose, onSave, currentDeadline, todoTit
   const handleSave = () => {
     // Combine date and time
     const deadline = new Date(selectedDate);
-    const [hours, minutes] = selectedTime.split(':');
+    const [hours, minutes] = selectedTime.split(":");
     deadline.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-    
+
     onSave(deadline);
     onClose();
   };
@@ -75,13 +81,15 @@ const DeadlinePickerModal = ({ isOpen, onClose, onSave, currentDeadline, todoTit
             onChange={(e) => setSelectedTime(e.target.value)}
           >
             {Array.from({ length: 24 }, (_, i) => {
-              const hour = i.toString().padStart(2, '0');
+              const hour = i.toString().padStart(2, "0");
               return [`${hour}:00`, `${hour}:30`];
-            }).flat().map((time) => (
-              <option key={time} value={time} className="txt bg-sec">
-                {time}
-              </option>
-            ))}
+            })
+              .flat()
+              .map((time) => (
+                <option key={time} value={time} className="txt bg-sec">
+                  {time}
+                </option>
+              ))}
           </select>
         </div>
 

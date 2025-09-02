@@ -5,7 +5,7 @@ import SnakeIcon from "..//../assets/icon/SnakeIcon";
 import SpaceTypeIcon from "../../assets/icon/SpaceTypeIcon";
 import TicTacToeIcon from "../../assets/icon/TicTacToeIcon";
 import WacAMole from "@/assets/icon/WacAMole";
-import SudokuIcon from "../../assets/icon/SudokuIcon.jsx"; 
+import SudokuIcon from "../../assets/icon/SudokuIcon.jsx";
 import Game2048Icon from "@/assets/icon/Game2048Icon";
 
 function GameRoom() {
@@ -35,10 +35,10 @@ function GameRoom() {
       path: "2048",
       Icon: Game2048Icon,
     },
-     {
+    {
       name: "Sudoku",
       path: "sudoku",
-      Icon: SudokuIcon, 
+      Icon: SudokuIcon,
     },
   ];
 

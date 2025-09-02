@@ -13,10 +13,10 @@ function OnlineFriends() {
 
   const truncate = (str) => {
     if (str.length > 12) {
-      return str.slice(0, 10) + '...';
+      return str.slice(0, 10) + "...";
     }
     return str;
-  }
+  };
 
   return (
     <section>

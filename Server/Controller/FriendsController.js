@@ -26,7 +26,7 @@ export const userList = async (req, res) => {
           { _id: { $nin: currentUser.friendRequests || [] } },
         ],
       })
-        .sort({ createdAt: -1 }) 
+        .sort({ createdAt: -1 })
         .select("FirstName LastName ProfilePicture Bio OtherDetails");
 
       return res.json(users);

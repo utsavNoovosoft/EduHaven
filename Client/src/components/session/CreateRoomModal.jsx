@@ -9,7 +9,8 @@ function CreateRoomModal({ isOpen, onClose, onCreate }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (roomName.trim() === "" || cateogery === "" || description.trim() === "") return;
+    if (roomName.trim() === "" || cateogery === "" || description.trim() === "")
+      return;
     onCreate({ name: roomName, description, cateogery });
     setRoomName("");
     setDescription("");
@@ -55,12 +56,11 @@ function CreateRoomModal({ isOpen, onClose, onCreate }) {
             transition={{ duration: 0.25, ease: "easeInOut" }}
             className="p-8 rounded-2xl w-96 shadow-2xl transition-all bg-sec"
           >
-            <h2 className="text-2xl font-semibold txt mb-6">Create a New Room</h2>
+            <h2 className="text-2xl font-semibold txt mb-6">
+              Create a New Room
+            </h2>
             <form onSubmit={handleSubmit}>
-              <label
-                htmlFor="room-name"
-                className="block mb-2 font-medium txt"
-              >
+              <label htmlFor="room-name" className="block mb-2 font-medium txt">
                 Room Name
               </label>
               <input

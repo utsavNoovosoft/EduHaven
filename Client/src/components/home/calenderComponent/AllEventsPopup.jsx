@@ -37,14 +37,11 @@ const AllEventsPopup = ({ events, onClose, refreshEvents }) => {
     }
 
     try {
-      await axiosInstance.put(
-        `/events/${editingEvent}`,
-        {
-          title: editTitle,
-          time: editTime,
-          date: editDate,
-        },
-      );
+      await axiosInstance.put(`/events/${editingEvent}`, {
+        title: editTitle,
+        time: editTime,
+        date: editDate,
+      });
       setEditingEvent(null);
       refreshEvents();
     } catch (error) {

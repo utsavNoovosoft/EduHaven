@@ -115,14 +115,14 @@ function ScientificCalculator() {
           const className = isClear
             ? baseClass + " bg-red-600 hover:bg-red-700"
             : isDel
-            ? baseClass + " bg-yellow-600 hover:bg-yellow-700 "
-            : isEqual
-            ? baseClass + " col-span-5 btn hover:btn-hover"
-            : isOperator
-            ? baseClass + " bg-ter hover:bg-sec"
-            : isFunc
-            ? baseClass + "bg-transparent hover:bg-sec"
-            : baseClass + " bg-sec hover:bg-ter";
+              ? baseClass + " bg-yellow-600 hover:bg-yellow-700 "
+              : isEqual
+                ? baseClass + " col-span-5 btn hover:btn-hover"
+                : isOperator
+                  ? baseClass + " bg-ter hover:bg-sec"
+                  : isFunc
+                    ? baseClass + "bg-transparent hover:bg-sec"
+                    : baseClass + " bg-sec hover:bg-ter";
 
           const handleClick = () => {
             if (isClear) clearAll();

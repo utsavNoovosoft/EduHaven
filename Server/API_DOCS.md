@@ -8,7 +8,6 @@ https://eduhaven-backend.onrender.com
 ## 📑 Table of Contents
 
 - [🔑 Authentication Endpoints](#🔑-authentication-endpoints)
-
   - [Google OAuth (Redirect to Google)](#1-google-oauth-redirect-to-google) → `googleAuth`
   - [Google OAuth Callback](#2-google-oauth-callback) → `googleCallback`
   - [User Signup](#3-user-signup) → `signup`
@@ -19,7 +18,6 @@ https://eduhaven-backend.onrender.com
   - [Delete Account](#8-delete-account) → `deleteAccount`
 
 - [📝 Notes Endpoints](#📝-notes-endpoints)
-
   - [ Create Todo](#1-create-todo) → `createTodo`
   - [ Get All Todos](#2-get-all-todos) → `getAllTodos`
   - [ Get Todo by ID](#3-get-todo-by-id) → `getTodoById`
@@ -29,7 +27,6 @@ https://eduhaven-backend.onrender.com
   - [ Recreate Daily Habits](#7-recreate-daily-habits) → `recreateDailyHabits`
 
 - [📝 Todo Endpoints](#📝-todo-endpoints)
-
   - [Create Note](#1-create-note) → `createNote`
   - [Get All Notes](#2-get-all-notes) → `getAllNotes`
   - [Get Note by ID](#3-get-note-by-id) → `getNoteById`
@@ -37,7 +34,6 @@ https://eduhaven-backend.onrender.com
   - [Delete Note](#5-delete-note) → `deleteNote`
 
 - [📅 Events Endpoints](#📅-events-endpoints)
-
   - [Get All Events](#1-get-all-events) → `getAllEvents`
   - [Get Event by Date](#2-get-event-by-date) → `getEventByDate`
   - [Get Event by ID](#3-get-event-by-id) → `getEventById`
@@ -46,19 +42,17 @@ https://eduhaven-backend.onrender.com
   - [Delete Event](#6-delete-event) → `deleteEvent`
 
 - [⏲️ Study Session Endpoints](#⏲️-study-session-endpoints)
-
   - [Create Study Session](#1-create-study-session) → `createStudySession`
   - [Get Study Session Stats](#2-get-study-session-stats) → `getStudySessionStats`
   - [Get User Study Stats](#3-get-user-study-stats) → `getUserStudyStats`
   - [Get Leaderboard](#4-get-leaderboard) → `getLeaderboard`
 
 - [🏠 Session Room Endpoints](#🏠-session-room-endpoints)
-
   - [Get All Session Rooms](#1-get-all-session-rooms) → `getRoomLists`
   - [Create a Session Room](#2-create-a-session-room) → `createRoom`
   - [Delete a Session Room](#3-delete-a-session-room) → `deleteRoom`
-- [👥 Friends Endpoints](#👥-friends-endpoints)
 
+- [👥 Friends Endpoints](#👥-friends-endpoints)
   - [Get Friends List](#1-get-friends-list) → `friendList`
   - [Get Friend Suggestions](#2-get-friend-suggestions) → `userList`
   - [Send Friend Request](#3-send-friend-request) → `sendRequest`
@@ -72,7 +66,6 @@ https://eduhaven-backend.onrender.com
   - [Cancel Sent Request](#11-cancel-sent-request) → `removeSentRequest`
 
 - [👤 User Endpoints](#👤-user-endpoints)
-
   - [Give Kudos](#1-give-kudos) → `giveKudos`
   - [Get User Details](#2-get-user-details) → `getUserDetails`
   - [Get User Badges](#3-get-user-badges) → `getUserBadges`

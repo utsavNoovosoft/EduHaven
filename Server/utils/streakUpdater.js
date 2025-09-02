@@ -9,7 +9,7 @@ export const updateStreaks = async (userId, studyMinutes) => {
   if (!user.streaks) {
     user.streaks = { current: 0, max: 0, lastStudyDate: null };
   }
-  
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 

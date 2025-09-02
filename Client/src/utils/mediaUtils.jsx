@@ -1,10 +1,10 @@
 /**
  * mediaUtils.js
- * 
+ *
  * Utility functions for creating dummy media tracks when actual media is not available.
  * Provides functions to create silent audio tracks and black video tracks for WebRTC connections.
  * Used as fallback when user has disabled their camera/microphone or when media access fails.
- * 
+ *
  * - silence(): Creates a muted audio track
  * - black(): Creates a black video track
  * - createBlackSilence(): Creates a MediaStream with both black video and silent audio

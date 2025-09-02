@@ -124,7 +124,7 @@ const getUserDetails = async(req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        const token = req.headers.authorization ? .split(" ")[1];
+        const token = req.headers.authorization?.split(" ")[1];
         if (!token)
             return res.status(200).json({...user, relationshipStatus: "Add friends" });
 

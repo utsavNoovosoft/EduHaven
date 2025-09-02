@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Search } from 'lucide-react';
-import PropTypes from 'prop-types';
+import { useState } from "react";
+import { Search } from "lucide-react";
+import PropTypes from "prop-types";
 
 function SearchBar({ onSearch, placeholder = "Search friends..." }) {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -27,11 +27,13 @@ function SearchBar({ onSearch, placeholder = "Search friends..." }) {
         <button
           className="absolute inset-y-0 right-0 flex items-center pr-3"
           onClick={() => {
-            setSearchTerm('');
-            onSearch('');
+            setSearchTerm("");
+            onSearch("");
           }}
         >
-          <span className="txt-dim hover:text-[var(--btn)] transition-colors">✕</span>
+          <span className="txt-dim hover:text-[var(--btn)] transition-colors">
+            ✕
+          </span>
         </button>
       )}
     </div>

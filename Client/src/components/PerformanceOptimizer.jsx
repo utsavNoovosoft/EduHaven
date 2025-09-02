@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 // Lazy Image Component with Intersection Observer
-export const LazyImage = ({ 
-  src, 
-  alt, 
-  className = '', 
-  placeholder = '/placeholder.jpg',
+export const LazyImage = ({
+  src,
+  alt,
+  className = "",
+  placeholder = "/placeholder.jpg",
   threshold = 0.1,
-  rootMargin = '50px'
+  rootMargin = "50px",
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
@@ -49,20 +49,20 @@ export const LazyImage = ({
           aria-hidden="true"
         />
       )}
-      
+
       {/* Actual Image */}
       {isInView && (
         <img
           src={src}
           alt={alt}
           className={`w-full h-full object-cover transition-opacity duration-300 ${
-            isLoaded ? 'opacity-100' : 'opacity-0'
+            isLoaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={handleLoad}
           loading="lazy"
         />
       )}
-      
+
       {/* Loading Spinner */}
       {!isLoaded && isInView && (
         <div className="absolute inset-0 flex items-center justify-center">
@@ -77,32 +77,35 @@ export const LazyImage = ({
 export const PerformanceMonitor = () => {
   useEffect(() => {
     // Monitor Core Web Vitals
-    if ('PerformanceObserver' in window) {
+    if ("PerformanceObserver" in window) {
       // Largest Contentful Paint (LCP)
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
-        console.log('LCP:', lastEntry.startTime);
-        
+        console.log("LCP:", lastEntry.startTime);
+
         // Send to analytics if needed
         if (lastEntry.startTime > 2500) {
-          console.warn('LCP is too slow:', lastEntry.startTime);
+          console.warn("LCP is too slow:", lastEntry.startTime);
         }
       });
-      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+      lcpObserver.observe({ entryTypes: ["largest-contentful-paint"] });
 
       // First Input Delay (FID)
       const fidObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         entries.forEach((entry) => {
-          console.log('FID:', entry.processingStart - entry.startTime);
-          
+          console.log("FID:", entry.processingStart - entry.startTime);
+
           if (entry.processingStart - entry.startTime > 100) {
-            console.warn('FID is too slow:', entry.processingStart - entry.startTime);
+            console.warn(
+              "FID is too slow:",
+              entry.processingStart - entry.startTime
+            );
           }
         });
       });
-      fidObserver.observe({ entryTypes: ['first-input'] });
+      fidObserver.observe({ entryTypes: ["first-input"] });
 
       // Cumulative Layout Shift (CLS)
       let clsValue = 0;
@@ -112,13 +115,13 @@ export const PerformanceMonitor = () => {
             clsValue += entry.value;
           }
         }
-        console.log('CLS:', clsValue);
-        
+        console.log("CLS:", clsValue);
+
         if (clsValue > 0.1) {
-          console.warn('CLS is too high:', clsValue);
+          console.warn("CLS is too high:", clsValue);
         }
       });
-      clsObserver.observe({ entryTypes: ['layout-shift'] });
+      clsObserver.observe({ entryTypes: ["layout-shift"] });
 
       return () => {
         lcpObserver.disconnect();
@@ -135,19 +138,19 @@ export const PerformanceMonitor = () => {
 export const ResourcePreloader = ({ resources = [] }) => {
   useEffect(() => {
     resources.forEach((resource) => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = resource.as || 'fetch';
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = resource.as || "fetch";
       link.href = resource.href;
-      
+
       if (resource.crossOrigin) {
         link.crossOrigin = resource.crossOrigin;
       }
-      
+
       if (resource.type) {
         link.type = resource.type;
       }
-      
+
       document.head.appendChild(link);
     });
   }, [resources]);
@@ -158,15 +161,15 @@ export const ResourcePreloader = ({ resources = [] }) => {
 // Service Worker Registration
 export const ServiceWorkerRegistration = () => {
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
         navigator.serviceWorker
-          .register('/sw.js')
+          .register("/sw.js")
           .then((registration) => {
-            console.log('SW registered: ', registration);
+            console.log("SW registered: ", registration);
           })
           .catch((registrationError) => {
-            console.log('SW registration failed: ', registrationError);
+            console.log("SW registration failed: ", registrationError);
           });
       });
     }
@@ -176,11 +179,11 @@ export const ServiceWorkerRegistration = () => {
 };
 
 // Main Performance Optimizer Component
-const PerformanceOptimizer = ({ 
-  children, 
+const PerformanceOptimizer = ({
+  children,
   preloadResources = [],
   enableMonitoring = true,
-  enableServiceWorker = true 
+  enableServiceWorker = true,
 }) => {
   return (
     <>
