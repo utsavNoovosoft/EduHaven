@@ -148,8 +148,8 @@ const OtpInput = () => {
             Verify Your Email
           </h1>
           <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-            We've sent a 6-digit verification code to your email address.
-            Please enter it below to continue.
+            We've sent a 6-digit verification code to your email address. Please
+            enter it below to continue.
           </p>
         </div>
 
@@ -166,11 +166,12 @@ const OtpInput = () => {
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 maxLength="1"
                 className={`w-12 h-12 text-center text-xl font-bold border-2 rounded-xl transition-all duration-200
-                  ${digit
-                    ? "border-blue-500 bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-200"
-                    : error
-                      ? "border-red-300 bg-red-50 dark:bg-red-900"
-                      : "border-gray-300 dark:border-gray-600 hover:border-blue-300 focus:border-blue-500"
+                  ${
+                    digit
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-200"
+                      : error
+                        ? "border-red-300 bg-red-50 dark:bg-red-900"
+                        : "border-gray-300 dark:border-gray-600 hover:border-blue-300 focus:border-blue-500"
                   } focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800`}
                 disabled={isVerifying}
               />
@@ -202,7 +203,8 @@ const OtpInput = () => {
         {/* Tip */}
         <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg border border-blue-200 dark:border-blue-800">
           <p className="text-blue-700 dark:text-blue-200 text-xs text-center">
-            💡 <strong>Tip:</strong> You can paste the entire OTP at once using Ctrl+V
+            💡 <strong>Tip:</strong> You can paste the entire OTP at once using
+            Ctrl+V
           </p>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const noteSchema = new mongoose.Schema({
   title: {
@@ -23,10 +23,10 @@ const noteSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
 });
 
-const Note = mongoose.model('Note', noteSchema);
+const Note = mongoose.model("Note", noteSchema);
 export default Note;

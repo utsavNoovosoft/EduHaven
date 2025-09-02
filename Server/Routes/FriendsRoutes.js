@@ -10,7 +10,7 @@ import {
   removeFriend,
   getFriendsCount,
   getUserStats,
-  removeSentRequest
+  removeSentRequest,
 } from "../Controller/FriendsController.js";
 
 import authMiddleware from "../Middlewares/authMiddleware.js";

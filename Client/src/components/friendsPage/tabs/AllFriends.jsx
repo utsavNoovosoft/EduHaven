@@ -7,7 +7,7 @@ import SearchBar from "../SearchBar";
 export default function AllFriends() {
   const [friends, setFriends] = useState([]);
   const [filteredFriends, setFilteredFriends] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
 
   const fetchFriends = async () => {
@@ -40,37 +40,41 @@ export default function AllFriends() {
       setFilteredFriends(friends);
       return;
     }
-    
-    const filtered = friends.filter(user => {
-      const fullName = `${user.FirstName} ${user.LastName || ''}`.toLowerCase();
-      
+
+    const filtered = friends.filter((user) => {
+      const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
+
       // Search by name
       if (fullName.includes(term.toLowerCase())) {
         return true;
       }
-      
+
       // Search by skills
-      if (user.OtherDetails?.skills && 
-          user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())) {
+      if (
+        user.OtherDetails?.skills &&
+        user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())
+      ) {
         return true;
       }
-      
+
       // Search by interests
-      if (user.OtherDetails?.interests && 
-          user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())) {
+      if (
+        user.OtherDetails?.interests &&
+        user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())
+      ) {
         return true;
       }
-      
+
       return false;
     });
-    
+
     setFilteredFriends(filtered);
   };
 
   useEffect(() => {
     fetchFriends();
   }, []);
-  
+
   useEffect(() => {
     setFilteredFriends(friends);
   }, [friends]);
@@ -83,12 +87,9 @@ export default function AllFriends() {
   return (
     <div>
       {friends.length > 0 && (
-        <SearchBar 
-          onSearch={handleSearch} 
-          placeholder="Search friends..."
-        />
+        <SearchBar onSearch={handleSearch} placeholder="Search friends..." />
       )}
-      
+
       <div className="flex flex-wrap gap-3 2xl:gap-4 mt-4">
         {filteredFriends.map((user) => (
           <UserCard
@@ -99,7 +100,7 @@ export default function AllFriends() {
           />
         ))}
       </div>
-      
+
       {filteredFriends.length === 0 && searchTerm && (
         <div className="text-center text-gray-500 mt-4">
           No matching friends found

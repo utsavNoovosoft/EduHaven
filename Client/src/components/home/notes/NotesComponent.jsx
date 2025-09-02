@@ -90,11 +90,10 @@ function NotesComponent() {
     }
 
     try {
-      const response = await axiosInstance.post(`/note`,
-        {
-          title: title,
-          content: content,
-        });
+      const response = await axiosInstance.post(`/note`, {
+        title: title,
+        content: content,
+      });
 
       if (response.data.success) {
         fetchNotes();
@@ -159,7 +158,9 @@ function NotesComponent() {
       contentTimeoutRef.current = setTimeout(async () => {
         try {
           if (noteId) {
-            await axiosInstance.put(`/note/${noteId}`,{ content: contentToSave });
+            await axiosInstance.put(`/note/${noteId}`, {
+              content: contentToSave,
+            });
           }
           handleSync(notes[noteIndex].title, updatedText); // sets synced = true
         } catch (err) {
@@ -207,7 +208,7 @@ function NotesComponent() {
       titleTimeoutRef.current = setTimeout(async () => {
         try {
           if (noteId) {
-            await axiosInstance.put(`/note/${noteId}`,{ title: titleToSave });
+            await axiosInstance.put(`/note/${noteId}`, { title: titleToSave });
           }
           handleSync(updatedTitle, notes[noteIndex].content); // sets synced = true after delay
         } catch (err) {

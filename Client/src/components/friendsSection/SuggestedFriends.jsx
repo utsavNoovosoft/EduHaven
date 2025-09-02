@@ -51,7 +51,9 @@ function SuggestedFriends({ onViewSentRequests }) {
     try {
       await axiosInstance.post(`/friends/request/${friendId}`, null);
       setSuggestedFriends((prevUsers) =>
-        prevUsers.map((user) => (user._id === friendId ? { ...user, requestSent: true } : user))
+        prevUsers.map((user) =>
+          user._id === friendId ? { ...user, requestSent: true } : user
+        )
       );
     } catch (error) {
       console.error("Error adding friend:", error.response?.data || error);

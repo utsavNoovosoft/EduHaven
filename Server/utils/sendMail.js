@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 import dotenv from "dotenv";
-import fetch, { Headers, Request, Response } from 'node-fetch';
+import fetch, { Headers, Request, Response } from "node-fetch";
 
 // Set up global fetch objects for Resend
 global.Headers = Headers;
@@ -15,7 +15,7 @@ const sendEmail = async (Email, FirstName, otp) => {
   try {
     const response = await resend.emails.send({
       from: "Eduahaven <noreply@eduhaven.online>",
-      to:Email,
+      to: Email,
       subject: "Confirm your Email Address – Eduahaven",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #ffffff;">

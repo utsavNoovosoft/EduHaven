@@ -11,40 +11,76 @@
 
 ## Features
 
-- **User Dashboard**: Tracks tasks completed, study time, and productivity stats.
-- **Calendar & Events**: 
- - **User-Specific Events**: Each user can only view and manage their own calendar events
- - **Event Management**: Create, edit, and delete personal events with date/time
- - **Privacy & Security**: Secure authentication ensures event privacy across users
-- **Enhanced Goals System**: 
- - **Data Persistence**: All goals persist in database across sessions
- - **Smart Organization**: Three collapsible sections (Daily Habits, Other Goals, Closed Goals)
- - **Repeat Functionality**: Daily habits automatically recreate when completed
- - **Deadline Tracking**: Visual indicators for time left, due today, or overdue
-- **To-Do List**: Helps users organize and manage their tasks efficiently.
-- **Note-Making**: Rich-text editor to create, edit, and organize notes.
-- **Real-Time Study Rooms**:
- - Chat and collaborate with friends.
- - Video/audio controls using WebRTC.
-- **Chatbot**: Provides productivity tips and answers academic questions.
-- **Friends and Social Features**: Add friends, invite them to study rooms, and track their online/offline status.
-- **Analytics**: Visualize progress with charts and insights.
-- **Gamification**: Earn badges and track streaks to stay motivated.
+- ### User Dashboard
+
+  - Track tasks completed, study time, and productivity stats  
+  - Add and manage notes directly from dashboard  
+  - Integrated calendars for event planning  
+  - Quick access to stats and insights  
+
+- ### Calendar & Events
+
+  - **User-Specific Events**: Each user can only view and manage their own calendar events  
+  - **Event Management**: Create, edit, and delete personal events with date/time  
+  - **Privacy & Security**: Secure authentication ensures event privacy across users  
+
+- ### Enhanced Goals System
+
+  - **Data Persistence**: All goals persist in database across sessions  
+  - **Smart Organization**: Three collapsible sections (Daily Habits, Other Goals, Closed Goals)  
+  - **Repeat Functionality**: Daily habits automatically recreate when completed  
+  - **Deadline Tracking**: Visual indicators for time left, due today, or overdue  
+
+- ### To-Do List : Helps users organize and manage their tasks efficiently.
+  
+
+-  ### Note-Making: Rich-text editor to create, edit, and organize notes.
+
+
+- ### Real-Time Study Rooms
+
+  - Join or create study rooms for collaboration  
+  - Video/audio controls using WebRTC  
+  - Session tracking and collaboration tools  
+
+- ### Realtime Chat 
+
+  - Chat with peers inside study rooms  
+  - Private messaging and group chat support  
+  - Online/offline presence indicators  
+
+- ### Chatbot : Provides productivity tips and answers academic questions.  
+
+
+- ### Friends and Social Features
+
+  - Add friends, invite them to study rooms  
+  - Track their online/offline status  
+  - Share study goals and progress  
+
+- ### Analytics: Visualize progress with charts and insights.
+
+
+- ### Gamification
+
+  - Earn badges and rewards for task completion  
+  - Track streaks to stay motivated  
+  - Leaderboards for friendly competition  
 
 ## Tech Stack
 
-- **Frontend**: React.js with CSS (or Tailwind CSS)
-- **Backend**: Node.js with Express
-- **Database**: MongoDB
-- **Real-Time Communication**: Socket.IO, WebRTC
+- **Frontend**: React.js with CSS (or Tailwind CSS)  
+- **Backend**: Node.js with Express  
+- **Database**: MongoDB  
+- **Real-Time Communication**: Socket.IO, WebRTC  
 
 ## Installation and Setup
 
 ### Prerequisites
 
-- Node.js
-- MongoDB
-- Git
+- Node.js  
+- MongoDB  
+- Git  
 
 ### Steps to Run Locally
 
@@ -53,7 +89,6 @@
    ```bash
    git clone https://github.com/<your-username>/EduHaven.git
    cd EduHaven
-   ```
 
 2. Install dependencies:
 

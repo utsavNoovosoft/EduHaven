@@ -37,7 +37,9 @@ const Goals = ({ isCurrentUser = false }) => {
         if (isCurrentUser) {
           response = await axiosInstance.get(`/todo?view=${view}`);
         } else {
-          response = await axiosInstance.get(`/todo/user/${userId}?view=${view}`);
+          response = await axiosInstance.get(
+            `/todo/user/${userId}?view=${view}`
+          );
         }
 
         // console.log(response.data);

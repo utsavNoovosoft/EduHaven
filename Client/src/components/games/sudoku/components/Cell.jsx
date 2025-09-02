@@ -1,13 +1,23 @@
 import React from "react";
 
-export default function Cell({ r, c, value, fixed, selected, sameRow, sameCol, sameBox, onClick }) {
+export default function Cell({
+  r,
+  c,
+  value,
+  fixed,
+  selected,
+  sameRow,
+  sameCol,
+  sameBox,
+  onClick,
+}) {
   const base = "sudoku-cell";
   const classes = [
     base,
     selected ? "is-selected" : "",
     fixed ? "is-fixed" : "",
-    (!fixed && value === 0) ? "is-empty" : "",
-    (!selected && (sameRow || sameCol || sameBox)) ? "is-related" : "",
+    !fixed && value === 0 ? "is-empty" : "",
+    !selected && (sameRow || sameCol || sameBox) ? "is-related" : "",
   ].join(" ");
 
   return (

@@ -1,33 +1,103 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send,MoreVertical, Smile, User, Users } from "lucide-react";
+import { Send, MoreVertical, Smile, User, Users } from "lucide-react";
 
 // Dummy messages for demonstration
 const getDummyMessages = (userId) => {
   const messageTemplates = {
     1: [
-      { id: 1, text: "Hey! How's the studying going?", sender: "other", timestamp: "10:30 AM" },
-      { id: 2, text: "Pretty good! Working on calculus problems.", sender: "me", timestamp: "10:32 AM" },
-      { id: 3, text: "Need any help? I'm pretty good with derivatives.", sender: "other", timestamp: "10:33 AM" },
-      { id: 4, text: "That would be awesome! I'm struggling with the chain rule.", sender: "me", timestamp: "10:35 AM" },
-      { id: 5, text: "No problem! Want to hop on a video call?", sender: "other", timestamp: "10:36 AM" },
+      {
+        id: 1,
+        text: "Hey! How's the studying going?",
+        sender: "other",
+        timestamp: "10:30 AM",
+      },
+      {
+        id: 2,
+        text: "Pretty good! Working on calculus problems.",
+        sender: "me",
+        timestamp: "10:32 AM",
+      },
+      {
+        id: 3,
+        text: "Need any help? I'm pretty good with derivatives.",
+        sender: "other",
+        timestamp: "10:33 AM",
+      },
+      {
+        id: 4,
+        text: "That would be awesome! I'm struggling with the chain rule.",
+        sender: "me",
+        timestamp: "10:35 AM",
+      },
+      {
+        id: 5,
+        text: "No problem! Want to hop on a video call?",
+        sender: "other",
+        timestamp: "10:36 AM",
+      },
     ],
     2: [
-      { id: 1, text: "Thanks for the study notes!", sender: "other", timestamp: "2:15 PM" },
-      { id: 2, text: "You're welcome! How did the exam go?", sender: "me", timestamp: "2:20 PM" },
-      { id: 3, text: "Really well! Your notes were super helpful.", sender: "other", timestamp: "2:22 PM" },
+      {
+        id: 1,
+        text: "Thanks for the study notes!",
+        sender: "other",
+        timestamp: "2:15 PM",
+      },
+      {
+        id: 2,
+        text: "You're welcome! How did the exam go?",
+        sender: "me",
+        timestamp: "2:20 PM",
+      },
+      {
+        id: 3,
+        text: "Really well! Your notes were super helpful.",
+        sender: "other",
+        timestamp: "2:22 PM",
+      },
     ],
     3: [
-      { id: 1, text: "Hey, can we reschedule our study session?", sender: "other", timestamp: "Yesterday" },
-      { id: 2, text: "Sure! What time works better for you?", sender: "me", timestamp: "Yesterday" },
+      {
+        id: 1,
+        text: "Hey, can we reschedule our study session?",
+        sender: "other",
+        timestamp: "Yesterday",
+      },
+      {
+        id: 2,
+        text: "Sure! What time works better for you?",
+        sender: "me",
+        timestamp: "Yesterday",
+      },
     ],
     5: [
-      { id: 1, text: "Don't forget about tomorrow's group study at 3 PM", sender: "other", timestamp: "Yesterday" },
-      { id: 2, text: "What topics are we covering?", sender: "me", timestamp: "Yesterday" },
-      { id: 3, text: "Data structures and algorithms", sender: "other", timestamp: "Yesterday" },
-      { id: 4, text: "Perfect! I'll bring my notes on binary trees", sender: "me", timestamp: "Yesterday" },
-    ]
+      {
+        id: 1,
+        text: "Don't forget about tomorrow's group study at 3 PM",
+        sender: "other",
+        timestamp: "Yesterday",
+      },
+      {
+        id: 2,
+        text: "What topics are we covering?",
+        sender: "me",
+        timestamp: "Yesterday",
+      },
+      {
+        id: 3,
+        text: "Data structures and algorithms",
+        sender: "other",
+        timestamp: "Yesterday",
+      },
+      {
+        id: 4,
+        text: "Perfect! I'll bring my notes on binary trees",
+        sender: "me",
+        timestamp: "Yesterday",
+      },
+    ],
   };
-  
+
   return messageTemplates[userId] || [];
 };
 
@@ -56,10 +126,13 @@ function ChatWindow({ selectedUser }) {
       id: Date.now(),
       text: message,
       sender: "me",
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
 
-    setMessages(prev => [...prev, newMessage]);
+    setMessages((prev) => [...prev, newMessage]);
     setMessage("");
 
     // TODO: Connect to backend - Send message via socket/API
@@ -73,14 +146,17 @@ function ChatWindow({ selectedUser }) {
         id: Date.now() + 1,
         text: "Thanks for your message! I'll get back to you soon.",
         sender: "other",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       };
-      setMessages(prev => [...prev, autoReply]);
+      setMessages((prev) => [...prev, autoReply]);
     }, 2000);
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -89,7 +165,12 @@ function ChatWindow({ selectedUser }) {
   // Empty state when no user is selected
   if (!selectedUser) {
     return (
-      <div className="h-full flex items-center justify-center" style={{ backgroundColor: 'color-mix(in srgb, var(--bg-ter), black 15%)' }}>
+      <div
+        className="h-full flex items-center justify-center"
+        style={{
+          backgroundColor: "color-mix(in srgb, var(--bg-ter), black 15%)",
+        }}
+      >
         <div className="text-center txt-disabled">
           <Users className="w-16 h-16 mx-auto mb-4 opacity-50" />
           <h3 className="text-xl font-medium mb-2">Select a conversation</h3>
@@ -100,9 +181,19 @@ function ChatWindow({ selectedUser }) {
   }
 
   return (
-    <div className="h-full flex flex-col" style={{ backgroundColor: 'color-mix(in srgb, var(--bg-ter), black 15%)' }}>
+    <div
+      className="h-full flex flex-col"
+      style={{
+        backgroundColor: "color-mix(in srgb, var(--bg-ter), black 15%)",
+      }}
+    >
       {/* Chat Header - Responsive */}
-      <div className="p-2 sm:p-3 lg:p-4 border-b border-gray-200/20" style={{ backgroundColor: 'color-mix(in srgb, var(--bg-sec), black 10%)' }}>
+      <div
+        className="p-2 sm:p-3 lg:p-4 border-b border-gray-200/20"
+        style={{
+          backgroundColor: "color-mix(in srgb, var(--bg-sec), black 10%)",
+        }}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-3">
             {/* User Avatar - Responsive sizing */}
@@ -124,12 +215,15 @@ function ChatWindow({ selectedUser }) {
 
             {/* User Info - Responsive text sizing */}
             <div>
-              <h3 className="font-semibold txt text-sm sm:text-base">{selectedUser.name}</h3>
+              <h3 className="font-semibold txt text-sm sm:text-base">
+                {selectedUser.name}
+              </h3>
               <p className="text-xs sm:text-sm txt-dim">
-                {selectedUser.isGroup ? 
-                  `${Math.floor(Math.random() * 20) + 5} members` : 
-                  selectedUser.isOnline ? 'Online' : 'Last seen recently'
-                }
+                {selectedUser.isGroup
+                  ? `${Math.floor(Math.random() * 20) + 5} members`
+                  : selectedUser.isOnline
+                    ? "Online"
+                    : "Last seen recently"}
               </p>
             </div>
           </div>
@@ -148,30 +242,37 @@ function ChatWindow({ selectedUser }) {
       <div className="flex-1 overflow-y-auto p-2 sm:p-3 lg:p-4 space-y-2 sm:space-y-3 lg:space-y-4">
         {messages.length === 0 ? (
           <div className="text-center txt-disabled mt-6 sm:mt-8">
-            <p className="text-sm sm:text-base">No messages yet. Start the conversation!</p>
+            <p className="text-sm sm:text-base">
+              No messages yet. Start the conversation!
+            </p>
           </div>
         ) : (
           messages.map((msg) => (
             <div
               key={msg.id}
-              className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${msg.sender === "me" ? "justify-end" : "justify-start"}`}
             >
               <div
                 className={`max-w-[70%] px-2 py-1.5 sm:px-3 sm:py-2 lg:px-4 lg:py-2 rounded-2xl ${
-                  msg.sender === 'me'
-                    ? 'bg-[var(--btn)] text-white rounded-br-md'
-                    : 'rounded-bl-md txt'
+                  msg.sender === "me"
+                    ? "bg-[var(--btn)] text-white rounded-br-md"
+                    : "rounded-bl-md txt"
                 }`}
                 style={{
-                  backgroundColor: msg.sender === 'me' 
-                    ? 'var(--btn)' 
-                    : 'color-mix(in srgb, var(--bg-sec), black 10%)'
+                  backgroundColor:
+                    msg.sender === "me"
+                      ? "var(--btn)"
+                      : "color-mix(in srgb, var(--bg-sec), black 10%)",
                 }}
               >
-                <p className="break-words text-xs sm:text-sm lg:text-base">{msg.text}</p>
-                <p className={`text-xs mt-1 ${
-                  msg.sender === 'me' ? 'text-white/70' : 'txt-disabled'
-                }`}>
+                <p className="break-words text-xs sm:text-sm lg:text-base">
+                  {msg.text}
+                </p>
+                <p
+                  className={`text-xs mt-1 ${
+                    msg.sender === "me" ? "text-white/70" : "txt-disabled"
+                  }`}
+                >
                   {msg.timestamp}
                 </p>
               </div>
@@ -182,11 +283,25 @@ function ChatWindow({ selectedUser }) {
         {/* Typing Indicator - Responsive */}
         {isTyping && (
           <div className="flex justify-start">
-            <div className="txt px-2 py-1.5 sm:px-3 sm:py-2 lg:px-4 lg:py-2 rounded-2xl rounded-bl-md" style={{ backgroundColor: 'color-mix(in srgb, var(--bg-sec), black 10%)' }}>
+            <div
+              className="txt px-2 py-1.5 sm:px-3 sm:py-2 lg:px-4 lg:py-2 rounded-2xl rounded-bl-md"
+              style={{
+                backgroundColor: "color-mix(in srgb, var(--bg-sec), black 10%)",
+              }}
+            >
               <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-txt-dim rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 bg-txt-dim rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                <div className="w-2 h-2 bg-txt-dim rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                <div
+                  className="w-2 h-2 bg-txt-dim rounded-full animate-bounce"
+                  style={{ animationDelay: "0ms" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-txt-dim rounded-full animate-bounce"
+                  style={{ animationDelay: "150ms" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-txt-dim rounded-full animate-bounce"
+                  style={{ animationDelay: "300ms" }}
+                ></div>
               </div>
             </div>
           </div>
@@ -196,10 +311,20 @@ function ChatWindow({ selectedUser }) {
       </div>
 
       {/* Message Input - Responsive */}
-      <div className="p-2 sm:p-3 lg:p-4 border-t border-gray-200/20" style={{ backgroundColor: 'color-mix(in srgb, var(--bg-sec), black 10%)' }}>
+      <div
+        className="p-2 sm:p-3 lg:p-4 border-t border-gray-200/20"
+        style={{
+          backgroundColor: "color-mix(in srgb, var(--bg-sec), black 10%)",
+        }}
+      >
         <div className="flex items-end gap-2 sm:gap-3">
           {/* Message Input */}
-          <div className="flex-1 rounded-2xl border border-gray-200/20 focus-within:border-[var(--btn)] transition-colors" style={{ backgroundColor: 'color-mix(in srgb, var(--bg-ter), black 12%)' }}>
+          <div
+            className="flex-1 rounded-2xl border border-gray-200/20 focus-within:border-[var(--btn)] transition-colors"
+            style={{
+              backgroundColor: "color-mix(in srgb, var(--bg-ter), black 12%)",
+            }}
+          >
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -207,7 +332,7 @@ function ChatWindow({ selectedUser }) {
               placeholder="Type a message..."
               className="w-full p-2 sm:p-3 bg-transparent resize-none txt placeholder-txt-disabled focus:outline-none text-sm sm:text-base"
               rows={1}
-              style={{ maxHeight: '120px' }}
+              style={{ maxHeight: "120px" }}
             />
           </div>
 
@@ -222,8 +347,8 @@ function ChatWindow({ selectedUser }) {
             disabled={!message.trim()}
             className={`p-1.5 sm:p-2 rounded-full transition-colors ${
               message.trim()
-                ? 'bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                ? "bg-[var(--btn)] hover:bg-[var(--btn-hover)] text-white"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
             }`}
           >
             <Send className="w-4 h-4 sm:w-5 sm:h-5" />

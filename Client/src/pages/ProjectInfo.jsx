@@ -69,12 +69,12 @@ export default function Info() {
         setIsLoading(true);
         const [repoResponse, contributorsResponse] = await Promise.all([
           fetch(GITHUB_API_URL),
-          fetch(`${GITHUB_API_URL}/contributors`)
+          fetch(`${GITHUB_API_URL}/contributors`),
         ]);
 
         const [repoJson, contributorsJson] = await Promise.all([
           repoResponse.json(),
-          contributorsResponse.json()
+          contributorsResponse.json(),
         ]);
 
         setRepoData(repoJson);
@@ -226,30 +226,34 @@ export default function Info() {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4">
               {isLoading
-                ? Array(8).fill(0).map((_, i) => <ContributorSkeleton key={i} />)
+                ? Array(8)
+                    .fill(0)
+                    .map((_, i) => <ContributorSkeleton key={i} />)
                 : contributors.map((contributor, index) => (
-                  <motion.a
-                    key={contributor.id}
-                    href={contributor.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex flex-col items-center p-3 hover:bg-sec rounded-3xl text-center text-xs sm:text-sm"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    <img
-                      src={contributor.avatar_url}
-                      alt={contributor.login}
-                      className="w-15 h-15 sm:w-24 sm:h-24 rounded-full mb-1"
-                    />
-                    <p className="mt-2 font-medium txt">{contributor.login}</p>
-                    <p className="txt-dim">
-                      Contributions: {contributor.contributions}
-                    </p>
-                  </motion.a>
-                ))}
+                    <motion.a
+                      key={contributor.id}
+                      href={contributor.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex flex-col items-center p-3 hover:bg-sec rounded-3xl text-center text-xs sm:text-sm"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <img
+                        src={contributor.avatar_url}
+                        alt={contributor.login}
+                        className="w-15 h-15 sm:w-24 sm:h-24 rounded-full mb-1"
+                      />
+                      <p className="mt-2 font-medium txt">
+                        {contributor.login}
+                      </p>
+                      <p className="txt-dim">
+                        Contributions: {contributor.contributions}
+                      </p>
+                    </motion.a>
+                  ))}
             </div>
           </motion.div>
           <hr className="opacity-40" />
@@ -266,21 +270,40 @@ export default function Info() {
             <h2 className="semi-bold text-xl txt">About</h2>
             <div className="text-sm sm:text-base txt-dim">
               <div className="flex items-center gap-1 p-2 txt-dim">
-                <Star /> {isLoading ? <TextSkeleton width="16" /> : `${repoData?.stargazers_count} Stars`}
+                <Star />{" "}
+                {isLoading ? (
+                  <TextSkeleton width="16" />
+                ) : (
+                  `${repoData?.stargazers_count} Stars`
+                )}
               </div>
               <div className="flex items-center gap-1 p-2 txt-dim">
-                <GitFork /> {isLoading ? <TextSkeleton width="16" /> : `${repoData?.forks_count} Forks`}
+                <GitFork />{" "}
+                {isLoading ? (
+                  <TextSkeleton width="16" />
+                ) : (
+                  `${repoData?.forks_count} Forks`
+                )}
               </div>
               <div className="flex items-center gap-1 p-2 txt-dim">
-                <Code /> {isLoading ? <TextSkeleton width="16" /> : repoData?.language}
+                <Code />{" "}
+                {isLoading ? <TextSkeleton width="16" /> : repoData?.language}
               </div>
               <div className="flex items-center gap-1 p-2 txt-dim">
                 <Calendar /> Created:{" "}
-                {isLoading ? <TextSkeleton width="24" /> : new Date(repoData?.created_at).toLocaleDateString()}
+                {isLoading ? (
+                  <TextSkeleton width="24" />
+                ) : (
+                  new Date(repoData?.created_at).toLocaleDateString()
+                )}
               </div>
               <div className="flex items-center gap-1 p-2 txt-dim">
                 <Calendar /> Updated:{" "}
-                {isLoading ? <TextSkeleton width="24" /> : new Date(repoData?.updated_at).toLocaleDateString()}
+                {isLoading ? (
+                  <TextSkeleton width="24" />
+                ) : (
+                  new Date(repoData?.updated_at).toLocaleDateString()
+                )}
               </div>
             </div>
           </motion.div>
@@ -295,7 +318,12 @@ export default function Info() {
             <h2 className="semi-bold text-xl txt">Additional Details</h2>
             <ul className="list-disc pl-4 sm:pl-5 text-xs sm:text-base txt-dim mx-2">
               <li className="p-2">
-                Default Branch: {isLoading ? <TextSkeleton width="16" /> : repoData?.default_branch}
+                Default Branch:{" "}
+                {isLoading ? (
+                  <TextSkeleton width="16" />
+                ) : (
+                  repoData?.default_branch
+                )}
               </li>
               <li className="p-2">
                 License:{" "}
@@ -306,14 +334,24 @@ export default function Info() {
                 )}
               </li>
               <li className="p-2">
-                Watchers: {isLoading ? <TextSkeleton width="16" /> : repoData?.watchers_count}
+                Watchers:{" "}
+                {isLoading ? (
+                  <TextSkeleton width="16" />
+                ) : (
+                  repoData?.watchers_count
+                )}
               </li>
               <li className="p-2">
-                Size: {isLoading ? <TextSkeleton width="16" /> : `${repoData?.size} KB`}
+                Size:{" "}
+                {isLoading ? (
+                  <TextSkeleton width="16" />
+                ) : (
+                  `${repoData?.size} KB`
+                )}
               </li>
             </ul>
 
- <div className="mt-6 text-center space-y-2">
+            <div className="mt-6 text-center space-y-2">
               <a
                 href="/privacy"
                 className="text-blue-400 hover:underline text-sm"
@@ -322,7 +360,6 @@ export default function Info() {
               </a>
               <p className="text-xs txt-dim">© 2025 EduHaven</p>
             </div>
-
           </motion.div>
           <motion.div
             className="w-72 mt-8 space-y-4"

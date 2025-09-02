@@ -7,7 +7,7 @@ import SearchBar from "../SearchBar";
 export default function SentRequests() {
   const [sent, setSent] = useState([]);
   const [filteredSent, setFilteredSent] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
 
   const fetchSent = async () => {
@@ -40,53 +40,59 @@ export default function SentRequests() {
       setFilteredSent(sent);
       return;
     }
-    
-    const filtered = sent.filter(user => {
-      const fullName = `${user.FirstName} ${user.LastName || ''}`.toLowerCase();
-      
+
+    const filtered = sent.filter((user) => {
+      const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
+
       // Search by name
       if (fullName.includes(term.toLowerCase())) {
         return true;
       }
-      
+
       // Search by skills
-      if (user.OtherDetails?.skills && 
-          user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())) {
+      if (
+        user.OtherDetails?.skills &&
+        user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())
+      ) {
         return true;
       }
-      
+
       // Search by interests
-      if (user.OtherDetails?.interests && 
-          user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())) {
+      if (
+        user.OtherDetails?.interests &&
+        user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())
+      ) {
         return true;
       }
-      
+
       return false;
     });
-    
+
     setFilteredSent(filtered);
   };
 
   useEffect(() => {
     fetchSent();
   }, []);
-  
+
   useEffect(() => {
     setFilteredSent(sent);
   }, [sent]);
 
-  if (loading) return <div className="text-center text-gray-500">Loading...</div>;
-  if (!sent.length) return <div className="text-center text-gray-500">No sent requests</div>;
+  if (loading)
+    return <div className="text-center text-gray-500">Loading...</div>;
+  if (!sent.length)
+    return <div className="text-center text-gray-500">No sent requests</div>;
 
   return (
     <div>
       {sent.length > 0 && (
-        <SearchBar 
-          onSearch={handleSearch} 
+        <SearchBar
+          onSearch={handleSearch}
           placeholder="Search sent requests..."
         />
       )}
-      
+
       <div className="flex flex-wrap gap-3 2xl:gap-4 mt-4">
         {filteredSent.map((user) => (
           <UserCard
@@ -97,7 +103,7 @@ export default function SentRequests() {
           />
         ))}
       </div>
-      
+
       {filteredSent.length === 0 && searchTerm && (
         <div className="text-center text-gray-500 mt-4">
           No matching sent requests found

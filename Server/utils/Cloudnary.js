@@ -1,8 +1,8 @@
-import multer from 'multer';
-import fs from 'fs-extra';
-import { v2 as cloudinary } from 'cloudinary';
-import dotenv from 'dotenv';
-import path from 'path';
+import multer from "multer";
+import fs from "fs-extra";
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
+import path from "path";
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ cloudinary.config({
 // Multer Configuration for Local Storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(process.cwd(), 'uploads'); // Local directory
+    const uploadPath = path.join(process.cwd(), "uploads"); // Local directory
     fs.ensureDirSync(uploadPath); // Ensure folder exists
     cb(null, uploadPath);
   },
@@ -31,12 +31,12 @@ const uploadmanish = multer({ storage });
 const cloudinaryUpload = async (req, res, next) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded!' });
+      return res.status(400).json({ message: "No file uploaded!" });
     }
 
     // Upload to Cloudinary
     const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: 'signup_images', // Cloudinary folder for signup images
+      folder: "signup_images", // Cloudinary folder for signup images
     });
 
     // console.log('Cloudinary upload result:', result);
@@ -46,12 +46,12 @@ const cloudinaryUpload = async (req, res, next) => {
     req.body.publicId = result.public_id;
 
     // Clean up the local 'uploads' folder
-    const uploadPath = path.join(process.cwd(), 'uploads');
+    const uploadPath = path.join(process.cwd(), "uploads");
     await fs.emptyDir(uploadPath); // Remove all files from the folder
 
     next(); // Proceed to the next middleware or route handler
   } catch (error) {
-    console.error('Error during Cloudinary upload:', error);
+    console.error("Error during Cloudinary upload:", error);
 
     // Cleanup the local file in case of error
     if (req.file && req.file.path) {
@@ -59,7 +59,7 @@ const cloudinaryUpload = async (req, res, next) => {
     }
 
     res.status(500).json({
-      message: 'File upload to Cloudinary failed!',
+      message: "File upload to Cloudinary failed!",
       error: error.message,
     });
   }
