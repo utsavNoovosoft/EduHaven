@@ -16,13 +16,17 @@ import StudySessionRoutes from "./Routes/StudySessionRoutes.js";
 import FriendsRoutes from "./Routes/FriendsRoutes.js";
 import SessionRoomRoutes from "./Routes/SessionRoomRoutes.js";
 
+
+// import Security 
+import { applySecurity } from './security/securityMiddleware';
+
 import { initializeSocket } from "./Socket/socket.js";
 import fetch, { Headers, Request, Response } from "node-fetch";
 if (!globalThis.fetch) {
-  globalThis.fetch = fetch;
-  globalThis.Headers = Headers;
-  globalThis.Request = Request;
-  globalThis.Response = Response;
+    globalThis.fetch = fetch;
+    globalThis.Headers = Headers;
+    globalThis.Request = Request;
+    globalThis.Response = Response;
 }
 
 const app = express();
@@ -31,18 +35,21 @@ const port = 3000;
 const server = createServer(app);
 
 const io = new Server(server, {
-  cors: {
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
+    cors: {
+        origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+        methods: ["GET", "POST"],
+        credentials: true,
+    },
 });
 
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
-  credentials: true,
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
 };
 
+
+// Security Applied -> Using hpp and helmet 
+applySecurity(app);
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
@@ -61,6 +68,6 @@ app.use("/user", UserRoutes);
 initializeSocket(io);
 
 server.listen(port, () => {
-  ConnectDB();
-  console.log(`Server running at http://localhost:${port}`);
+    ConnectDB();
+    console.log(`Server running at http://localhost:${port}`);
 });
