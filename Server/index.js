@@ -16,8 +16,8 @@ import SessionRoomRoutes from "./Routes/SessionRoomRoutes.js";
 import FriendsRoutes from "./Routes/FriendsRoutes.js";
 import UserRoutes from "./Routes/UserRoutes.js";
 
-// import Security 
-import { applySecurity } from './security/securityMiddleware';
+// Import Security
+import { applySecurity } from "./security/securityMiddleware.js";
 
 import { initializeSocket } from "./Socket/socket.js";
 import notFound from "./Middlewares/notFound.js";
@@ -26,10 +26,10 @@ import errorHandler from "./Middlewares/errorHandler.js";
 dotenv.config();
 
 if (!globalThis.fetch) {
-    globalThis.fetch = fetch;
-    globalThis.Headers = Headers;
-    globalThis.Request = Request;
-    globalThis.Response = Response;
+  globalThis.fetch = fetch;
+  globalThis.Headers = Headers;
+  globalThis.Request = Request;
+  globalThis.Response = Response;
 }
 
 const app = express();
@@ -37,14 +37,14 @@ const port = process.env.PORT || 3000;
 
 const server = createServer(app);
 const io = new Server(server, {
-    cors: {
-        origin: process.env.CORS_ORIGIN || "http://localhost:5173",
-        methods: ["GET", "POST"],
-        credentials: true,
-    },
+  cors: {
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
 });
 
-// Security Applied -> Using hpp and helmet 
+// Security Applied -> Using hpp and helmet
 applySecurity(app);
 
 // Middlewares
@@ -74,6 +74,6 @@ initializeSocket(io);
 
 // Start Server
 server.listen(port, () => {
-    ConnectDB();
-    console.log(`🚀 Server running at http://localhost:${port}`);
+  ConnectDB();
+  console.log(`🚀 Server running at http://localhost:${port}`);
 });
