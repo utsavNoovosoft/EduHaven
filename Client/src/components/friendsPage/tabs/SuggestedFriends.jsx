@@ -3,81 +3,68 @@ import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 import UserCard from "../UserCard";
 import SearchBar from "../SearchBar";
+import FriendsSkeletonLoader from "../../skeletons/FriendsSkeletonLoader"; // <-- Import the loader
 
 export default function SuggestedFriends() {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(false);
+  // Set initial loading state to true to show skeleton on component mount
+  const [loading, setLoading] = useState(true);
 
   const fetchSuggestions = async () => {
-    setLoading(true);
-    try {
-      const res = await axiosInstance.get(
-        "/friends/friend-suggestions?all=true"
-      );
-      setUsers(res.data || []);
+  // Helper function to simulate network delay
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  try {
+    const res = await axiosInstance.get(
+      "/friends/friend-suggestions?all=true"
+    );
+    setUsers(res.data || []);
     } catch (err) {
       console.error("Fetch suggestions error:", err);
       toast.error("Failed to load suggestions");
     } finally {
-      setLoading(false);
+      // Add this line to wait for 2 seconds (2000 ms) before hiding the skeleton
+      await sleep(2000); 
+
+      setLoading(false); // This will run after the delay
     }
   };
 
+  // ... (sendRequest and handleSearch functions remain the same) ...
   const sendRequest = async (friendId) => {
-    try {
-      await axiosInstance.post(`/friends/request/${friendId}`, null);
-      // mark locally
-      setUsers((prev) =>
-        prev.map((u) => (u._id === friendId ? { ...u, requestSent: true } : u))
-      );
-      setFilteredUsers((prev) =>
-        prev.map((u) => (u._id === friendId ? { ...u, requestSent: true } : u))
-      );
-      toast.success("Friend request sent!");
-    } catch (err) {
-      console.error(err);
-      toast.error("Error sending friend request!");
-    }
-  };
+    try {
+      await axiosInstance.post(`/friends/request/${friendId}`, null);
+      setUsers((prev) =>
+        prev.map((u) => (u._id === friendId ? { ...u, requestSent: true } : u))
+      );
+      setFilteredUsers((prev) =>
+        prev.map((u) => (u._id === friendId ? { ...u, requestSent: true } : u))
+      );
+      toast.success("Friend request sent!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Error sending friend request!");
+    }
+  };
 
-  const handleSearch = (term) => {
-    setSearchTerm(term);
-    if (!term.trim()) {
-      setFilteredUsers(users);
-      return;
-    }
-
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    if (!term.trim()) {
+      setFilteredUsers(users);
+      return;
+    }
     const filtered = users.filter((user) => {
       const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
-
-      // Search by name
-      if (fullName.includes(term.toLowerCase())) {
-        return true;
-      }
-
-      // Search by skills
-      if (
-        user.OtherDetails?.skills &&
-        user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())
-      ) {
-        return true;
-      }
-
-      // Search by interests
-      if (
-        user.OtherDetails?.interests &&
-        user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())
-      ) {
-        return true;
-      }
-
+      if (fullName.includes(term.toLowerCase())) return true;
+      if (user.OtherDetails?.skills?.toLowerCase().includes(term.toLowerCase())) return true;
+      if (user.OtherDetails?.interests?.toLowerCase().includes(term.toLowerCase())) return true;
       return false;
     });
+    setFilteredUsers(filtered);
+  };
 
-    setFilteredUsers(filtered);
-  };
 
   useEffect(() => {
     fetchSuggestions();
@@ -87,11 +74,15 @@ export default function SuggestedFriends() {
     setFilteredUsers(users);
   }, [users]);
 
-  if (loading)
-    return <div className="text-center text-gray-500">Loading...</div>;
+  // --- Main Change Here ---
+  // If loading, display the skeleton loader.
+  if (loading) {
+    return <FriendsSkeletonLoader />;
+  }
 
-  if (!users.length)
+  if (!users.length) {
     return <div className="text-center text-gray-500">No suggestions</div>;
+  }
 
   return (
     <div>

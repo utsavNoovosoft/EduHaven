@@ -3,15 +3,15 @@ import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 import UserCard from "../UserCard";
 import SearchBar from "../SearchBar";
+import FriendsSkeletonLoader from "../../skeletons/FriendsSkeletonLoader"; // 1. Import skeleton loader
 
 export default function SentRequests() {
   const [sent, setSent] = useState([]);
   const [filteredSent, setFilteredSent] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // 2. Set initial loading to true
 
   const fetchSent = async () => {
-    setLoading(true);
     try {
       const res = await axiosInstance.get(`/friends/sent-requests`);
       setSent(res.data || []);
@@ -40,34 +40,13 @@ export default function SentRequests() {
       setFilteredSent(sent);
       return;
     }
-
     const filtered = sent.filter((user) => {
       const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
-
-      // Search by name
-      if (fullName.includes(term.toLowerCase())) {
-        return true;
-      }
-
-      // Search by skills
-      if (
-        user.OtherDetails?.skills &&
-        user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())
-      ) {
-        return true;
-      }
-
-      // Search by interests
-      if (
-        user.OtherDetails?.interests &&
-        user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())
-      ) {
-        return true;
-      }
-
+      if (fullName.includes(term.toLowerCase())) return true;
+      if (user.OtherDetails?.skills?.toLowerCase().includes(term.toLowerCase())) return true;
+      if (user.OtherDetails?.interests?.toLowerCase().includes(term.toLowerCase())) return true;
       return false;
     });
-
     setFilteredSent(filtered);
   };
 
@@ -79,10 +58,14 @@ export default function SentRequests() {
     setFilteredSent(sent);
   }, [sent]);
 
-  if (loading)
-    return <div className="text-center text-gray-500">Loading...</div>;
-  if (!sent.length)
+  // 3. Render skeleton loader while loading
+  if (loading) {
+    return <FriendsSkeletonLoader />;
+  }
+  
+  if (!sent.length) {
     return <div className="text-center text-gray-500">No sent requests</div>;
+  }
 
   return (
     <div>
@@ -93,7 +76,8 @@ export default function SentRequests() {
         />
       )}
 
-      <div className="flex flex-wrap gap-3 2xl:gap-4 mt-4">
+      {/* 4. Update container to use CSS Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         {filteredSent.map((user) => (
           <UserCard
             key={user._id}
