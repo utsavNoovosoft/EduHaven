@@ -16,7 +16,9 @@ import SessionRoomRoutes from "./Routes/SessionRoomRoutes.js";
 import FriendsRoutes from "./Routes/FriendsRoutes.js";
 import UserRoutes from "./Routes/UserRoutes.js";
 
+// Security Middleware
 import { applySecurity } from "./security/securityMiddleware.js";
+
 import { initializeSocket } from "./Socket/socket.js";
 import notFound from "./Middlewares/notFound.js";
 import errorHandler from "./Middlewares/errorHandler.js";
@@ -43,15 +45,16 @@ const io = new Server(server, {
   },
 });
 
+// Apply security middleware (helmet, hpp, etc.)
+applySecurity(app);
+
 // Middlewares
 app.use(express.json());
 app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-applySecurity(app);
-
-// Health check endpoint
+// Health check endpoint (Uptime Monitoring)
 app.get("/uptime", (req, res) => {
   res.status(200).json({
     status: "ok",
