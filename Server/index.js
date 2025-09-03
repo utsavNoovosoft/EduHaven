@@ -15,8 +15,11 @@ import StudySessionRoutes from "./Routes/StudySessionRoutes.js";
 import SessionRoomRoutes from "./Routes/SessionRoomRoutes.js";
 import FriendsRoutes from "./Routes/FriendsRoutes.js";
 import UserRoutes from "./Routes/UserRoutes.js";
-import { initializeSocket } from "./Socket/socket.js";
 
+// Import Security
+import { applySecurity } from "./security/securityMiddleware.js";
+
+import { initializeSocket } from "./Socket/socket.js";
 import notFound from "./Middlewares/notFound.js";
 import errorHandler from "./Middlewares/errorHandler.js";
 
@@ -41,11 +44,16 @@ const io = new Server(server, {
   },
 });
 
+// Security Applied -> Using hpp and helmet
+applySecurity(app);
+
+// Middlewares
 app.use(express.json());
 app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+// Routes
 app.get("/", (req, res) => res.send("Hello, World!"));
 
 app.use("/auth", authRoutes);
@@ -57,11 +65,14 @@ app.use("/session-room", SessionRoomRoutes);
 app.use("/friends", FriendsRoutes);
 app.use("/user", UserRoutes);
 
+// Error Handling
 app.use(notFound);
 app.use(errorHandler);
 
+// Socket
 initializeSocket(io);
 
+// Start Server
 server.listen(port, () => {
   ConnectDB();
   console.log(`🚀 Server running at http://localhost:${port}`);
