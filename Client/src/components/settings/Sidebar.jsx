@@ -38,7 +38,7 @@ const Sidebar = ({ user, activeTab, setActiveTab }) => {
     { key: "themes", label: "Themes", icon: <Palette size={24} /> },
     {
       key: "time-language",
-      label: "Time / Language",
+      label: "Time",
       icon: <Settings2 size={24} />,
     },
   ];
