@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Award, Info } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
-import axiosInstance from "@/utils/axios";
-import { getAllBadges } from '@/utils/badgeSystem';
-import { useUserProfile } from '@/contexts/UserProfileContext';
-import BadgeModal from './BadgeModal';
-import BadgeTooltip from './BadgeTooltip';
-
+import axios from "axios";
+import { getAllBadges } from "@/utils/badgeSystem";
+import { useUserProfile } from "@/contexts/UserProfileContext";
+import BadgeModal from "./BadgeModal";
+import BadgeTooltip from "./BadgeTooltip";
 
 const backendUrl = import.meta.env.VITE_API_URL;
 
@@ -41,8 +40,8 @@ const Badges = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axiosInstance.get(`/user/badges`, {
-        headers: { Authorization: `Bearer ${token}` }
+      const response = await axios.get(`${backendUrl}/user/badges`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.data.badges) {

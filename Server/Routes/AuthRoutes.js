@@ -4,13 +4,10 @@ import {
   googleAuth,
   googleCallback,
   login,
-  forgotPassword,
-  resetPassword,
   logout,
   refreshAccessToken,
   signup,
   verifyUser,
-  verifyResetOTP
 } from "../Controller/AuthController.js";
 
 // these are added -> for security --
@@ -50,7 +47,6 @@ router.post(
 
 router.post("/verify", verifyUser);
 
-
 // router.post("/login", login);
 router.post(
   "/login",
@@ -60,11 +56,6 @@ router.post(
   loginRateLimiter,
   login
 );
-
-// Forgot password flow
-router.post("/forgot-password", forgotPassword);
-router.post("/verify-reset-otp", verifyResetOTP);
-router.post("/reset-password", resetPassword);
 
 router.post("/logout", logout);
 router.post("/refresh", refreshAccessToken);
