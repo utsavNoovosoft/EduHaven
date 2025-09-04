@@ -23,7 +23,6 @@ import "react-toastify/dist/ReactToastify.css";
 import NoteNest from "./pages/NoteNest";
 import Delete from "./components/settings/Delete";
 import Chats from "./pages/Chats";
-
 function App() {
   return (
     <UserProfileProvider>
