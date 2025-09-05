@@ -3,7 +3,7 @@ import { Landmark, Puzzle, DraftingCompass, Earth } from "lucide-react";
 
 const ProfileDetails = ({ user }) => {
   return (
-    <div className="bg-gray-500/20 rounded-3xl p-4 space-y-4">
+    <div className="bg-gray-100/10 rounded-3xl p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.04)] space-y-4">
       {user.FieldOfStudy && (
         <div className="flex items-center gap-4 text-[var(--text-secondary)]">
           <Landmark className="h-7 w-7 flex-shrink-0" />
