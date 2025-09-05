@@ -1,0 +1,26 @@
+
+name: Prettier Check
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Prettier Check
+        run: npx prettier --check .
+        # If you want to automatically fix formatting issues, use the following line instead:
+        # run: npx prettier --write .
+        # Note: Using --write will modify files, which may not be desirable in a CI context.
