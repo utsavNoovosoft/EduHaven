@@ -1,22 +1,24 @@
 import { useFriends } from "@/queries/friendQueries";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import SearchBar from "../SearchBar";
 import UserCard from "../UserCard";
 
 export default function AllFriends() {
-  const [filteredFriends, setFilteredFriends] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data: friends = [], isLoading } = useFriends();
 
   const handleSearch = (term) => {
     setSearchTerm(term);
+  };
+
+  const filteredFriends = useMemo(() => {
+    const term = searchTerm;
     if (!term.trim()) {
-      setFilteredFriends(friends);
-      return;
+      return friends;
     }
 
-    const filtered = friends.filter((user) => {
+    return friends.filter((user) => {
       const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
 
       // Search by name
@@ -42,14 +44,7 @@ export default function AllFriends() {
 
       return false;
     });
-
-    setFilteredFriends(filtered);
-  };
-
-  useEffect(() => {
-    if (friends.length)
-      setFilteredFriends(friends);
-  }, [friends]);
+  }, [friends, searchTerm]);
 
   if (isLoading)
     return <div className="text-center text-gray-500">Loading...</div>;

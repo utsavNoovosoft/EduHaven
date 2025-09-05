@@ -1,22 +1,24 @@
 import { useSentRequests } from "@/queries/friendQueries";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import SearchBar from "../SearchBar";
 import UserCard from "../UserCard";
 
 export default function SentRequests() {
-  const [filteredSent, setFilteredSent] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data: sentRequests = [], isLoading } = useSentRequests();
 
   const handleSearch = (term) => {
     setSearchTerm(term);
+  };
+
+  const filteredSent = useMemo(() => {
+    const term = searchTerm;
     if (!term.trim()) {
-      setFilteredSent(sentRequests);
-      return;
+      return sentRequests;
     }
 
-    const filtered = sentRequests.filter((user) => {
+    return sentRequests.filter((user) => {
       const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
 
       // Search by name
@@ -42,15 +44,7 @@ export default function SentRequests() {
 
       return false;
     });
-
-    setFilteredSent(filtered);
-  };
-
-  useEffect(() => {
-    if (sentRequests.length) {
-      setFilteredSent(sentRequests);
-    }
-  }, [sentRequests]);
+  }, [sentRequests, searchTerm]);
 
   if (isLoading)
     return <div className="text-center text-gray-500">Loading...</div>;

@@ -1,22 +1,24 @@
 import { useFriendRequests } from "@/queries/friendQueries";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import SearchBar from "../SearchBar";
 import UserCard from "../UserCard";
 
 export default function FriendRequests() {
-  const [filteredRequests, setFilteredRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const {data : requests = [] , isLoading} = useFriendRequests();
+  const { data: requests = [], isLoading } = useFriendRequests();
 
   const handleSearch = (term) => {
     setSearchTerm(term);
+  };
+
+  const filteredRequests = useMemo(() => {
+    const term = searchTerm;
     if (!term.trim()) {
-      setFilteredRequests(requests);
-      return;
+      return requests;
     }
 
-    const filtered = requests.filter((user) => {
+    return requests.filter((user) => {
       const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
 
       // Search by name
@@ -42,14 +44,7 @@ export default function FriendRequests() {
 
       return false;
     });
-
-    setFilteredRequests(filtered);
-  };
-
-  useEffect(() => {
-    if (requests.length)
-      setFilteredRequests(requests);
-  }, [requests]);
+  }, [requests, searchTerm]);
 
   if (isLoading)
     return <div className="text-center text-gray-500">Loading...</div>;
@@ -67,11 +62,7 @@ export default function FriendRequests() {
 
       <div className="flex flex-wrap gap-3 2xl:gap-4 mt-4">
         {filteredRequests.map((user) => (
-          <UserCard
-            key={user._id}
-            user={user}
-            selectedTab="friendRequests"
-          />
+          <UserCard key={user._id} user={user} selectedTab="friendRequests" />
         ))}
       </div>
 

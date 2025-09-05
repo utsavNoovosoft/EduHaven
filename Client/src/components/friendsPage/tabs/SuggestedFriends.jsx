@@ -1,40 +1,50 @@
 import { useAllSuggestedUsers } from "@/queries/friendQueries";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SearchBar from "../SearchBar";
 import UserCard from "../UserCard";
 
 export default function SuggestedFriends() {
-  const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data: users = [], isLoading } = useAllSuggestedUsers();
 
   const handleSearch = (term) => {
     setSearchTerm(term);
-
-    if (!term.trim()) {
-      setFilteredUsers(users);
-      return;
-    }
-
-    const lowerTerm = term.toLowerCase();
-    const filtered = users.filter((user) => {
-      const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
-      return (
-        fullName.includes(lowerTerm) ||
-        user.OtherDetails?.skills?.toLowerCase().includes(lowerTerm) ||
-        user.OtherDetails?.interests?.toLowerCase().includes(lowerTerm)
-      );
-    });
-
-    setFilteredUsers(filtered);
   };
 
-  useEffect(() => {
-    if (users.length > 0) {
-      setFilteredUsers(users);
+  const filteredUsers = useMemo(() => {
+    const term = searchTerm;
+    if (!term.trim()) {
+      return users;
     }
-  }, [users]);
+
+    return users.filter((user) => {
+      const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
+
+      // Search by name
+      if (fullName.includes(term.toLowerCase())) {
+        return true;
+      }
+
+      // Search by skills
+      if (
+        user.OtherDetails?.skills &&
+        user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())
+      ) {
+        return true;
+      }
+
+      // Search by interests
+      if (
+        user.OtherDetails?.interests &&
+        user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())
+      ) {
+        return true;
+      }
+
+      return false;
+    });
+  }, [users, searchTerm]);
 
   if (isLoading)
     return <div className="text-center text-gray-500">Loading...</div>;
