@@ -1,37 +1,37 @@
 import axiosInstance from "@/utils/axios";
 
 // gets all the incoming friend requests
-export const fetchRequests = async () => {
+export const fetchFriendRequests = async () => {
   const res = await axiosInstance.get("/friends/requests");
   return res.data || [];
 };
 
 // accepts a friend request
-export const acceptRequest = async (friendId) => {
+export const acceptFriendRequest = async (friendId) => {
   const res = await axiosInstance.post(`/friends/accept/${friendId}`, null);
   return res.data;
 };
 
 // rejects a friend request
-export const rejectRequest = async (friendId) => {
+export const rejectFriendRequest = async (friendId) => {
   const res = await axiosInstance.delete(`/friends/reject/${friendId}`);
   return res.data;
 };
 
 // get all the sent friend requests
-export const fetchSent = async () => {
+export const fetchSentRequests = async () => {
   const res = await axiosInstance.get("/friends/sent-requests");
   return res.data || [];
 };
 
 // cancels a sent friend request
-export const cancelRequest = async (friendId) => {
+export const cancelFriendRequest = async (friendId) => {
   const res = await axiosInstance.delete(`/friends/sent-requests/${friendId}`);
   return res.data;
 };
 
 // get all the friends
-export const fetchFriends = async () => {
+export const fetchAllFriends = async () => {
   const res = await axiosInstance.get("/friends");
   return res.data || [];
 };
@@ -42,24 +42,26 @@ export const removeFriend = async (friendId) => {
   return res.data;
 };
 
-// returns the friend suggestions
-export const fetchSuggestions = async ({ pageParam = 1, queryKey }) => {
-  const [_key, { all }] = queryKey;
-  const limit = 20;
-
-  const res = await axiosInstance.get(
-    `/friends/friend-suggestions?page=${pageParam}&limit=${limit}&all=${all}`
-  );
-
-  return {
-    data: res.data || [],
-    nextPage: res.data?.length === limit ? pageParam + 1 : undefined,
-  };
+export const fetchSuggestedUsers = async ({ page = 1, limit = 20 }) => {
+  const { data } = await axiosInstance.get("/friends/friend-suggestions", {
+    params: { page, limit },
+  });
+  return data;
 };
 
+export const fetchAllSuggestedUsers = async () => {
+  const { data } = await axiosInstance.get("/friends/friend-suggestions", {
+    params: { all: true },
+  });
+  return data;
+};
 
-// sends a friend request
-export const sendRequest = async (friendId) => {
+export const sendFriendRequest = async (friendId) => {
   const res = await axiosInstance.post(`/friends/request/${friendId}`, null);
+  return res.data;
+};
+
+export const getFriendStats = async (friendId) => {
+  const res = await axiosInstance.get(`/friends/${friendId}/stats`);
   return res.data;
 };

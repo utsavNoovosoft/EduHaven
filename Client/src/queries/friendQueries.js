@@ -1,22 +1,28 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { handleApiError } from "@/utils/errorHandler";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import {
-  acceptRequest,
-  cancelRequest,
-  fetchFriends,
-  fetchRequests,
-  fetchSent,
-  fetchSuggestions,
-  rejectRequest,
+  acceptFriendRequest,
+  cancelFriendRequest,
+  fetchAllFriends,
+  fetchAllSuggestedUsers,
+  fetchFriendRequests,
+  fetchSuggestedUsers,
+  getFriendStats,
+  rejectFriendRequest,
   removeFriend,
-  sendRequest,
+  sendFriendRequest,
 } from "../api/friendApi";
-import { handleApiError } from "@/utils/errorHandler";
 
 export const useFriendRequests = () =>
   useQuery({
     queryKey: ["friendRequests"],
-    queryFn: fetchRequests,
+    queryFn: fetchFriendRequests,
     staleTime: 1000 * 60,
     onError: (err) => handleApiError(err, "Error fetching friend requests"),
   });
@@ -24,7 +30,7 @@ export const useFriendRequests = () =>
 export const useAcceptRequest = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: acceptRequest,
+    mutationFn: acceptFriendRequest,
     onSuccess: () => {
       toast.success("Friend request accepted!");
       qc.invalidateQueries({ queryKey: ["friendRequests"] });
@@ -37,7 +43,7 @@ export const useAcceptRequest = () => {
 export const useRejectRequest = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: rejectRequest,
+    mutationFn: rejectFriendRequest,
     onSuccess: () => {
       toast.info("Friend request rejected.");
       qc.invalidateQueries({ queryKey: ["friendRequests"] });
@@ -49,7 +55,7 @@ export const useRejectRequest = () => {
 export const useSentRequests = () =>
   useQuery({
     queryKey: ["sentRequests"],
-    queryFn: fetchSent,
+    queryFn: fetchFriendRequests,
     staleTime: 1000 * 60,
     onError: (err) => handleApiError(err, "Error fetching sent requests"),
   });
@@ -57,7 +63,7 @@ export const useSentRequests = () =>
 export const useCancelRequest = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: cancelRequest,
+    mutationFn: cancelFriendRequest,
     onSuccess: () => {
       toast.info("Friend request canceled.");
       qc.invalidateQueries({ queryKey: ["sentRequests"] });
@@ -70,7 +76,7 @@ export const useCancelRequest = () => {
 export const useFriends = () =>
   useQuery({
     queryKey: ["friends"],
-    queryFn: fetchFriends,
+    queryFn: fetchAllFriends,
     staleTime: 1000 * 60,
     onError: (err) => handleApiError(err, "Error fetching friends"),
   });
@@ -87,24 +93,43 @@ export const useRemoveFriend = () => {
   });
 };
 
-export const useFriendSuggestions = ({ all = false } = {}) => {
+export const useUsersInfinite = (limit = 20) => {
   return useInfiniteQuery({
-    queryKey: ["friendSuggestions", { all }],
-    queryFn: fetchSuggestions,
-    getNextPageParam: (lastPage) => lastPage.nextPage,
-    onError: (err) => handleApiError(err, "Error fetching friend suggestions"),
+    queryKey: ["users", "infinite"],
+    queryFn: ({ pageParam = 1 }) =>
+      fetchSuggestedUsers({ page: pageParam, limit }),
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.hasMore) {
+        return allPages.length + 1;
+      }
+      return undefined;
+    },
+  });
+};
+
+export const useAllSuggestedUsers = () => {
+  return useQuery({
+    queryKey: ["users", "all"],
+    queryFn: fetchAllSuggestedUsers,
   });
 };
 
 export const useSendRequest = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: sendRequest,
+    mutationFn: sendFriendRequest,
     onSuccess: () => {
       toast.success("Friend request sent!");
       qc.invalidateQueries({ queryKey: ["friendSuggestions"] });
       qc.invalidateQueries({ queryKey: ["sentRequests"] });
     },
     onError: (err) => handleApiError(err, "Error sending friend request!"),
+  });
+};
+
+export const useFriendStats = (friendId) => {
+  return useQuery({
+    queryKey: ["friendStats", friendId],
+    queryFn: () => getFriendStats(friendId),
   });
 };
