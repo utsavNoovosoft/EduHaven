@@ -11,26 +11,54 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
-      - name: Add Comment to Issue
+      - name: Add to Issue
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const { owner, repo } = context.repo;
             const issueNumber = context.issue.number;
+            const opener = context.payload.issue.user.login;
 
-            const commentBody1 = `### Thank you for raising this issue!\n We'll review it as soon as possible. We truly appreciate your contributions! ✨\n\n> Meanwhile make sure you've visited the README.md, CONTRIBUTING.md, and CODE_OF_CONDUCT.md before creating a PR for this. Also, please do NOT create a PR until this issue has been assigned to you. 😊`;
+            // Find the opener's permission level on this repo
+            let perm = "none";
+            try {
+              const res = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner,
+                repo,
+                username: opener,
+              });
+              perm = res.data.permission; // admin | maintain | write | triage | read
+            } catch (e) {
+              // If API fails (rare), treat as outside contributor
+              perm = "none";
+            }
+
+            // Skip for admins/collaborators/maintainers/triagers
+            if (["admin", "maintain", "write", "triage"].includes(perm)) {
+              core.info(`No auto-comment: ${opener} has ${perm} permission.`);
+              return;
+            }
+
+            
+            const commentBody1 = `### Thank you for raising this issue! 
+                 We'll review it as soon as possible. We truly appreciate your contributions! 
+
+                > Meanwhile, make sure you've visited the **README.md**, **CONTRIBUTING.md**, and **CODE_OF_CONDUCT.md** before creating a PR for this.
+                   Please do **NOT** create a PR until this issue has been assigned to you. `;
 
             await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner,
+              repo,
               issue_number: issueNumber,
-              body: commentBody1
+              body: commentBody1,
             });
 
             await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner,
+              repo,
               issue_number: issueNumber,
-              body: commentBody2
+              body: commentBody2,
             });
 
-            console.log('Both comments added successfully.');
+            core.info(`Auto-comment added for outside contributor: ${opener} (permission=${perm}).`);
