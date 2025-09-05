@@ -17,3 +17,6 @@ assignees: ''
 
 ---
 
+## Aceeptance Criteria
+<!-- Any specific requirements to be fullfilled to fix the issue , leave empty if not needed >
+
