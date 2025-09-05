@@ -53,28 +53,32 @@ function App() {
                 <Route path="*" element={<PageNotFound />} />
               </Route>
 
-            <Route path="session/:id" element={<StudyRoom />} />
-            <Route path="/signout" element={<Signout />} />
-            <Route path="/verify" element={<OtpInput />} />
-            <Route path="/authenticate" element={<Auth />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/verify-reset-otp" element={<OtpInput />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/auth/google/callback" element={<GoogleRedirect />} />
-            <Route path="/delete-account" element={<Delete />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </RouterSelector>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          closeOnClick
-          pauseOnHover
-          theme="light"
-        />
-      </SocketProvider>
+              <Route path="session/:id" element={<StudyRoom />} />
+              <Route path="/signout" element={<Signout />} />
+              <Route path="/verify" element={<OtpInput />} />
+              <Route path="/authenticate" element={<Auth />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/verify-reset-otp" element={<OtpInput />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route
+                path="/auth/google/callback"
+                element={<GoogleRedirect />}
+              />
+              <Route path="/delete-account" element={<Delete />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </RouterSelector>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            closeOnClick
+            pauseOnHover
+            theme="light"
+          />
+        </SocketProvider>
+      </QueryClientProvider>
     </UserProfileProvider>
   );
 }
