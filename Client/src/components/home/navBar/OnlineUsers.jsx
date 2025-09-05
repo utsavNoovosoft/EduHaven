@@ -1,4 +1,4 @@
-import UseSocketContext from "@/context/SocketContext.jsx";
+import UseSocketContext from "@/contexts/SocketContext.jsx";
 import { User } from "lucide-react";
 import { useState } from "react";
 

@@ -2,6 +2,7 @@ import { useFriends } from "@/queries/friendQueries";
 import { useMemo, useState } from "react";
 import SearchBar from "../SearchBar";
 import UserCard from "../UserCard";
+import FriendsSkeletonLoader from "../../skeletons/FriendsSkeletonLoader"; // 1. Import skeleton loader
 
 export default function AllFriends() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,36 +21,21 @@ export default function AllFriends() {
 
     return friends.filter((user) => {
       const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
-
-      // Search by name
-      if (fullName.includes(term.toLowerCase())) {
-        return true;
-      }
-
-      // Search by skills
-      if (
-        user.OtherDetails?.skills &&
-        user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())
-      ) {
-        return true;
-      }
-
-      // Search by interests
-      if (
-        user.OtherDetails?.interests &&
-        user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())
-      ) {
-        return true;
-      }
-
+      if (fullName.includes(term.toLowerCase())) return true;
+      if (user.OtherDetails?.skills?.toLowerCase().includes(term.toLowerCase())) return true;
+      if (user.OtherDetails?.interests?.toLowerCase().includes(term.toLowerCase())) return true;
       return false;
     });
   }, [friends, searchTerm]);
 
-  if (isLoading)
-    return <div className="text-center text-gray-500">Loading...</div>;
-  if (friends.length == 0)
+  // 3. Render skeleton loader while loading
+  if (isLoading) {
+    return <FriendsSkeletonLoader />;
+  }
+
+  if (friends.length === 0) {
     return <div className="text-center text-gray-500">No friends yet</div>;
+  }
 
   return (
     <div>
@@ -57,7 +43,8 @@ export default function AllFriends() {
         <SearchBar onSearch={handleSearch} placeholder="Search friends..." />
       )}
 
-      <div className="flex flex-wrap gap-3 2xl:gap-4 mt-4">
+      {/* 4. Update container to use CSS Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         {filteredFriends.map((user) => (
           <UserCard key={user._id} user={user} selectedTab="allFriends" />
         ))}

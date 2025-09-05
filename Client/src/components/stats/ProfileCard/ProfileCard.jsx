@@ -173,7 +173,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
   if (friendsLoading || !user) return <ProfileSkeleton />;
 
   return (
-    <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-2xl py-6 w-full h-fit relative overflow-hidden">
+    <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-md pt-6 w-full h-fit relative overflow-hidden">
       {/* Header */}
       <ProfileHeader
         isCurrentUser={isCurrentUser}
@@ -241,7 +241,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
                   : friendRequestStatus === "Cancel Request"
                   ? "bg-purple-500 hover:bg-purple-600"
                   : "bg-purple-400 hover:bg-purple-500"
-              }  transition-colors text-[var(--text-primary)] px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap cursor-pointer`}
+              }  transition-colors text-white px-6 py-2 h-10 rounded-lg flex items-center space-x-2 w-full sm:w-auto text-center flex-1 text-nowrap cursor-pointer`}
               disabled={isFriendRequestLoading}
               onClick={handleFriendRequestAction}
             >
@@ -252,11 +252,15 @@ const ProfileCard = ({ isCurrentUser = false }) => {
         )}
       </div>
 
-      {(user.FieldOfStudy ||
-        user.OtherDetails?.skills ||
-        user.OtherDetails?.interests ||
-        user.Country ||
-        user.OtherDetails?.additionalNotes) && <ProfileDetails user={user} />}
+      {user.FieldOfStudy ||
+      user.OtherDetails?.skills ||
+      user.OtherDetails?.interests ||
+      user.Country ||
+      user.OtherDetails?.additionalNotes ? (
+        <ProfileDetails user={user} />
+      ) : (
+        <div className="h-3"></div>
+      )}
     </div>
   );
 };

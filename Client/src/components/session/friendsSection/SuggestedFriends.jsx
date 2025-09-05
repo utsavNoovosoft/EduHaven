@@ -1,7 +1,9 @@
 import { MoreVertical, Plus, User } from "lucide-react";
+import { MoreVertical, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
+import Avatar from "../../Avatar";
 
 import { useSendRequest, useUsersInfinite } from "@/queries/friendQueries";
 
@@ -97,17 +99,7 @@ function SuggestedFriends({ onViewSentRequests }) {
                     to={`/user/${user._id}`}
                     className="flex items-center hover:brightness-110"
                   >
-                    {user.ProfilePicture ? (
-                      <img
-                        src={user.ProfilePicture}
-                        className="w-11 h-11 rounded-full transition cursor-pointer"
-                        alt="Profile"
-                      />
-                    ) : (
-                      <div className="p-2 bg-ter rounded-full transition cursor-pointer">
-                        <User className="w-7 h-7" />
-                      </div>
-                    )}
+                   <Avatar src={user.ProfilePicture} alt={"Profile"} />
                     <div className="ml-4 flex-1 overflow-hidden">
                       <div className="text-lg font-medium line-clamp-1 txt">
                         {user.FirstName

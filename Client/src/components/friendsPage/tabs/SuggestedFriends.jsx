@@ -2,10 +2,10 @@ import { useAllSuggestedUsers } from "@/queries/friendQueries";
 import { useEffect, useMemo, useState } from "react";
 import SearchBar from "../SearchBar";
 import UserCard from "../UserCard";
+import FriendsSkeletonLoader from "../../skeletons/FriendsSkeletonLoader"; // <-- Import the loader
 
 export default function SuggestedFriends() {
   const [searchTerm, setSearchTerm] = useState("");
-
   const { data: users = [], isLoading } = useAllSuggestedUsers();
 
   const handleSearch = (term) => {
@@ -20,37 +20,24 @@ export default function SuggestedFriends() {
 
     return users.filter((user) => {
       const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
-
-      // Search by name
-      if (fullName.includes(term.toLowerCase())) {
+      if (fullName.includes(term.toLowerCase())) return true;
+      if (user.OtherDetails?.skills?.toLowerCase().includes(term.toLowerCase()))
         return true;
-      }
-
-      // Search by skills
       if (
-        user.OtherDetails?.skills &&
-        user.OtherDetails.skills.toLowerCase().includes(term.toLowerCase())
-      ) {
+        user.OtherDetails?.interests?.toLowerCase().includes(term.toLowerCase())
+      )
         return true;
-      }
-
-      // Search by interests
-      if (
-        user.OtherDetails?.interests &&
-        user.OtherDetails.interests.toLowerCase().includes(term.toLowerCase())
-      ) {
-        return true;
-      }
-
       return false;
     });
   }, [users, searchTerm]);
 
-  if (isLoading)
-    return <div className="text-center text-gray-500">Loading...</div>;
+  if (isLoading) {
+    return <FriendsSkeletonLoader />;
+  }
 
-  if (!users || users.length === 0)
+  if (!users || users.length === 0) {
     return <div className="text-center text-gray-500">No suggestions</div>;
+  }
 
   return (
     <div>

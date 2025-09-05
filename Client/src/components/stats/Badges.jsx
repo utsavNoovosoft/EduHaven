@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Award, Info } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
-import axios from "axios";
+import axiosInstance from "@/utils/axios";
 import { getAllBadges } from "@/utils/badgeSystem";
 import { useUserProfile } from "@/contexts/UserProfileContext";
 import BadgeModal from "./BadgeModal";
 import BadgeTooltip from "./BadgeTooltip";
-
-const backendUrl = import.meta.env.VITE_API_URL;
 
 const Badges = () => {
   const [earnedBadges, setEarnedBadges] = useState([]);
@@ -40,7 +38,7 @@ const Badges = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${backendUrl}/user/badges`, {
+      const response = await axiosInstance.get(`/user/badges`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -74,9 +72,16 @@ const Badges = () => {
     <>
       <div className="bg-[var(--bg-sec)] rounded-3xl shadow-md p-6 w-full">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-center flex-1">
-            Badges Earned
-          </h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-xl font-semibold flex gap-2 items-center">
+              Badges Earned
+            </h3>
+            {earnedBadges.length > 0 && (
+              <p className="text-sm text-[var(--txt-dim)]">
+                {earnedBadges.length} / {allBadges.length}
+              </p>
+            )}
+          </div>
           <button
             onClick={() => setIsModalOpen(true)}
             className="p-2 hover:bg-[var(--bg-ter)] rounded-lg transition-colors group"
@@ -95,15 +100,12 @@ const Badges = () => {
                   <img
                     src={badge.icon}
                     alt={badge.name}
-                    className="w-8 h-8 object-contain"
+                    className="w-12 h-12 object-contain"
                     onError={(e) => {
                       e.target.style.display = "none";
                       e.target.nextSibling.style.display = "flex";
                     }}
                   />
-                  <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full items-center justify-center text-white font-bold text-xs hidden">
-                    {badge.name.charAt(0)}
-                  </div>
                 </div>
                 <p className="text-xs mt-1 text-center text-[var(--txt)]">
                   {badge.name}
@@ -120,7 +122,7 @@ const Badges = () => {
                 key={`placeholder-${i}`}
                 className="flex flex-col items-center opacity-30"
               >
-                <div className="w-8 h-8 bg-[var(--bg-ter)] rounded-full flex items-center justify-center">
+                <div className="w-12 h-12 bg-[var(--bg-ter)] rounded-full flex items-center justify-center">
                   <Award className="w-5 h-5 text-[var(--txt-dim)]" />
                 </div>
                 <p className="text-xs mt-1 text-[var(--txt-dim)]">Locked</p>
@@ -128,14 +130,6 @@ const Badges = () => {
             )
           )}
         </div>
-
-        {earnedBadges.length > 0 && (
-          <div className="mt-4 text-center">
-            <p className="text-sm text-[var(--txt-dim)]">
-              {earnedBadges.length} of {allBadges.length} badges earned
-            </p>
-          </div>
-        )}
       </div>
 
       <BadgeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />

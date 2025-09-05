@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 // import useSessionChat from "../../hooks/useSessionChat";
 // import UseSocket from "@/hooks/UseSocket";
 import { useEffect, useState } from "react";
-import UseSocketContext from "@/context/SocketContext";
+import UseSocketContext from "@/contexts/SocketContext";
 import useSessionRoom from "@/hooks/useSessionRoom";
 
 function Controls({

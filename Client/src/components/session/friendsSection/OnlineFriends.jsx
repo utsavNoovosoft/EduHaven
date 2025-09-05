@@ -1,6 +1,6 @@
 import { User } from "lucide-react";
 import { useState } from "react";
-import UseSocketContext from "@/context/SocketContext";
+import UseSocketContext from "@/contexts/SocketContext";
 
 function OnlineFriends() {
   const { onlineUsers } = UseSocketContext();
