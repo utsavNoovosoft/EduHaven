@@ -4,7 +4,7 @@ import useSessionChat from "../hooks/useSessionChat.jsx";
 import Controls from "../components/sessionRooms/Controls.jsx";
 import ChatPannel from "@/components/sessionRooms/ChatPannel.jsx";
 import ShowInfo from "@/components/sessionRooms/InfoPannel.jsx";
-import UseSocketContext from "@/context/SocketContext.jsx";
+import UseSocketContext from "@/contexts/SocketContext.jsx";
 import { UseMediaHandlers } from "@/hooks/WebRTC/UseMediaHandlers.jsx";
 import UseConnectToSocketServer from "@/hooks/WebRTC/UseSocketService.jsx";
 import VideoConferenceView from "@/hooks/WebRTC/VideoConferenceView.jsx";

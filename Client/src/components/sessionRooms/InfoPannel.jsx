@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Check, Clipboard, User, X } from "lucide-react";
 import useSessionRoom from "@/hooks/useSessionRoom.jsx";
 import { useParams } from "react-router-dom";
-import UseSocketContext from "@/context/SocketContext.jsx";
+import UseSocketContext from "@/contexts/SocketContext.jsx";
 import ProfileIcon from "./ProfileIcon.jsx";
 
 function ShowInfo({ setShowInfo }) {

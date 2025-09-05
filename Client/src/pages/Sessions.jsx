@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import OtherRoom from "../components/session/OtherRooms.jsx";
-import OnlineFriends from "../components/friendsSection/OnlineFriends.jsx";
-import FriendRequests from "../components/friendsSection/FriendsRequests.jsx";
-import SuggestedFriends from "../components/friendsSection/SuggestedFriends.jsx";
-import SentRequests from "../components/friendsSection/SentRequests.jsx";
+import OnlineFriends from "../components/session/friendsSection/OnlineFriends.jsx";
+import FriendRequests from "../components/session/friendsSection/FriendsRequests.jsx";
+import SuggestedFriends from "../components/session/friendsSection/SuggestedFriends.jsx";
+import SentRequests from "../components/session/friendsSection/SentRequests.jsx";
 import YourRooms from "@/components/session/YourRooms.jsx";
 import NotLogedInPage from "@/components/NotLogedInPage.jsx";
 import axiosInstance from "@/utils/axios";

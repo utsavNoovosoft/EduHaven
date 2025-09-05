@@ -1,5 +1,6 @@
 import axiosInstance from "@/utils/axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const MonthlyLevel = () => {
   const [stats, setStats] = useState(null);
@@ -62,50 +63,47 @@ const MonthlyLevel = () => {
   const hoursNeeded = nextLevel ? nextLevel.min - totalHours : 0;
 
   return (
-    <div className="bg-[var(--bg-sec)] rounded-3xl shadow-md p-6 flex flex-col items-center w-full">
-      {/* Title */}
-      <h3 className="text-xl font-bold mb-4 text-cyan-300">Monthly Level</h3>
-
-      {/* Badge with Profile Pic inside */}
-      <div className="relative w-28 h-28 flex items-center justify-center mb-4">
-        <img
-          src={`/EduhavenBadges/${currentLevel.name.toLowerCase()}Badge.svg`}
-          alt={currentLevel.name}
-          className="absolute inset-0 w-full h-full object-contain"
-        />
+    <div className="bg-[var(--bg-sec)] rounded-3xl shadow-md p-6 flex flex-col w-full">
+      <div className="flex justify-between">
+        <h3 className="text-xl font-semibold mb-4 txt">Monthly Level</h3>
+        <p className="txt-dim">Total: {totalHours.toFixed(1)} h</p>
       </div>
 
-      {/* Level Name */}
-      <p
-        className="font-bold text-lg mb-4"
-        style={{ color: currentLevel.color }}
-      >
-        {currentLevel.name}
-      </p>
+      <div className="flex items-center gap-4">
+        <div className="w-28 h-28 flex items-center justify-center mb-4">
+          <img
+            src={`/EduhavenBadges/${currentLevel.name.toLowerCase()}Badge.svg`}
+            alt={currentLevel.name}
+            className="object-contain w-full h-full"
+          />
+        </div>
+        <div className="flex flex-col">
+          <p
+            className="font-extralight text-5xl font-poppins"
+            style={{ color: currentLevel.color }}
+          >
+            {currentLevel.name}
+          </p>
+          <p className="text-md mb-2 txt-dim">
+            {nextLevel
+              ? `${hoursNeeded.toFixed(1)} hrs to ${nextLevel.name}`
+              : "Max level reached 🎉"}
+          </p>
+        </div>
+      </div>
 
       {/* Progress Bar */}
       <div className="w-full">
-        <div className="h-3 bg-slate-600 rounded-full overflow-hidden">
-          <div
-            className="h-full transition-all duration-500"
+        <div className="h-10 bg-primary rounded-full overflow-hidden">
+          <motion.div
+            className="h-full rounded-full"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             style={{
-              width: `${progress}%`,
               backgroundColor: currentLevel.color,
             }}
-          ></div>
-        </div>
-        <p className="text-xs mt-1 text-center text-gray-300">
-          {nextLevel
-            ? `${hoursNeeded.toFixed(1)} hrs to ${nextLevel.name}`
-            : "Max level reached 🎉"}
-        </p>
-      </div>
-
-      {/* Hours Only */}
-      <div className="mt-4 w-full grid grid-cols-1 gap-2">
-        <div className="bg-[var(--bg-ter)] rounded-md p-2 text-center">
-          <p className="text-sm text-gray-400">Total Hours</p>
-          <p className="font-semibold text-white">{totalHours.toFixed(1)}</p>
+          ></motion.div>
         </div>
       </div>
     </div>

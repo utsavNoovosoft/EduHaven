@@ -3,7 +3,7 @@ import { MoreVertical, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
-import Avatar from "../Avatar";
+import Avatar from "../../Avatar";
 
 function SuggestedFriends({ onViewSentRequests }) {
   const [suggestedFriends, setSuggestedFriends] = useState([]);

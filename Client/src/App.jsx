@@ -18,7 +18,7 @@ import Auth from "./Auth/Auth";
 import ForgotPassword from "./Auth/ForgotPassword";
 import ResetPassword from "./Auth/ResetPassword";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import { SocketProvider } from "./context/SocketContext";
+import { SocketProvider } from "./contexts/SocketContext";
 import FriendsPage from "./pages/FriendsPage.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

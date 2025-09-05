@@ -1,7 +1,7 @@
 import axiosInstance from "@/utils/axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Avatar from "../Avatar";
+import Avatar from "../../Avatar";
 
 function FriendRequests() {
   const [friendRequests, setRequests] = useState([]);
