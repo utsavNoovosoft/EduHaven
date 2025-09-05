@@ -24,16 +24,16 @@ assignees: ''
 
 ### Checklist
 
-- [ ] Code is formatted with the project’s Prettier config provided in .prettierrc file.
+- [ ] Code will be  formatted with the project’s Prettier config provided in .prettierrc file.
 
-- [ ] Only the necessary files are modified; no unrelated changes are included.
+- [ ] Only the necessary files will be  modified; no unrelated changes will be included.
 
-- [ ] Follows clean code principles (readable, maintainable, minimal duplication).
+- [ ] I will Follows clean code principles (readable, maintainable, minimal duplication).
 
-- [ ] All changes are clearly documented
+- [ ] I will documen All changes are clearly 
 
-- [ ] Code has been tested across all supported themes and verified against potential edge cases.
+- [ ]I will test the  Code across all supported themes and verified against potential edge cases.
 
-- [ ] Multiple screenshots or recordings are attached (if required)
+- [ ] I will attach Multiple screenshots or recordings (if required)
 
-- [ ] No breaking changes are introduced to existing functionality.
+- [ ] No breaking changes will be  introduced to existing functionality.
