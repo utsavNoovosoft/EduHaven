@@ -7,7 +7,7 @@ export default function SentRequests() {
   const [filteredSent, setFilteredSent] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { data: sentRequests, isLoading } = useSentRequests();
+  const { data: sentRequests = [], isLoading } = useSentRequests();
 
   const handleSearch = (term) => {
     setSearchTerm(term);
@@ -47,12 +47,14 @@ export default function SentRequests() {
   };
 
   useEffect(() => {
-    setFilteredSent(sentRequests);
+    if (sentRequests.length) {
+      setFilteredSent(sentRequests);
+    }
   }, [sentRequests]);
 
   if (isLoading)
     return <div className="text-center text-gray-500">Loading...</div>;
-  if (!sentRequests.length)
+  if (sentRequests.length == 0)
     return <div className="text-center text-gray-500">No sent requests</div>;
 
   return (
@@ -60,16 +62,13 @@ export default function SentRequests() {
       {sentRequests.length > 0 && (
         <SearchBar
           onSearch={handleSearch}
-          placeholder="Search sentRequests requests..."
+          placeholder="Search sent requests..."
         />
       )}
 
       <div className="flex flex-wrap gap-3 2xl:gap-4 mt-4">
         {filteredSent?.map((user) => (
-          <UserCard
-            key={user._id}
-            user={user}
-          />
+          <UserCard key={user._id} user={user} selectedTab="sentRequests" />
         ))}
       </div>
 

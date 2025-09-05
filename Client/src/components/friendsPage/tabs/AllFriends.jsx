@@ -47,12 +47,13 @@ export default function AllFriends() {
   };
 
   useEffect(() => {
-    setFilteredFriends(friends);
+    if (friends.length)
+      setFilteredFriends(friends);
   }, [friends]);
 
   if (isLoading)
-    return <div className="text-center text-gray-500">isLoading...</div>;
-  if (!friends.length)
+    return <div className="text-center text-gray-500">Loading...</div>;
+  if (friends.length == 0)
     return <div className="text-center text-gray-500">No friends yet</div>;
 
   return (

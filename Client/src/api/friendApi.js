@@ -58,6 +58,7 @@ export const fetchAllSuggestedUsers = async () => {
 
 export const sendFriendRequest = async (friendId) => {
   const res = await axiosInstance.post(`/friends/request/${friendId}`, null);
+  console.log("friend request sent");
   return res.data;
 };
 

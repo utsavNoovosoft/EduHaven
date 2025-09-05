@@ -1,5 +1,5 @@
-import { useMemo, useEffect, useState } from "react";
-import { useFriendSuggestions } from "@/queries/friendQueries";
+import { useAllSuggestedUsers } from "@/queries/friendQueries";
+import { useEffect, useState } from "react";
 import SearchBar from "../SearchBar";
 import UserCard from "../UserCard";
 
@@ -7,11 +7,7 @@ export default function SuggestedFriends() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // stable options object
-  const queryOptions = useMemo(() => ({ all: true }), []);
-  const { data, isLoading } = useFriendSuggestions(queryOptions);
-
-  const users = data?.pages.flatMap((page) => page.users) ?? [];
+  const { data: users = [], isLoading } = useAllSuggestedUsers();
 
   const handleSearch = (term) => {
     setSearchTerm(term);
@@ -35,13 +31,15 @@ export default function SuggestedFriends() {
   };
 
   useEffect(() => {
-    setFilteredUsers(users);
+    if (users.length > 0) {
+      setFilteredUsers(users);
+    }
   }, [users]);
 
   if (isLoading)
     return <div className="text-center text-gray-500">Loading...</div>;
 
-  if (!users.length)
+  if (!users || users.length === 0)
     return <div className="text-center text-gray-500">No suggestions</div>;
 
   return (

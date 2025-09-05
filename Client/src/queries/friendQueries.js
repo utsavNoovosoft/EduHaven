@@ -12,6 +12,7 @@ import {
   fetchAllFriends,
   fetchAllSuggestedUsers,
   fetchFriendRequests,
+  fetchSentRequests,
   fetchSuggestedUsers,
   getFriendStats,
   rejectFriendRequest,
@@ -55,7 +56,7 @@ export const useRejectRequest = () => {
 export const useSentRequests = () =>
   useQuery({
     queryKey: ["sentRequests"],
-    queryFn: fetchFriendRequests,
+    queryFn: fetchSentRequests,
     staleTime: 1000 * 60,
     onError: (err) => handleApiError(err, "Error fetching sent requests"),
   });

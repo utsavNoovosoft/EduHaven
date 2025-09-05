@@ -47,12 +47,13 @@ export default function FriendRequests() {
   };
 
   useEffect(() => {
-    setFilteredRequests(requests);
+    if (requests.length)
+      setFilteredRequests(requests);
   }, [requests]);
 
   if (isLoading)
     return <div className="text-center text-gray-500">Loading...</div>;
-  if (!requests.length)
+  if (requests.length == 0)
     return <div className="text-center text-gray-500">No requests</div>;
 
   return (
