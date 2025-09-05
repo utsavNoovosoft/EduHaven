@@ -38,7 +38,7 @@ const GoalsComponent = () => {
   const fetchTodos = async () => {
     try {
       const { data } = await axiosInstance.get(`/todo`);
-      console.log("Fetched todos:", data.data);
+      // console.log("Fetched todos:", data.data);
       setTodos(data.data); // ✅ Will now be the actual Task documents
     } catch (error) {
       console.error("Error fetching todos:", error.message);
