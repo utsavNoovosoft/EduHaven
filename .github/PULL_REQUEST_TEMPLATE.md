@@ -13,11 +13,15 @@ Fixes #<issue_number>
 ## Screenshots or GIFs (if applicable)
 <!-- Add visual changes to better communicate your changes. -->
 
-## Checklist
-- [ ] I have performed a self-review of my code.
-- [ ] My changes are well-documented.
-- [ ] I have added tests that prove my fix is effective or that my feature works.
-- [ ] Any dependent changes have been merged and published.
+## checklist
+
+- [ ] Code is formatted with the project’s Prettier config provided in `.prettierrc`.
+- [ ] Only the necessary files are modified; no unrelated changes are included.
+- [ ] Follows clean code principles (readable, maintainable, minimal duplication).
+- [ ] All changes are clearly documented.
+- [ ] Code has been tested across all supported themes and verified against potential edge cases.
+- [ ] Multiple screenshots or recordings are attached (if required).
+- [ ] No breaking changes are introduced to existing functionality.
 
 ## Additional Notes
 <!-- Add any other relevant information or context. -->
