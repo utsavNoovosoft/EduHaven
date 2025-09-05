@@ -1,4 +1,3 @@
-import { MoreVertical, Plus, User } from "lucide-react";
 import { MoreVertical, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
