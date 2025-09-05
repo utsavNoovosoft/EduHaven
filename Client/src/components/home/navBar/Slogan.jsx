@@ -207,9 +207,9 @@ function Slogan() {
     if (cachedQuote && !shouldRefreshQuote()) {
       setQuote(cachedQuote);
       setAuthor(cachedAuthor || "");
-      console.log("Using cached quote:", cachedQuote);
+      // console.log("Using cached quote:", cachedQuote);
     } else {
-      console.log("Fetching new quote...");
+      // console.log("Fetching new quote...");
       fetchQuote().then((fetchedData) => {
         setQuote(fetchedData.quote);
         setAuthor(fetchedData.author);
