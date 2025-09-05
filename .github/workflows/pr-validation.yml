@@ -20,11 +20,4 @@ jobs:
             exit 1
           fi
 
-          # Check PR length (must be more than 1 line)
-          LINES=$(echo "$BODY" | wc -l)
-          if [ "$LINES" -lt 1 ]; then
-            echo "PR description is too short. Please provide more details."
-            exit 1
-          fi
-
           echo "✅ PR description is valid."
