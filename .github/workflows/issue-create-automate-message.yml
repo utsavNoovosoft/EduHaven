@@ -30,35 +30,26 @@ jobs:
               });
               perm = res.data.permission; // admin | maintain | write | triage | read
             } catch (e) {
-              // If API fails (rare), treat as outside contributor
               perm = "none";
             }
 
-            // Skip for admins/collaborators/maintainers/triagers
+            // Skip for admins/collaborators
             if (["admin", "maintain", "write", "triage"].includes(perm)) {
               core.info(`No auto-comment: ${opener} has ${perm} permission.`);
               return;
             }
 
-            
-            const commentBody1 = `### Thank you for raising this issue! 
-                 We'll review it as soon as possible. We truly appreciate your contributions! 
-
-                > Meanwhile, make sure you've visited the **README.md**, **CONTRIBUTING.md**, and **CODE_OF_CONDUCT.md** before creating a PR for this.
-                   Please do **NOT** create a PR until this issue has been assigned to you. `;
+            const commentBody1 = `
+### Thank you for raising this issue!  
+We'll review it as soon as possible. We truly appreciate your contributions!   
+> Meanwhile, make sure you've visited the **README.md**, **CONTRIBUTING.md**, and **CODE_OF_CONDUCT.md** before creating a PR for this.  
+Please do **NOT** create a PR until this issue has been assigned to you. `;
 
             await github.rest.issues.createComment({
               owner,
               repo,
               issue_number: issueNumber,
               body: commentBody1,
-            });
-
-            await github.rest.issues.createComment({
-              owner,
-              repo,
-              issue_number: issueNumber,
-              body: commentBody2,
             });
 
             core.info(`Auto-comment added for outside contributor: ${opener} (permission=${perm}).`);
