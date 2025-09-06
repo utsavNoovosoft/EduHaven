@@ -10,33 +10,14 @@ import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
 import Typography from "@tiptap/extension-typography";
 import Underline from "@tiptap/extension-underline";
-import { EditorContent, useEditor } from "@tiptap/react";
+import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import {
-  Bold,
-  Code,
-  Heading1,
-  Heading2,
-  Heading3,
-  Highlighter,
-  Image as ImgIcn,
-  Italic,
-  Link as LinkIcn,
-  List,
-  ListOrdered,
-  Minus,
-  Plus,
-  Quote,
-  Search,
-  Strikethrough,
-  Table as TableIcn,
-  Underline as UnderlineIcn,
-  X,
-} from "lucide-react";
 import { useEffect, useState } from "react";
 
-import NoteCard from "../components/notes/NoteCard.jsx";
 import ToolbarButton from "../components/notes/ToolbarButton.jsx";
+import NoteEditor from "@/components/notes/NoteEditor.jsx";
+import NotesList from "@/components/notes/NotesList.jsx";
+import NoteHeader from "@/components/notes/NoteHeader.jsx";
 
 const colors = [
   { name: "default", style: { backgroundColor: "var(--bg-sec)" } },
@@ -246,357 +227,44 @@ const Notes = () => {
       style={{ backgroundColor: "var(--bg-primary)", color: "var(--txt)" }}
     >
       {/* Header */}
-      <header className="px-6 py-3 flex items-center  justify-between gap-4 w-full">
-        <div className="flex items-center gap-2">
-          <h1 className="m-0 text-2xl font-bold">Notes</h1>
-        </div>
-
-        <div className="flex-1 max-w-2xl relative">
-          <Search
-            size={20}
-            className="absolute left-3 top-1/2 transform -translate-y-1/2"
-            style={{ color: "var(--txt-dim)" }}
-          />
-          <input
-            type="text"
-            placeholder="Search notes..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full py-3 pl-10 pr-3 border text-sm outline-none"
-            style={{
-              borderColor: "var(--bg-sec)",
-              borderRadius: "var(--radius)",
-              backgroundColor: "var(--bg-sec)",
-              color: "var(--txt)",
-            }}
-          />
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={createNewNote}
-            className="w-full p-2 px-6 border border-dashed bg-transparent cursor-pointer flex items-center justify-center gap-2"
-            style={{
-              borderColor: "var(--btn)",
-              color: "var(--btn)",
-              borderRadius: "var(--radius)",
-            }}
-          >
-            <Plus size={18} />
-            Create new Note
-          </button>
-        </div>
-      </header>
+      <NoteHeader
+        createNewNote={createNewNote}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
 
       <div className="flex" style={{ height: "calc(100vh - 73px)" }}>
         {/* Notes List */}
-        <div
-          className={`${selectedNote ? "w-80" : "w-full"} ${
-            selectedNote ? "border-r" : ""
-          } overflow-auto p-4`}
-          style={{
-            backgroundColor: "var(--bg-primary)",
-            borderColor: "var(--bg-sec)",
-          }}
-        >
-          {pinnedNotes.length > 0 && (
-            <div className="mb-6">
-              <h3
-                className="text-xs font-medium uppercase mb-2 mt-0"
-                style={{ color: "var(--txt-dim)" }}
-              >
-                Pinned
-              </h3>
-              <div
-                className="grid gap-2"
-                style={{
-                  gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                }}
-              >
-                {pinnedNotes.map((note) => (
-                  <NoteCard
-                    key={note.id}
-                    note={note}
-                    onSelect={setSelectedNote}
-                    onPin={togglePin}
-                    onDelete={deleteNote}
-                    onDuplicate={duplicateNote}
-                    onExport={exportNote}
-                    onColorChange={changeColor}
-                    showColorPicker={showColorPicker}
-                    setShowColorPicker={setShowColorPicker}
-                    colors={colors}
-                    getPlainTextPreview={getPlainTextPreview}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {unpinnedNotes.length > 0 && (
-            <div>
-              {pinnedNotes.length > 0 && (
-                <h3
-                  className="text-xs font-medium uppercase mb-2 mt-0"
-                  style={{ color: "var(--txt-dim)" }}
-                >
-                  Others
-                </h3>
-              )}
-              <div
-                className="grid gap-2"
-                style={{
-                  gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                }}
-              >
-                {unpinnedNotes.map((note) => (
-                  <NoteCard
-                    key={note.id}
-                    note={note}
-                    onSelect={setSelectedNote}
-                    onPin={togglePin}
-                    onDelete={deleteNote}
-                    onDuplicate={duplicateNote}
-                    onExport={exportNote}
-                    onColorChange={changeColor}
-                    showColorPicker={showColorPicker}
-                    setShowColorPicker={setShowColorPicker}
-                    colors={colors}
-                    getPlainTextPreview={getPlainTextPreview}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {filteredNotes.length === 0 && (
-            <div
-              className="text-center mt-10"
-              style={{ color: "var(--txt-dim)" }}
-            >
-              {searchTerm
-                ? "No notes found"
-                : "No notes yet. Create your first note!"}
-            </div>
-          )}
-        </div>
+        <NotesList
+          selectedNote={selectedNote}
+          pinnedNotes={pinnedNotes}
+          unpinnedNotes={unpinnedNotes}
+          filteredNotes={filteredNotes}
+          searchTerm={searchTerm}
+          setSelectedNote={setSelectedNote}
+          togglePin={togglePin}
+          deleteNote={deleteNote}
+          duplicateNote={duplicateNote}
+          exportNote={exportNote}
+          changeColor={changeColor}
+          showColorPicker={showColorPicker}
+          setShowColorPicker={setShowColorPicker}
+          colors={colors}
+          getPlainTextPreview={getPlainTextPreview}
+        />
 
         {/* Note Editor */}
         {selectedNote && (
-          <div
-            className="flex-1 flex flex-col rounded-tl-3xl"
-            style={{ backgroundColor: "var(--bg-ter)" }}
-          >
-            {/* Editor Header */}
-            <div
-              className="p-4 border-b flex flex-col gap-3"
-              style={{ borderColor: "var(--bg-sec)" }}
-            >
-              <div className="flex items-center justify-between">
-                <input
-                  type="text"
-                  placeholder="Untitled"
-                  value={selectedNote.title}
-                  onChange={(e) =>
-                    updateNote(selectedNote.id, { title: e.target.value })
-                  }
-                  className="flex-1 border-none outline-none text-2xl font-semibold bg-transparent font-inherit"
-                  style={{ color: "var(--txt)" }}
-                />
-
-                <button
-                  onClick={() => setSelectedNote(null)}
-                  className="p-2 border-none bg-transparent cursor-pointer"
-                  style={{
-                    color: "var(--txt-dim)",
-                    borderRadius: "var(--radius)",
-                  }}
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              {/* Formatting Toolbar */}
-              <div
-                className="flex items-center gap-0.5 flex-wrap p-2 bg-red-500"
-                style={{
-                  backgroundColor: "var(--bg-sec)",
-                  borderRadius: "var(--radius)",
-                }}
-              >
-                {/* Headings */}
-                <ToolbarButton
-                  onClick={() =>
-                    editor?.chain().focus().toggleHeading({ level: 1 }).run()
-                  }
-                  isActive={editor?.isActive("heading", { level: 1 })}
-                  icon={<Heading1 size={16} />}
-                  title="Heading 1"
-                />
-
-                <ToolbarButton
-                  onClick={() =>
-                    editor?.chain().focus().toggleHeading({ level: 2 }).run()
-                  }
-                  isActive={editor?.isActive("heading", { level: 2 })}
-                  icon={<Heading2 size={16} />}
-                  title="Heading 2"
-                />
-
-                <ToolbarButton
-                  onClick={() =>
-                    editor?.chain().focus().toggleHeading({ level: 3 }).run()
-                  }
-                  isActive={editor?.isActive("heading", { level: 3 })}
-                  icon={<Heading3 size={16} />}
-                  title="Heading 3"
-                />
-
-                <div
-                  className="w-px h-5 mx-1"
-                  style={{ backgroundColor: "var(--txt-disabled)" }}
-                />
-
-                {/* Text Formatting */}
-                <ToolbarButton
-                  onClick={() => editor?.chain().focus().toggleBold().run()}
-                  isActive={editor?.isActive("bold")}
-                  icon={<Bold size={16} />}
-                  title="Bold"
-                />
-
-                <ToolbarButton
-                  onClick={() => editor?.chain().focus().toggleItalic().run()}
-                  isActive={editor?.isActive("italic")}
-                  icon={<Italic size={16} />}
-                  title="Italic"
-                />
-
-                <ToolbarButton
-                  onClick={() =>
-                    editor?.chain().focus().toggleUnderline().run()
-                  }
-                  isActive={editor?.isActive("underline")}
-                  icon={<UnderlineIcn size={16} />}
-                  title="Underline"
-                />
-
-                <ToolbarButton
-                  onClick={() => editor?.chain().focus().toggleStrike().run()}
-                  isActive={editor?.isActive("strike")}
-                  icon={<Strikethrough size={16} />}
-                  title="Strikethrough"
-                />
-
-                <ToolbarButton
-                  onClick={() => editor?.chain().focus().toggleCode().run()}
-                  isActive={editor?.isActive("code")}
-                  icon={<Code size={16} />}
-                  title="Code"
-                />
-
-                <ToolbarButton
-                  onClick={() =>
-                    editor?.chain().focus().toggleHighlight().run()
-                  }
-                  isActive={editor?.isActive("highlight")}
-                  icon={<Highlighter size={16} />}
-                  title="Highlight"
-                />
-
-                <div
-                  className="w-px h-5 mx-1"
-                  style={{ backgroundColor: "var(--txt-disabled)" }}
-                />
-
-                {/* Lists */}
-                <ToolbarButton
-                  onClick={() =>
-                    editor?.chain().focus().toggleBulletList().run()
-                  }
-                  isActive={editor?.isActive("bulletList")}
-                  icon={<List size={16} />}
-                  title="Bullet List"
-                />
-
-                <ToolbarButton
-                  onClick={() =>
-                    editor?.chain().focus().toggleOrderedList().run()
-                  }
-                  isActive={editor?.isActive("orderedList")}
-                  icon={<ListOrdered size={16} />}
-                  title="Numbered List"
-                />
-
-                <ToolbarButton
-                  onClick={() => editor?.chain().focus().toggleTaskList().run()}
-                  isActive={editor?.isActive("taskList")}
-                  icon={
-                    <div className="w-4 h-4 border-2 border-current rounded-sm flex items-center justify-center">
-                      ✓
-                    </div>
-                  }
-                  title="Task List"
-                />
-
-                <div
-                  className="w-px h-5 mx-1"
-                  style={{ backgroundColor: "var(--txt-disabled)" }}
-                />
-
-                {/* Other formatting */}
-                <ToolbarButton
-                  onClick={() =>
-                    editor?.chain().focus().toggleBlockquote().run()
-                  }
-                  isActive={editor?.isActive("blockquote")}
-                  icon={<Quote size={16} />}
-                  title="Quote"
-                />
-
-                <ToolbarButton
-                  onClick={() =>
-                    editor?.chain().focus().setHorizontalRule().run()
-                  }
-                  isActive={false}
-                  icon={<Minus size={16} />}
-                  title="Horizontal Rule"
-                />
-
-                <div
-                  className="w-px h-5 mx-1"
-                  style={{ backgroundColor: "var(--txt-disabled)" }}
-                />
-
-                {/* Media & Links */}
-                <ToolbarButton
-                  onClick={insertLink}
-                  isActive={editor?.isActive("link")}
-                  icon={<LinkIcn size={16} />}
-                  title="Insert Link"
-                />
-
-                <ToolbarButton
-                  onClick={insertImage}
-                  isActive={false}
-                  icon={<ImgIcn size={16} />}
-                  title="Insert Image"
-                />
-
-                <ToolbarButton
-                  onClick={insertTable}
-                  isActive={editor?.isActive("table")}
-                  icon={<TableIcn size={16} />}
-                  title="Insert Table"
-                />
-              </div>
-            </div>
-
-            {/* Editor Content */}
-            <div className="flex-1 p-4 overflow-auto">
-              <EditorContent editor={editor} className="min-h-full" />
-            </div>
-          </div>
+          <NoteEditor
+            selectedNote={selectedNote}
+            setSelectedNote={setSelectedNote}
+            editor={editor}
+            updateNote={updateNote}
+            insertLink={insertLink}
+            insertImage={insertImage}
+            insertTable={insertTable}
+            ToolbarButton={ToolbarButton}
+          />
         )}
       </div>
 
