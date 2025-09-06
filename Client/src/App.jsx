@@ -22,7 +22,7 @@ import { SocketProvider } from "./contexts/SocketContext";
 import FriendsPage from "./pages/FriendsPage.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import NoteNest from "./pages/NoteNest";
+import Notes from "./pages/Notes";
 import Delete from "./components/settings/Delete";
 import Chats from "./pages/Chats";
 function App() {
@@ -40,7 +40,7 @@ function App() {
                 element={<Stats isCurrentUser={false} />}
               />
               <Route path="games/*" element={<GameRoom />} />
-              <Route path="notenest" element={<NoteNest />} />
+              <Route path="notes" element={<Notes />} />
               <Route path="project-details" element={<ProjectInfo />} />
               <Route path="settings/" element={<Settings />} />
               <Route path="friends" element={<FriendsPage />} />
