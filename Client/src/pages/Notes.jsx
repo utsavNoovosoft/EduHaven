@@ -1,46 +1,53 @@
-import { useState, useEffect } from "react";
+import Highlight from "@tiptap/extension-highlight";
+import { Image } from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
+import Placeholder from "@tiptap/extension-placeholder";
+import { Table } from "@tiptap/extension-table";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import TableRow from "@tiptap/extension-table-row";
+import TaskItem from "@tiptap/extension-task-item";
+import TaskList from "@tiptap/extension-task-list";
+import Typography from "@tiptap/extension-typography";
+import Underline from "@tiptap/extension-underline";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import {
-  Search,
-  Plus,
-  Archive,
-  Trash2,
-  MoreVertical,
-  Pin,
-  Copy,
-  Download,
-  X,
-  Palette,
   Bold,
-  Italic,
-  Underline as UnderlineIcn,
-  Strikethrough,
   Code,
-  Highlighter,
-  Quote,
-  List,
-  ListOrdered,
   Heading1,
   Heading2,
   Heading3,
+  Highlighter,
   Image as ImgIcn,
+  Italic,
   Link as LinkIcn,
-  Table as TableIcn,
+  List,
+  ListOrdered,
   Minus,
+  Plus,
+  Quote,
+  Search,
+  Strikethrough,
+  Table as TableIcn,
+  Underline as UnderlineIcn,
+  X,
 } from "lucide-react";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
-import Typography from "@tiptap/extension-typography";
-import TaskList from "@tiptap/extension-task-list";
-import TaskItem from "@tiptap/extension-task-item";
-import { Table } from "@tiptap/extension-table";
-import TableRow from "@tiptap/extension-table-row";
-import TableCell from "@tiptap/extension-table-cell";
-import TableHeader from "@tiptap/extension-table-header";
-import Highlight from "@tiptap/extension-highlight";
-import Underline from "@tiptap/extension-underline";
-import Link from "@tiptap/extension-link";
-import { Image } from "@tiptap/extension-image";
+import { useEffect, useState } from "react";
+
+import NoteCard from "../components/notes/NoteCard.jsx";
+import ToolbarButton from "../components/notes/ToolbarButton.jsx";
+
+const colors = [
+  { name: "default", style: { backgroundColor: "var(--bg-sec)" } },
+  { name: "red", style: { backgroundColor: "var(--red-light)" } },
+  { name: "orange", style: { backgroundColor: "var(--orange-light)" } },
+  { name: "yellow", style: { backgroundColor: "var(--yellow-light)" } },
+  { name: "green", style: { backgroundColor: "var(--green-light)" } },
+  { name: "blue", style: { backgroundColor: "var(--blue-light)" } },
+  { name: "purple", style: { backgroundColor: "var(--purple-light)" } },
+  { name: "pink", style: { backgroundColor: "var(--pink-light)" } },
+];
 
 const Notes = () => {
   const [notes, setNotes] = useState([
@@ -50,7 +57,6 @@ const Notes = () => {
       content: `<h1>Welcome to Eduhaven Notes!</h1><p>This is a modern notes feature with rich text editing capabilities, similar to Notion.</p><p>You can:</p><ul><li>Create <strong>bold</strong> and <em>italic</em> text</li><li>Add headers, lists, and more</li><li>Use the toolbar above for formatting</li><li>Create task lists</li></ul><p>Try selecting text and using the formatting toolbar above!</p>`,
       createdAt: new Date().toISOString(),
       isPinned: false,
-      isArchived: false,
       color: "default",
     },
   ]);
@@ -58,18 +64,6 @@ const Notes = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedNote, setSelectedNote] = useState(null);
   const [showColorPicker, setShowColorPicker] = useState(null);
-  const [showArchived, setShowArchived] = useState(false);
-
-  const colors = [
-    { name: "default", style: { backgroundColor: "var(--bg-sec)" } },
-    { name: "red", style: { backgroundColor: "var(--red-light)" } },
-    { name: "orange", style: { backgroundColor: "var(--orange-light)" } },
-    { name: "yellow", style: { backgroundColor: "var(--yellow-light)" } },
-    { name: "green", style: { backgroundColor: "var(--green-light)" } },
-    { name: "blue", style: { backgroundColor: "var(--blue-light)" } },
-    { name: "purple", style: { backgroundColor: "var(--purple-light)" } },
-    { name: "pink", style: { backgroundColor: "var(--pink-light)" } },
-  ];
 
   const editor = useEditor({
     extensions: [
@@ -136,7 +130,6 @@ const Notes = () => {
       content: "",
       createdAt: new Date().toISOString(),
       isPinned: false,
-      isArchived: false,
       color: "default",
     };
     setNotes([newNote, ...notes]);
@@ -162,11 +155,6 @@ const Notes = () => {
   const togglePin = (id) => {
     const note = notes.find((n) => n.id === id);
     updateNote(id, { isPinned: !note.isPinned });
-  };
-
-  const toggleArchive = (id) => {
-    const note = notes.find((n) => n.id === id);
-    updateNote(id, { isArchived: !note.isArchived });
   };
 
   const changeColor = (id, color) => {
@@ -246,10 +234,7 @@ const Notes = () => {
     const matchesSearch =
       note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       plainContent.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesArchiveFilter = showArchived
-      ? note.isArchived
-      : !note.isArchived;
-    return matchesSearch && matchesArchiveFilter;
+    return matchesSearch;
   });
 
   const pinnedNotes = filteredNotes.filter((note) => note.isPinned);
@@ -334,7 +319,6 @@ const Notes = () => {
                     note={note}
                     onSelect={setSelectedNote}
                     onPin={togglePin}
-                    onArchive={toggleArchive}
                     onDelete={deleteNote}
                     onDuplicate={duplicateNote}
                     onExport={exportNote}
@@ -371,7 +355,6 @@ const Notes = () => {
                     note={note}
                     onSelect={setSelectedNote}
                     onPin={togglePin}
-                    onArchive={toggleArchive}
                     onDelete={deleteNote}
                     onDuplicate={duplicateNote}
                     onExport={exportNote}
@@ -788,243 +771,6 @@ const Notes = () => {
           background-color: var(--bg-sec);
         }
       `}</style>
-    </div>
-  );
-};
-
-const ToolbarButton = ({ onClick, isActive, icon, title }) => (
-  <button
-    onClick={onClick}
-    title={title}
-    className="p-1.5 border-none cursor-pointer flex items-center justify-center transition-all"
-    style={{
-      backgroundColor: isActive ? "var(--btn)" : "transparent",
-      color: isActive ? "white" : "var(--txt)",
-      borderRadius: "var(--radius)",
-    }}
-    onMouseEnter={(e) => {
-      if (!isActive) {
-        e.target.style.backgroundColor = "var(--bg-primary)";
-      }
-    }}
-    onMouseLeave={(e) => {
-      if (!isActive) {
-        e.target.style.backgroundColor = "transparent";
-      }
-    }}
-  >
-    {icon}
-  </button>
-);
-
-const NoteCard = ({
-  note,
-  onSelect,
-  onPin,
-  onArchive,
-  onDelete,
-  onDuplicate,
-  onExport,
-  onColorChange,
-  showColorPicker,
-  setShowColorPicker,
-  colors,
-  getPlainTextPreview,
-}) => {
-  const [showMenu, setShowMenu] = useState(false);
-
-  const getColorStyle = (colorName) => {
-    const color = colors.find((c) => c.name === colorName);
-    return color ? color.style : colors[0].style;
-  };
-
-  const truncateText = (text, limit) => {
-    if (!text) return "";
-    if (text.length <= limit) return text;
-    return text.substring(0, limit) + "...";
-  };
-
-  return (
-    <div
-      className="cursor-pointer relative flex flex-col transition-all p-4 rounded-xl"
-      style={{
-        ...getColorStyle(note.color),
-        minHeight: "120px",
-      }}
-      onClick={() => onSelect(note)}
-    >
-      <div className="flex items-start justify-between mb-2">
-        <div className="flex-1">
-          {note.title && (
-            <h3
-              className="text-sm font-semibold m-0 mb-1.5 leading-tight"
-              style={{ color: "var(--txt)" }}
-            >
-              {truncateText(note.title, 40)}
-            </h3>
-          )}
-          <div
-            className="text-xs leading-snug"
-            style={{ color: "var(--txt-dim)" }}
-          >
-            {truncateText(getPlainTextPreview(note.content), 100)}
-          </div>
-        </div>
-
-        <div className="relative">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowMenu(!showMenu);
-            }}
-            className="p-1 border-none bg-transparent cursor-pointer opacity-70 rounded"
-            style={{ color: "var(--txt-dim)" }}
-          >
-            <MoreVertical size={16} />
-          </button>
-
-          {showMenu && (
-            <div
-              className="absolute top-full right-0 border z-10 shadow-lg"
-              style={{
-                backgroundColor: "var(--bg-ter)",
-                borderColor: "var(--bg-sec)",
-                borderRadius: "var(--radius)",
-                minWidth: "150px",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onPin(note.id);
-                  setShowMenu(false);
-                }}
-                className="w-full py-2 px-3 border-none bg-transparent text-left cursor-pointer flex items-center gap-2 text-sm rounded"
-                style={{ color: "var(--txt)" }}
-              >
-                <Pin size={14} />
-                {note.isPinned ? "Unpin" : "Pin"}
-              </button>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowColorPicker(
-                    showColorPicker === note.id ? null : note.id
-                  );
-                }}
-                className="w-full py-2 px-3 border-none bg-transparent text-left cursor-pointer flex items-center gap-2 text-sm rounded"
-                style={{ color: "var(--txt)" }}
-              >
-                <Palette size={14} />
-                Color
-              </button>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDuplicate(note);
-                  setShowMenu(false);
-                }}
-                className="w-full py-2 px-3 border-none bg-transparent text-left cursor-pointer flex items-center gap-2 text-sm rounded"
-                style={{ color: "var(--txt)" }}
-              >
-                <Copy size={14} />
-                Duplicate
-              </button>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onExport(note);
-                  setShowMenu(false);
-                }}
-                className="w-full py-2 px-3 border-none bg-transparent text-left cursor-pointer flex items-center gap-2 text-sm rounded"
-                style={{ color: "var(--txt)" }}
-              >
-                <Download size={14} />
-                Export
-              </button>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onArchive(note.id);
-                  setShowMenu(false);
-                }}
-                className="w-full py-2 px-3 border-none bg-transparent text-left cursor-pointer flex items-center gap-2 text-sm rounded"
-                style={{ color: "var(--txt)" }}
-              >
-                <Archive size={14} />
-                {note.isArchived ? "Unarchive" : "Archive"}
-              </button>
-
-              <hr
-                className="my-1 border-none border-t"
-                style={{ borderColor: "var(--bg-sec)" }}
-              />
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete(note.id);
-                  setShowMenu(false);
-                }}
-                className="w-full py-2 px-3 border-none bg-transparent text-left cursor-pointer flex items-center gap-2 text-sm rounded"
-                style={{ color: "var(--danger)" }}
-              >
-                <Trash2 size={14} />
-                Delete
-              </button>
-            </div>
-          )}
-
-          {showColorPicker === note.id && (
-            <div
-              className="absolute top-full right-0 border p-2 shadow-lg z-20 flex gap-1 flex-wrap"
-              style={{
-                backgroundColor: "var(--bg-ter)",
-                borderColor: "var(--bg-sec)",
-                borderRadius: "var(--radius)",
-                width: "120px",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {colors.map((color) => (
-                <button
-                  key={color.name}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onColorChange(note.id, color.name);
-                  }}
-                  className="w-6 h-6 cursor-pointer rounded-full border"
-                  style={{
-                    ...color.style,
-                    borderColor:
-                      note.color === color.name
-                        ? "var(--btn)"
-                        : "var(--bg-sec)",
-                    borderWidth: note.color === color.name ? "2px" : "1px",
-                  }}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {note.isPinned && (
-        <Pin
-          size={12}
-          className="absolute top-2 right-8"
-          style={{ color: "var(--btn)" }}
-        />
-      )}
-
-      <div className="text-xs mt-auto" style={{ color: "var(--txt-disabled)" }}>
-        {new Date(note.createdAt).toLocaleDateString()}
-      </div>
     </div>
   );
 };
