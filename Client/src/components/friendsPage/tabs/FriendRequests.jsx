@@ -1,76 +1,37 @@
-import { useEffect, useState } from "react";
-import axiosInstance from "@/utils/axios";
-import { toast } from "react-toastify";
-import UserCard from "../UserCard";
+import { useFriendRequests } from "@/queries/friendQueries";
+import { useMemo, useState } from "react";
 import SearchBar from "../SearchBar";
-import FriendsSkeletonLoader from "../../skeletons/FriendsSkeletonLoader"; // 1. Import skeleton loader
+import UserCard from "../UserCard";
+import FriendsSkeletonLoader from "../../skeletons/FriendsSkeletonLoader";
 
 export default function FriendRequests() {
-  const [requests, setRequests] = useState([]);
-  const [filteredRequests, setFilteredRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true); // 2. Set initial loading to true
-
-  const fetchRequests = async () => {
-    try {
-      const res = await axiosInstance.get("/friends/requests");
-      setRequests(res.data || []);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to load friend requests");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const acceptRequest = async (friendId) => {
-    try {
-      await axiosInstance.post(`/friends/accept/${friendId}`, null);
-      setRequests((prev) => prev.filter((r) => r._id !== friendId));
-      toast.success("Friend request accepted!");
-    } catch (err) {
-      console.error(err);
-      toast.error("Error accepting friend request!");
-    }
-  };
-
-  const rejectRequest = async (friendId) => {
-    try {
-      await axiosInstance.delete(`/friends/reject/${friendId}`);
-      setRequests((prev) => prev.filter((r) => r._id !== friendId));
-      toast.info("Friend request rejected.");
-    } catch (err) {
-      console.error(err);
-      toast.error("Error rejecting friend request!");
-    }
-  };
+  const { data: requests = [], isLoading } = useFriendRequests();
 
   const handleSearch = (term) => {
     setSearchTerm(term);
-    if (!term.trim()) {
-      setFilteredRequests(requests);
-      return;
-    }
-    const filtered = requests.filter((user) => {
-      const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
-      if (fullName.includes(term.toLowerCase())) return true;
-      if (user.OtherDetails?.skills?.toLowerCase().includes(term.toLowerCase())) return true;
-      if (user.OtherDetails?.interests?.toLowerCase().includes(term.toLowerCase())) return true;
-      return false;
-    });
-    setFilteredRequests(filtered);
   };
 
-  useEffect(() => {
-    fetchRequests();
-  }, []);
+  const filteredRequests = useMemo(() => {
+    const term = searchTerm;
+    if (!term.trim()) {
+      return requests;
+    }
 
-  useEffect(() => {
-    setFilteredRequests(requests);
-  }, [requests]);
+    return requests.filter((user) => {
+      const fullName = `${user.FirstName} ${user.LastName || ""}`.toLowerCase();
+      if (fullName.includes(term.toLowerCase())) return true;
+      if (user.OtherDetails?.skills?.toLowerCase().includes(term.toLowerCase()))
+        return true;
+      if (
+        user.OtherDetails?.interests?.toLowerCase().includes(term.toLowerCase())
+      )
+        return true;
+      return false;
+    });
+  }, [requests, searchTerm]);
 
-  // 3. Render skeleton loader while loading
-  if (loading) {
+  if (isLoading) {
     return <FriendsSkeletonLoader />;
   }
 
@@ -90,13 +51,7 @@ export default function FriendRequests() {
       {/* 4. Update container to use CSS Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         {filteredRequests.map((user) => (
-          <UserCard
-            key={user._id}
-            user={user}
-            selectedTab="friendRequests"
-            onAcceptRequest={acceptRequest}
-            onRejectRequest={rejectRequest}
-          />
+          <UserCard key={user._id} user={user} selectedTab="friendRequests" />
         ))}
       </div>
 

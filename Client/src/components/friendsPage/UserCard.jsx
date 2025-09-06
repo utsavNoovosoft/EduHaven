@@ -1,18 +1,23 @@
+import {
+  useAcceptRequest,
+  useCancelRequest,
+  useRejectRequest,
+  useRemoveFriend,
+  useSendRequest,
+} from "@/queries/friendQueries";
 import { UserPlus } from "lucide-react";
-import { useState } from "react";
-import DefaultProfilePic from "../../assets/profilePic.avif";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import DefaultProfilePic from "../../assets/profilePic.avif";
 
-function UserCard({
-  user,
-  selectedTab,
-  onSendRequest,
-  onCancelRequest,
-  onAcceptRequest,
-  onRejectRequest,
-  onRemoveFriend,
-}) {
+function UserCard({ user, selectedTab }) {
+  const { mutate: sendRequest } = useSendRequest();
+  const { mutate: cancelRequest } = useCancelRequest();
+  const { mutate: rejectRequest } = useRejectRequest();
+  const { mutate: acceptRequest } = useAcceptRequest();
+  const { mutate: removeFriend } = useRemoveFriend();
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -55,7 +60,7 @@ function UserCard({
       <div>
         {selectedTab === "suggested" && !user.requestSent && (
           <button
-            onClick={() => onSendRequest(user._id)}
+            onClick={() => sendRequest(user._id)}
             className="w-full bg-[var(--btn)] text-sm px-3 py-2 rounded-lg flex items-center justify-center gap-1 transition text-white hover:bg-[var(--btn-hover)] txt"
           >
             <UserPlus className="w-5 h-5" />
@@ -66,13 +71,13 @@ function UserCard({
         {selectedTab === "friendRequests" && (
           <div className="flex gap-2">
             <button
-              onClick={() => onRejectRequest(user._id)}
+              onClick={() => rejectRequest(user._id)}
               className="w-1/2 bg-ter text-sm txt px-3 py-2 rounded-lg transition hover:bg-red-700 txt"
             >
               Reject
             </button>
             <button
-              onClick={() => onAcceptRequest(user._id)}
+              onClick={() => acceptRequest(user._id)}
               className="w-1/2 bg-[var(--btn)] text-white text-sm px-3 py-2 rounded-lg transition hover:bg-[var(--btn-hover)] txt"
             >
               Accept
@@ -82,7 +87,7 @@ function UserCard({
 
         {selectedTab === "sentRequests" && (
           <button
-            onClick={() => onCancelRequest(user._id)}
+            onClick={() => cancelRequest(user._id)}
             className="w-full bg-[var(--btn)] text-sm text-white px-3 py-2 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
           >
             Cancel Request
@@ -91,7 +96,7 @@ function UserCard({
 
         {selectedTab === "allFriends" && (
           <button
-            onClick={() => onRemoveFriend(user._id)}
+            onClick={() => removeFriend(user._id)}
             className="w-full bg-ter text-sm text-white px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--bg-primary)] txt"
           >
             Remove Friend
@@ -113,11 +118,6 @@ UserCard.propTypes = {
     requestSent: PropTypes.bool,
   }).isRequired,
   selectedTab: PropTypes.string.isRequired,
-  onSendRequest: PropTypes.func,
-  onCancelRequest: PropTypes.func,
-  onAcceptRequest: PropTypes.func,
-  onRejectRequest: PropTypes.func,
-  onRemoveFriend: PropTypes.func,
 };
 
 export default UserCard;

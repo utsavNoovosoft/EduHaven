@@ -1,14 +1,17 @@
-import axiosInstance from "@/utils/axios";
 import { MoreVertical, Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
 import Avatar from "../../Avatar";
 
+import { useSendRequest, useUsersInfinite } from "@/queries/friendQueries";
+
 function SuggestedFriends({ onViewSentRequests }) {
-  const [suggestedFriends, setSuggestedFriends] = useState([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const { mutate: sendFriendRequest } = useSendRequest();
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
+    useUsersInfinite(15);
+  const suggestedFriends = data?.pages.flatMap((page) => page.users) || [];
+
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdrownRef = useRef(null);
 
@@ -25,45 +28,7 @@ function SuggestedFriends({ onViewSentRequests }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const fetchSuggestions = async (pageNum = 1, append = true) => {
-    try {
-      const res = await axiosInstance.get(
-        `/friends/friend-suggestions?page=${pageNum}&limit=15`
-      );
-
-      if (append) {
-        setSuggestedFriends((prev) => [...prev, ...res.data.users]);
-      } else {
-        setSuggestedFriends(res.data.users);
-      }
-
-      setPage((prev) => prev + 1);
-      setHasMore(res.data.hasMore);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchSuggestions(1, false);
-  }, []);
-
-  const sendRequest = async (friendId) => {
-    try {
-      await axiosInstance.post(`/friends/request/${friendId}`, null);
-      setSuggestedFriends((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === friendId ? { ...user, requestSent: true } : user
-        )
-      );
-    } catch (error) {
-      console.error("Error adding friend:", error.response?.data || error);
-    }
-  };
-
-  const showSkeletons = suggestedFriends.length === 0;
-
-  if (showSkeletons) {
+  if (isLoading) {
     return (
       <div className="bg-[var(--bg-secondary)] border border-gray-700/30 p-4 rounded-3xl shadow flex flex-col justify-center animate-pulse">
         <div className="w-full mb-4 h-8 bg-gray-500/20 rounded-md"></div>
@@ -114,8 +79,8 @@ function SuggestedFriends({ onViewSentRequests }) {
       <div id="scrollableDiv" style={{ height: "500px", overflow: "auto" }}>
         <InfiniteScroll
           dataLength={suggestedFriends.length}
-          next={() => fetchSuggestions(page, true)}
-          hasMore={hasMore}
+          next={fetchNextPage}
+          hasMore={!!hasNextPage}
           loader={<p className="text-center txt-dim">Loading...</p>}
           endMessage={
             <p className="text-center txt-dim">
@@ -154,7 +119,7 @@ function SuggestedFriends({ onViewSentRequests }) {
                     </button>
                   ) : (
                     <button
-                      onClick={() => sendRequest(user._id)}
+                      onClick={() => sendFriendRequest(user._id)}
                       className="bg-ter text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-1 transition hover:bg-[var(--btn-hover)] txt"
                     >
                       <Plus className="w-4 h-4" />

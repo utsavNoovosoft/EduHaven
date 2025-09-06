@@ -1,48 +1,11 @@
-import axiosInstance from "@/utils/axios";
+import { useFriends, useRemoveFriend } from "@/queries/friendQueries";
 import { User } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Friends = () => {
-  const [friends, setFriends] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: friends, isLoading } = useFriends();
+  const { mutate: removeFriend } = useRemoveFriend();
 
-  useEffect(() => {
-    fetchFriends();
-  }, []);
-
-  const fetchFriends = async () => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.get(`/friends`);
-      // Add an `isRemoved` property to each friend (initially false)
-      const friendsWithFlag = response.data.map((friend) => ({
-        ...friend,
-        isRemoved: false,
-      }));
-      setFriends(friendsWithFlag);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching friends:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const removeFriend = async (friendId) => {
-    try {
-      await axiosInstance.delete(`/friends/${friendId}`);
-      setFriends(
-        friends.map((friend) =>
-          friend._id === friendId ? { ...friend, isRemoved: true } : friend
-        )
-      );
-    } catch (error) {
-      console.error("Error removing friend:", error);
-    }
-  };
-
-  // Loading skeleton component
   const LoadingSkeleton = () => (
     <div className="space-y-2 min-w-[600px] rounded-2xl overflow-hidden">
       {[...Array(3)].map((_, index) => (
@@ -66,7 +29,7 @@ const Friends = () => {
         </Link>
       </div>
 
-      {loading ? (
+      {isLoading ? (
         <LoadingSkeleton />
       ) : friends.length === 0 ? (
         <p className="txt">No friends yet.</p>

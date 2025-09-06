@@ -1,15 +1,20 @@
 // components/ProfileCard/ProfileCard.jsx
-import { useState, useEffect, useRef } from "react";
-import { User, ThumbsUp, MessageCircle, UserPlus } from "lucide-react";
-import { useParams } from "react-router-dom";
 import axiosInstance from "@/utils/axios";
 import { jwtDecode } from "jwt-decode";
+import { MessageCircle, ThumbsUp, UserPlus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import ProfileSkeleton from "./ProfileSkeleton";
-import ProfileHeader from "./ProfileHeader";
+import {
+  useAcceptRequest,
+  useCancelRequest,
+  useSendRequest
+} from "@/queries/friendQueries";
 import FriendsPopup from "./FriendsPopup";
 import ProfileDetails from "./ProfileDetails";
+import ProfileHeader from "./ProfileHeader";
+import ProfileSkeleton from "./ProfileSkeleton";
 
 const ProfileCard = ({ isCurrentUser = false }) => {
   // ... keep all your state & logic here
@@ -22,6 +27,10 @@ const ProfileCard = ({ isCurrentUser = false }) => {
   const [hasGivenKudos, setHasGivenKudos] = useState(false);
   const [friendRequestStatus, setFriendRequestStatus] = useState("Add Friend");
   const [isFriendRequestLoading, setIsFriendRequestLoading] = useState(false);
+
+  const { mutate: sendRequest } = useSendRequest();
+  const { mutate: cancelRequest } = useCancelRequest();
+  const { mutate: acceptRequest } = useAcceptRequest();
 
   const { userId } = useParams();
   const shareRef = useRef(null);
@@ -48,53 +57,17 @@ const ProfileCard = ({ isCurrentUser = false }) => {
 
     setIsFriendRequestLoading(true);
     if (friendRequestStatus === "Add Friend") {
-      await sendRequest(userId);
+      sendRequest(userId);
+      setFriendRequestStatus("Cancel Request");
       setIsFriendRequestLoading(false);
     } else if (friendRequestStatus === "Cancel Request") {
-      await cancelRequest(userId);
+      cancelRequest(userId);
+      setFriendRequestStatus("Add Friend");
       setIsFriendRequestLoading(false);
     } else if (friendRequestStatus === "Accept Request") {
-      await acceptRequest(userId);
-      setIsFriendRequestLoading(false);
-    }
-  };
-
-  const sendRequest = async (friendId) => {
-    try {
-      await axiosInstance.post(`/friends/request/${friendId}`, null);
-      setFriendRequestStatus("Cancel Request");
-      toast.success("Friend request sent!");
-    } catch (err) {
-      console.error(err);
-      toast.error(
-        err.response?.data?.message || "Error sending friend request!"
-      );
-    }
-  };
-
-  const cancelRequest = async (friendId) => {
-    try {
-      await axiosInstance.delete(`/friends/sent-requests/${friendId}`);
-      setFriendRequestStatus("Add Friend");
-      toast.info("Friend request canceled.");
-    } catch (err) {
-      console.error(err);
-      toast.error(
-        err.response?.data?.message || "Error canceling friend request!"
-      );
-    }
-  };
-
-  const acceptRequest = async (friendId) => {
-    try {
-      await axiosInstance.post(`/friends/accept/${friendId}`, null);
+      acceptRequest(userId);
       setFriendRequestStatus("Friends");
-      toast.success("Friend request accepted!");
-    } catch (err) {
-      console.error(err);
-      toast.error(
-        err.response?.data?.message || "Error accepting friend request!"
-      );
+      setIsFriendRequestLoading(false);
     }
   };
 

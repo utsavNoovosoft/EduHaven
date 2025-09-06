@@ -1,21 +1,9 @@
-import { useEffect, useState } from "react";
-import axiosInstance from "@/utils/axios";
+import { useSentRequests } from "@/queries/friendQueries";
 import { ArrowLeft, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function SentRequests({ onBack }) {
-  const [sentRequests, setSentRequests] = useState([]);
-
-  useEffect(() => {
-    axiosInstance
-      .get("/friends/sent-requests")
-      .then((response) => {
-        setSentRequests(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching sent requests:", error);
-      });
-  }, []);
+  const { data: sentRequests = [], isLoading } = useSentRequests();
 
   const showSkeletons = sentRequests.length === 0;
 
@@ -50,7 +38,7 @@ function SentRequests({ onBack }) {
         <p className="txt-dim">No sent requests.</p>
       ) : (
         <div className="space-y-4">
-          {sentRequests.map((user) => (
+          {sentRequests?.map((user) => (
             <div key={user._id} className="flex items-center">
               <Link to={`/user/${user._id}`}>
                 {user.ProfilePicture ? (

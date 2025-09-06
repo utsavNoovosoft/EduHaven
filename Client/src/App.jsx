@@ -25,51 +25,60 @@ import "react-toastify/dist/ReactToastify.css";
 import Notes from "./pages/Notes";
 import Delete from "./components/settings/Delete";
 import Chats from "./pages/Chats";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 function App() {
+  const queryClient = new QueryClient();
+
   return (
     <UserProfileProvider>
-      <SocketProvider>
-        <RouterSelector>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="session" element={<Session />} />
-              <Route path="stats" element={<Stats isCurrentUser={true} />} />
-              <Route
-                path="user/:userId"
-                element={<Stats isCurrentUser={false} />}
-              />
-              <Route path="games/*" element={<GameRoom />} />
-              <Route path="notes" element={<Notes />} />
-              <Route path="project-details" element={<ProjectInfo />} />
-              <Route path="settings/" element={<Settings />} />
-              <Route path="friends" element={<FriendsPage />} />
-              <Route path="chat" element={<Chats />} />
-              <Route path="*" element={<PageNotFound />} />
-            </Route>
+      <QueryClientProvider client={queryClient}>
+        <SocketProvider>
+          <RouterSelector>
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="session" element={<Session />} />
+                <Route path="stats" element={<Stats isCurrentUser={true} />} />
+                <Route
+                  path="user/:userId"
+                  element={<Stats isCurrentUser={false} />}
+                />
+                <Route path="games/*" element={<GameRoom />} />
+                <Route path="notes" element={<Notes />} />
+                <Route path="project-details" element={<ProjectInfo />} />
+                <Route path="settings/" element={<Settings />} />
+                <Route path="friends" element={<FriendsPage />} />
+                <Route path="chat" element={<Chats />} />
+                <Route path="*" element={<PageNotFound />} />
+              </Route>
 
-            <Route path="session/:id" element={<StudyRoom />} />
-            <Route path="/signout" element={<Signout />} />
-            <Route path="/verify" element={<OtpInput />} />
-            <Route path="/authenticate" element={<Auth />} />
-             <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="session/:id" element={<StudyRoom />} />
+              <Route path="/signout" element={<Signout />} />
+              <Route path="/verify" element={<OtpInput />} />
+              <Route path="/authenticate" element={<Auth />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/verify-reset-otp" element={<OtpInput />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/auth/google/callback" element={<GoogleRedirect />} />
-            <Route path="/delete-account" element={<Delete />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </RouterSelector>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          closeOnClick
-          pauseOnHover
-          theme="light"
-        />
-      </SocketProvider>
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route
+                path="/auth/google/callback"
+                element={<GoogleRedirect />}
+              />
+              <Route path="/delete-account" element={<Delete />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </RouterSelector>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            closeOnClick
+            pauseOnHover
+            theme="light"
+          />
+        </SocketProvider>
+      </QueryClientProvider>
     </UserProfileProvider>
   );
 }
