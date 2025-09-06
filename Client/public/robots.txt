@@ -30,7 +30,7 @@ Disallow: /*?utm_  # prevent tracking parameters from being indexed
 # ============================
 Allow: /session
 Allow: /stats
-Allow: /notenest
+Allow: /notes
 Allow: /friends
 Allow: /settings
 Allow: /games

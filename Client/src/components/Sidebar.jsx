@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   BarChart2,
-  GamepadIcon,
+  Gamepad2,
   LogIn,
   Radio,
   Settings,
-  Edit3,
   BadgeInfo,
   Users,
-  Wrench,
-  MessageSquareMore,
+  StickyNote,
+  MessageCircle,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -83,13 +82,6 @@ function Sidebar() {
             isActive={location.pathname === "/session"}
             ref={(el) => (linkRefs.current["/session"] = el)}
           />
-          {/* <SidebarLink
-              to="/chat-room"
-              IconComponent={MessageSquareText}
-              label="chat"
-              isActive={location.pathname === "/chat-room"}
-              ref={(el) => (linkRefs.current["/chat-room"] = el)}
-            /> */}
           <SidebarLink
             to="/stats"
             IconComponent={BarChart2}
@@ -98,29 +90,30 @@ function Sidebar() {
             ref={(el) => (linkRefs.current["/stats"] = el)}
           />
           <SidebarLink
+            to="/chat"
+            IconComponent={MessageCircle}
+            label="Chat"
+            isActive={location.pathname === "/chat"}
+            ref={(el) => (linkRefs.current["/chat"] = el)}
+          />
+          <SidebarLink
+            to="/notes"
+            IconComponent={StickyNote}
+            label="Notes"
+            isActive={location.pathname === "/notes"}
+            ref={(el) => (linkRefs.current["/notes"] = el)}
+          />
+          <SidebarLink
             to="/friends"
             IconComponent={Users}
             label="Friends"
             isActive={location.pathname === "/friends"}
             ref={(el) => (linkRefs.current["/friends"] = el)}
           />
-          <SidebarLink
-            to="/chat"
-            IconComponent={MessageSquareMore}
-            label="Chats"
-            isActive={location.pathname === "/chat"}
-            ref={(el) => (linkRefs.current["/chat"] = el)}
-          />
-          <SidebarLink
-            to="/notenest"
-            IconComponent={Wrench}
-            label="Tools"
-            isActive={location.pathname === "/notenest"}
-            ref={(el) => (linkRefs.current["/notenest"] = el)}
-          />
+
           <SidebarLink
             to="/games"
-            IconComponent={GamepadIcon}
+            IconComponent={Gamepad2}
             label="Games"
             isActive={location.pathname === "/games"}
             ref={(el) => (linkRefs.current["/games"] = el)}
