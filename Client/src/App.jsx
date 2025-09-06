@@ -45,7 +45,7 @@ function App() {
                   element={<Stats isCurrentUser={false} />}
                 />
                 <Route path="games/*" element={<GameRoom />} />
-                <Route path="notenest" element={<NoteNest />} />
+                <Route path="notes" element={<Notes />} />
                 <Route path="project-details" element={<ProjectInfo />} />
                 <Route path="settings/" element={<Settings />} />
                 <Route path="friends" element={<FriendsPage />} />

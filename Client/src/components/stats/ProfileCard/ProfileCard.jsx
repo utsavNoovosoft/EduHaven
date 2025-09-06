@@ -9,9 +9,7 @@ import { toast } from "react-toastify";
 import {
   useAcceptRequest,
   useCancelRequest,
-  useFriends,
-  useFriendStats,
-  useSendRequest,
+  useSendRequest
 } from "@/queries/friendQueries";
 import FriendsPopup from "./FriendsPopup";
 import ProfileDetails from "./ProfileDetails";
@@ -23,7 +21,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  // const [friendsList, setFriendsList] = useState([]);
+  const [friendsList, setFriendsList] = useState([]);
   const [showLink, setShowLink] = useState(false);
   const [kudosCount, setKudosCount] = useState(0);
   const [hasGivenKudos, setHasGivenKudos] = useState(false);
@@ -37,21 +35,6 @@ const ProfileCard = ({ isCurrentUser = false }) => {
   const { userId } = useParams();
   const shareRef = useRef(null);
   const popupRef = useRef(null);
-
-  const { data: currentUserFriends, isLoading: isCurrentUserFriendsLoading } =
-    useFriends({ enabled: isCurrentUser });
-
-  const { data: otherUserStats, isLoading: isOtherUserStatsLoading } =
-    useFriendStats(userId, { enabled: !isCurrentUser });
-
-  // Derive friends list and loading state without setState
-  const friendsList = isCurrentUser
-    ? currentUserFriends || []
-    : otherUserStats?.stats?.friends || [];
-
-  const friendsLoading = isCurrentUser
-    ? isCurrentUserFriendsLoading
-    : isOtherUserStatsLoading;
 
   const profilelink = user?._id
     ? `${window.location.origin}/user/${user._id}`
@@ -129,6 +112,47 @@ const ProfileCard = ({ isCurrentUser = false }) => {
   }, [showLink]);
 
   useEffect(() => {
+    // Fetch friends list + count for either current user or the profile user
+    const fetchFriendsForUser = async () => {
+      try {
+        if (isCurrentUser) {
+          // Current (logged-in) user — keep using protected endpoints
+          try {
+            const listRes = await axiosInstance.get("/friends");
+
+            const friends = listRes.data || [];
+            setFriendsList(friends);
+          } catch (err) {
+            console.error("Error fetching current user's friends:", err);
+            setFriendsList([]);
+          }
+
+          return;
+        }
+
+        try {
+          const listRes = await axiosInstance.get(`/friends/${userId}/stats`);
+          setFriendsList(listRes.data.stats.friends || []);
+
+          // console.log(listRes.data);
+        } catch (err) {
+          toast.error("Error fetching profile user's friends");
+          setFriendsList([]);
+          console.error(err);
+        }
+      } catch (error) {
+        console.error("Error fetching friends for profile:", error);
+        setFriendsList([]);
+      }
+    };
+
+    // only fetch when we have userId or we are current user
+    if (isCurrentUser || userId) {
+      fetchFriendsForUser();
+    }
+  }, [isCurrentUser, userId]);
+
+  useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         let response;
@@ -170,7 +194,7 @@ const ProfileCard = ({ isCurrentUser = false }) => {
     }
   }, [showPopup]);
 
-  if (friendsLoading || !user) return <ProfileSkeleton />;
+  if (isLoading || !user) return <ProfileSkeleton />;
 
   return (
     <div className="bg-gradient-to-br from-indigo-500/50 to-purple-500/5 rounded-3xl shadow-md pt-6 w-full h-fit relative overflow-hidden">

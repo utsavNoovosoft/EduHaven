@@ -14,10 +14,9 @@ import {
   fetchFriendRequests,
   fetchSentRequests,
   fetchSuggestedUsers,
-  getFriendStats,
   rejectFriendRequest,
   removeFriend,
-  sendFriendRequest,
+  sendFriendRequest
 } from "../api/friendApi";
 
 export const useFriendRequests = () =>
@@ -78,7 +77,7 @@ export const useFriends = () =>
   useQuery({
     queryKey: ["friends"],
     queryFn: fetchAllFriends,
-    staleTime: 1000 * 60,
+    staleTime: 1000 * 60 * 10,
     onError: (err) => handleApiError(err, "Error fetching friends"),
   });
 
@@ -112,6 +111,8 @@ export const useAllSuggestedUsers = () => {
   return useQuery({
     queryKey: ["users", "all"],
     queryFn: fetchAllSuggestedUsers,
+    staleTime: 1000 * 60,
+    onError: (err) => handleApiError(err, "Error fetching suggested users"),
   });
 };
 
@@ -125,12 +126,5 @@ export const useSendRequest = () => {
       qc.invalidateQueries({ queryKey: ["sentRequests"] });
     },
     onError: (err) => handleApiError(err, "Error sending friend request!"),
-  });
-};
-
-export const useFriendStats = (friendId) => {
-  return useQuery({
-    queryKey: ["friendStats", friendId],
-    queryFn: () => getFriendStats(friendId),
   });
 };

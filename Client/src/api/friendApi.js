@@ -60,8 +60,3 @@ export const sendFriendRequest = async (friendId) => {
   const res = await axiosInstance.post(`/friends/request/${friendId}`, null);
   return res.data;
 };
-
-export const getFriendStats = async (friendId) => {
-  const res = await axiosInstance.get(`/friends/${friendId}/stats`);
-  return res.data;
-};
