@@ -10,14 +10,27 @@ jobs:
     steps:
       - name: Validate PR description
         run: |
-          BODY="${{ github.event.pull_request.body }}"
+          # Safely capture PR body
+          BODY=$(cat << 'EOF'
+          ${{ github.event.pull_request.body }}
+          EOF
+          )
 
           echo "Checking PR body..."
-          
-          # Check for issue reference (e.g. Fixes #123)
-          if ! echo "$BODY" | grep -qE "(Fixes|Closes|Resolves) #[0-9]+"; then
-            echo "PR must reference an issue (e.g., Fixes #123)."
+
+          # Trim whitespace
+          TRIMMED=$(echo "$BODY" | xargs)
+
+          # Rule 1: Must not be empty
+          if [ -z "$TRIMMED" ]; then
+            echo "PR description cannot be empty."
             exit 1
           fi
 
-          echo "✅ PR description is valid."
+          # Rule 2: Must reference an issue OR be at least 10 chars long
+          if ! echo "$TRIMMED" | grep -qE "(Fixes|Closes|Resolves) #[0-9]+" && [ ${#TRIMMED} -lt 10 ]; then
+            echo " PR must either reference an issue (e.g., Fixes #123) OR provide a meaningful description."
+            exit 1
+          fi
+
+          echo "PR description is valid."
