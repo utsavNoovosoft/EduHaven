@@ -6,6 +6,7 @@ const ToolbarButton = ({ onClick, isActive, icon, title }) => (
     style={{
       backgroundColor: isActive ? "var(--btn)" : "transparent",
       color: isActive ? "white" : "var(--txt)",
+      borderRadius: "var(--radius)",
     }}
     onMouseEnter={(e) => {
       if (!isActive) {
@@ -21,5 +22,3 @@ const ToolbarButton = ({ onClick, isActive, icon, title }) => (
     {icon}
   </button>
 );
-
-export default ToolbarButton;

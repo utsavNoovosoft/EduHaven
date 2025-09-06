@@ -18,6 +18,7 @@ import {
   Underline as UnderlineIcn,
   X,
 } from "lucide-react";
+import ToolbarButton from "./ToolbarButton";
 
 const NoteEditor = ({
   selectedNote,
@@ -27,7 +28,6 @@ const NoteEditor = ({
   insertLink,
   insertImage,
   insertTable,
-  ToolbarButton,
 }) => {
   return (
     <div

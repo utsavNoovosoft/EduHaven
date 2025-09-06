@@ -1,4 +1,3 @@
-import React from "react";
 import NoteCard from "./NoteCard";
 
 const NotesList = ({
