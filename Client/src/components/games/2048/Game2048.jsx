@@ -179,8 +179,8 @@ const Game2048 = () => {
         </div>
 
         <div className="flex items-center gap-10">
-          <div className="font-bold text-lg">Score: {score}</div>
-          <div className="font-bold text-lg text-[var(--btn)]">
+          <div className="font-semibold text-lg">Score: {score}</div>
+          <div className="font-semibold text-lg text-[var(--txt)]">
             High Score: {highScore}
           </div>
         </div>
@@ -204,9 +204,9 @@ const Game2048 = () => {
       <div className="flex-1 flex items-center justify-center">
         <div className="">
           {/* Board */}
-          <div className={styles.board}>
+          <div className="grid grid-rows-4 gap-1 2xl:gap-2 aspect-square w-[400px] 2xl:w-[480px]">
             {board.map((row, i) => (
-              <div key={i} className={styles.row}>
+              <div key={i} className="grid grid-cols-4 gap-1 2xl:gap-2">
                 {row.map((cell, j) => (
                   <div
                     key={`${i}-${j}`}

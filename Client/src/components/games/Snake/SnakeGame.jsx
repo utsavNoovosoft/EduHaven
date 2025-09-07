@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import $ from "jquery";
 import styles from "./snake.module.css";
 import { ArrowLeft } from "lucide-react";
@@ -43,12 +43,11 @@ const ToggleSwitch = ({ label, checked, onChange }) => {
 
 const SnakeGame = () => {
   const root = document.documentElement; // or any container element
-  const txtDim = getComputedStyle(root).getPropertyValue("--txt-dim").trim();
-  const btn = getComputedStyle(root).getPropertyValue("--btn").trim();
+  const txtDim = getComputedStyle(root).getPropertyValue("--txt").trim();
 
   const [hiScore, setHiScore] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [gameMode, setGameMode] = useState("Modes");
+  const [gameMode, setGameMode] = useState("settings");
 
   // CHANGED: RENAMED 'settings' TO 'drawingOptions' TO MATCH GAME LOGIC AND ADDED CORRECT KEYS
   const [drawingOptions, setDrawingOptions] = useState({
@@ -84,7 +83,6 @@ const SnakeGame = () => {
     setIsOpen(false); // Close dropdown when a mode is selected
   };
 
-  // CHANGED: RENAMED HANDLER TO MATCH NEW STATE NAME
   const handleDrawingChange = (key) => {
     // This directly manipulates the `drawing` object in the game's scope
     // This is a necessary workaround because the game logic is not React-driven
@@ -496,10 +494,7 @@ const SnakeGame = () => {
 
   return (
     <div className={styles.snakeGame}>
-      <nav
-        className="bg-[var(--bg-sec)] shadow-lg border-b border-[rgba(var(--shadow-rgb),0.08)] px-6 sm:px-7 py-1 flex items-center justify-between fixed top-0 z-20"
-        style={{ width: "94%", left: "80px" }}
-      >
+      <nav className="px-6 flex items-center justify-between w-full">
         <button
           onClick={() => window.history.back()}
           className="flex items-center gap-2 px-3 py-2 text-[txtDim] bg-[var(--bg-ter)] rounded-lg cursor-pointer transition-all duration-200 text-base font-medium hover:bg-ter hover:text-[var(--txt)] shadow-sm"
@@ -556,7 +551,7 @@ const SnakeGame = () => {
         </div>
       </nav>
 
-      <canvas className={styles.canvas} id="c"></canvas>
+      <canvas className={`flex-1 ${styles.canvas}`} id="c"></canvas>
 
       <div className={styles.noticePause}>
         Use space or down to pause and space or up to resume.
