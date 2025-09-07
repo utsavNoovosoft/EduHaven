@@ -43,12 +43,15 @@ const NoteCard = ({
           e.stopPropagation();
           onPin(note.id);
         }}
-        className="absolute top-2 right-2 p-1 rounded-full bg-black/10 hover:bg-black/20"
+        className={`absolute top-2 right-2 p-1 rounded-full bg-black/10 hover:bg-black/20 transition-opacity
+        ${note.isPinned ? "opacity-100" : hovered ? "opacity-100" : "opacity-0"}`}
       >
         <Pin
           size={16}
           style={{
             color: note.isPinned ? "var(--btn)" : "var(--txt-dim)",
+            transform: note.isPinned ? "rotate(45deg)" : "rotate(0deg)",
+            transition: "transform 0.2s ease",
           }}
         />
       </button>
