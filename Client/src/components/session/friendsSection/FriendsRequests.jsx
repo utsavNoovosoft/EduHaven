@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import Avatar from "../../Avatar";
 
 function FriendRequests() {
-  const { data: friendRequests = [], isLoading } = useFriendRequests();
+  let { data: friendRequests = [], isLoading } = useFriendRequests();
 
   const { mutate: acceptRequest } = useAcceptRequest();
   const { mutate: handleRejectRequest } = useRejectRequest();

@@ -43,10 +43,10 @@ function Sidebar() {
         <Link
           to={to}
           ref={ref}
-          className="relative flex flex-col items-center justify-center pt-2.5 pb-1.5 group hover:bg-ter rounded-lg transition-colors"
+          className="relative flex flex-col items-center justify-center pt-2.5 pb-2 group hover:bg-ter rounded-lg transition-colors"
         >
           <IconComponent
-            className={`w-6 h-6 transition-colors duration-300 ${
+            className={`size-5 2xl:size-6 transition-colors duration-300 ${
               isActive ? "txt" : "!txt-disabled group-hover:txt"
             }`}
           />
@@ -74,7 +74,7 @@ function Sidebar() {
             />
           </div>
         </Link>
-        <div className="space-y-5 mt-2">
+        <div className="space-y-2.5 2xl:space-y-4 mt-1 2xl:mt-2">
           <SidebarLink
             to="/session"
             IconComponent={Radio}
@@ -120,7 +120,7 @@ function Sidebar() {
           />
         </div>
 
-        <hr className="border-sec my-5 mx-4" />
+        <hr className="border-[var(--txt-disabled)] opacity-50 md:my-2.5 2xl:my-4 mx-4" />
         <SidebarLink
           to="/project-details"
           IconComponent={BadgeInfo}

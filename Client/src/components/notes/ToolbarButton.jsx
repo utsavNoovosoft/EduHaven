@@ -22,3 +22,5 @@ const ToolbarButton = ({ onClick, isActive, icon, title }) => (
     {icon}
   </button>
 );
+
+export default ToolbarButton;
