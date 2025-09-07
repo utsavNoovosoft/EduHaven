@@ -16,6 +16,7 @@ import {
   UserPlus,
   Video,
   Target,
+  MessageSquare,
 } from "lucide-react";
 import AdCard from "@/components/AdCard";
 import { motion } from "framer-motion";
@@ -351,6 +352,25 @@ export default function Info() {
               </li>
             </ul>
 
+            {/* Feedback Section */}
+            <div className="mt-6 mb-6">
+              <h3 className="semi-bold text-lg txt mb-3">Share Your Feedback</h3>
+              <motion.a
+                href="https://forms.gle/SKL45KczPnVBkY276"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="btn hover:btn-hover transition-colors flex gap-3 items-center px-4 py-3 w-full justify-center rounded-lg"
+              >
+                <MessageSquare className="w-5 h-5" />
+                <span className="text-sm font-medium">Give Feedback</span>
+              </motion.a>
+              <p className="text-xs txt-dim mt-2 text-center">
+                Help us improve EduHaven with your thoughts and suggestions
+              </p>
+            </div>
+
             <div className="mt-6 text-center space-y-2">
               <a
                 href="/privacy"
@@ -365,7 +385,7 @@ export default function Info() {
             className="w-72 mt-8 space-y-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
           >
             <AdCard />
           </motion.div>
