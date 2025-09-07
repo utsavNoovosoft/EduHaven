@@ -1,10 +1,29 @@
+import { useState } from "react";
 import { useFriends, useRemoveFriend } from "@/queries/friendQueries";
 import { User } from "lucide-react";
 import { Link } from "react-router-dom";
+import ConfirmRemoveFriendModal from "../ConfirmRemoveFriendModal";
 
 const Friends = () => {
   const { data: friends, isLoading } = useFriends();
   const { mutate: removeFriend } = useRemoveFriend();
+
+  const [selectedFriend, setSelectedFriend] = useState(null);
+
+  const handleRemoveClick = (friend) => {
+    setSelectedFriend(friend);
+  };
+
+  const confirmRemove = () => {
+    if (selectedFriend) {
+      removeFriend(selectedFriend._id);
+      setSelectedFriend(null);
+    }
+  };
+
+  const cancelRemove = () => {
+    setSelectedFriend(null);
+  };
 
   const LoadingSkeleton = () => (
     <div className="space-y-2 min-w-[600px] rounded-2xl overflow-hidden">
@@ -64,7 +83,7 @@ const Friends = () => {
                 </Link>
               </div>
               <button
-                onClick={() => removeFriend(friend._id)}
+                onClick={() => handleRemoveClick(friend)}
                 disabled={friend.isRemoved}
                 className={`transition-colors duration-300 txt px-3 py-1 rounded ${
                   friend.isRemoved ? "bg-ter" : "bg-ter hover:bg-red-500"
@@ -75,6 +94,13 @@ const Friends = () => {
             </li>
           ))}
         </ul>
+      )}
+
+      {selectedFriend && (
+        <ConfirmRemoveFriendModal
+          onConfirm={confirmRemove}
+          onCancel={cancelRemove}
+        />
       )}
     </div>
   );
