@@ -11,10 +11,13 @@ const Account = () => {
         <p>Change your Email</p>
         <ChevronRight />
       </div>
-      <div className="flex w-full items-center justify-between hover:bg-sec p-4 rounded-xl cursor-not-allowed">
+      <Link
+        to="/forgot-password"
+        className="flex w-full items-center justify-between hover:bg-sec p-4 rounded-xl"
+      >
         <p>Change your Password</p>
         <ChevronRight />
-      </div>
+      </Link>
       <Link
         to="/delete-account"
         className="flex w-full items-center justify-between hover:bg-sec p-4 rounded-xl"
