@@ -120,9 +120,10 @@ body {
 }
 
 .ProseMirror mark {
-  background-color: var(--yellow-light);
+  background-color: color-mix(in srgb, var(--btn) 75%, transparent);
   border-radius: 2px;
-  padding: 0 2px;
+  padding: 0 4px;
+  color: var(--txt);
 }
 
 .ProseMirror img {
