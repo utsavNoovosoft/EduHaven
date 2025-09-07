@@ -23,6 +23,7 @@ import ToolbarButton from "./ToolbarButton";
 const NoteEditor = ({
   selectedNote,
   setSelectedNote,
+  colors,
   editor,
   updateNote,
   insertLink,
@@ -32,7 +33,11 @@ const NoteEditor = ({
   return (
     <div
       className="flex-1 flex flex-col rounded-tl-3xl"
-      style={{ backgroundColor: "var(--bg-ter)" }}
+      style={{
+        backgroundColor: colors.find((c) => c.name === selectedNote.color)
+          ?.style.backgroundColor,
+        color: "var(--txt)",
+      }}
     >
       {/* Editor Header */}
       <div

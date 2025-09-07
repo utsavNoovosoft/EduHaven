@@ -1,3 +1,14 @@
+:root {
+  --note-default: rgba(128, 128, 128, 0.15);
+  --note-red: rgba(255, 99, 71, 0.2);
+  --note-orange: rgba(255, 165, 0, 0.2);
+  --note-yellow: rgba(255, 223, 0, 0.2);
+  --note-green: rgba(50, 205, 50, 0.2);
+  --note-blue: rgba(70, 130, 180, 0.2);
+  --note-purple: rgba(138, 43, 226, 0.2);
+  --note-pink: rgba(255, 105, 180, 0.2);
+}
+
 * {
   box-sizing: border-box;
 }
