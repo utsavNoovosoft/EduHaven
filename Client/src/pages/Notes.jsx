@@ -94,6 +94,7 @@ const Notes = () => {
         class: "prose prose-lg max-w-none focus:outline-none",
       },
     },
+    shouldRerenderOnTransaction: true,
   });
 
   useEffect(() => {
@@ -267,7 +268,6 @@ const Notes = () => {
           />
         )}
       </div>
-
     </div>
   );
 };
