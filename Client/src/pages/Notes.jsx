@@ -21,14 +21,14 @@ import NotesList from "@/components/notes/NotesList.jsx";
 import "@/components/notes/note.css";
 
 const colors = [
-  { name: "default", style: { backgroundColor: "var(--bg-sec)" } },
-  { name: "red", style: { backgroundColor: "var(--red-light)" } },
-  { name: "orange", style: { backgroundColor: "var(--orange-light)" } },
-  { name: "yellow", style: { backgroundColor: "var(--yellow-light)" } },
-  { name: "green", style: { backgroundColor: "var(--green-light)" } },
-  { name: "blue", style: { backgroundColor: "var(--blue-light)" } },
-  { name: "purple", style: { backgroundColor: "var(--purple-light)" } },
-  { name: "pink", style: { backgroundColor: "var(--pink-light)" } },
+  { name: "default", style: { backgroundColor: "var(--note-default)" } },
+  { name: "red", style: { backgroundColor: "var(--note-red)" } },
+  { name: "orange", style: { backgroundColor: "var(--note-orange)" } },
+  { name: "yellow", style: { backgroundColor: "var(--note-yellow)" } },
+  { name: "green", style: { backgroundColor: "var(--note-green)" } },
+  { name: "blue", style: { backgroundColor: "var(--note-blue)" } },
+  { name: "purple", style: { backgroundColor: "var(--note-purple)" } },
+  { name: "pink", style: { backgroundColor: "var(--note-pink)" } },
 ];
 
 const Notes = () => {
@@ -260,6 +260,7 @@ const Notes = () => {
           <NoteEditor
             selectedNote={selectedNote}
             setSelectedNote={setSelectedNote}
+            colors={colors}
             editor={editor}
             updateNote={updateNote}
             insertLink={insertLink}
