@@ -228,32 +228,34 @@ const Notes = () => {
       className="min-h-screen font-sans"
       style={{ backgroundColor: "var(--bg-primary)", color: "var(--txt)" }}
     >
-      {/* Header */}
-      <NoteHeader
-        createNewNote={createNewNote}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
-
-      <div className="flex" style={{ height: "calc(100vh - 73px)" }}>
-        {/* Notes List */}
-        <NotesList
-          selectedNote={selectedNote}
-          pinnedNotes={pinnedNotes}
-          unpinnedNotes={unpinnedNotes}
-          filteredNotes={filteredNotes}
-          searchTerm={searchTerm}
-          setSelectedNote={setSelectedNote}
-          togglePin={togglePin}
-          deleteNote={deleteNote}
-          duplicateNote={duplicateNote}
-          exportNote={exportNote}
-          changeColor={changeColor}
-          showColorPicker={showColorPicker}
-          setShowColorPicker={setShowColorPicker}
-          colors={colors}
-          getPlainTextPreview={getPlainTextPreview}
-        />
+      <div className="flex h-screen">
+        {/* notes page (also works as sidebar} */}
+        <div
+          className={`${selectedNote ? "w-80" : "w-full"} overflow-auto p-4`}
+        >
+          <NoteHeader
+            selectedNote={selectedNote}
+            createNewNote={createNewNote}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
+          <NotesList
+            pinnedNotes={pinnedNotes}
+            unpinnedNotes={unpinnedNotes}
+            filteredNotes={filteredNotes}
+            searchTerm={searchTerm}
+            setSelectedNote={setSelectedNote}
+            togglePin={togglePin}
+            deleteNote={deleteNote}
+            duplicateNote={duplicateNote}
+            exportNote={exportNote}
+            changeColor={changeColor}
+            showColorPicker={showColorPicker}
+            setShowColorPicker={setShowColorPicker}
+            colors={colors}
+            getPlainTextPreview={getPlainTextPreview}
+          />
+        </div>
 
         {/* Note Editor */}
         {selectedNote && (
