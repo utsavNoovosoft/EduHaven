@@ -44,7 +44,10 @@ const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5173";
 
 // ---- Middlewares (safe defaults) ----
 app.use(compression()); // optional, small perf boost
-app.use(morgan(NODE_ENV === "development" ? "dev" : "combined"));
+
+if (NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 // Apply project-specific security middleware (keep this)
 applySecurity(app);
@@ -189,7 +192,9 @@ process.on("SIGINT", async () => {
 
   try {
     // Ask user to confirm exit. Customize the message if you want.
-    const answer = await waitForKeypress("\nAre you sure you want to exit? (Y/N): ");
+    const answer = await waitForKeypress(
+      "\nAre you sure you want to exit? (Y/N): "
+    );
 
     sigintPromptActive = false;
 
@@ -224,7 +229,6 @@ process.on("unhandledRejection", (reason) => {
   if (!shuttingDown) doGracefulShutdown("unhandledRejection");
 });
 // ---------------------------------------------------------------------
-
 
 // Start: ensure DB connected first, then start server and initialize sockets
 async function start() {
