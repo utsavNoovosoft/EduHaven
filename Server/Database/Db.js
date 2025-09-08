@@ -78,7 +78,7 @@ export const ConnectDB = async ({
       // exponential backoff before retrying
       const delay = initialDelayMs * Math.pow(2, attempt - 1);
       console.log(`⏳ Waiting ${delay}ms before next retry...`);
-      // eslint-disable-next-line no-await-in-loop
+       
       await wait(delay);
     }
   }
