@@ -1,15 +1,13 @@
 import express from "express";
 import { createServer } from "http";
-import { Server } from "socket.io";
 import fetch, { Headers, Request, Response } from "node-fetch";
-import { PORT, NODE_ENV, CORS_ORIGIN } from "./Config/envConfig.js";
+import { PORT } from "./Config/envConfig.js";
 import { applyCommonMiddleware } from "./Config/commonMiddlewares.js";
 import { ConnectDB } from "./Database/Db.js";
 import { mountRoutes } from "./Routes/routes.js";
 import { mountHealthRoutes } from "./Routes/HealthRoutes.js";
 import { applySecurity } from "./security/securityMiddleware.js";
-
-import { initializeSocket } from "./Socket/socket.js";
+import { createSocket, initSocketHandlers } from "./config/socketConfig.js";
 import notFound from "./Middlewares/notFound.js";
 import errorHandler from "./Middlewares/errorHandler.js";
 
@@ -42,14 +40,7 @@ app.use(errorHandler);
 const server = createServer(app);
 
 // Create socket.io instance; we will initialize handlers after DB connect
-const io = new Server(server, {
-  cors: {
-    origin: CORS_ORIGIN,
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-  pingTimeout: 60000,
-});
+const io = createSocket(server);
 
 // -------------------- Interactive graceful shutdown --------------------
 import readline from "readline";
@@ -177,7 +168,7 @@ async function start() {
     await ConnectDB(); // ensure ConnectDB throws on failure
 
     // Initialize your socket handlers after DB ready
-    initializeSocket(io);
+    initSocketHandlers(io);
 
     server.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);
