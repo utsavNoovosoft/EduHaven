@@ -207,8 +207,8 @@ const OtpInput = () => {
 
   const getDescription = () => {
     return verificationType === "reset"
-      ? `We've sent a 6-digit verification code to ${email}. Please enter it below to continue with password reset.`
-      : "We've sent a 6-digit verification code to your email address. Please enter it below to continue.";
+      ? `We have sent a 6-digit verification code to ${email}. Please enter it below to continue with password reset.`
+      : "We have sent a 6-digit verification code to your email address. Please enter it below to continue.";
   };
 
   const getSuccessMessage = () => {
@@ -275,7 +275,7 @@ const OtpInput = () => {
           </h1>
           <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
             {getDescription()}
-            We've sent a 6-digit verification code to your email address. Please
+            We have sent a 6-digit verification code to your email address. Please
             enter it below to continue.
           </p>
         </div>
@@ -331,7 +331,7 @@ const OtpInput = () => {
 
         <div className="text-center mb-4">
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Didn't receive the code?{" "}
+            Did not receive the code?{" "}
             <button
               onClick={handleResendOtp}
               className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"

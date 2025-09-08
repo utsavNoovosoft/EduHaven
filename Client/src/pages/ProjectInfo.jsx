@@ -207,7 +207,7 @@ export default function Info() {
               <SmilePlus /> Why It Stands Out?
             </h3>
             <p className="txt-dim">
-              EduHaven is more than just a study app—it's a community-driven,
+              EduHaven is more than just a study app—it is a community-driven,
               data-backed platform that fosters productivity, teamwork, and
               personalized learning. By leveraging real-time features and
               gamification, it ensures students stay engaged and on track.

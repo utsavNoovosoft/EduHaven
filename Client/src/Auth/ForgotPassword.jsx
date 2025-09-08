@@ -131,7 +131,7 @@ function ForgotPassword() {
                 Forgot Password?
               </h2>
               <p className="text-gray-600 dark:text-gray-400 text-sm">
-                 Enter your email address and we'll send you an OTP to reset your password
+                 Enter your email address and we will send you an OTP to reset your password
               </p>
             </div>
                        
