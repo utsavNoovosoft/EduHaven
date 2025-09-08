@@ -1,12 +1,9 @@
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import cors from "cors";
-import cookieParser from "cookie-parser";
 import fetch, { Headers, Request, Response } from "node-fetch";
-import compression from "compression";
-import morgan from "morgan";
 import { PORT, NODE_ENV, CORS_ORIGIN } from "./config.js";
+import { applyCommonMiddleware } from "./middlewares.js";
 import { ConnectDB } from "./Database/Db.js";
 import authRoutes from "./Routes/AuthRoutes.js";
 import TodoRoutes from "./Routes/ToDoRoutes.js";
@@ -35,32 +32,12 @@ if (!globalThis.fetch) {
 
 const app = express();
 
-// ---- Middlewares (safe defaults) ----
-app.use(compression()); // optional, small perf boost
-app.use(morgan(NODE_ENV === "development" ? "dev" : "combined"));
 
 // Apply project-specific security middleware (keep this)
 applySecurity(app);
 
-// body parsing with limits to avoid huge payloads
-app.use(express.json({ limit: "100kb" }));
-app.use(express.urlencoded({ extended: true, limit: "100kb" }));
+applyCommonMiddleware(app);
 
-// CORS: prefer explicit origin check rather than open wildcard
-app.use(
-  cors({
-    origin: (origin, cb) => {
-      // allow non-browser tools (no origin)
-      if (!origin) return cb(null, true);
-      if (origin === CORS_ORIGIN) return cb(null, true);
-      cb(new Error("CORS blocked by server"), false);
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  })
-);
-
-app.use(cookieParser());
 
 // ---- Health + basic routes ----
 app.get("/uptime", (req, res) =>
