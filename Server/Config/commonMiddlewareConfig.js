@@ -8,8 +8,9 @@ import { NODE_ENV, CORS_ORIGIN } from "./envConfig.js";
 export function applyCommonMiddleware(app) {
   // ---- Middlewares (safe defaults) ----
   app.use(compression()); // optional, small perf boost
-  app.use(morgan(NODE_ENV === "development" ? "dev" : "combined"));
-
+  if (NODE_ENV === "development") {
+    app.use(morgan("dev"));
+  }
   // body parsing with limits to avoid huge payloads
   app.use(express.json({ limit: "100kb" }));
   app.use(express.urlencoded({ extended: true, limit: "100kb" }));
