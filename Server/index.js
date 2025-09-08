@@ -36,7 +36,6 @@ mountRoutes(app)
 app.use(notFound);
 app.use(errorHandler);
 
-// Create HTTP server (but do not listen yet)
 const server = createServer(app);
 
 // Create socket.io instance; we will initialize handlers after DB connect
@@ -44,13 +43,11 @@ const io = createSocket(server);
 
 setupGracefulShutdown(server);
 
-// Start: ensure DB connected first, then start server and initialize sockets
 async function start() {
   try {
     console.log("🚀 Starting server...");
-    await ConnectDB(); // ensure ConnectDB throws on failure
+    await ConnectDB();
 
-    // Initialize your socket handlers after DB ready
     initSocketHandlers(io);
 
     server.listen(PORT, () => {

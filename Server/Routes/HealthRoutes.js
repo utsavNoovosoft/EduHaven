@@ -1,7 +1,6 @@
 import { NODE_ENV } from "../Config/envConfig.js";
 
 export function mountHealthRoutes(app) {
-    // ---- Health + basic routes ----
     app.get("/uptime", (req, res) =>
         res.status(200).json({
             status: "ok",
