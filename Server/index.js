@@ -1,16 +1,13 @@
-// Server/index.js (improved)
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
-import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import fetch, { Headers, Request, Response } from "node-fetch";
 import compression from "compression";
 import morgan from "morgan";
-
+import { PORT, NODE_ENV, CORS_ORIGIN } from "./config.js";
 import { ConnectDB } from "./Database/Db.js";
-
 import authRoutes from "./Routes/AuthRoutes.js";
 import TodoRoutes from "./Routes/ToDoRoutes.js";
 import NotesRoutes from "./Routes/NotesRoutes.js";
@@ -27,7 +24,6 @@ import { initializeSocket } from "./Socket/socket.js";
 import notFound from "./Middlewares/notFound.js";
 import errorHandler from "./Middlewares/errorHandler.js";
 
-dotenv.config();
 
 // Polyfill fetch for Node (if needed)
 if (!globalThis.fetch) {
@@ -38,9 +34,6 @@ if (!globalThis.fetch) {
 }
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
-const NODE_ENV = process.env.NODE_ENV || "development";
-const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5173";
 
 // ---- Middlewares (safe defaults) ----
 app.use(compression()); // optional, small perf boost
