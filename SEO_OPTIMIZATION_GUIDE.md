@@ -40,7 +40,7 @@ This document outlines all the SEO optimizations implemented for the EduHaven ed
 
 ### 3. Performance Optimizations
 
-#### Vite Configuration (`Client/vite.config.js`)
+#### Vite Configuration (`Client/vite.envConfig.js`)
 - **Compression**: Gzip and Brotli compression
 - **Code Splitting**: Manual chunk optimization
 - **Minification**: Terser optimization with console removal
@@ -125,7 +125,7 @@ This document outlines all the SEO optimizations implemented for the EduHaven ed
 6. Test performance metrics
 
 ### Configuration Files
-- `vite.config.js` - Build optimization
+- `vite.envConfig.js` - Build optimization
 - `sw.js` - Service worker
 - `robots.txt` - Crawler guidance
 - `sitemap.xml` - Page indexing

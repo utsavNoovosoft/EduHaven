@@ -1,4 +1,4 @@
-import { NODE_ENV } from "../config.js";
+import { NODE_ENV } from "../Config/envConfig.js";
 
 export function mountHealthRoutes(app) {
     // ---- Health + basic routes ----

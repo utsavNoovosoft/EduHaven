@@ -3,9 +3,7 @@ import morgan from "morgan";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { NODE_ENV, CORS_ORIGIN } from "./config.js";
-import authRoutes from "./Routes/AuthRoutes.js";
-import {app} from "./index.js";
+import { NODE_ENV, CORS_ORIGIN } from "./envConfig.js";
 
 export function applyCommonMiddleware(app) {
     // ---- Middlewares (safe defaults) ----
