@@ -36,7 +36,7 @@ const Notes = () => {
     {
       id: 1,
       title: "Welcome to Eduhaven Notes!",
-      content: `<h1>Welcome to Eduhaven Notes!</h1><p>This is a modern notes feature with rich text editing capabilities, similar to Notion.</p><p>You can:</p><ul><li>Create <strong>bold</strong> and <em>italic</em> text</li><li>Add headers, lists, and more</li><li>Use the toolbar above for formatting</li><li>Create task lists</li></ul><p>Try selecting text and using the formatting toolbar above!</p>`,
+      content: `<p>Create notes with modern features and rich text editing capabilities.</p><p>You can:</p><ul><li>Create <strong>bold</strong> and <em>italic</em> text</li><li>Add headers, lists, and more</li><li>Use the toolbar above for formatting</li><li>Create task lists</li><li>Share notes in real-time with your friends</li></ul><p>Try selecting text and using the formatting toolbar above!</p>`,
       createdAt: new Date().toISOString(),
       isPinned: false,
       color: "default",
