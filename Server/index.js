@@ -2,7 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import fetch, { Headers, Request, Response } from "node-fetch";
 import { PORT } from "./Config/envConfig.js";
-import { applyCommonMiddleware } from "./Config/commonMiddlewares.js";
+import { applyCommonMiddleware } from "./Config/commonMiddlewareConfig.js";
 import { ConnectDB } from "./Database/Db.js";
 import { mountRoutes } from "./Routes/routes.js";
 import { mountHealthRoutes } from "./Routes/HealthRoutes.js";
