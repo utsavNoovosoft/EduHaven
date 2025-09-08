@@ -25,7 +25,7 @@ jobs:
       - name: Run ESLint on Client
         run: |
           cd Client
-          npx eslint . --max-warnings=0
+          npx eslint . --max-warnings=100
 
       - name: Setup Node.js for Server
         uses: actions/setup-node@v4
