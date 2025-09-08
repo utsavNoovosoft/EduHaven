@@ -6,7 +6,7 @@ import { PORT, NODE_ENV, CORS_ORIGIN } from "./config.js";
 import { applyCommonMiddleware } from "./middlewares.js";
 import { ConnectDB } from "./Database/Db.js";
 import { mountRoutes } from "./Routes/routes.js";
-// Security Middleware
+import { mountHealthRoutes } from "./Routes/HealthRoutes.js";
 import { applySecurity } from "./security/securityMiddleware.js";
 
 import { initializeSocket } from "./Socket/socket.js";
@@ -30,17 +30,7 @@ applySecurity(app);
 
 applyCommonMiddleware(app);
 
-
-// ---- Health + basic routes ----
-app.get("/uptime", (req, res) =>
-  res.status(200).json({
-    status: "ok",
-    message: "Server is healthy",
-    timestamp: new Date().toISOString(),
-  })
-);
-
-app.get("/", (req, res) => res.send(`Hello, World! (${NODE_ENV})`));
+mountHealthRoutes(app);
 
 mountRoutes(app)
 
