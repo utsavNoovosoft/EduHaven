@@ -8,12 +8,12 @@ import FriendsRoutes from "./FriendsRoutes.js";
 import UserRoutes from "./UserRoutes.js";
 
 export function mountRoutes(app) {
-    app.use("/auth", authRoutes);
-    app.use("/todo", TodoRoutes);
-    app.use("/note", NotesRoutes);
-    app.use("/events", EventRoutes);
-    app.use("/study-sessions", StudySessionRoutes);
-    app.use("/session-room", SessionRoomRoutes);
-    app.use("/friends", FriendsRoutes);
-    app.use("/user", UserRoutes);
+  app.use("/auth", authRoutes);
+  app.use("/todo", TodoRoutes);
+  app.use("/note", NotesRoutes);
+  app.use("/events", EventRoutes);
+  app.use("/study-sessions", StudySessionRoutes);
+  app.use("/session-room", SessionRoomRoutes);
+  app.use("/friends", FriendsRoutes);
+  app.use("/user", UserRoutes);
 }

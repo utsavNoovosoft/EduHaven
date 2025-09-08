@@ -22,7 +22,6 @@ if (!globalThis.fetch) {
 
 const app = express();
 
-
 // Apply project-specific security middleware (keep this)
 applySecurity(app);
 
@@ -30,7 +29,7 @@ applyCommonMiddleware(app);
 
 mountHealthRoutes(app);
 
-mountRoutes(app)
+mountRoutes(app);
 
 // 404 + error middleware
 app.use(notFound);
