@@ -1,6 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { CheckCircle, Mail, ArrowLeft, RefreshCw } from "lucide-react";
 import { toast } from "react-toastify";
@@ -117,7 +115,6 @@ const OtpInput = () => {
           localStorage.setItem("otpVerified", "true");
 
           setTimeout(() => {
-             
             navigate("/reset-password");
           }, 1500);
         } else {
@@ -232,7 +229,9 @@ const OtpInput = () => {
         <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md p-8 rounded-3xl shadow-2xl max-w-md w-full text-center transition-colors">
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4 animate-bounce" />
           <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-            {verificationType === "reset" ? "OTP Verified Successfully!" : "Verification Successful!"}
+            {verificationType === "reset"
+              ? "OTP Verified Successfully!"
+              : "Verification Successful!"}
           </h2>
           <p className="text-gray-600 dark:text-gray-300">
             {getSuccessMessage()}
@@ -275,7 +274,7 @@ const OtpInput = () => {
             {getTitle()}
           </h1>
           <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-             {getDescription()}
+            {getDescription()}
             We've sent a 6-digit verification code to your email address. Please
             enter it below to continue.
           </p>
@@ -285,7 +284,7 @@ const OtpInput = () => {
         <div className="mb-6">
           <div className="flex justify-center gap-3 mb-4">
             {otp.map((digit, index) => (
-              <Input
+              <input
                 key={index}
                 ref={(el) => (inputRefs.current[index] = el)}
                 type="text"
@@ -300,7 +299,6 @@ const OtpInput = () => {
                       : error
                       ? "border-red-300 bg-red-50 dark:bg-red-900"
                       : "border-gray-300 dark:border-gray-600 hover:border-blue-300 focus:border-blue-500"
-
                   } focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800`}
                 disabled={isVerifying}
               />
@@ -314,7 +312,7 @@ const OtpInput = () => {
         </div>
 
         {/* Verify Button */}
-        <Button
+        <button
           onClick={handleVerifyOtp}
           disabled={isVerifying || otp.join("").length !== 6}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed mb-4"
@@ -327,7 +325,7 @@ const OtpInput = () => {
           ) : (
             "Verify OTP"
           )}
-        </Button>
+        </button>
 
         {/* Resend OTP */}
 
