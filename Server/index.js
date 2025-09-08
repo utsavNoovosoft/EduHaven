@@ -5,15 +5,7 @@ import fetch, { Headers, Request, Response } from "node-fetch";
 import { PORT, NODE_ENV, CORS_ORIGIN } from "./config.js";
 import { applyCommonMiddleware } from "./middlewares.js";
 import { ConnectDB } from "./Database/Db.js";
-import authRoutes from "./Routes/AuthRoutes.js";
-import TodoRoutes from "./Routes/ToDoRoutes.js";
-import NotesRoutes from "./Routes/NotesRoutes.js";
-import EventRoutes from "./Routes/EventRoutes.js";
-import StudySessionRoutes from "./Routes/StudySessionRoutes.js";
-import SessionRoomRoutes from "./Routes/SessionRoomRoutes.js";
-import FriendsRoutes from "./Routes/FriendsRoutes.js";
-import UserRoutes from "./Routes/UserRoutes.js";
-
+import { mountRoutes } from "./Routes/routes.js";
 // Security Middleware
 import { applySecurity } from "./security/securityMiddleware.js";
 
@@ -50,15 +42,7 @@ app.get("/uptime", (req, res) =>
 
 app.get("/", (req, res) => res.send(`Hello, World! (${NODE_ENV})`));
 
-// ---- API routes ----
-app.use("/auth", authRoutes);
-app.use("/todo", TodoRoutes);
-app.use("/note", NotesRoutes);
-app.use("/events", EventRoutes);
-app.use("/study-sessions", StudySessionRoutes);
-app.use("/session-room", SessionRoomRoutes);
-app.use("/friends", FriendsRoutes);
-app.use("/user", UserRoutes);
+mountRoutes(app)
 
 // 404 + error middleware
 app.use(notFound);
