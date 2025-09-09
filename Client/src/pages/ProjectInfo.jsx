@@ -354,7 +354,9 @@ export default function Info() {
 
             {/* Feedback Section */}
             <div className="mt-6 mb-6">
-              <h3 className="semi-bold text-lg txt mb-3">Share Your Feedback</h3>
+              <h3 className="semi-bold text-lg txt mb-3">
+                Share Your Feedback
+              </h3>
               <motion.a
                 href="https://forms.gle/SKL45KczPnVBkY276"
                 target="_blank"

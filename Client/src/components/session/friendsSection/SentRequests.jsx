@@ -14,7 +14,10 @@ function SentRequests({ onBack }) {
         {Array(4)
           .fill()
           .map((key) => (
-            <div key={key} className="flex justify-between items-center space-x-2 my-2">
+            <div
+              key={key}
+              className="flex justify-between items-center space-x-2 my-2"
+            >
               <div className="w-10 aspect-square bg-gray-500/20 rounded-full"></div>
               <div className="flex-1 flex flex-col justify-center *:items-start space-y-2">
                 <div className=" bg-gray-500/20 w-full h-4 rounded-md"></div>

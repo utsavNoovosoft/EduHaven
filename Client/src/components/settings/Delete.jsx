@@ -79,7 +79,8 @@ const Delete = () => {
         </div>
 
         <p className="text-sm text-center text-black/80 mb-6">
-          If you are facing issues, please contact support first before deleting.
+          If you are facing issues, please contact support first before
+          deleting.
         </p>
 
         {/* Buttons */}

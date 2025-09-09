@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "react-toastify";
 import axiosInstance from "@/utils/axios";
@@ -139,7 +139,7 @@ function Login() {
             )}
           </div>
           <div className="text-right mt-2 mb-4">
-             <Link
+            <Link
               to="/forgot-password"
               className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
             >
