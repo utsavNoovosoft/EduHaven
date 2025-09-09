@@ -189,7 +189,9 @@ process.on("SIGINT", async () => {
 
   try {
     // Ask user to confirm exit. Customize the message if you want.
-    const answer = await waitForKeypress("\nAre you sure you want to exit? (Y/N): ");
+    const answer = await waitForKeypress(
+      "\nAre you sure you want to exit? (Y/N): "
+    );
 
     sigintPromptActive = false;
 
@@ -224,7 +226,6 @@ process.on("unhandledRejection", (reason) => {
   if (!shuttingDown) doGracefulShutdown("unhandledRejection");
 });
 // ---------------------------------------------------------------------
-
 
 // Start: ensure DB connected first, then start server and initialize sockets
 async function start() {

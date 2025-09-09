@@ -48,7 +48,9 @@ export const ConnectDB = async ({
     try {
       attempt += 1;
       if (attempt > 1) {
-        console.log(`🔁 Retry ${attempt}/${retries + 1} - attempting MongoDB connection...`);
+        console.log(
+          `🔁 Retry ${attempt}/${retries + 1} - attempting MongoDB connection...`
+        );
       } else {
         console.log("🔌 Attempting to connect to MongoDB...");
       }
@@ -78,7 +80,7 @@ export const ConnectDB = async ({
       // exponential backoff before retrying
       const delay = initialDelayMs * Math.pow(2, attempt - 1);
       console.log(`⏳ Waiting ${delay}ms before next retry...`);
-       
+
       await wait(delay);
     }
   }
