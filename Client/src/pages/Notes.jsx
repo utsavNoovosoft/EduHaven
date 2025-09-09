@@ -12,13 +12,21 @@ import Typography from "@tiptap/extension-typography";
 import Underline from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import NoteEditor from "@/components/notes/NoteEditor.jsx";
 import NoteHeader from "@/components/notes/NoteHeader.jsx";
 import NotesList from "@/components/notes/NotesList.jsx";
 
+import {
+  useCreateNote,
+  useDeleteNote,
+  useNotes,
+  useUpdateNote,
+} from "@/queries/NoteQueries";
+
 import "@/components/notes/note.css";
+import { toast } from "react-toastify";
 
 const colors = [
   { name: "default", style: { backgroundColor: "var(--note-default)" } },
@@ -32,20 +40,16 @@ const colors = [
 ];
 
 const Notes = () => {
-  const [notes, setNotes] = useState([
-    {
-      id: 1,
-      title: "Welcome to Eduhaven Notes!",
-      content: `<p>Create notes with modern features and rich text editing capabilities.</p><p>You can:</p><ul><li>Create <strong>bold</strong> and <em>italic</em> text</li><li>Add headers, lists, and more</li><li>Use the toolbar above for formatting</li><li>Create task lists</li><li>Share notes in real-time with your friends</li></ul><p>Try selecting text and using the formatting toolbar above!</p>`,
-      createdAt: new Date().toISOString(),
-      isPinned: false,
-      color: "default",
-    },
-  ]);
+  const { data: notes = [], isLoading } = useNotes();
+  const createNoteMutation = useCreateNote();
+  const updateNoteMutation = useUpdateNote();
+  const deleteNoteMutation = useDeleteNote();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedNote, setSelectedNote] = useState(null);
   const [showColorPicker, setShowColorPicker] = useState(null);
+
+  const typingTimeoutRef = useRef(null);
 
   const editor = useEditor({
     extensions: [
@@ -84,10 +88,14 @@ const Notes = () => {
     ],
     content: selectedNote?.content || "",
     onUpdate: ({ editor }) => {
-      if (selectedNote) {
-        const content = editor.getHTML();
-        updateNote(selectedNote.id, { content });
-      }
+      if (!selectedNote) return;
+
+      const content = editor.getHTML();
+
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = setTimeout(() => {
+        updateNote(selectedNote._id, { content });
+      }, 1500); // waits 1500ms after last keystroke
     },
     editorProps: {
       attributes: {
@@ -107,36 +115,37 @@ const Notes = () => {
   }, [selectedNote, editor]);
 
   const createNewNote = () => {
-    const newNote = {
-      id: Date.now(),
-      title: "",
-      content: "",
-      createdAt: new Date().toISOString(),
-      isPinned: false,
-      color: "default",
-    };
-    setNotes([newNote, ...notes]);
-    setSelectedNote(newNote);
+    createNoteMutation.mutate(
+      {
+        title: `Note ${notes.length + 1}`,
+        content: "Write here...",
+        color: "default",
+        isPinned: false,
+      },
+      {
+        onSuccess: (newNote) => setSelectedNote(newNote),
+      }
+    );
   };
 
   const updateNote = (id, updates) => {
-    setNotes(
-      notes.map((note) => (note.id === id ? { ...note, ...updates } : note))
-    );
-    if (selectedNote && selectedNote.id === id) {
+    updateNoteMutation.mutate({ id, ...updates });
+    if (selectedNote && selectedNote._id === id) {
       setSelectedNote({ ...selectedNote, ...updates });
     }
   };
 
   const deleteNote = (id) => {
-    setNotes(notes.filter((note) => note.id !== id));
-    if (selectedNote && selectedNote.id === id) {
-      setSelectedNote(null);
-    }
+    deleteNoteMutation.mutate(id, {
+      onSuccess: () => {
+        toast.success("Note deleted!");
+        if (selectedNote?._id === id) setSelectedNote(null);
+      },
+    });
   };
 
   const togglePin = (id) => {
-    const note = notes.find((n) => n.id === id);
+    const note = notes.find((n) => n._id === id);
     updateNote(id, { isPinned: !note.isPinned });
   };
 
@@ -146,14 +155,14 @@ const Notes = () => {
   };
 
   const duplicateNote = (note) => {
-    const newNote = {
-      ...note,
-      id: Date.now(),
-      title: note.title + " (Copy)",
-      createdAt: new Date().toISOString(),
-      isPinned: false,
-    };
-    setNotes([newNote, ...notes]);
+    // const newNote = {
+    //   ...note,
+    //   id: Date.now(),
+    //   title: note.title + " (Copy)",
+    //   createdAt: new Date().toISOString(),
+    //   isPinned: false,
+    // };
+    // setNotes([newNote, ...notes]);
   };
 
   const exportNote = (note) => {
@@ -220,8 +229,12 @@ const Notes = () => {
     return matchesSearch;
   });
 
-  const pinnedNotes = filteredNotes.filter((note) => note.isPinned);
-  const unpinnedNotes = filteredNotes.filter((note) => !note.isPinned);
+  const pinnedNotes = (notes || []).filter((note) => note.isPinned);
+  const unpinnedNotes = (notes || []).filter((note) => !note.isPinned);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div

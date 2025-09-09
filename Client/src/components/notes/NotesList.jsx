@@ -35,7 +35,7 @@ const NotesList = ({
           >
             {pinnedNotes.map((note) => (
               <NoteCard
-                key={note.id}
+                key={note?._id}
                 note={note}
                 onSelect={setSelectedNote}
                 onPin={togglePin}
@@ -72,7 +72,7 @@ const NotesList = ({
           >
             {unpinnedNotes.map((note) => (
               <NoteCard
-                key={note.id}
+                key={note?._id}
                 note={note}
                 onSelect={setSelectedNote}
                 onPin={togglePin}

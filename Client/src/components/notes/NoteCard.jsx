@@ -31,7 +31,7 @@ const NoteCard = ({
     <div
       className="cursor-pointer relative flex flex-col transition-all p-4 rounded-xl group"
       style={{
-        ...getColorStyle(note.color),
+        ...getColorStyle(note?.color),
         minHeight: "140px",
       }}
       onClick={() => onSelect(note)}
@@ -41,40 +41,42 @@ const NoteCard = ({
       <button
         onClick={(e) => {
           e.stopPropagation();
-          onPin(note.id);
+          onPin(note?.id);
         }}
         className={`absolute top-2 right-2 p-1 rounded-full bg-black/10 hover:bg-black/20 transition-opacity
-        ${note.isPinned ? "opacity-100" : hovered ? "opacity-100" : "opacity-0"}`}
+        ${
+          note?.isPinned ? "opacity-100" : hovered ? "opacity-100" : "opacity-0"
+        }`}
       >
         <Pin
           size={16}
           style={{
-            color: note.isPinned ? "var(--btn)" : "var(--txt-dim)",
-            transform: note.isPinned ? "rotate(45deg)" : "rotate(0deg)",
+            color: note?.isPinned ? "var(--btn)" : "var(--txt-dim)",
+            transform: note?.isPinned ? "rotate(45deg)" : "rotate(0deg)",
             transition: "transform 0.2s ease",
           }}
         />
       </button>
 
       <div className="flex-1">
-        {note.title && (
+        {note?.title && (
           <h3
             className="text-sm font-semibold m-0 mb-1.5 leading-tight"
             style={{ color: "var(--txt)" }}
           >
-            {truncateText(note.title, 40)}
+            {truncateText(note?.title, 40)}
           </h3>
         )}
         <div
           className="text-xs leading-snug"
           style={{ color: "var(--txt-dim)" }}
         >
-          {truncateText(getPlainTextPreview(note.content), 100)}
+          {truncateText(getPlainTextPreview(note?.content), 100)}
         </div>
       </div>
 
       <div className="text-xs mt-2" style={{ color: "var(--txt-disabled)" }}>
-        {new Date(note.createdAt).toLocaleDateString()}
+        {new Date(note?.createdAt).toLocaleDateString()}
       </div>
 
       {hovered && (
@@ -85,7 +87,9 @@ const NoteCard = ({
         >
           <button
             onClick={() =>
-              setShowColorPicker(showColorPicker === note.id ? null : note.id)
+              setShowColorPicker(
+                showColorPicker === note?._id ? null : note?._id
+              )
             }
             className="p-1 rounded hover:bg-black/10"
           >
@@ -114,7 +118,7 @@ const NoteCard = ({
           </button>
 
           <button
-            onClick={() => onDelete(note.id)}
+            onClick={() => onDelete(note?._id)}
             className="p-1 rounded hover:bg-black/10"
           >
             <Trash2 size={16} />
@@ -122,7 +126,7 @@ const NoteCard = ({
         </div>
       )}
 
-      {showColorPicker === note.id && (
+      {showColorPicker === note?._id && (
         <div
           className="absolute bottom-12 left-2 border p-2 shadow-lg z-20 flex gap-1 flex-wrap bg-[var(--bg-ter)] rounded-lg"
           onClick={(e) => e.stopPropagation()}
@@ -130,13 +134,13 @@ const NoteCard = ({
           {colors.map((color) => (
             <button
               key={color.name}
-              onClick={() => onColorChange(note.id, color.name)}
+              onClick={() => onColorChange(note?._id, color.name)}
               className="w-6 h-6 cursor-pointer rounded-full border"
               style={{
                 ...color.style,
                 borderColor:
-                  note.color === color.name ? "var(--btn)" : "var(--bg-sec)",
-                borderWidth: note.color === color.name ? "2px" : "1px",
+                  note?.color === color.name ? "var(--btn)" : "var(--bg-sec)",
+                borderWidth: note?.color === color.name ? "2px" : "1px",
               }}
             />
           ))}
