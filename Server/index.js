@@ -44,7 +44,10 @@ const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5173";
 
 // ---- Middlewares (safe defaults) ----
 app.use(compression()); // optional, small perf boost
-app.use(morgan(NODE_ENV === "development" ? "dev" : "combined"));
+
+if (NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 // Apply project-specific security middleware (keep this)
 applySecurity(app);
