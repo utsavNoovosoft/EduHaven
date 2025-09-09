@@ -207,8 +207,8 @@ const OtpInput = () => {
 
   const getDescription = () => {
     return verificationType === "reset"
-      ? `We've sent a 6-digit verification code to ${email}. Please enter it below to continue with password reset.`
-      : "We've sent a 6-digit verification code to your email address. Please enter it below to continue.";
+      ? `We have sent a 6-digit verification code to ${email}. Please enter it below to continue with password reset.`
+      : "We have sent a 6-digit verification code to your email address. Please enter it below to continue.";
   };
 
   const getSuccessMessage = () => {
@@ -275,8 +275,8 @@ const OtpInput = () => {
           </h1>
           <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
             {getDescription()}
-            We've sent a 6-digit verification code to your email address. Please
-            enter it below to continue.
+            We have sent a 6-digit verification code to your email address.
+            Please enter it below to continue.
           </p>
         </div>
 
@@ -297,8 +297,8 @@ const OtpInput = () => {
                     digit
                       ? "border-blue-500 bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-200"
                       : error
-                      ? "border-red-300 bg-red-50 dark:bg-red-900"
-                      : "border-gray-300 dark:border-gray-600 hover:border-blue-300 focus:border-blue-500"
+                        ? "border-red-300 bg-red-50 dark:bg-red-900"
+                        : "border-gray-300 dark:border-gray-600 hover:border-blue-300 focus:border-blue-500"
                   } focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800`}
                 disabled={isVerifying}
               />
@@ -331,7 +331,7 @@ const OtpInput = () => {
 
         <div className="text-center mb-4">
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Didn't receive the code?{" "}
+            Did not receive the code?{" "}
             <button
               onClick={handleResendOtp}
               className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"

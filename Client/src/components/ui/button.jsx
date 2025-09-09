@@ -17,7 +17,8 @@ const buttonVariants = cva(
         link: "text-[var(--txt)] underline-offset-4 hover:underline",
       },
       size: {
-        default: "px-5 py-2 rounded-lg transition-colors duration-300 ease-in-out",
+        default:
+          "px-5 py-2 rounded-lg transition-colors duration-300 ease-in-out",
         sm: "h-9 px-4 py-2 text-sm rounded-md",
         lg: "py-2.5 px-5 rounded-lg",
         icon: "p-2.5",
