@@ -37,7 +37,7 @@ export default defineConfig(({ mode }) => {
   };
 });
 
-// vite.envConfig.js old
+// vite.config.js old
 // import { defineConfig } from "vite";
 // import react from "@vitejs/plugin-react";
 // import path from "path";
