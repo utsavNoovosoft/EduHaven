@@ -505,11 +505,29 @@ const deleteAccount = async (req, res) => {
     await User.updateMany({ friends: userId }, { $pull: { friends: userId } });
 
     // 2. Delete all related data
+    await User.updateMany(
+      { friendRequests: userId },
+      { $pull: { friendRequests: userId } }
+    );
+    await User.updateMany(
+      { sentRequests: userId },
+      { $pull: { sentRequests: userId } }
+    );
+    await User.updateMany(
+      { kudosGiven: userId },
+      { $pull: { kudosGiven: userId } }
+    );
+
+    await Note.updateMany(
+      { "collaborators.user": userId },
+      { $pull: { collaborators: { user: userId } } }
+    );
+
     await Promise.all([
-      Note.deleteMany({ user: userId }),
+      Note.deleteMany({ owner: userId }),
       Event.deleteMany({ createdBy: userId }),
-      TimerSession.deleteMany({ userId }),
-      SessionRoom.deleteMany({ host: userId }),
+      TimerSession.deleteMany({ user: userId }),
+      SessionRoom.deleteMany({ createdBy: userId }),
       Task.deleteMany({ user: userId }),
     ]);
 
