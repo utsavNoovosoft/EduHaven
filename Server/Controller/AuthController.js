@@ -125,7 +125,7 @@ const verifyUser = async (req, res) => {
       LastName: verify.user.LastName,
       Email: verify.user.Email,
       Password: verify.user.Password,
-      ProfilePicture: `https://api.dicebear.com/9.x/initials/svg?seed=${verify.user.FirstName}}`,
+      ProfilePicture: `https://api.dicebear.com/9.x/initials/svg?seed=${verify.user.FirstName}`,
     });
 
     return res.status(200).json({ message: "User Signup Successfully" });
@@ -218,7 +218,6 @@ const signup = async (req, res) => {
       LastName,
       Email,
       Password: haspass, // Store hashed password
-      ProfilePicture: "https://cdn-icons-png.flaticon.com/512/219/219986.png", // Default profile picture
     };
 
     const otp = Math.floor(Math.random() * 1000000)
@@ -237,8 +236,6 @@ const signup = async (req, res) => {
 
     await sendMail(Email, FirstName, otp, "signup");
 
-    const token = generateAuthToken(user);
-
     res.cookie("activationToken", activationToken, {
       expires: new Date(Date.now() + 86400000),
       httpOnly: true,
@@ -246,7 +243,6 @@ const signup = async (req, res) => {
 
     return res.status(201).json({
       message: "OTP sent to your email.",
-      token,
       activationToken,
     });
   } catch (error) {

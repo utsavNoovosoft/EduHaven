@@ -36,11 +36,7 @@ function SignUp() {
 
       reset();
 
-      const { token, activationToken } = response.data;
-
-      if (token) {
-        localStorage.setItem("token", token);
-      }
+      const { activationToken } = response.data;
 
       if (activationToken) {
         localStorage.setItem("activationToken", activationToken);
