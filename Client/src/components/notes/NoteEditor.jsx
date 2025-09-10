@@ -19,7 +19,7 @@ import {
   X,
 } from "lucide-react";
 import ToolbarButton from "./ToolbarButton";
-
+import { motion } from "framer-motion";
 const NoteEditor = ({
   selectedNote,
   setSelectedNote,
@@ -31,13 +31,16 @@ const NoteEditor = ({
   insertTable,
 }) => {
   return (
-    <div
+    <motion.div
       className="flex-1 flex flex-col rounded-tl-3xl"
       style={{
         backgroundColor: colors.find((c) => c.name === selectedNote.color)
           ?.style.backgroundColor,
         color: "var(--txt)",
       }}
+      initial={{ x: 100, opacity: 0 }}
+      animate={{ x: 1, opacity: 1 }}
+      transition={{ delay: 0.2 }}
     >
       {/* Editor Header */}
       <div
@@ -236,7 +239,7 @@ const NoteEditor = ({
       <div className="flex-1 p-4 overflow-auto">
         <EditorContent editor={editor} className="min-h-full" />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

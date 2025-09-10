@@ -1,5 +1,6 @@
 import { FilePenLine, Plus, Search } from "lucide-react";
-
+import { motion } from "framer-motion";
+import { Button } from "../ui/button";
 const NoteHeader = ({
   createNewNote,
   searchTerm,
@@ -19,13 +20,14 @@ const NoteHeader = ({
       </div>
 
       {selectedNote && (
-        <button
+        <Button
+          variant="transparent"
           onClick={createNewNote}
           className="w-full p-2 py-2.5 mt-1 hover:bg-[var(--bg-ter)] rounded-lg cursor-pointer flex items-center gap-2 transition-colors font-semibold"
         >
           <FilePenLine size={18} />
           Create new Note
-        </button>
+        </Button>
       )}
 
       <div className="flex-1 max-w-2xl relative">
@@ -50,15 +52,16 @@ const NoteHeader = ({
       </div>
 
       <div className="flex items-center gap-2">
-        <button
+        <Button
           onClick={createNewNote}
           className={`w-full p-2.5 px-6 cursor-pointer flex items-center justify-center gap-2 bg-[var(--btn)] text-white hover:bg-[var(--btn-hover)] rounded-lg ${
             selectedNote && "hidden"
           }`}
+          whileHover={{ scale: 1.1 }}
         >
           <Plus size={18} />
           Create new Note
-        </button>
+        </Button>
       </div>
     </header>
   );
