@@ -125,6 +125,7 @@ const verifyUser = async (req, res) => {
       LastName: verify.user.LastName,
       Email: verify.user.Email,
       Password: verify.user.Password,
+      ProfilePicture: `https://api.dicebear.com/9.x/initials/svg?seed=${verify.user.FirstName}}`,
     });
 
     return res.status(200).json({ message: "User Signup Successfully" });

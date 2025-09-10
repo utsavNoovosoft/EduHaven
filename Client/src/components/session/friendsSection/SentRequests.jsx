@@ -44,17 +44,14 @@ function SentRequests({ onBack }) {
           {sentRequests?.map((user) => (
             <div key={user._id} className="flex items-center">
               <Link to={`/user/${user._id}`}>
-                {user.ProfilePicture ? (
-                  <img
-                    src={user.ProfilePicture}
-                    className="w-9 h-9 rounded-full transition hover:brightness-75 cursor-pointer"
-                    alt="Profile"
-                  />
-                ) : (
-                  <div className="p-2 bg-ter rounded-full transition hover:brightness-75 cursor-pointer">
-                    <User className="w-7 h-7" />
-                  </div>
-                )}
+                <img
+                  src={
+                    user?.ProfilePicture ||
+                    `https://api.dicebear.com/9.x/initials/svg?seed=${user.FirstName}`
+                  }
+                  className="w-9 h-9 rounded-full transition hover:brightness-75 cursor-pointer"
+                  alt="Profile"
+                />
               </Link>
               <div className="ml-4">
                 <Link
