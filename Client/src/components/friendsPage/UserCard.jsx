@@ -9,7 +9,6 @@ import { UserPlus } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import DefaultProfilePic from "../../assets/profilePic.avif";
 
 function UserCard({ user, selectedTab }) {
   const { mutate: sendRequest } = useSendRequest();
@@ -27,8 +26,10 @@ function UserCard({ user, selectedTab }) {
         className="flex flex-col items-center justify-center hover:brightness-90 transition"
       >
         <img
-          src={user.ProfilePicture || DefaultProfilePic}
-          onError={(e) => (e.target.src = DefaultProfilePic)}
+          src={
+            user?.ProfilePicture ||
+            `https://api.dicebear.com/9.x/initials/svg?seed=${user.FirstName}`
+          }
           alt="Profile"
           className="w-24 object-cover aspect-square rounded-full cursor-pointer"
         />
