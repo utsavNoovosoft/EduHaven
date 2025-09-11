@@ -53,7 +53,7 @@ const NoteEditor = ({
             placeholder="Untitled"
             value={selectedNote.title}
             onChange={(e) =>
-              updateNote(selectedNote.id, { title: e.target.value })
+              updateNote(selectedNote._id, { title: e.target.value })
             }
             className="flex-1 border-none outline-none text-2xl font-semibold bg-transparent font-inherit"
             style={{ color: "var(--txt)" }}
