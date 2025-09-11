@@ -1,3 +1,4 @@
+import FileHandler from "@tiptap/extension-file-handler";
 import Highlight from "@tiptap/extension-highlight";
 import { Image } from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -10,6 +11,7 @@ import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
 import Typography from "@tiptap/extension-typography";
 import Underline from "@tiptap/extension-underline";
+
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useRef, useState } from "react";
@@ -26,6 +28,7 @@ import {
 } from "@/queries/NoteQueries";
 
 import "@/components/notes/note.css";
+import axiosInstance from "@/utils/axios";
 import { toast } from "react-toastify";
 
 const colors = [
@@ -41,6 +44,7 @@ const colors = [
 
 const Notes = () => {
   const { data: notes = [], isLoading } = useNotes();
+
   const createNoteMutation = useCreateNote();
   const updateNoteMutation = useUpdateNote();
   const deleteNoteMutation = useDeleteNote();
@@ -78,7 +82,21 @@ const Notes = () => {
       Link.configure({
         openOnClick: false,
       }),
-      Image,
+      Image.configure({
+        allowBase64: true,
+      }),
+      FileHandler.configure({
+        allowedMimeTypes: [
+          "image/png",
+          "image/jpeg",
+          "image/gif",
+          "image/webp",
+        ],
+        onDrop: (currentEditor, files, pos) =>
+          handleImageUpload(currentEditor, files, pos),
+        onPaste: (currentEditor, files, pos) =>
+          handleImageUpload(currentEditor, files, pos),
+      }),
       Table.configure({
         resizable: true,
       }),
@@ -104,6 +122,97 @@ const Notes = () => {
     },
     shouldRerenderOnTransaction: true,
   });
+
+  const handleImageUpload = async (editor, files, pos) => {
+    const replacePlaceholder = (placeholder, replacement) => {
+      const { doc } = editor.state;
+      let replaced = false;
+
+      doc.descendants((node, posNode) => {
+        if (replaced) return false; // stop early if already replaced
+        if (node.isText && node.text && node.text.includes(placeholder)) {
+          const idx = node.text.indexOf(placeholder);
+          const from = posNode + idx;
+          const to = from + placeholder.length;
+
+          editor
+            .chain()
+            .focus()
+            .deleteRange({ from, to })
+            .insertContentAt({ from, to: from }, replacement)
+            .run();
+
+          replaced = true;
+          return false;
+        }
+        return true;
+      });
+
+      return replaced;
+    };
+
+    for (const file of files) {
+      if (!file.type.startsWith("image/")) continue;
+
+      const safePos =
+        typeof pos === "number" ? pos : editor.state.selection.from;
+      const uploadId =
+        "Uploading-Image" +
+        Date.now() +
+        "-" +
+        Math.random().toString(6).slice(2, 6);
+      const placeholder = `[${uploadId}]`;
+
+      editor
+        .chain()
+        .focus()
+        .insertContentAt({ from: safePos, to: safePos }, placeholder)
+        .run();
+
+      try {
+        const formData = new FormData();
+        formData.append("noteImage", file);
+
+        const { data } = await axiosInstance.post("/note/upload", formData);
+        const imageUrl = data.noteImageUrl;
+
+        const didReplace = replacePlaceholder(placeholder, {
+          type: "image",
+          attrs: { src: imageUrl, alt: file.name || "Image" },
+        });
+
+        if (!didReplace) {
+          const insertPos = editor.state.selection.from;
+          editor
+            .chain()
+            .focus()
+            .insertContentAt(
+              { from: insertPos, to: insertPos },
+              {
+                type: "image",
+                attrs: { src: imageUrl, alt: file.name || "Image" },
+              }
+            )
+            .run();
+        }
+      } catch (err) {
+        const didReplace = replacePlaceholder(
+          placeholder,
+          "Failed to upload image"
+        );
+        if (!didReplace) {
+          editor
+            .chain()
+            .focus()
+            .insertContentAt(
+              editor.state.selection.from,
+              "Failed to upload image"
+            )
+            .run();
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     if (editor && selectedNote) {

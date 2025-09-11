@@ -1,12 +1,12 @@
 // src/queries/noteQuery.js
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+  createNote,
+  deleteNote,
   getAllNotes,
   getNoteById,
-  createNote,
   updateNote,
-  deleteNote,
 } from "@/api/NoteApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Fetch all notes
 export const useNotes = () => {
