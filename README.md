@@ -19,21 +19,21 @@
 
 ## Features
 
-- ### User Dashboard (home page)
+- #### User Dashboard (home page)
   - Study & break timer for focus, see your stats summary
   - Add and manage notes
   - Set your goals, set repeat / deadline etc.
   - Integrated calendars for event planning
   - The tools like AI chat, calculator, convertor and graph to help with studies
 
-- ### Real-Time Study Rooms
+- #### Real-Time Study Rooms
 
   - Join or create study rooms to study with your fiends
   - Video/audio controls
   - Control who can join your study room
   - Chat and discussion features.
 
-- ### See Realtime  stats:
+- #### See Realtime  stats:
   - View Stats of your study time
   - View your streaks, max streak
   - See your rank globally and also within your friends
@@ -41,17 +41,17 @@
   - See the analytics of friends.
   - See your goals completion rate.
 
-- ### Realtime Chat
+- #### Realtime Chat
   - Chat in Realtime with peers. share notes and study materials
   - Private messaging
   - Online/offline presence indicators
 
-- ### Friends and Social Features
+- #### Friends and Social Features
   - Add friends, invite them to study rooms
   - Track their online/offline status
   - Share study goals and progress
 
-- ### Gamification
+- #### Gamification
   - Earn badges and rewards for task completion
   - Track streaks to stay motivated
   - Leaderboards for friendly competition
