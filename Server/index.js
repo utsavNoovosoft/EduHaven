@@ -10,7 +10,10 @@ import { applySecurity } from "./security/securityMiddleware.js";
 import { createSocket, initSocketHandlers } from "./config/socketConfig.js";
 import notFound from "./Middlewares/notFound.js";
 import errorHandler from "./Middlewares/errorHandler.js";
-import { doGracefulShutdown, setupGracefulShutdown } from "./Config/shutdownConfig.js";
+import {
+  doGracefulShutdown,
+  setupGracefulShutdown,
+} from "./Config/shutdownConfig.js";
 
 dotenv.config();
 
