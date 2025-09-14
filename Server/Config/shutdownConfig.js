@@ -27,7 +27,7 @@ async function shutdownDB() {
   }
 }
 
-async function doGracefulShutdown(signal, server) {
+export async function doGracefulShutdown(signal, server) {
   if (shuttingDown) return;
   shuttingDown = true;
   console.log(`\n🛑 Received ${signal}. Shutting down gracefully...`);
