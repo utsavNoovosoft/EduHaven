@@ -1,7 +1,7 @@
 import express from "express";
 import { createServer } from "http";
 import fetch, { Headers, Request, Response } from "node-fetch";
-import { PORT } from "./Config/envConfig.js";
+import dotenv from "dotenv";
 import { applyCommonMiddleware } from "./Middlewares/commonMiddleware.js";
 import { ConnectDB } from "./Database/Db.js";
 import { mountRoutes } from "./Routes/routes.js";
@@ -12,6 +12,8 @@ import notFound from "./Middlewares/notFound.js";
 import errorHandler from "./Middlewares/errorHandler.js";
 import { setupGracefulShutdown } from "./Config/shutdownConfig.js";
 
+dotenv.config();
+
 // Polyfill fetch for Node (if needed)
 if (!globalThis.fetch) {
   globalThis.fetch = fetch;
@@ -21,6 +23,9 @@ if (!globalThis.fetch) {
 }
 
 const app = express();
+export const PORT = Number(process.env.PORT) || 3000;
+export const NODE_ENV = process.env.NODE_ENV || "development";
+export const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5173";
 
 // Apply project-specific security middleware (keep this)
 applySecurity(app);

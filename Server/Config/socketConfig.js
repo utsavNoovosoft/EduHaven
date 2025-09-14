@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { CORS_ORIGIN } from "./envConfig.js";
+import { CORS_ORIGIN } from "../index.js";
 import { initializeSocket } from "../Socket/socket.js";
 
 export function createSocket(server) {

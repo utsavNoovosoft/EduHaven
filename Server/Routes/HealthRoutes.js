@@ -1,4 +1,4 @@
-import { NODE_ENV } from "../Config/envConfig.js";
+import { NODE_ENV } from "../index.js";
 
 export function mountHealthRoutes(app) {
   app.get("/uptime", (req, res) =>
